@@ -1,0 +1,72 @@
+[
+  {
+    "id_curso": 1,
+    "codigo": "SIST-301",
+    "nombre": "Desarrollo de Software I",
+    "horas_teoria": 3,
+    "horas_laboratorio": 2,
+    "horas_practica": 0,
+    "creditos": 4,
+    "ciclo": 5,
+    "plan_estudios": "2020",
+    "prerequisitos": null,
+    "activo": true,
+    "fecha_creacion": "2026-05-19T02:39:58.347Z"
+  },
+  {
+    "id_curso": 2,
+    "codigo": "SIST-302",
+    "nombre": "Base de Datos I",
+    "horas_teoria": 3,
+    "horas_laboratorio": 2,
+    "horas_practica": 0,
+    "creditos": 4,
+    "ciclo": 5,
+    "plan_estudios": "2020",
+    "prerequisitos": null,
+    "activo": true,
+    "fecha_creacion": "2026-05-19T02:39:58.347Z"
+  },
+  {
+    "id_curso": 3,
+    "codigo": "SIST-401",
+    "nombre": "Desarrollo de Software II",
+    "horas_teoria": 3,
+    "horas_laboratorio": 2,
+    "horas_practica": 0,
+    "creditos": 4,
+    "ciclo": 7,
+    "plan_estudios": "2020",
+    "prerequisitos": null,
+    "activo": true,
+    "fecha_creacion": "2026-05-19T02:39:58.347Z"
+  },
+  {
+    "id_curso": 4,
+    "codigo": "SIST-402",
+    "nombre": "Inteligencia Artificial",
+    "horas_teoria": 4,
+    "horas_laboratorio": 2,
+    "horas_practica": 0,
+    "creditos": 5,
+    "ciclo": 8,
+    "plan_estudios": "2020",
+    "prerequisitos": null,
+    "activo": true,
+    "fecha_creacion": "2026-05-19T02:39:58.347Z"
+  },
+  {
+    "id_curso": 5,
+    "codigo": "SIST-303",
+    "nombre": "Redes y Comunicaciones",
+    "horas_teoria": 3,
+    "horas_laboratorio": 2,
+    "horas_practica": 0,
+    "creditos": 4,
+    "ciclo": 6,
+    "plan_estudios": "2020",
+    "prerequisitos": null,
+    "activo": true,
+    "fecha_creacion": "2026-05-19T02:39:58.347Z"
+  }
+]

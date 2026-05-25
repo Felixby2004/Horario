@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /dashboard/
+Allow: /
+
+Sitemap: https://horarios.unt.edu.pe/sitemap.xml

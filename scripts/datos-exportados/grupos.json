@@ -1,0 +1,68 @@
+[
+  {
+    "id_grupo": 1,
+    "id_curso": 1,
+    "id_periodo": 1,
+    "codigo_grupo": "A",
+    "capacidad_maxima": 40,
+    "cantidad_matriculados": 35,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  },
+  {
+    "id_grupo": 2,
+    "id_curso": 1,
+    "id_periodo": 1,
+    "codigo_grupo": "B",
+    "capacidad_maxima": 40,
+    "cantidad_matriculados": 38,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  },
+  {
+    "id_grupo": 3,
+    "id_curso": 2,
+    "id_periodo": 1,
+    "codigo_grupo": "A",
+    "capacidad_maxima": 30,
+    "cantidad_matriculados": 28,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  },
+  {
+    "id_grupo": 4,
+    "id_curso": 3,
+    "id_periodo": 1,
+    "codigo_grupo": "A",
+    "capacidad_maxima": 40,
+    "cantidad_matriculados": 40,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  },
+  {
+    "id_grupo": 5,
+    "id_curso": 4,
+    "id_periodo": 1,
+    "codigo_grupo": "A",
+    "capacidad_maxima": 35,
+    "cantidad_matriculados": 32,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  },
+  {
+    "id_grupo": 6,
+    "id_curso": 5,
+    "id_periodo": 1,
+    "codigo_grupo": "A",
+    "capacidad_maxima": 40,
+    "cantidad_matriculados": 37,
+    "activo": true,
+    "observaciones": null,
+    "fecha_creacion": "2026-05-19T02:54:19.323Z"
+  }
+]

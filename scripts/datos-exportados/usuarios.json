@@ -1,0 +1,54 @@
+[
+  {
+    "id_usuario": 1,
+    "codigo": "ADMIN001",
+    "nombres": "Administrador",
+    "apellidos": "Sistema",
+    "correo_electronico": "admin@unitru.edu.pe",
+    "contrasena_hash": ".05.X3vGTVxTu58tY6jr5YD7gfcow/mgrNPZKgmFl1HW",
+    "rol": "administrador_sistema",
+    "activo": true,
+    "ultimo_acceso": null,
+    "fecha_creacion": "2026-05-19T02:39:58.350Z",
+    "fecha_actualizacion": "2026-05-19T02:39:58.350Z"
+  },
+  {
+    "id_usuario": 2,
+    "codigo": "DOC-001",
+    "nombres": "Juan Carlos",
+    "apellidos": "P?rez Garc?a",
+    "correo_electronico": "jperez@unitru.edu.pe",
+    "contrasena_hash": ".05.X3vGTVxTu58tY6jr5YD7gfcow/mgrNPZKgmFl1HW",
+    "rol": "docente",
+    "activo": true,
+    "ultimo_acceso": null,
+    "fecha_creacion": "2026-05-19T02:39:58.350Z",
+    "fecha_actualizacion": "2026-05-19T02:39:58.350Z"
+  },
+  {
+    "id_usuario": 3,
+    "codigo": "DOC-002",
+    "nombres": "Mar?a Elena",
+    "apellidos": "Rodr?guez Silva",
+    "correo_electronico": "mrodriguez@unitru.edu.pe",
+    "contrasena_hash": ".05.X3vGTVxTu58tY6jr5YD7gfcow/mgrNPZKgmFl1HW",
+    "rol": "docente",
+    "activo": true,
+    "ultimo_acceso": null,
+    "fecha_creacion": "2026-05-19T02:39:58.350Z",
+    "fecha_actualizacion": "2026-05-19T02:39:58.350Z"
+  },
+  {
+    "id_usuario": 5,
+    "codigo": "admin",
+    "nombres": "Administrador",
+    "apellidos": "Sistema",
+    "correo_electronico": "admin@unt.edu.pe",
+    "contrasena_hash": "$2a$10$xH12IBNi0.05.X3vGTVxTu58tY6jr5YD7gfcow/mgrNPZKgmFl1HW",
+    "rol": "administrador_sistema",
+    "activo": true,
+    "ultimo_acceso": "2026-05-19T03:26:26.618Z",
+    "fecha_creacion": "2026-05-19T02:43:11.591Z",
+    "fecha_actualizacion": "2026-05-19T03:26:26.620Z"
+  }
+]

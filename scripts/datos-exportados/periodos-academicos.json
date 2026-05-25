@@ -1,0 +1,30 @@
+[
+  {
+    "id_periodo": 1,
+    "codigo": "2024-I",
+    "nombre": "2024-I",
+    "anio": 2024,
+    "semestre": 1,
+    "fecha_inicio": "2024-03-01T00:00:00.000Z",
+    "fecha_fin": "2024-07-31T00:00:00.000Z",
+    "fecha_inicio_clases": null,
+    "fecha_fin_clases": null,
+    "activo": true,
+    "estado": "en_curso",
+    "fecha_creacion": "2026-05-19T02:39:58.335Z"
+  },
+  {
+    "id_periodo": 2,
+    "codigo": "2024-II",
+    "nombre": "2024-II",
+    "anio": 2024,
+    "semestre": 2,
+    "fecha_inicio": "2024-08-01T00:00:00.000Z",
+    "fecha_fin": "2024-12-31T00:00:00.000Z",
+    "fecha_inicio_clases": null,
+    "fecha_fin_clases": null,
+    "activo": true,
+    "estado": "planificacion",
+    "fecha_creacion": "2026-05-19T02:39:58.335Z"
+  }
+]

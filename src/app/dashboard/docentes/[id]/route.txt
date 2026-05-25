@@ -1,0 +1,3 @@
+DEPRECATED FILE - DO NOT USE
+This API functionality has been moved to /api/docentes/[id]/route.ts
+This file placeholder exists only to prevent build conflicts

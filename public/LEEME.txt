@@ -1,0 +1,31 @@
+SISTEMA DE GESTIÓN DE HORARIOS - UNIVERSIDAD NACIONAL DE TRUJILLO
+===================================================================
+
+Este sistema permite la gestión completa de horarios académicos para la
+Escuela de Ingeniería de Sistemas.
+
+CARACTERÍSTICAS PRINCIPALES:
+- Selección interactiva de horarios con validación en tiempo real
+- Sistema de ventanas de atención priorizadas
+- Notificaciones multicanal (Email, WhatsApp, Telegram)
+- Generación de reportes PDF profesionales
+- Dashboard con estadísticas en tiempo real
+- Importación masiva desde Excel/CSV
+
+INSTALACIÓN:
+1. Instalar dependencias: npm install
+2. Configurar base de datos: npx prisma db push
+3. Configurar .env.local con sus credenciales
+4. Ejecutar: npm run dev
+
+ACCESO:
+URL: http://localhost:3000
+Usuario: admin
+Password: admin123
+
+SOPORTE:
+Para soporte técnico o consultas, contactar al departamento de TI
+de la Escuela de Ingeniería de Sistemas - UNT.
+
+Versión: 1.0.0
+Año: 2025

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: horarios-postgres
+    environment:
+      POSTGRES_DB: horarios_unt
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - horarios-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: horarios-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - horarios-network
+
+  app:
+    build: .
+    container_name: horarios-app
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://admin:admin123@postgres:5432/horarios_unt
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your-secret-key-change-this
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    networks:
+      - horarios-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  horarios-network:
+    driver: bridge

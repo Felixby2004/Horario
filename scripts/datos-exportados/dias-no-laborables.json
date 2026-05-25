@@ -1,0 +1,26 @@
+[
+  {
+    "id_dia_no_laborable": 1,
+    "fecha": "2024-04-01T00:00:00.000Z",
+    "descripcion": "Semana Santa",
+    "tipo": "feriado_nacional",
+    "afecta_clases": true,
+    "id_periodo": 1
+  },
+  {
+    "id_dia_no_laborable": 2,
+    "fecha": "2024-05-01T00:00:00.000Z",
+    "descripcion": "D?a del Trabajo",
+    "tipo": "feriado_nacional",
+    "afecta_clases": true,
+    "id_periodo": 1
+  },
+  {
+    "id_dia_no_laborable": 3,
+    "fecha": "2024-06-29T00:00:00.000Z",
+    "descripcion": "San Pedro y San Pablo",
+    "tipo": "feriado_nacional",
+    "afecta_clases": true,
+    "id_periodo": 1
+  }
+]
