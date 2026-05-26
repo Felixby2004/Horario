@@ -1,42 +1,154 @@
 import { Redis } from 'ioredis';
 
-let redis: Redis | null = null;
+let redisClient: Redis | null = null;
 
 try {
   // Solo intentar conectar si REDIS_URL está configurado
   if (process.env.REDIS_URL) {
-    redis = new Redis(process.env.REDIS_URL, {
+    redisClient = new Redis(process.env.REDIS_URL, {
       maxRetriesPerRequest: 1,
       retryStrategy: () => null, // No reintentar
       lazyConnect: true
     });
 
     // Intentar conectar
-    redis.connect().catch(() => {
+    redisClient.connect().catch(() => {
       console.log('⚠️  Redis no disponible - funcionando sin caché');
-      redis = null;
+      redisClient = null;
     });
   } else {
     console.log('ℹ️  Redis deshabilitado - funcionando sin caché');
   }
 } catch (error) {
   console.log('⚠️  Redis no disponible - funcionando sin caché');
-  redis = null;
+  redisClient = null;
 }
 
-// Wrapper seguro para operaciones de Redis
-export const cache = {
+// Wrapper seguro que simula Redis cuando no está disponible
+class RedisProxy {
+  constructor(private client: Redis | null) {}
+
   async get(key: string): Promise<string | null> {
-    if (!redis) return null;
+    if (!this.client) return null;
     try {
-      return await redis.get(key);
+      return await this.client.get(key);
     } catch {
       return null;
     }
+  }
+
+  async set(key: string, value: string): Promise<any> {
+    if (!this.client) return 'OK';
+    try {
+      return await this.client.set(key, value);
+    } catch {
+      return 'OK';
+    }
+  }
+
+  async setex(key: string, ttl: number, value: string): Promise<any> {
+    if (!this.client) return 'OK';
+    try {
+      return await this.client.setex(key, ttl, value);
+    } catch {
+      return 'OK';
+    }
+  }
+
+  async del(key: string): Promise<number> {
+    if (!this.client) return 0;
+    try {
+      return await this.client.del(key);
+    } catch {
+      return 0;
+    }
+  }
+
+  async incr(key: string): Promise<number> {
+    if (!this.client) return 1;
+    try {
+      return await this.client.incr(key);
+    } catch {
+      return 1;
+    }
+  }
+
+  async expire(key: string, ttl: number): Promise<number> {
+    if (!this.client) return 0;
+    try {
+      return await this.client.expire(key, ttl);
+    } catch {
+      return 0;
+    }
+  }
+
+  async sadd(key: string, ...members: string[]): Promise<number> {
+    if (!this.client) return 0;
+    try {
+      return await this.client.sadd(key, ...members);
+    } catch {
+      return 0;
+    }
+  }
+
+  async smembers(key: string): Promise<string[]> {
+    if (!this.client) return [];
+    try {
+      return await this.client.smembers(key);
+    } catch {
+      return [];
+    }
+  }
+
+  async keys(pattern: string): Promise<string[]> {
+    if (!this.client) return [];
+    try {
+      return await this.client.keys(pattern);
+    } catch {
+      return [];
+    }
+  }
+
+  async publish(channel: string, message: string): Promise<number> {
+    if (!this.client) return 0;
+    try {
+      return await this.client.publish(channel, message);
+    } catch {
+      return 0;
+    }
+  }
+
+  async connect(): Promise<void> {
+    if (this.client) {
+      try {
+        await this.client.connect();
+      } catch {
+        // Ignorar errores de conexión
+      }
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    if (this.client) {
+      try {
+        await this.client.disconnect();
+      } catch {
+        // Ignorar errores de desconexión
+      }
+    }
+  }
+}
+
+// Exportar proxy que es seguro incluso sin Redis
+export const redis = new RedisProxy(redisClient);
+
+// Wrapper para caché
+export const cache = {
+  async get(key: string): Promise<string | null> {
+    return redis.get(key);
   },
 
   async set(key: string, value: string, ttl?: number): Promise<boolean> {
-    if (!redis) return false;
     try {
       if (ttl) {
         await redis.setex(key, ttl, value);
@@ -50,7 +162,6 @@ export const cache = {
   },
 
   async del(key: string): Promise<boolean> {
-    if (!redis) return false;
     try {
       await redis.del(key);
       return true;
@@ -60,13 +171,8 @@ export const cache = {
   },
 
   async keys(pattern: string): Promise<string[]> {
-    if (!redis) return [];
-    try {
-      return await redis.keys(pattern);
-    } catch {
-      return [];
-    }
+    return redis.keys(pattern);
   }
 };
 
-export { redis };
+export { redisClient };
