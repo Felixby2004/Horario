@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/prisma-generate-build.cjs && next build",
+    "build": "cross-env DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
@@ -70,6 +70,7 @@
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/ws": "^8.5.10",
+    "cross-env": "^10.1.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "jest": "^29.7.0",
