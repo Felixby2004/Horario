@@ -5,74 +5,56 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    // Lista de tablas con sus secuencias (estándar de PostgreSQL para serial)
-    const tables = [
-      'usuario',
-      'periodo_academico',
-      'docente',
-      'curso',
-      'grupo',
-      'ambiente',
-      'horario_asignado',
-      'auditoria_horario',
-      'conflicto_horario',
-      'dia_no_laborable',
-      'disponibilidad_docente',
-      'disponibilidad_docente_registro',
-      'docente_curso',
-      'docente_grupo',
-      'fase_disponibilidad',
-      'historial_notificaciones',
-      'preasignacion',
-      'preferencias_notificacion_docente',
-      'restriccion_institucional',
-      'seleccion_temporal_horario',
-      'ventana_atencion',
-      'cola_notificaciones',
-      'citacion_docente'
-    ];
+    // Consulta para encontrar todas las secuencias y sus tablas/columnas asociadas
+    const sequences: any[] = await prisma.$queryRaw`
+      SELECT 
+        t.relname AS table_name, 
+        a.attname AS column_name, 
+        s.relname AS sequence_name
+      FROM pg_class s
+      JOIN pg_depend d ON d.objid = s.oid
+      JOIN pg_class t ON d.refobjid = t.oid
+      JOIN pg_attribute a ON (d.refobjid = a.attrelid AND d.refobjsubid = a.attnum)
+      WHERE s.relkind = 'S' AND t.relkind = 'r';
+    `;
 
     const results = [];
 
-    for (const table of tables) {
+    for (const seq of sequences) {
       try {
-        // Obtener el nombre de la columna ID (usualmente id_nombretabla)
-        // Pero en este esquema varían un poco, así que mapeamos los nombres correctos
-        let idColumn = `id_${table}`;
-        if (table === 'usuario') idColumn = 'id_usuario';
-        if (table === 'periodo_academico') idColumn = 'id_periodo';
-        if (table === 'horario_asignado') idColumn = 'id_horario';
-        if (table === 'auditoria_horario') idColumn = 'id_auditoria';
-        if (table === 'conflicto_horario') idColumn = 'id_conflicto';
-        if (table === 'dia_no_laborable') idColumn = 'id_dia_no_laborable';
-        if (table === 'disponibilidad_docente') idColumn = 'id_disponibilidad';
-        if (table === 'disponibilidad_docente_registro') idColumn = 'id_registro';
-        if (table === 'docente_curso') idColumn = 'id_docente_curso';
-        if (table === 'docente_grupo') idColumn = 'id_docente_grupo';
-        if (table === 'fase_disponibilidad') idColumn = 'id_fase';
-        if (table === 'historial_notificaciones') idColumn = 'id_historial';
-        if (table === 'preasignacion') idColumn = 'id_preasignacion';
-        if (table === 'preferencias_notificacion_docente') idColumn = 'id_preferencia';
-        if (table === 'restriccion_institucional') idColumn = 'id_restriccion';
-        if (table === 'seleccion_temporal_horario') idColumn = 'id_seleccion';
-        if (table === 'ventana_atencion') idColumn = 'id_ventana';
-        if (table === 'cola_notificaciones') idColumn = 'id_cola';
-        if (table === 'citacion_docente') idColumn = 'id_citacion';
-
-        const seqName = `${table}_${idColumn}_seq`;
+        const { table_name, column_name, sequence_name } = seq;
         
+        // Ejecutar el setval dinámicamente para cada secuencia encontrada
         await prisma.$executeRawUnsafe(`
-          SELECT setval('${seqName}', (SELECT COALESCE(MAX(${idColumn}), 0) + 1 FROM "${table}"), false);
+          SELECT setval('"${sequence_name}"', (SELECT COALESCE(MAX("${column_name}"), 0) + 1 FROM "${table_name}"), false);
         `);
-        results.push({ table, status: 'success' });
+        
+        results.push({ table: table_name, column: column_name, sequence: sequence_name, status: 'success' });
       } catch (err: any) {
-        results.push({ table, status: 'error', message: err.message });
+        results.push({ table: seq.table_name, status: 'error', message: err.message });
+      }
+    }
+
+    // Si la consulta anterior no devuelve nada (dependiendo de la versión de PG), 
+    // intentamos con los nombres manuales más comunes
+    if (results.length === 0) {
+      const manualTables = ['usuario', 'docente', 'curso', 'grupo', 'ambiente', 'periodo_academico'];
+      for (const table of manualTables) {
+        try {
+          let idCol = table === 'periodo_academico' ? 'id_periodo' : `id_${table}`;
+          const manualSeq = `${table}_${idCol}_seq`;
+          await prisma.$executeRawUnsafe(`
+            SELECT setval('${manualSeq}', (SELECT COALESCE(MAX("${idCol}"), 0) + 1 FROM "${table}"), false);
+          `);
+          results.push({ table, status: 'manual_success' });
+        } catch (e) {}
       }
     }
 
     return NextResponse.json({
       exito: true,
-      mensaje: 'Proceso de sincronización de secuencias finalizado',
+      mensaje: 'Sincronización de secuencias completada',
+      secuencias_procesadas: results.length,
       detalles: results
     });
   } catch (error: any) {
