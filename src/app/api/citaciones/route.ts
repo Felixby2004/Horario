@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 import { verificarAutenticacion, verificarRol, obtenerDocenteDelUsuario } from '@/lib/auth';
 import { enviarNotificacionCitacion } from '@/lib/notificaciones';
 

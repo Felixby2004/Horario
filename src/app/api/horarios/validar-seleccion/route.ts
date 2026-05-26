@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ValidadorHorario } from '@/services/horarios/ValidadorHorario';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const datos = await request.json();

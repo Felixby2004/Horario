@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GeneradorPDF } from '@/services/reportes/GeneradorPDF';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { tipo, id_entidad, id_periodo } = await request.json();

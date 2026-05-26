@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { ValidadorConflictos } from '@/services/horarios/ServiciosAvanzados';
 
+export const dynamic = 'force-dynamic';
+
 // /api/horarios/validar-todo/route.ts
 export async function GET(request: NextRequest) {
   try {

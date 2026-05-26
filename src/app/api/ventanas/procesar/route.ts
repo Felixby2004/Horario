@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
+export const dynamic = 'force-dynamic';
+
 function normalizarValor(valor: unknown) {
   const s = String(valor ?? '').trim().toLowerCase();
   // Mapeos especiales para casos comunes de inconsistencia
