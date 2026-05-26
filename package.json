@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy npx prisma generate && next build",
+    "build": "env DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
-    "cross-env": "^10.1.0",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
