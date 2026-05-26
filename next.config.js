@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  productionBrowserSourceMaps: false, // Reducir tamaño del build
+  compress: true, // Comprimir respuestas
   
   // Variables de entorno públicas
   env: {
@@ -13,6 +15,7 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'horarios.unitru.edu.pe'],
     formats: ['image/webp', 'image/avif'],
+    unoptimized: false,
   },
 
   // Headers de seguridad
