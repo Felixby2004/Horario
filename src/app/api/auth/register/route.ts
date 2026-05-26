@@ -52,22 +52,46 @@ export async function POST(request: NextRequest) {
     // Hash de la contraseña
     const contrasena_hash = await bcrypt.hash(password, 10);
 
-    // Crear usuario
-    const nuevoUsuario = await prisma.usuario.create({
-      data: {
-        codigo,
-        nombres,
-        apellidos,
-        correo_electronico,
-        contrasena_hash,
-        rol,
-        activo: true
-      }
-    });
+    // Intentar crear usuario con reintento automático si falla la secuencia del ID
+    let nuevoUsuario;
+    try {
+      nuevoUsuario = await prisma.usuario.create({
+        data: {
+          codigo,
+          nombres,
+          apellidos,
+          correo_electronico,
+          contrasena_hash,
+          rol,
+          activo: true
+        }
+      });
+    } catch (error: any) {
+      // Error P2002 es de restricción única. Si es id_usuario, es por la secuencia desincronizada
+      if (error.code === 'P2002' && (error.message.includes('id_usuario') || error.meta?.target?.includes('id_usuario'))) {
+        console.log('Detectada secuencia desincronizada en usuario, intentando reparar...');
+        
+        // Reparar secuencia de usuario
+        await prisma.$executeRawUnsafe(`
+          SELECT setval('usuario_id_usuario_seq', (SELECT COALESCE(MAX(id_usuario), 0) + 1 FROM "usuario"), false);
+        `);
 
-    // NOTA: Si el rol es docente, el usuario se crea aquí pero el registro
-    // completo en tabla docente se hace desde Dashboard → Docentes → Importar
-    // Esto permite que el admin configure correctamente modalidad, categoría, etc.
+        // Reintentar creación
+        nuevoUsuario = await prisma.usuario.create({
+          data: {
+            codigo,
+            nombres,
+            apellidos,
+            correo_electronico,
+            contrasena_hash,
+            rol,
+            activo: true
+          }
+        });
+      } else {
+        throw error;
+      }
+    }
 
     return NextResponse.json({
       exito: true,
