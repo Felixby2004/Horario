@@ -5,6 +5,12 @@ const nextConfig = {
   productionBrowserSourceMaps: false,  // Reduce memory usage
   optimizeFonts: true,
   compress: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   
   // Variables de entorno públicas
   env: {

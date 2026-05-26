@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && next build",
+    "build": "node scripts/prisma-generate-build.cjs && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
