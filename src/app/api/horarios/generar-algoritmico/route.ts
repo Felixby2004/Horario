@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import GeneradorHorariosAG from '@/services/horarios/AlgoritmoGenetico';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * POST /api/horarios/generar-algoritmico
  * 

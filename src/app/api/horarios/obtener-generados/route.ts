@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/horarios/obtener-generados
  * Obtiene los horarios generados de una sesión (temporales o ya guardados)
