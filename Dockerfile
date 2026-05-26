@@ -1,11 +1,13 @@
 # Stage 1: Dependencies
-FROM node:18-alpine AS dependencies
+FROM node:18-slim AS dependencies
+RUN apt-get update && apt-get install -y openssl
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
 # Stage 2: Builder
-FROM node:18-alpine AS builder
+FROM node:18-slim AS builder
+RUN apt-get update && apt-get install -y openssl
 WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma
@@ -15,11 +17,11 @@ RUN npm run prisma:generate
 RUN npm run build
 
 # Stage 3: Runtime
-FROM node:18-alpine AS runtime
+FROM node:18-slim AS runtime
 WORKDIR /app
 
 # Install dumb-init and OpenSSL (required for Prisma)
-RUN apk add --no-cache dumb-init openssl openssl-dev
+RUN apt-get update && apt-get install -y openssl dumb-init && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 ENV PORT=3000
@@ -33,8 +35,8 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/generated ./generated
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN groupadd -g 1001 nodejs
+RUN useradd -u 1001 -g nodejs -s /bin/sh -m nextjs
 USER nextjs
 
 EXPOSE 3000

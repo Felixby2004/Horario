@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 function normalizarValor(valor: unknown) {
   const s = String(valor ?? '').trim().toLowerCase();
   if (s.includes('jefe') && (s.includes('practica') || s.includes('práctica'))) return 'jefepractica';

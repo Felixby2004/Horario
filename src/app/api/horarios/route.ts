@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { GestorVentanasAtencion } from '@/services/ventanas/GestorVentanasAtencion';
 
+export const dynamic = 'force-dynamic';
+
 function obtenerHorasRequeridas(curso: any, tipoClase: string) {
   if (tipoClase === 'teoria') return curso.horas_teoria || 0;
   if (tipoClase === 'laboratorio') return curso.horas_laboratorio || 0;
