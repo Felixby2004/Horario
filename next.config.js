@@ -2,8 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  productionBrowserSourceMaps: false, // Reducir tamaño del build
-  compress: true, // Comprimir respuestas
+  productionBrowserSourceMaps: false,  // Reduce memory usage
+  optimizeFonts: true,
+  compress: true,
   
   // Variables de entorno públicas
   env: {
@@ -14,8 +15,9 @@ const nextConfig = {
   // Configuración de imágenes
   images: {
     domains: ['localhost', 'horarios.unitru.edu.pe'],
-    formats: ['image/webp', 'image/avif'],
-    unoptimized: false,
+    formats: ['image/webp'],  // Solo webp para reducir tamaño
+    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // Headers de seguridad
@@ -53,6 +55,31 @@ const nextConfig = {
         net: false,
         tls: false,
         fs: false,
+      };
+    }
+    // Reduce bundle size
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            vendor: {
+              name: 'vendor',
+              chunks: 'all',
+              test: /node_modules/,
+              priority: 20
+            },
+            common: {
+              minChunks: 2,
+              priority: 10,
+              reuseExistingChunk: true,
+              name: 'commons'
+            }
+          }
+        }
       };
     }
     return config;
