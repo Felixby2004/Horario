@@ -6,6 +6,7 @@ import { Alerta } from '@/components/ui/Alerta';
 import { Modal } from '@/components/ui/Modal';
 import { CampoTexto } from '@/components/ui/CampoTexto';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
+import { Calendar, Clock, Timer, FileText, Settings, Edit3, Play, Users, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface FaseInfo {
   id_fase_disponibilidad: number;
@@ -265,76 +266,142 @@ export default function DisponibilidadAdminPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Detalles de la Fase */}
           <div className="md:col-span-2 space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
-              <div className="flex justify-between items-start">
-                <h3 className="text-lg font-bold text-gray-800">Configuración de la Fase</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                  fase.estado === 'abierta' ? 'bg-green-100 text-green-700' :
-                  fase.estado === 'no_iniciada' ? 'bg-gray-100 text-gray-700' :
-                  fase.estado === 'cerrada' ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-blue-100 text-blue-700'
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <Settings className="w-5 h-5 text-indigo-600" />
+                  Configuración de la Fase
+                </h3>
+                <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                  fase.estado === 'abierta' ? 'bg-green-50 text-green-600 border border-green-200' :
+                  fase.estado === 'no_iniciada' ? 'bg-gray-50 text-gray-600 border border-gray-200' :
+                  fase.estado === 'cerrada' ? 'bg-amber-50 text-amber-600 border border-amber-200' :
+                  'bg-blue-50 text-blue-600 border border-blue-200'
                 }`}>
-                  {fase.estado.toUpperCase().replace('_', ' ')}
+                  {fase.estado.replace('_', ' ')}
                 </span>
               </div>
+              
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-indigo-50 rounded-lg">
+                        <Calendar className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Inicio</p>
+                        <p className="text-sm font-bold text-gray-900 mt-0.5">
+                          {utilidadesFecha.formatearFechaHora(fase.fecha_inicio)}
+                        </p>
+                      </div>
+                    </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <p className="text-sm text-gray-500">Fecha Inicio</p>
-                  <p className="font-semibold">{utilidadesFecha.formatearFechaHora(fase.fecha_inicio)}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Fecha Límite (Fin)</p>
-                  <p className="font-semibold text-red-600">{utilidadesFecha.formatearFechaHora(fase.fecha_fin)}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Bloques de Tiempo</p>
-                  <p className="font-semibold">{fase.bloques_tiempo} minutos</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Instrucciones</p>
-                  <p className="text-sm italic text-gray-600">{fase.instrucciones || 'Sin instrucciones'}</p>
-                </div>
-              </div>
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-red-50 rounded-lg">
+                        <Clock className="w-5 h-5 text-red-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Límite (Fin)</p>
+                        <p className="text-sm font-bold text-red-600 mt-0.5">
+                          {utilidadesFecha.formatearFechaHora(fase.fecha_fin)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="pt-4 border-t flex gap-3">
-                <Boton onClick={abrirEditar} variante="secundario">Editar Configuración</Boton>
-                {fase.estado === 'cerrada' && (
-                  <Boton onClick={handleProcesar}>Procesar y Generar Citaciones</Boton>
-                )}
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <Timer className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bloques de Tiempo</p>
+                        <p className="text-sm font-bold text-gray-900 mt-0.5">
+                          {fase.bloques_tiempo} minutos
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-amber-50 rounded-lg">
+                        <FileText className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Instrucciones</p>
+                        <p className="text-sm text-gray-600 mt-0.5 italic leading-relaxed">
+                          {fase.instrucciones || 'Sin instrucciones adicionales'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-gray-100 flex flex-wrap gap-3">
+                  <button 
+                    onClick={abrirEditar}
+                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                    Editar Configuración
+                  </button>
+                  {fase.estado === 'cerrada' && (
+                    <Boton onClick={handleProcesar} className="flex items-center gap-2">
+                      <Play className="w-4 h-4" />
+                      Procesar y Generar Citaciones
+                    </Boton>
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Estadísticas de Progreso */}
             {estadisticas && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
-                <h3 className="text-lg font-bold text-gray-800">Progreso de Registro</h3>
-                
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-100 text-center">
-                    <p className="text-sm text-indigo-600 font-semibold">Total Docentes</p>
-                    <p className="text-2xl font-bold text-indigo-900">{estadisticas.totalDocentes}</p>
-                  </div>
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-100 text-center">
-                    <p className="text-sm text-green-600 font-semibold">Completados</p>
-                    <p className="text-2xl font-bold text-green-900">{estadisticas.docentesCompletados}</p>
-                  </div>
-                  <div className="p-4 bg-amber-50 rounded-lg border border-amber-100 text-center">
-                    <p className="text-sm text-amber-600 font-semibold">Pendientes</p>
-                    <p className="text-2xl font-bold text-amber-900">{estadisticas.docentesPendientes}</p>
-                  </div>
+              <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div className="bg-gray-50/50 px-6 py-4 border-b border-gray-100">
+                  <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                    <Users className="w-5 h-5 text-indigo-600" />
+                    Progreso de Registro
+                  </h3>
                 </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-semibold">
-                    <span>Porcentaje de Avance</span>
-                    <span>{estadisticas.porcentajeCompletacion}%</span>
+                
+                <div className="p-6 space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 group hover:bg-indigo-50 transition-colors">
+                      <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">Total Docentes</p>
+                      <p className="text-3xl font-black text-indigo-900">{estadisticas.totalDocentes}</p>
+                    </div>
+                    <div className="p-4 bg-green-50/50 rounded-xl border border-green-100 group hover:bg-green-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <p className="text-xs font-bold text-green-600 uppercase tracking-widest mb-1">Completados</p>
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      </div>
+                      <p className="text-3xl font-black text-green-900">{estadisticas.docentesCompletados}</p>
+                    </div>
+                    <div className="p-4 bg-amber-50/50 rounded-xl border border-amber-100 group hover:bg-amber-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Pendientes</p>
+                        <AlertCircle className="w-4 h-4 text-amber-500" />
+                      </div>
+                      <p className="text-3xl font-black text-amber-900">{estadisticas.docentesPendientes}</p>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                    <div 
-                      className="bg-green-500 h-full transition-all duration-500" 
-                      style={{ width: `${estadisticas.porcentajeCompletacion}%` }}
-                    />
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Porcentaje de Avance</p>
+                        <p className="text-2xl font-black text-gray-900">{estadisticas.porcentajeCompletacion}%</p>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden p-0.5 border border-gray-200">
+                      <div 
+                        className={`h-full rounded-full transition-all duration-1000 ease-out shadow-sm ${
+                          Number(estadisticas.porcentajeCompletacion) === 100 ? 'bg-gradient-to-r from-green-400 to-green-600' : 'bg-gradient-to-r from-indigo-500 to-purple-600'
+                        }`}
+                        style={{ width: `${estadisticas.porcentajeCompletacion}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

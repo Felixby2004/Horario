@@ -570,7 +570,7 @@ export default function VentanasPage() {
         <div className="bg-white border-2 border-gray-400 shadow-md">
           <div className="bg-gradient-to-b from-gray-200 to-gray-300 border-b-2 border-gray-400 px-4 py-2">
             <h1 className="text-lg font-bold text-gray-800">
-              📅 Configurador de Ventanas de Atención (Citaciones)
+              📅 Configurador de ventanas de atención (Citaciones)
             </h1>
             <p className="text-sm text-gray-600">
               Defina los horarios generales por día para la atención de los docentes

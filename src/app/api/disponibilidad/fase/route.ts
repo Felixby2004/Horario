@@ -4,7 +4,7 @@ import { verificarAutenticacion, verificarRol } from '@/lib/auth';
 
 /**
  * GET /api/disponibilidad/fase
- * Obtiene información de la fase de disponibilidad de un período
+ * Obtiene información de la Fase de disponibilidad de un período
  */
 export async function GET(request: NextRequest) {
   try {

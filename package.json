@@ -17,12 +17,15 @@
     "db:import": "ts-node --project tsconfig-scripts.json scripts/importar-datos.ts",
     "ventanas:estandar": "ts-node --project tsconfig-scripts.json scripts/configuracion-ventanas-estandar.ts",
     "db:exportar-sql": "ts-node --project tsconfig-scripts.json scripts/exportar-sql-completo.ts",
+    "db:clean": "ts-node --project tsconfig-scripts.json scripts/limpiar-base-datos.ts",
+    "db:insert-reales": "ts-node --project tsconfig-scripts.json scripts/insertar-datos-reales.ts",
+    "db:insert-admin": "ts-node --project tsconfig-scripts.json scripts/insertar-admin.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@prisma/client": "^5.8.0",
+    "@prisma/client": "^5.22.0",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",

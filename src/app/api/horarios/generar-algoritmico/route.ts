@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
       tamanio_poblacion = 50,
       generaciones = 100,
       probabilidad_cruzamiento = 0.8,
-      probabilidad_mutacion = 0.1
+      probabilidad_mutacion = 0.1,
+      criterio_ordenamiento = 'combinado'
     } = body;
 
     // Validar parámetros
@@ -72,7 +73,8 @@ export async function POST(request: NextRequest) {
       tamanio_poblacion,
       generaciones,
       probabilidad_cruzamiento,
-      probabilidad_mutacion
+      probabilidad_mutacion,
+      criterio_ordenamiento
     });
 
     const horariosGenerados = generador.obtenerHorarios(mejorCromosoma);

@@ -18,27 +18,25 @@ function normalizarValor(valor: unknown) {
 }
 
 function obtenerFechaHoraLima(ahora = new Date()) {
-  const formatter = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'America/Lima',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle: 'h23'
-  });
+  // Lima es siempre UTC-5
+  const UTC_OFFSET_LIMA = -5;
+  
+  // Obtener el tiempo en UTC
+  const utc = ahora.getTime() + (ahora.getTimezoneOffset() * 60000);
+  
+  // Crear una nueva fecha para Lima
+  const limaTime = new Date(utc + (3600000 * UTC_OFFSET_LIMA));
 
-  const partes = formatter.formatToParts(ahora).reduce((acc: Record<string, string>, part) => {
-    if (part.type !== 'literal') {
-      acc[part.type] = part.value;
-    }
-    return acc;
-  }, {});
+  const year = limaTime.getFullYear();
+  const month = String(limaTime.getMonth() + 1).padStart(2, '0');
+  const day = String(limaTime.getDate()).padStart(2, '0');
+  const hour = String(limaTime.getHours()).padStart(2, '0');
+  const minute = String(limaTime.getMinutes()).padStart(2, '0');
+  const second = String(limaTime.getSeconds()).padStart(2, '0');
 
   return {
-    fecha: `${partes.year}-${partes.month}-${partes.day}`,
-    hora: `${partes.hour}:${partes.minute}:${partes.second}`
+    fecha: `${year}-${month}-${day}`,
+    hora: `${hour}:${minute}:${second}`
   };
 }
 
@@ -61,37 +59,29 @@ function obtenerEstadoVentana(ventana: any, ahora = new Date()) {
   const { fecha: fechaLima, hora: ahoraLima } = obtenerFechaHoraLima(ahora);
 
   // Formatear la fecha de la ventana sin problemas de zona horaria
-  // Aceptar tanto `fecha` (ventana general) como `fecha_citacion` (citaciones individuales)
   let fechaVentanaLima: string;
   const posibleFecha = (ventana && (ventana.fecha ?? ventana.fecha_citacion ?? ventana.fechaCita)) ?? null;
   if (posibleFecha instanceof Date) {
-    // Las fechas de Prisma (@db.Date) vienen como Date objects en UTC midnight
     fechaVentanaLima = posibleFecha.toISOString().split('T')[0];
   } else {
     fechaVentanaLima = String(posibleFecha).split('T')[0];
   }
 
-  const ahoraMinutos = Number(ahoraLima.slice(0, 2)) * 60 + Number(ahoraLima.slice(3, 5));
+  const [hActual, mActual] = ahoraLima.split(':').map(Number);
+  const ahoraMinutos = hActual * 60 + mActual;
   const inicioMinutos = horaInicio * 60 + minutoInicio;
   const finMinutos = horaFin * 60 + minutoFin;
 
-  // Si la fecha de la ventana es posterior al día actual (en Lima)
   if (fechaLima < fechaVentanaLima) return 'proxima';
-
   const fechaVentanaLimaMas1 = addDaysLima(fechaVentanaLima, 1);
-
-  // Si la ventana ya pasó (más de 1 día de diferencia)
   if (fechaLima > fechaVentanaLima && fechaLima !== fechaVentanaLimaMas1) return 'cerrada';
 
-  // Lógica para ventanas que no cruzan medianoche
   if (inicioMinutos <= finMinutos) {
     if (fechaLima === fechaVentanaLima) {
       if (ahoraMinutos < inicioMinutos) return 'proxima';
       if (ahoraMinutos > finMinutos) return 'cerrada';
       return 'activa';
     }
-    // Si hoy es el día después de la ventana (y no cruza medianoche), ya cerró
-    if (fechaLima === fechaVentanaLimaMas1) return 'cerrada';
     return 'cerrada';
   }
 
@@ -113,14 +103,16 @@ function seleccionarVentanaMasRelevante(ventanas: any[], ahora = new Date()) {
   const evaluadas = ventanas
     .map((ventana) => ({ ventana, estado: obtenerEstadoVentana(ventana, ahora) }))
     .sort((a, b) => {
-      // Ordenar por fecha y hora de inicio
-      const fa = new Date(a.ventana.fecha);
-      const fb = new Date(b.ventana.fecha);
+      // Ordenar por fecha y hora de inicio de forma segura
+      const getFecha = (v: any) => v.fecha ?? v.fecha_citacion ?? v.fechaCita;
+      const fa = new Date(getFecha(a.ventana));
+      const fb = new Date(getFecha(b.ventana));
+      
+      if (fa.getTime() !== fb.getTime()) return fa.getTime() - fb.getTime();
+      
       const [ha, ma] = String(a.ventana.hora_inicio).split(':').map(Number);
       const [hb, mb] = String(b.ventana.hora_inicio).split(':').map(Number);
-      fa.setHours(ha, ma, 0, 0);
-      fb.setHours(hb, mb, 0, 0);
-      return fa.getTime() - fb.getTime();
+      return (ha * 60 + ma) - (hb * 60 + mb);
     });
 
   const activa = evaluadas.find((x) => x.estado === 'activa');
@@ -208,25 +200,22 @@ export async function GET(request: NextRequest) {
     const desdeLima = new Date(`${addDaysLima(fechaLima, -15)}T00:00:00.000Z`);
     const hastaLima = new Date(`${addDaysLima(fechaLima, 15)}T00:00:00.000Z`);
 
-    // 1. Buscar si el docente tiene una citación específica para este período
-    const citacion = await prisma.citacionDocente.findFirst({
+    // 1. Buscar si el docente tiene citaciones específicas para este período
+    const citaciones = await prisma.citacionDocente.findMany({
       where: {
         id_docente: idDocenteNum,
         id_periodo: periodoActivo.id_periodo,
         fecha_citacion: { gte: desdeLima, lte: hastaLima }
       },
-      orderBy: [
-        { fecha_citacion: 'asc' },
-        { hora_inicio: 'asc' },
-        { id_citacion: 'asc' }
-      ],
       include: {
         ventana: true
       }
     });
 
+    const citacionEval = seleccionarVentanaMasRelevante(citaciones);
+    const citacion = citacionEval?.ventana || null;
+
     if (citacion) {
-      const estado = obtenerEstadoVentana(citacion, new Date());
       return NextResponse.json({
         exito: true,
         datos: {
@@ -236,7 +225,7 @@ export async function GET(request: NextRequest) {
           hora_inicio: citacion.hora_inicio,
           hora_fin: citacion.hora_fin,
           numero_orden_turno: citacion.numero_orden_turno,
-          estado: estado,
+          estado: citacionEval.estado,
           es_citacion_individual: true,
           docente_info: {
             categoria: docente.categoria,

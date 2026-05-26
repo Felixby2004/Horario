@@ -24,10 +24,15 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    const config = await prisma.configuracionSistema.findFirst();
+    const duracionBloque = config?.duracion_bloque || 90;
+    const [hInicio, mInicio] = (config?.hora_inicio || '07:00').split(':').map(Number);
+    const minutosInicioConfig = hInicio * 60 + mInicio;
+
     const bloques = horariosAsignados.map(h => {
       const [hi, mi] = h.hora_inicio.split(':').map(Number);
-      const minutosInicio = hi * 60 + mi;
-      const bloque = Math.floor((minutosInicio - 420) / 90) + 1;
+      const minutosInicioActual = hi * 60 + mi;
+      const bloque = Math.floor((minutosInicioActual - minutosInicioConfig) / duracionBloque) + 1;
 
       const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 

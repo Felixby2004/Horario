@@ -6,6 +6,11 @@ export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: 'postgresql://admin:admin123@localhost:5432/horarios_unt'
+      }
+    }
   });
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;

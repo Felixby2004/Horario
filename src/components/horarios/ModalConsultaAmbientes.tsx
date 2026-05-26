@@ -15,19 +15,18 @@ interface ModalConsultaAmbientesProps {
   tipo: 'aula' | 'laboratorio';
   ambientes: Ambiente[];
   horarios: any[];
+  horas?: string[];
 }
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-const HORAS = [
-  '07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30'
-];
 
 export const ModalConsultaAmbientes: React.FC<ModalConsultaAmbientesProps> = ({
   abierto,
   alCerrar,
   tipo,
   ambientes,
-  horarios
+  horarios,
+  horas = ['07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30']
 }) => {
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState<Ambiente | null>(null);
 
@@ -87,7 +86,7 @@ export const ModalConsultaAmbientes: React.FC<ModalConsultaAmbientesProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {HORAS.map((hora, hIdx) => (
+                    {horas.map((hora, hIdx) => (
                       <tr key={hora}>
                         <td className="border p-1 font-medium bg-gray-50">{hora}</td>
                         {DIAS.map((_, dIdx) => {

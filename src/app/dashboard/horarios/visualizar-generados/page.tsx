@@ -24,6 +24,7 @@ interface Horario {
     id_curso: number;
     codigo: string;
     nombre: string;
+    ciclo?: number | null;
   };
   grupo: {
     id_grupo: number;
@@ -37,11 +38,10 @@ interface Horario {
 }
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-const HORAS = [
-  '07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30'
-];
 
 export default function VisualizarGeneradosPage() {
+  const [horas, setHoras] = useState<string[]>([]);
+  const [config, setConfig] = useState<any>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const sesion_id = searchParams.get('sesion');
@@ -65,14 +65,34 @@ export default function VisualizarGeneradosPage() {
   const cargarHorarios = async () => {
     try {
       setCargando(true);
-      const res = await fetch(`/api/horarios/obtener-generados?sesion_id=${sesion_id}&tipo=temporal`);
-      const data = await res.json();
+      const [resHorarios, resConfig] = await Promise.all([
+        fetch(`/api/horarios/obtener-generados?sesion_id=${sesion_id}&tipo=temporal`),
+        fetch('/api/configuracion')
+      ]);
 
-      if (data.exito) {
-        setHorarios(data.datos.horarios || []);
-        info('✅ Horarios cargados', `Se encontraron ${data.datos.total} asignaciones`);
+      const [dataHorarios, dataConfig] = await Promise.all([
+        resHorarios.json(),
+        resConfig.json()
+      ]);
+
+      if (dataConfig.exito && dataConfig.datos) {
+        setConfig(dataConfig.datos);
+        const { utilidadesFecha } = await import('@/lib/utilidadesFecha');
+        const intervalos = utilidadesFecha.generarIntervalosHorarios(
+          dataConfig.datos.hora_inicio,
+          dataConfig.datos.hora_fin,
+          dataConfig.datos.duracion_bloque
+        );
+        setHoras(intervalos.map(i => i.inicio));
       } else {
-        error('Error', data.error || 'No se pudieron cargar los horarios');
+        setHoras(['07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30']);
+      }
+
+      if (dataHorarios.exito) {
+        setHorarios(dataHorarios.datos.horarios || []);
+        info('✅ Horarios cargados', `Se encontraron ${dataHorarios.datos.total} asignaciones`);
+      } else {
+        error('Error', dataHorarios.error || 'No se pudieron cargar los horarios');
       }
     } catch (err) {
       console.error('Error:', err);
@@ -249,19 +269,19 @@ export default function VisualizarGeneradosPage() {
           </div>
         </div>
 
-        {/* Vista de Contenido */}
-        <div id={`vista-${vistaActual}`} className="bg-white rounded-lg shadow p-6">
-          {vistaActual === 'ciclo' && <VistaPorCiclo horarios={horarios} onEditar={handleEditarHorario} />}
-          {vistaActual === 'aula' && <VistaPorAula horarios={horarios} onEditar={handleEditarHorario} />}
-          {vistaActual === 'laboratorio' && <VistaPorLaboratorio horarios={horarios} onEditar={handleEditarHorario} />}
-          {vistaActual === 'docente' && <VistaPorDocente horarios={horarios} onEditar={handleEditarHorario} />}
-        </div>
+        {/* Vistas según selección */}
+      <div className="bg-white rounded-lg shadow-lg p-6" id="tabla-horarios">
+        {vistaActual === 'ciclo' && <VistaPorCiclo horarios={horarios} onEditar={handleEditarHorario} horas={horas} />}
+        {vistaActual === 'aula' && <VistaPorAula horarios={horarios} onEditar={handleEditarHorario} horas={horas} />}
+        {vistaActual === 'laboratorio' && <VistaPorLaboratorio horarios={horarios} onEditar={handleEditarHorario} horas={horas} />}
+        {vistaActual === 'docente' && <VistaPorDocente horarios={horarios} onEditar={handleEditarHorario} horas={horas} />}
       </div>
 
       {/* Modal de Edición */}
       {editando && (
         <ModalEditarHorario
           horario={editando}
+          horas={horas}
           onChange={setEditando}
           onGuardar={handleGuardarEdicion}
           onCancelar={() => setEditando(null)}
@@ -269,14 +289,15 @@ export default function VisualizarGeneradosPage() {
         />
       )}
     </div>
+    </div>
   );
 }
 
 // Componentes de Vistas
-function VistaPorCiclo({ horarios, onEditar }: { horarios: Horario[]; onEditar: (h: Horario) => void }) {
+function VistaPorCiclo({ horarios, onEditar, horas }: { horarios: Horario[]; onEditar: (h: Horario) => void; horas: string[] }) {
   const ciclos = new Map<number, Horario[]>();
   horarios.forEach(h => {
-    const ciclo = h.curso?.id_curso || 0;
+    const ciclo = h.curso?.ciclo ?? 0;
     if (!ciclos.has(ciclo)) ciclos.set(ciclo, []);
     ciclos.get(ciclo)!.push(h);
   });
@@ -285,15 +306,17 @@ function VistaPorCiclo({ horarios, onEditar }: { horarios: Horario[]; onEditar: 
     <div className="space-y-6">
       {Array.from(ciclos.entries()).map(([ciclo, items]) => (
         <div key={ciclo} className="border rounded-lg p-4 bg-blue-50">
-          <h3 className="text-xl font-bold text-blue-900 mb-4">Ciclo {ciclo}</h3>
-          <MatrizHoraria horarios={items} onEditar={onEditar} />
+          <h3 className="text-xl font-bold text-blue-900 mb-4">
+            {ciclo > 0 ? `Ciclo ${ciclo}` : 'Sin ciclo definido'}
+          </h3>
+          <MatrizHoraria horarios={items} onEditar={onEditar} horas={horas} />
         </div>
       ))}
     </div>
   );
 }
 
-function VistaPorAula({ horarios, onEditar }: { horarios: Horario[]; onEditar: (h: Horario) => void }) {
+function VistaPorAula({ horarios, onEditar, horas }: { horarios: Horario[]; onEditar: (h: Horario) => void; horas: string[] }) {
   const aulas = new Map<string, Horario[]>();
   horarios
     .filter(h => h.tipo_clase === 'teoria')
@@ -308,14 +331,14 @@ function VistaPorAula({ horarios, onEditar }: { horarios: Horario[]; onEditar: (
       {Array.from(aulas.entries()).map(([aula, items]) => (
         <div key={aula} className="border rounded-lg p-4 bg-green-50">
           <h3 className="text-xl font-bold text-green-900 mb-4">🏫 {aula}</h3>
-          <MatrizHoraria horarios={items} onEditar={onEditar} />
+          <MatrizHoraria horarios={items} onEditar={onEditar} horas={horas} />
         </div>
       ))}
     </div>
   );
 }
 
-function VistaPorLaboratorio({ horarios, onEditar }: { horarios: Horario[]; onEditar: (h: Horario) => void }) {
+function VistaPorLaboratorio({ horarios, onEditar, horas }: { horarios: Horario[]; onEditar: (h: Horario) => void; horas: string[] }) {
   const labs = new Map<string, Horario[]>();
   horarios
     .filter(h => h.tipo_clase === 'laboratorio')
@@ -330,14 +353,14 @@ function VistaPorLaboratorio({ horarios, onEditar }: { horarios: Horario[]; onEd
       {Array.from(labs.entries()).map(([lab, items]) => (
         <div key={lab} className="border rounded-lg p-4 bg-purple-50">
           <h3 className="text-xl font-bold text-purple-900 mb-4">🔬 {lab}</h3>
-          <MatrizHoraria horarios={items} onEditar={onEditar} />
+          <MatrizHoraria horarios={items} onEditar={onEditar} horas={horas} />
         </div>
       ))}
     </div>
   );
 }
 
-function VistaPorDocente({ horarios, onEditar }: { horarios: Horario[]; onEditar: (h: Horario) => void }) {
+function VistaPorDocente({ horarios, onEditar, horas }: { horarios: Horario[]; onEditar: (h: Horario) => void; horas: string[] }) {
   const docentes = new Map<number, Horario[]>();
   horarios.forEach(h => {
     const id = h.docente?.id_docente || 0;
@@ -352,14 +375,14 @@ function VistaPorDocente({ horarios, onEditar }: { horarios: Horario[]; onEditar
           <h3 className="text-xl font-bold text-orange-900 mb-4">
             👨‍🏫 {items[0]?.docente?.apellidos}, {items[0]?.docente?.nombres}
           </h3>
-          <MatrizHoraria horarios={items} onEditar={onEditar} />
+          <MatrizHoraria horarios={items} onEditar={onEditar} horas={horas} />
         </div>
       ))}
     </div>
   );
 }
 
-function MatrizHoraria({ horarios, onEditar }: { horarios: Horario[]; onEditar: (h: Horario) => void }) {
+function MatrizHoraria({ horarios, onEditar, horas }: { horarios: Horario[]; onEditar: (h: Horario) => void; horas: string[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-sm">
@@ -372,7 +395,7 @@ function MatrizHoraria({ horarios, onEditar }: { horarios: Horario[]; onEditar: 
           </tr>
         </thead>
         <tbody>
-          {HORAS.map(hora => (
+          {horas.map(hora => (
             <tr key={hora}>
               <td className="border p-2 font-bold text-gray-700 bg-gray-50">{hora}</td>
               {DIAS.map((dia, diaIdx) => {
@@ -407,12 +430,14 @@ function MatrizHoraria({ horarios, onEditar }: { horarios: Horario[]; onEditar: 
 
 function ModalEditarHorario({
   horario,
+  horas,
   onChange,
   onGuardar,
   onCancelar,
   guardando
 }: {
   horario: Horario;
+  horas: string[];
   onChange: (h: Horario) => void;
   onGuardar: () => void;
   onCancelar: () => void;
@@ -445,7 +470,7 @@ function ModalEditarHorario({
                 onChange={(e) => onChange({ ...horario, hora_inicio: e.target.value })}
                 className="w-full border rounded px-3 py-2"
               >
-                {HORAS.map(h => (
+                {horas.map(h => (
                   <option key={h} value={h}>{h}</option>
                 ))}
               </select>

@@ -92,8 +92,7 @@ export async function GET(request: NextRequest) {
 function agruparPorCiclo(horarios: any[]) {
   const grupos = new Map<number, any[]>();
   horarios.forEach(h => {
-    // Placeholder: asumir ciclo basado en ID del grupo
-    const ciclo = Math.ceil((h.grupo?.id_grupo || 1) / 100); // Simplificado
+    const ciclo = h.curso?.ciclo ?? 0;
     if (!grupos.has(ciclo)) grupos.set(ciclo, []);
     grupos.get(ciclo)!.push(h);
   });

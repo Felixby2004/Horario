@@ -18,7 +18,6 @@ const menuItems = [
   { titulo: 'Usuarios', icono: '👤', ruta: '/dashboard/usuarios' },
   { titulo: 'Solicitudes', icono: '📋', ruta: '/dashboard/solicitudes' },
   { titulo: 'Reportes', icono: '📄', ruta: '/dashboard/reportes' },
-  { titulo: 'Notificaciones', icono: '🔔', ruta: '/dashboard/notificaciones' },
   { titulo: 'Configuración', icono: '⚙️', ruta: '/dashboard/configuracion' },
 ];
 

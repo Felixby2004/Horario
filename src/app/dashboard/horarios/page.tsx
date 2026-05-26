@@ -4,23 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
+import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-const HORAS = [
-  { inicio: '07:00', fin: '08:30' },
-  { inicio: '08:30', fin: '10:00' },
-  { inicio: '10:00', fin: '11:30' },
-  { inicio: '11:30', fin: '13:00' },
-  { inicio: '13:00', fin: '14:30' },
-  { inicio: '14:30', fin: '16:00' },
-  { inicio: '16:00', fin: '17:30' },
-  { inicio: '17:30', fin: '19:00' },
-  { inicio: '19:00', fin: '20:30' },
-  { inicio: '20:30', fin: '22:00' }
-];
 
 export default function HorariosPage() {
   const router = useRouter();
+  const [horas, setHoras] = useState<{ inicio: string, fin: string }[]>([]);
+  const [config, setConfig] = useState<any>(null);
   const [periodos, setPeriodos] = useState<any[]>([]);
   const [docentes, setDocentes] = useState<any[]>([]);
   const [cursos, setCursos] = useState<any[]>([]);
@@ -75,17 +66,43 @@ export default function HorariosPage() {
 
   const cargarDatosIniciales = useCallback(async () => {
     try {
-      const [resPeriodos, resDocentes, resAmbientes] = await Promise.all([
+      const [resPeriodos, resDocentes, resAmbientes, resConfig] = await Promise.all([
         fetch('/api/periodos'),
         fetch('/api/docentes'),
-        fetch('/api/ambientes')
+        fetch('/api/ambientes'),
+        fetch('/api/configuracion')
       ]);
 
-      const [dataPeriodos, dataDocentes, dataAmbientes] = await Promise.all([
+      const [dataPeriodos, dataDocentes, dataAmbientes, dataConfig] = await Promise.all([
         resPeriodos.json(),
         resDocentes.json(),
-        resAmbientes.json()
+        resAmbientes.json(),
+        resConfig.json()
       ]);
+
+      if (dataConfig.exito && dataConfig.datos) {
+        setConfig(dataConfig.datos);
+        const nuevosIntervalos = utilidadesFecha.generarIntervalosHorarios(
+          dataConfig.datos.hora_inicio,
+          dataConfig.datos.hora_fin,
+          dataConfig.datos.duracion_bloque
+        );
+        setHoras(nuevosIntervalos);
+      } else {
+        // Fallback si no hay config
+        setHoras([
+          { inicio: '07:00', fin: '08:30' },
+          { inicio: '08:30', fin: '10:00' },
+          { inicio: '10:00', fin: '11:30' },
+          { inicio: '11:30', fin: '13:00' },
+          { inicio: '13:00', fin: '14:30' },
+          { inicio: '14:30', fin: '16:00' },
+          { inicio: '16:00', fin: '17:30' },
+          { inicio: '17:30', fin: '19:00' },
+          { inicio: '19:00', fin: '20:30' },
+          { inicio: '20:30', fin: '22:00' }
+        ]);
+      }
 
       if (dataPeriodos.exito) {
         const periodosActivos = (dataPeriodos.datos || []).filter(
@@ -170,6 +187,20 @@ export default function HorariosPage() {
 
   useEffect(() => {
     cargarDatosIniciales();
+  }, [cargarDatosIniciales]);
+
+  useEffect(() => {
+    const recargarConfiguracion = () => {
+      cargarDatosIniciales();
+    };
+
+    window.addEventListener('focus', recargarConfiguracion);
+    window.addEventListener('configuracion-updated', recargarConfiguracion as EventListener);
+
+    return () => {
+      window.removeEventListener('focus', recargarConfiguracion);
+      window.removeEventListener('configuracion-updated', recargarConfiguracion as EventListener);
+    };
   }, [cargarDatosIniciales]);
 
   useEffect(() => {
@@ -324,8 +355,8 @@ export default function HorariosPage() {
 
       const horario = {
         dia_semana: diaIndex,
-        hora_inicio: HORAS[horaIndex].inicio,
-        hora_fin: HORAS[horaIndex].fin,
+        hora_inicio: horas[horaIndex].inicio,
+        hora_fin: horas[horaIndex].fin,
         id_periodo: parseInt(periodoSeleccionado),
         id_docente: parseInt(docenteSeleccionado),
         id_curso: parseInt(cursoSeleccionado),
@@ -369,7 +400,7 @@ export default function HorariosPage() {
     // Retornar TODOS los horarios que coincidan (puede haber hasta 2 en lab/práctica)
     return horarios.filter(h => 
       h.dia_semana === diaIndex && 
-      h.hora_inicio === HORAS[horaIndex].inicio &&
+      h.hora_inicio === horas[horaIndex].inicio &&
       h.curso?.ciclo === parseInt(cicloSeleccionado)
     );
   };
@@ -749,7 +780,7 @@ export default function HorariosPage() {
               </tr>
             </thead>
             <tbody>
-              {HORAS.map((hora, horaIndex) => (
+              {horas.map((hora, horaIndex) => (
                 <tr key={horaIndex}>
                   <td className="border p-2 text-sm font-medium bg-gray-50 sticky left-0 z-10">
                     {hora.inicio}<br/>{hora.fin}
@@ -785,7 +816,7 @@ export default function HorariosPage() {
                       const docenteOcupado = horarios.some(h => 
                         h.id_docente === parseInt(docenteSeleccionado) && 
                         h.dia_semana === diaIndex && 
-                        h.hora_inicio === HORAS[horaIndex].inicio &&
+                        h.hora_inicio === horas[horaIndex].inicio &&
                         h.estado !== 'cancelado'
                       );
                       if (docenteOcupado) {
@@ -873,6 +904,7 @@ export default function HorariosPage() {
           tipo={consultaTipo}
           ambientes={ambientes}
           horarios={horarios}
+          horas={horas.map(h => h.inicio)}
         />
       )}
     </div>

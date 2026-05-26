@@ -29,13 +29,12 @@ interface Horario {
 }
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-const HORAS = [
-  '07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30'
-];
 
 export default function VistaPorCicloPage() {
   const { alertas, eliminarAlerta, error } = useAlertasTemporales();
 
+  const [horas, setHoras] = useState<string[]>([]);
+  const [config, setConfig] = useState<any>(null);
   const [ciclos, setCiclos] = useState<any[]>([]);
   const [cicloSeleccionado, setCicloSeleccionado] = useState<number>(1);
   const [horarios, setHorarios] = useState<Horario[]>([]);
@@ -67,13 +66,33 @@ export default function VistaPorCicloPage() {
   const cargarHorarios = async () => {
     try {
       setCargando(true);
-      const res = await fetch('/api/horarios');
-      const data = await res.json();
+      const [resHorarios, resConfig] = await Promise.all([
+        fetch('/api/horarios'),
+        fetch('/api/configuracion')
+      ]);
 
-      if (data.exito) {
-        setHorarios(data.datos || []);
+      const [dataHorarios, dataConfig] = await Promise.all([
+        resHorarios.json(),
+        resConfig.json()
+      ]);
+
+      if (dataConfig.exito && dataConfig.datos) {
+        setConfig(dataConfig.datos);
+        const { utilidadesFecha } = await import('@/lib/utilidadesFecha');
+        const intervalos = utilidadesFecha.generarIntervalosHorarios(
+          dataConfig.datos.hora_inicio,
+          dataConfig.datos.hora_fin,
+          dataConfig.datos.duracion_bloque
+        );
+        setHoras(intervalos.map(i => i.inicio));
       } else {
-        error('Error', data.error || 'No se pudieron cargar los horarios');
+        setHoras(['07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30']);
+      }
+
+      if (dataHorarios.exito) {
+        setHorarios(dataHorarios.datos || []);
+      } else {
+        error('Error', dataHorarios.error || 'No se pudieron cargar los horarios');
       }
     } catch (err) {
       console.error('Error:', err);
@@ -117,14 +136,14 @@ export default function VistaPorCicloPage() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-2xl font-bold mb-6 text-blue-900">Ciclo {cicloSeleccionado}</h2>
-          <MatrizHoraria horarios={horariosFiltrados} />
+          <MatrizHoraria horarios={horariosFiltrados} horas={horas} />
         </div>
       </div>
     </div>
   );
 }
 
-function MatrizHoraria({ horarios }: { horarios: Horario[] }) {
+function MatrizHoraria({ horarios, horas }: { horarios: Horario[], horas: string[] }) {
   if (horarios.length === 0) {
     return (
       <div className="text-center py-12">
@@ -145,7 +164,7 @@ function MatrizHoraria({ horarios }: { horarios: Horario[] }) {
           </tr>
         </thead>
         <tbody>
-          {HORAS.map(hora => (
+          {horas.map(hora => (
             <tr key={hora}>
               <td className="border p-2 font-bold text-gray-700 bg-gray-50">{hora}</td>
               {DIAS.map((dia, diaIdx) => {

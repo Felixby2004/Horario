@@ -7,22 +7,30 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const idPeriodo = parseInt(searchParams.get('periodo') || '0');
 
+    const config = await prisma.configuracionSistema.findFirst();
+    const duracionBloque = config?.duracion_bloque || 90;
+    const [hIniConfig, mIniConfig] = (config?.hora_inicio || '07:00').split(':').map(Number);
+    const minutosInicioConfig = hIniConfig * 60 + mIniConfig;
+
     const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-    const bloques = 10;
+    const bloques = config?.bloques_horarios || 10;
     const matriz: number[][] = Array(bloques).fill(0).map(() => Array(5).fill(0));
 
     // Calcular ocupación por bloque y día
     for (let b = 0; b < bloques; b++) {
       for (let d = 0; d < dias.length; d++) {
-        const horaInicio = `${7 + Math.floor(b * 1.5)}:${(b % 2) * 30}`;
-        const horaFin = `${7 + Math.floor((b + 1) * 1.5)}:${((b + 1) % 2) * 30}`;
+        const minInicioBloque = minutosInicioConfig + (b * duracionBloque);
+        const minFinBloque = minInicioBloque + duracionBloque;
+
+        const hInicio = `${Math.floor(minInicioBloque / 60).toString().padStart(2, '0')}:${(minInicioBloque % 60).toString().padStart(2, '0')}`;
+        const hFin = `${Math.floor(minFinBloque / 60).toString().padStart(2, '0')}:${(minFinBloque % 60).toString().padStart(2, '0')}`;
 
         const ocupados = await prisma.horarioAsignado.count({
           where: {
             id_periodo: idPeriodo,
-            dia_semana: dias[d] as any,
-            hora_inicio: { lte: horaFin },
-            hora_fin: { gte: horaInicio },
+            dia_semana: d, // dia_semana es INTEGER en la BD
+            hora_inicio: { lte: hFin },
+            hora_fin: { gte: hInicio },
             estado: { in: ['confirmado', 'publicado'] }
           }
         });

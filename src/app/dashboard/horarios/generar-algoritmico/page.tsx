@@ -36,6 +36,7 @@ export default function GeneradorHorariosAG() {
   const [cargando, setCargando] = useState(true);
   const [generando, setGenerando] = useState(false);
   const [datosGeneracion, setDatosGeneracion] = useState<DatosGeneracion | null>(null);
+  const [criterioOrdenamiento, setCriterioOrdenamiento] = useState<'combinado' | 'antiguedad' | 'disponibilidad'>('combinado');
 
   // Parámetros del algoritmo
   const [parametros, setParametros] = useState({
@@ -85,6 +86,7 @@ export default function GeneradorHorariosAG() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id_periodo: periodSeleccionado,
+          criterio_ordenamiento: criterioOrdenamiento,
           ...parametros
         })
       });
@@ -200,6 +202,24 @@ export default function GeneradorHorariosAG() {
               <h3 className="font-semibold text-sm mb-3">Parámetros del AG</h3>
 
               <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Criterio de priorización
+                  </label>
+                  <select
+                    value={criterioOrdenamiento}
+                    onChange={(e) => setCriterioOrdenamiento(e.target.value as 'combinado' | 'antiguedad' | 'disponibilidad')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="combinado">Combinado: disponibilidad + antigüedad</option>
+                    <option value="antiguedad">Solo antigüedad</option>
+                    <option value="disponibilidad">Solo disponibilidad</option>
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    El criterio combinado prioriza docentes disponibles y, entre ellos, a los de mayor antigüedad.
+                  </p>
+                </div>
+
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
                     Tamaño Población: {parametros.tamanio_poblacion}

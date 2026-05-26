@@ -724,3 +724,20 @@ model HistorialCitacion {
 
   @@map("historial_citacion")
 }
+
+// Configuración del sistema
+model ConfiguracionSistema {
+  id_configuracion           Int       @id @default(autoincrement())
+  bloques_horarios           Int       @default(10)
+  duracion_bloque            Int       @default(90)
+  hora_inicio                String    @db.VarChar(5) @default("07:00")
+  hora_fin                   String    @db.VarChar(5) @default("22:00")
+  max_horas_docente          Int       @default(40)
+  min_horas_entre_clases     Int       @default(0)
+  permitir_clases_seguidas   Boolean   @default(true)
+  validar_capacidad_ambiente Boolean   @default(true)
+  fecha_creacion             DateTime  @default(now())
+  fecha_actualizacion        DateTime  @updatedAt
+
+  @@map("configuracion_sistema")
+}

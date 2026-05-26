@@ -42,6 +42,7 @@ export interface ParametrosAG {
   generaciones: number;
   probabilidad_cruzamiento: number;
   probabilidad_mutacion: number;
+  criterio_ordenamiento?: 'combinado' | 'antiguedad' | 'disponibilidad';
 }
 
 class GeneradorHorariosAG {
@@ -51,6 +52,7 @@ class GeneradorHorariosAG {
   private grupos: any[] = [];
   private ambientes: any[] = [];
   private disponibilidades: Map<number, any[]> = new Map();
+  private criterioOrdenamiento: 'combinado' | 'antiguedad' | 'disponibilidad' = 'combinado';
 
   /**
    * Inicializa el algoritmo genético cargando datos del sistema
@@ -126,6 +128,71 @@ class GeneradorHorariosAG {
     }
   }
 
+  private obtenerAntiguedad(docente: any): number {
+    if (typeof docente?.antiguedad === 'number') {
+      return docente.antiguedad;
+    }
+
+    if (docente?.fecha_ingreso) {
+      const fechaIngreso = new Date(docente.fecha_ingreso);
+      const hoy = new Date();
+      let antiguedad = hoy.getFullYear() - fechaIngreso.getFullYear();
+      const meses = hoy.getMonth() - fechaIngreso.getMonth();
+      if (meses < 0 || (meses === 0 && hoy.getDate() < fechaIngreso.getDate())) {
+        antiguedad--;
+      }
+      return Math.max(0, antiguedad);
+    }
+
+    return 0;
+  }
+
+  private obtenerPuntajeDisponibilidadDocente(docente: any, dia: number, horaInicio: string, horaFin: string): number {
+    const disponibilidades = this.disponibilidades.get(docente.id_docente) || [];
+
+    if (disponibilidades.length === 0) {
+      return 1;
+    }
+
+    const disponible = disponibilidades.some((d: any) => {
+      if (d.dia_semana !== dia || d.disponible !== true) {
+        return false;
+      }
+
+      return this.intervaloCubiertoPorDisponibilidad(d.hora_inicio, d.hora_fin, horaInicio, horaFin);
+    });
+
+    return disponible ? 100 : 0;
+  }
+
+  private intervaloCubiertoPorDisponibilidad(dispoInicio: string, dispoFin: string, horaInicio: string, horaFin: string): boolean {
+    return this.horaAMinutos(dispoInicio) <= this.horaAMinutos(horaInicio) &&
+      this.horaAMinutos(dispoFin) >= this.horaAMinutos(horaFin);
+  }
+
+  private ordenarDocentesPorPrioridad(docentes: any[], dia: number, horaInicio: string, horaFin: string): any[] {
+    const conPuntaje = docentes.map(docente => {
+      const antiguedad = this.obtenerAntiguedad(docente);
+      const disponibilidad = this.obtenerPuntajeDisponibilidadDocente(docente, dia, horaInicio, horaFin);
+      const puntaje = this.criterioOrdenamiento === 'antiguedad'
+        ? antiguedad
+        : this.criterioOrdenamiento === 'disponibilidad'
+          ? disponibilidad
+          : (disponibilidad * 1000) + antiguedad;
+
+      return { docente, puntaje, antiguedad, disponibilidad };
+    });
+
+    return conPuntaje
+      .filter(item => item.disponibilidad > 0)
+      .sort((a, b) => {
+        if (b.puntaje !== a.puntaje) return b.puntaje - a.puntaje;
+        if (b.disponibilidad !== a.disponibilidad) return b.disponibilidad - a.disponibilidad;
+        return b.antiguedad - a.antiguedad;
+      })
+      .map(item => item.docente);
+  }
+
   /**
    * Genera la población inicial de cromosomas
    */
@@ -152,6 +219,9 @@ class GeneradorHorariosAG {
   private generarHorariosAleatorios(): AsignacionHorario[] {
     const horarios: AsignacionHorario[] = [];
 
+    const horaInicioBase = '08:00';
+    const horaFinBase = '22:00';
+
     for (const grupo of this.grupos) {
       // Obtener docentes que pueden enseñar este curso
       const docentesValidos = this.docentes.filter(d =>
@@ -160,10 +230,17 @@ class GeneradorHorariosAG {
 
       if (docentesValidos.length === 0) continue;
 
-      // Seleccionar docente aleatorio
-      const docente = docentesValidos[
-        Math.floor(Math.random() * docentesValidos.length)
-      ];
+      const dia = Math.floor(Math.random() * 5); // 0-4 (lunes a viernes)
+      const horaBase = 8 + Math.floor(Math.random() * 10); // 8:00 a 18:00
+      const horaInicio = `${String(horaBase).padStart(2, '0')}:00`;
+      const horaFin = `${String(horaBase + 2).padStart(2, '0')}:00`;
+
+      const docentesPriorizados = this.ordenarDocentesPorPrioridad(docentesValidos, dia, horaInicio, horaFin);
+
+      if (docentesPriorizados.length === 0) continue;
+
+      // Seleccionar el docente mejor priorizado para combinar disponibilidad y antigüedad
+      const docente = docentesPriorizados[0];
 
       // Obtener ambiente válido para la capacidad del grupo
       const ambientesValidos = this.ambientes.filter(
@@ -176,14 +253,20 @@ class GeneradorHorariosAG {
         Math.floor(Math.random() * ambientesValidos.length)
       ];
 
-      // Generar día y hora aleatorios
-      const dia = Math.floor(Math.random() * 5); // 0-4 (lunes a viernes)
-      const horaBase = 8 + Math.floor(Math.random() * 10); // 8:00 a 18:00
-      
       // Determinar duración según tipo de clase y curso
       const curso = this.cursos.find(c => c.id_curso === grupo.id_curso);
       const horasLab = curso?.horas_laboratorio || 2;
       const duracion = horasLab > 0 ? horasLab : 2;
+
+      // Si el docente no tiene disponibilidad para este bloque, se intenta con el siguiente grupo
+      const coberturaDisponibilidad = this.obtenerPuntajeDisponibilidadDocente(docente, dia, horaInicio, horaFin);
+      if (coberturaDisponibilidad <= 0) {
+        const docenteAlternativo = docentesPriorizados.find(candidato =>
+          this.obtenerPuntajeDisponibilidadDocente(candidato, dia, horaInicio, horaFin) > 0
+        );
+
+        if (!docenteAlternativo) continue;
+      }
 
       horarios.push({
         id_docente: docente.id_docente,
@@ -191,7 +274,7 @@ class GeneradorHorariosAG {
         id_grupo: grupo.id_grupo,
         id_ambiente: ambiente.id_ambiente,
         dia_semana: dia,
-        hora_inicio: `${String(horaBase).padStart(2, '0')}:00`,
+        hora_inicio: horaInicio,
         hora_fin: `${String(horaBase + duracion).padStart(2, '0')}:00`,
         tipo_clase: 'teoria'
       });
@@ -477,6 +560,7 @@ class GeneradorHorariosAG {
    */
   async ejecutar(parametros: ParametrosAG): Promise<Cromosoma> {
     await this.inicializar(parametros.id_periodo);
+    this.criterioOrdenamiento = parametros.criterio_ordenamiento || 'combinado';
 
     console.log(`[AG] Iniciando ejecución: ${parametros.generaciones} generaciones, población de ${parametros.tamanio_poblacion}`);
 

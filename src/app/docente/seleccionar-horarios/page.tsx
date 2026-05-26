@@ -2,23 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { Boton } from '@/components/ui/Boton';
+import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-const HORAS = [
-  { inicio: '07:00', fin: '08:30' },
-  { inicio: '08:30', fin: '10:00' },
-  { inicio: '10:00', fin: '11:30' },
-  { inicio: '11:30', fin: '13:00' },
-  { inicio: '13:00', fin: '14:30' },
-  { inicio: '14:30', fin: '16:00' },
-  { inicio: '16:00', fin: '17:30' },
-  { inicio: '17:30', fin: '19:00' },
-  { inicio: '19:00', fin: '20:30' },
-  { inicio: '20:30', fin: '22:00' }
-];
 
 export default function SeleccionarHorariosPage() {
+  const [horas, setHoras] = useState<{ inicio: string, fin: string }[]>([]);
+  const [config, setConfig] = useState<any>(null);
   const [usuario, setUsuario] = useState<any>(null);
   const [periodos, setPeriodos] = useState<any[]>([]);
   const [cursos, setCursos] = useState<any[]>([]);
@@ -41,6 +32,7 @@ export default function SeleccionarHorariosPage() {
   const [ventanaDebug, setVentanaDebug] = useState<any>(null);
   const [citacionInfo, setCitacionInfo] = useState<any>(null);
   const [isSlotActive, setIsSlotActive] = useState<boolean>(false);
+  const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -56,7 +48,7 @@ export default function SeleccionarHorariosPage() {
       if (!userData) return;
       const usuarioObj = JSON.parse(userData);
       try {
-        const res = await fetch(`/api/docente/ventana-actual?id_docente=${usuarioObj.id_docente}`);
+        const res = await fetch(`/api/docente/ventana-actual?id_docente=${usuarioObj.id_docente}`, { cache: 'no-store' });
         const data = await res.json();
         if (data.exito) {
           setVentanaEstado(data.datos.estado || null);
@@ -140,15 +132,41 @@ export default function SeleccionarHorariosPage() {
 
   const cargarDatos = async () => {
     try {
-      const [resPeriodos, resAmbientes] = await Promise.all([
+      const [resPeriodos, resAmbientes, resConfig] = await Promise.all([
         fetch('/api/periodos'),
-        fetch('/api/ambientes')
+        fetch('/api/ambientes'),
+        fetch('/api/configuracion')
       ]);
 
-      const [dataPeriodos, dataAmbientes] = await Promise.all([
+      const [dataPeriodos, dataAmbientes, dataConfig] = await Promise.all([
         resPeriodos.json(),
-        resAmbientes.json()
+        resAmbientes.json(),
+        resConfig.json()
       ]);
+
+      if (dataConfig.exito && dataConfig.datos) {
+        setConfig(dataConfig.datos);
+        const nuevosIntervalos = utilidadesFecha.generarIntervalosHorarios(
+          dataConfig.datos.hora_inicio,
+          dataConfig.datos.hora_fin,
+          dataConfig.datos.duracion_bloque
+        );
+        setHoras(nuevosIntervalos);
+      } else {
+        // Fallback
+        setHoras([
+          { inicio: '07:00', fin: '08:30' },
+          { inicio: '08:30', fin: '10:00' },
+          { inicio: '10:00', fin: '11:30' },
+          { inicio: '11:30', fin: '13:00' },
+          { inicio: '13:00', fin: '14:30' },
+          { inicio: '14:30', fin: '16:00' },
+          { inicio: '16:00', fin: '17:30' },
+          { inicio: '17:30', fin: '19:00' },
+          { inicio: '19:00', fin: '20:30' },
+          { inicio: '20:30', fin: '22:00' }
+        ]);
+      }
 
       if (dataPeriodos.exito) {
         // Filtrar periodos que NO estén finalizados
@@ -255,7 +273,7 @@ export default function SeleccionarHorariosPage() {
     
     return horariosExistentes.filter(h => 
       h.dia_semana === diaIndex && 
-      h.hora_inicio === HORAS[horaIndex].inicio &&
+      h.hora_inicio === horas[horaIndex].inicio &&
       h.curso?.ciclo === parseInt(cicloSeleccionado) &&
       h.estado !== 'cancelado'
     );
@@ -288,9 +306,10 @@ export default function SeleccionarHorariosPage() {
     const nuevas = new Set(celdasSeleccionadas);
 
     const horasLimite = obtenerHorasLimite();
-    const horasAprobadas = obtenerHorasYaAprobadas() * 1.5;
+    const duracionBloqueHoras = (config?.duracion_bloque || 90) / 60;
+    const horasAprobadas = obtenerHorasYaAprobadas() * duracionBloqueHoras;
     const horasDisponibles = Math.max(0, horasLimite - horasAprobadas);
-    const bloquesDisponibles = Math.floor(horasDisponibles / 1.5);
+    const bloquesDisponibles = Math.floor(horasDisponibles / duracionBloqueHoras);
 
     // Si intenta agregar una celda que ya existe, solo eliminarla
     if (nuevas.has(key)) {
@@ -298,13 +317,13 @@ export default function SeleccionarHorariosPage() {
     } else {
       // Si intenta agregar nueva celda, validar límite
       if (bloquesDisponibles <= 0) {
-        setError(`❌ ${tipoClase.charAt(0).toUpperCase() + tipoClase.slice(1)}: Ya tienes completas las ${horasLimite} horas (cada bloque es de 1.5h)`);
+        setError(`❌ ${tipoClase.charAt(0).toUpperCase() + tipoClase.slice(1)}: Ya tienes completas las ${horasLimite} horas (cada bloque es de ${config?.duracion_bloque || 90} min)`);
         return;
       }
 
       if (nuevas.size >= bloquesDisponibles) {
         setError(
-          `❌ ${tipoClase.charAt(0).toUpperCase() + tipoClase.slice(1)}: Solo puedes solicitar ${bloquesDisponibles} bloque(s) más (límite: ${horasLimite}h, aprobadas: ${horasAprobadas}h)`
+          `❌ ${tipoClase.charAt(0).toUpperCase() + tipoClase.slice(1)}: Solo puedes solicitar ${bloquesDisponibles} bloque(s) más (límite: ${horasLimite}h, asignadas: ${horasAprobadas}h)`
         );
         return;
       }
@@ -333,8 +352,8 @@ export default function SeleccionarHorariosPage() {
 
       const solicitud = {
         dia_semana: diaIndex,
-        hora_inicio: HORAS[horaIndex].inicio,
-        hora_fin: HORAS[horaIndex].fin,
+        hora_inicio: horas[horaIndex].inicio,
+        hora_fin: horas[horaIndex].fin,
         id_periodo: parseInt(periodoSeleccionado),
         id_docente: usuario.id_docente,
         id_curso: parseInt(cursoSeleccionado),
@@ -379,11 +398,42 @@ export default function SeleccionarHorariosPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold">Seleccionar mis horarios</h1>
-          <p className="text-gray-600">Selecciona los bloques horarios para tus cursos</p>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Seleccionar mis horarios</h1>
+            <p className="text-gray-600">Selecciona los bloques horarios para tus cursos</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setConsultaTipo('aula')}
+              className="bg-blue-100 text-blue-700 px-3 py-2 rounded hover:bg-blue-200 border border-blue-200 transition-colors text-sm font-medium"
+              title="Consultar disponibilidad de Aulas"
+            >
+              🏫 Aulas
+            </button>
+            <button
+              type="button"
+              onClick={() => setConsultaTipo('laboratorio')}
+              className="bg-purple-100 text-purple-700 px-3 py-2 rounded hover:bg-purple-200 border border-purple-200 transition-colors text-sm font-medium"
+              title="Consultar disponibilidad de Laboratorios"
+            >
+              🔬 Laboratorios
+            </button>
+          </div>
         </div>
 
+
+      {consultaTipo && (
+        <ModalConsultaAmbientes
+          abierto={!!consultaTipo}
+          alCerrar={() => setConsultaTipo(null)}
+          tipo={consultaTipo}
+          ambientes={ambientes}
+          horarios={horariosExistentes}
+          horas={horas.map((h) => h.inicio)}
+        />
+      )}
         {error && (
           <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg">
             ❌ {error}
@@ -391,9 +441,11 @@ export default function SeleccionarHorariosPage() {
         )}
 
         <div className="bg-white p-6 rounded-lg shadow space-y-4">
-          <h3 className="font-semibold">Datos de asignación</h3>
+          <h3 className="font-semibold flex items-center gap-2">
+            <span>📋</span> Datos de asignación
+          </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Período *</label>
               <select
@@ -515,17 +567,20 @@ export default function SeleccionarHorariosPage() {
         )}
 
         {ventanaEstado === 'activa' && (
-          <div className="bg-green-100 border-l-4 border-green-500 p-4 mb-4 rounded shadow-sm">
+          <div className={`${isSlotActive || !citacionInfo ? 'bg-green-100 border-green-500' : 'bg-amber-100 border-amber-500'} border-l-4 p-4 mb-4 rounded shadow-sm transition-colors duration-500`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-2xl">✅</span>
+                <span className="text-2xl">{isSlotActive || !citacionInfo ? '✅' : '⏳'}</span>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-bold text-green-800">
-                  ¡Ventana de Atención Activa!
+                <p className={`text-sm font-bold ${isSlotActive || !citacionInfo ? 'text-green-800' : 'text-amber-800'}`}>
+                  {isSlotActive || !citacionInfo ? '¡Ventana de Atención Activa!' : '¡Espera tu turno!'}
                 </p>
-                <div className="text-xs text-green-700">
-                  <div>Usted se encuentra en su horario permitido para seleccionar cursos y grupos.
+                <div className={`text-xs ${isSlotActive || !citacionInfo ? 'text-green-700' : 'text-amber-700'}`}>
+                  <div>
+                    {isSlotActive || !citacionInfo 
+                      ? 'Usted se encuentra en su horario permitido para seleccionar cursos y grupos.' 
+                      : 'La ventana general está abierta, pero su slot individual aún no comienza o ya terminó.'}
                     {citacionInfo && ` (Turno #${citacionInfo.numero_orden_turno}: ${citacionInfo.hora_inicio} - ${citacionInfo.hora_fin})`}
                   </div>
                   {citacionInfo && (
@@ -535,7 +590,7 @@ export default function SeleccionarHorariosPage() {
                   )}
                   {citacionInfo && (
                     <div className="text-xs mt-1 font-semibold">
-                      Estado del turno: {isSlotActive ? <span className="text-green-700">Activo</span> : <span className="text-red-600">Inactivo</span>}
+                      Estado del turno: {isSlotActive ? <span className="text-green-700 font-black">● ACTIVO AHORA</span> : <span className="text-amber-600">● ESPERANDO / FINALIZADO</span>}
                     </div>
                   )}
                 </div>
@@ -579,8 +634,9 @@ export default function SeleccionarHorariosPage() {
                 <div className="text-sm font-medium text-gray-700 bg-gray-50 px-3 py-2 rounded">
                   {(() => {
                     const limite = obtenerHorasLimite();
-                    const aprobadasHoras = obtenerHorasYaAprobadas() * 1.5;
-                    const disponiblesBloques = Math.floor(Math.max(0, limite - aprobadasHoras) / 1.5);
+                    const duracionBloqueHoras = (config?.duracion_bloque || 90) / 60;
+                    const aprobadasHoras = obtenerHorasYaAprobadas() * duracionBloqueHoras;
+                    const disponiblesBloques = Math.floor(Math.max(0, limite - aprobadasHoras) / duracionBloqueHoras);
                     return (
                       <>
                         Límite:
@@ -605,7 +661,7 @@ export default function SeleccionarHorariosPage() {
                 </tr>
               </thead>
               <tbody>
-                {HORAS.map((hora, horaIndex) => (
+                {horas.map((hora, horaIndex) => (
                   <tr key={horaIndex}>
                     <td className="border p-2 text-sm font-medium bg-gray-50">
                       {hora.inicio}<br/>{hora.fin}

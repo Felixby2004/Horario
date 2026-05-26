@@ -6,7 +6,8 @@ import Link from 'next/link';
 
 const menuItems = [
   { titulo: 'Inicio', icono: '🏠', ruta: '/docente' },
-  { titulo: 'Mi Disponibilidad', icono: '📆', ruta: '/docente/disponibilidad' },
+  { titulo: 'Mi Disponibilidad', icono: '⏱️', ruta: '/docente/disponibilidad' },
+  { titulo: 'Mis Citas', icono: '🧾', ruta: '/docente/citaciones' },
   { titulo: 'Seleccionar Horarios', icono: '📅', ruta: '/docente/seleccionar-horarios' },
   { titulo: 'Mis Horarios', icono: '📋', ruta: '/docente/mis-horarios' },
   { titulo: 'Mis Cursos y Grupos', icono: '📚', ruta: '/docente/mis-cursos' },

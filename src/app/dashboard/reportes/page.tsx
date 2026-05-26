@@ -6,6 +6,15 @@ import Link from 'next/link';
 export default function ReportesPage() {
   const tiposReporte = [
     {
+      id: 'dia',
+      titulo: 'Reporte de auditoría por día',
+      descripcion: 'Audita y verifica todas las clases de un día específico',
+      icono: '📅',
+      color: 'bg-red-500',
+      ruta: '/dashboard/reportes/dia',
+      caracteristicas: ['Auditoría diaria', 'Profesores y cursos', 'Verificación de ambientes']
+    },
+    {
       id: 'aula',
       titulo: 'Reporte por aula',
       descripcion: 'Horario semanal completo de una aula específica',
@@ -62,25 +71,36 @@ export default function ReportesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tiposReporte.map((tipo) => (
-          <Link key={tipo.id} href={tipo.ruta}>
-            <div className="bg-white p-6 rounded-lg shadow hover:shadow-2xl hover:scale-105 transition-all cursor-pointer h-full border-t-4"
-              style={{ borderTopColor: tipo.color === 'bg-blue-500' ? '#3b82f6' : tipo.color === 'bg-purple-500' ? '#a855f7' : tipo.color === 'bg-green-500' ? '#22c55e' : '#f97316' }}>
-              <div className={`${tipo.color} w-16 h-16 rounded-lg flex items-center justify-center text-3xl mb-4`}>
-                {tipo.icono}
+        {tiposReporte.map((tipo) => {
+          const colorMap: { [key: string]: string } = {
+            'bg-blue-500': '#3b82f6',
+            'bg-purple-500': '#a855f7',
+            'bg-green-500': '#22c55e',
+            'bg-indigo-500': '#6366f1',
+            'bg-orange-500': '#f97316',
+            'bg-red-500': '#ef4444'
+          };
+          
+          return (
+            <Link key={tipo.id} href={tipo.ruta}>
+              <div className="bg-white p-6 rounded-lg shadow hover:shadow-2xl hover:scale-105 transition-all cursor-pointer h-full border-t-4"
+                style={{ borderTopColor: colorMap[tipo.color] || '#3b82f6' }}>
+                <div className={`${tipo.color} w-16 h-16 rounded-lg flex items-center justify-center text-3xl mb-4`}>
+                  {tipo.icono}
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-gray-900">{tipo.titulo}</h3>
+                <p className="text-gray-600 mb-4">{tipo.descripcion}</p>
+                <div className="space-y-1">
+                  {tipo.caracteristicas.map((carac, idx) => (
+                    <p key={idx} className="text-sm text-gray-500 flex items-center">
+                      <span className="mr-2">✓</span> {carac}
+                    </p>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">{tipo.titulo}</h3>
-              <p className="text-gray-600 mb-4">{tipo.descripcion}</p>
-              <div className="space-y-1">
-                {tipo.caracteristicas.map((carac, idx) => (
-                  <p key={idx} className="text-sm text-gray-500 flex items-center">
-                    <span className="mr-2">✓</span> {carac}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
 
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-8">

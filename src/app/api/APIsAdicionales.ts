@@ -37,15 +37,26 @@ export async function POST_periodos(request: NextRequest) {
 export async function GET_grupos(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const idCurso = searchParams.get('curso');
+  const idPeriodo = searchParams.get('periodo');
 
   try {
-    const grupos = await prisma.grupoCurso.findMany({
-      where: idCurso ? { id_curso: parseInt(idCurso) } : {},
+    const where: any = {};
+
+    if (idCurso) {
+      where.id_curso = parseInt(idCurso);
+    }
+
+    if (idPeriodo) {
+      where.id_periodo = parseInt(idPeriodo);
+    }
+
+    const grupos = await prisma.grupo.findMany({
+      where,
       include: {
         curso: true,
-        docente: true
+        periodo: true
       },
-      orderBy: { numero_grupo: 'asc' }
+      orderBy: { codigo_grupo: 'asc' }
     });
 
     return NextResponse.json({ exito: true, datos: grupos });
@@ -58,12 +69,22 @@ export async function POST_grupos(request: NextRequest) {
   try {
     const datos = await request.json();
 
-    const grupo = await prisma.grupoCurso.create({
+    if (!datos.id_curso || !datos.id_periodo || !datos.codigo_grupo) {
+      return NextResponse.json(
+        { error: 'id_curso, id_periodo y codigo_grupo son requeridos' },
+        { status: 400 }
+      );
+    }
+
+    const grupo = await prisma.grupo.create({
       data: {
         id_curso: datos.id_curso,
-        numero_grupo: datos.numero_grupo,
-        id_docente: datos.id_docente,
-        max_estudiantes: datos.max_estudiantes || 30
+        id_periodo: datos.id_periodo,
+        codigo_grupo: datos.codigo_grupo,
+        capacidad_maxima: datos.capacidad_maxima || 40,
+        cantidad_matriculados: datos.cantidad_matriculados ?? 0,
+        observaciones: datos.observaciones,
+        activo: datos.activo !== false
       }
     });
 

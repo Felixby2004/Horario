@@ -1,4 +1,17 @@
 export const utilidadesFecha = {
+  intervalosPorDefecto: [
+    { inicio: '07:00', fin: '08:30' },
+    { inicio: '08:30', fin: '10:00' },
+    { inicio: '10:00', fin: '11:30' },
+    { inicio: '11:30', fin: '13:00' },
+    { inicio: '13:00', fin: '14:30' },
+    { inicio: '14:30', fin: '16:00' },
+    { inicio: '16:00', fin: '17:30' },
+    { inicio: '17:30', fin: '19:00' },
+    { inicio: '19:00', fin: '20:30' },
+    { inicio: '20:30', fin: '22:00' }
+  ],
+
   formatearFecha: (fecha: Date | string): string => {
     const f = typeof fecha === 'string' ? new Date(fecha) : fecha;
     return f.toLocaleDateString('es-PE', { timeZone: 'America/Lima' });
@@ -43,10 +56,12 @@ export const utilidadesFecha = {
     });
   },
 
-  // Obtiene la fecha actual en el timezone de Lima
+  // Obtiene la fecha actual en el timezone de Lima (UTC-5) de forma robusta
   ahoraLima: (): Date => {
-    const now = new Date();
-    return new Date(now.toLocaleString('en-US', { timeZone: 'America/Lima' }));
+    const ahora = new Date();
+    const UTC_OFFSET_LIMA = -5;
+    const utc = ahora.getTime() + (ahora.getTimezoneOffset() * 60000);
+    return new Date(utc + (3600000 * UTC_OFFSET_LIMA));
   },
 
   esMismoDia: (fecha1: Date, fecha2: Date): boolean => {
@@ -84,5 +99,37 @@ export const utilidadesFecha = {
       antiguedad--;
     }
     return Math.max(0, antiguedad);
+  },
+
+  generarIntervalosHorarios: (horaInicio: string, horaFin: string, duracionMinutos: number) => {
+    const duracionValida = Number(duracionMinutos);
+    if (!Number.isFinite(duracionValida) || duracionValida <= 0) {
+      return utilidadesFecha.intervalosPorDefecto;
+    }
+
+    const intervalos = [];
+    const [hIni, mIni] = horaInicio.split(':').map(Number);
+    const [hFin, mFin] = horaFin.split(':').map(Number);
+    
+    let actualMinutos = hIni * 60 + mIni;
+    const finMinutos = hFin * 60 + mFin;
+    
+    while (actualMinutos + duracionMinutos <= finMinutos) {
+      const hInicioStr = Math.floor(actualMinutos / 60).toString().padStart(2, '0');
+      const mInicioStr = (actualMinutos % 60).toString().padStart(2, '0');
+      
+      const finIntervaloMinutos = actualMinutos + duracionMinutos;
+      const hFinStr = Math.floor(finIntervaloMinutos / 60).toString().padStart(2, '0');
+      const mFinStr = (finIntervaloMinutos % 60).toString().padStart(2, '0');
+      
+      intervalos.push({
+        inicio: `${hInicioStr}:${mInicioStr}`,
+        fin: `${hFinStr}:${mFinStr}`
+      });
+      
+      actualMinutos += duracionMinutos;
+    }
+
+    return intervalos.length > 0 ? intervalos : utilidadesFecha.intervalosPorDefecto;
   }
 };
