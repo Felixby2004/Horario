@@ -18,8 +18,8 @@ RUN npm run build
 FROM node:18-alpine AS runtime
 WORKDIR /app
 
-# Install dumb-init to handle signals properly
-RUN apk add --no-cache dumb-init
+# Install dumb-init and OpenSSL (required for Prisma)
+RUN apk add --no-cache dumb-init openssl openssl-dev
 
 ENV NODE_ENV=production
 ENV PORT=3000
@@ -30,6 +30,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
