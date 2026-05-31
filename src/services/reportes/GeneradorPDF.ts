@@ -2093,18 +2093,31 @@ export class GeneradorPDF {
   }
 
   private static async convertirAPDF(html: string): Promise<Buffer> {
+    let executablePath = '';
+
+    // Determinar ruta ejecutable según ambiente
+    if (process.env.NODE_ENV === 'production') {
+      // En Render/producción: usar @sparticuz/chromium
+      try {
+        const chromium = await import('@sparticuz/chromium');
+        executablePath = await chromium.executablePath(
+          process.env.CHROMIUM_PATH || ''
+        );
+      } catch (e) {
+        console.warn('No se pudo cargar @sparticuz/chromium:', e);
+      }
+    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      // En local Windows: usar ruta configurada
+      executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+
     const launchOptions: any = {
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
     };
 
-    // En Render (Linux), usar Chromium descargado. En local (Windows), usar Chrome del path
-    if (process.env.NODE_ENV === 'production' && process.platform === 'linux') {
-      // Render: usar Chromium descargado por Puppeteer
-      launchOptions.executablePath = '/usr/bin/chromium' || undefined;
-    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      // Local Windows: usar ruta configurada
-      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    if (executablePath) {
+      launchOptions.executablePath = executablePath;
     }
 
     const browser = await puppeteer.launch(launchOptions);

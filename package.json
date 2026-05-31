@@ -45,6 +45,7 @@
     "nodemailer": "^6.9.8",
     "pg": "^8.21.0",
     "postcss": "^8.4.33",
+    "@sparticuz/chromium": "^119.0.2",
     "puppeteer": "^21.9.0",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
