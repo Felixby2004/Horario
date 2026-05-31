@@ -3,6 +3,14 @@ import puppeteer from 'puppeteer';
 import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
 
+// Importar chromium opcional para Render
+let chromium: any = null;
+try {
+  chromium = require('@sparticuz/chromium');
+} catch (e) {
+  // @sparticuz/chromium es opcional
+}
+
 interface DiaHorario {
   [key: string]: Array<{
     hora_inicio: string;
@@ -2093,31 +2101,18 @@ export class GeneradorPDF {
   }
 
   private static async convertirAPDF(html: string): Promise<Buffer> {
-    let executablePath = '';
-
-    // Determinar ruta ejecutable según ambiente
-    if (process.env.NODE_ENV === 'production') {
-      // En Render/producción: usar @sparticuz/chromium
-      try {
-        const chromium = await import('@sparticuz/chromium');
-        executablePath = await chromium.executablePath(
-          process.env.CHROMIUM_PATH || ''
-        );
-      } catch (e) {
-        console.warn('No se pudo cargar @sparticuz/chromium:', e);
-      }
-    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      // En local Windows: usar ruta configurada
-      executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    }
-
     const launchOptions: any = {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
     };
 
-    if (executablePath) {
-      launchOptions.executablePath = executablePath;
+    // Usar @sparticuz/chromium si está disponible (Render)
+    if (chromium) {
+      launchOptions.executablePath = await chromium.executablePath();
+    }
+    // O usar PUPPETEER_EXECUTABLE_PATH si está configurado (local Windows)
+    else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     }
 
     const browser = await puppeteer.launch(launchOptions);
