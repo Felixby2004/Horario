@@ -18,20 +18,46 @@ export class ImportadorDocentes {
       const fila: any = datos[i];
       
       try {
-        await prisma.docente.create({
-          data: {
-            codigo_docente: String(fila.codigo || fila.Codigo),
-            nombres: String(fila.nombres || fila.Nombres),
-            apellidos: String(fila.apellidos || fila.Apellidos),
-            modalidad: String(fila.modalidad || fila.Modalidad || 'contratado').toLowerCase(),
-            categoria: String(fila.categoria || fila.Categoria || 'auxiliar').toLowerCase(),
-            correo_electronico: String(fila.correo || fila.Correo || ''),
-            telefono: String(fila.telefono || fila.Telefono || ''),
-            grado_academico: String(fila.grado || fila.Grado || 'licenciado'),
-            especialidad: String(fila.especialidad || fila.Especialidad || ''),
-            antiguedad: parseInt(fila.antiguedad || fila.Antiguedad || '0')
-          }
+        const codigo = String(fila.codigo || fila.Codigo).trim();
+        
+        // Verificar si el docente ya existe
+        const docenteExistente = await prisma.docente.findUnique({
+          where: { codigo_docente: codigo }
         });
+
+        if (docenteExistente) {
+          // Actualizar en lugar de crear
+          await prisma.docente.update({
+            where: { codigo_docente: codigo },
+            data: {
+              nombres: String(fila.nombres || fila.Nombres),
+              apellidos: String(fila.apellidos || fila.Apellidos),
+              modalidad: String(fila.modalidad || fila.Modalidad || 'contratado').toLowerCase(),
+              categoria: String(fila.categoria || fila.Categoria || 'auxiliar').toLowerCase(),
+              correo_electronico: String(fila.correo || fila.Correo || ''),
+              telefono: String(fila.telefono || fila.Telefono || ''),
+              grado_academico: String(fila.grado || fila.Grado || 'licenciado'),
+              especialidad: String(fila.especialidad || fila.Especialidad || ''),
+              antiguedad: parseInt(fila.antiguedad || fila.Antiguedad || '0')
+            }
+          });
+        } else {
+          // Crear nuevo docente
+          await prisma.docente.create({
+            data: {
+              codigo_docente: codigo,
+              nombres: String(fila.nombres || fila.Nombres),
+              apellidos: String(fila.apellidos || fila.Apellidos),
+              modalidad: String(fila.modalidad || fila.Modalidad || 'contratado').toLowerCase(),
+              categoria: String(fila.categoria || fila.Categoria || 'auxiliar').toLowerCase(),
+              correo_electronico: String(fila.correo || fila.Correo || ''),
+              telefono: String(fila.telefono || fila.Telefono || ''),
+              grado_academico: String(fila.grado || fila.Grado || 'licenciado'),
+              especialidad: String(fila.especialidad || fila.Especialidad || ''),
+              antiguedad: parseInt(fila.antiguedad || fila.Antiguedad || '0')
+            }
+          });
+        }
         
         exitosos.push(i + 1);
       } catch (error: any) {
@@ -70,20 +96,55 @@ export class ImportadorDocentes {
       });
 
       try {
-        await prisma.docente.create({
-          data: {
-            codigo_docente: fila.codigo,
-            nombres: fila.nombres,
-            apellidos: fila.apellidos,
-            modalidad: (fila.modalidad || 'contratado').toLowerCase() as any,
-            categoria: (fila.categoria || 'auxiliar').toLowerCase() as any,
-            correo_electronico: fila.correo || '',
-            telefono: fila.telefono || '',
-            grado_academico: fila.grado || 'licenciado',
-            especialidad: fila.especialidad || '',
-            antiguedad: parseInt(fila.antiguedad || '0')
-          }
+        const codigo = fila.codigo?.trim();
+        
+        if (!codigo) {
+          errores.push({
+            fila: i,
+            error: 'Código de docente es requerido',
+            datos: fila
+          });
+          continue;
+        }
+
+        // Verificar si docente existe
+        const docenteExistente = await prisma.docente.findUnique({
+          where: { codigo_docente: codigo }
         });
+
+        if (docenteExistente) {
+          // Actualizar
+          await prisma.docente.update({
+            where: { codigo_docente: codigo },
+            data: {
+              nombres: fila.nombres || '',
+              apellidos: fila.apellidos || '',
+              modalidad: (fila.modalidad || 'contratado').toLowerCase() as any,
+              categoria: (fila.categoria || 'auxiliar').toLowerCase() as any,
+              correo_electronico: fila.correo || '',
+              telefono: fila.telefono || '',
+              grado_academico: fila.grado || 'licenciado',
+              especialidad: fila.especialidad || '',
+              antiguedad: parseInt(fila.antiguedad || '0')
+            }
+          });
+        } else {
+          // Crear
+          await prisma.docente.create({
+            data: {
+              codigo_docente: codigo,
+              nombres: fila.nombres || '',
+              apellidos: fila.apellidos || '',
+              modalidad: (fila.modalidad || 'contratado').toLowerCase() as any,
+              categoria: (fila.categoria || 'auxiliar').toLowerCase() as any,
+              correo_electronico: fila.correo || '',
+              telefono: fila.telefono || '',
+              grado_academico: fila.grado || 'licenciado',
+              especialidad: fila.especialidad || '',
+              antiguedad: parseInt(fila.antiguedad || '0')
+            }
+          });
+        }
 
         exitosos.push(i);
       } catch (error: any) {

@@ -104,7 +104,8 @@ function agruparPorCiclo(horarios: any[]) {
 function agruparPorAula(horarios: any[]) {
   const grupos = new Map<string, any[]>();
   horarios.forEach(h => {
-    if (h.tipo_clase === 'teoria') {
+    // Incluir teoría y cualquier clase que sea en aula
+    if (h.ambiente?.tipo === 'aula' || h.tipo_clase === 'teoria') {
       const key = h.ambiente?.codigo || 'SIN_AULA';
       if (!grupos.has(key)) grupos.set(key, []);
       grupos.get(key)!.push(h);
@@ -116,7 +117,8 @@ function agruparPorAula(horarios: any[]) {
 function agruparPorLaboratorio(horarios: any[]) {
   const grupos = new Map<string, any[]>();
   horarios.forEach(h => {
-    if (h.tipo_clase === 'laboratorio') {
+    // Incluir laboratorio y práctica en ambientes de laboratorio
+    if (h.ambiente?.tipo === 'laboratorio' || h.tipo_clase === 'laboratorio' || h.tipo_clase === 'practica') {
       const key = h.ambiente?.codigo || 'SIN_LAB';
       if (!grupos.has(key)) grupos.set(key, []);
       grupos.get(key)!.push(h);

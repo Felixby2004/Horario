@@ -239,8 +239,22 @@ class GeneradorHorariosAG {
 
       if (docentesPriorizados.length === 0) continue;
 
-      // Seleccionar el docente mejor priorizado para combinar disponibilidad y antigüedad
-      const docente = docentesPriorizados[0];
+      // MEJORADO: Distribuir docentes entre múltiples grupos si es posible
+      const gruposDelCurso = this.grupos.filter(g => g.id_curso === grupo.id_curso);
+      const cantidadDocentesValidos = docentesPriorizados.length;
+      
+      let docenteSeleccionado;
+      if (cantidadDocentesValidos > 1 && gruposDelCurso.length > 1) {
+        // Distribución round-robin: asignar diferentes docentes a diferentes grupos
+        const indiceGrupo = gruposDelCurso.findIndex(g => g.id_grupo === grupo.id_grupo) || 0;
+        const indiceDocente = indiceGrupo % cantidadDocentesValidos;
+        docenteSeleccionado = docentesPriorizados[indiceDocente];
+      } else {
+        // Usar el mejor priorizado
+        docenteSeleccionado = docentesPriorizados[0];
+      }
+
+      const docente = docenteSeleccionado;
 
       // Obtener ambiente válido para la capacidad del grupo
       const ambientesValidos = this.ambientes.filter(
