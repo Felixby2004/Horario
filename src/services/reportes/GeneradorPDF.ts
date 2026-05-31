@@ -2093,10 +2093,21 @@ export class GeneradorPDF {
   }
 
   private static async convertirAPDF(html: string): Promise<Buffer> {
-    const browser = await puppeteer.launch({
+    const launchOptions: any = {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    };
+
+    // En Render (Linux), usar Chromium descargado. En local (Windows), usar Chrome del path
+    if (process.env.NODE_ENV === 'production' && process.platform === 'linux') {
+      // Render: usar Chromium descargado por Puppeteer
+      launchOptions.executablePath = '/usr/bin/chromium' || undefined;
+    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      // Local Windows: usar ruta configurada
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+
+    const browser = await puppeteer.launch(launchOptions);
 
     try {
       const page = await browser.newPage();
