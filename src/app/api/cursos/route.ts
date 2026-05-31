@@ -64,15 +64,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verificar si ya existe un curso con ese código
+    const cursoExistente = await prisma.curso.findUnique({
+      where: { codigo: datos.codigo }
+    });
+
+    if (cursoExistente) {
+      return NextResponse.json(
+        { exito: false, mensaje: `Ya existe un curso con el código "${datos.codigo}"` },
+        { status: 409 }
+      );
+    }
+
     const curso = await prisma.curso.create({
       data: {
-        codigo: datos.codigo,
-        nombre: datos.nombre,
-        ciclo: datos.ciclo || 1,
-        horas_teoria: datos.horas_teoria || 0,
-        horas_practica: datos.horas_practica || 0,
-        horas_laboratorio: datos.horas_laboratorio || 0,
-        creditos: datos.creditos,
+        codigo: datos.codigo.trim(),
+        nombre: datos.nombre.trim(),
+        ciclo: datos.ciclo || null,
+        horas_teoria: parseInt(datos.horas_teoria) || 0,
+        horas_practica: parseInt(datos.horas_practica) || 0,
+        horas_laboratorio: parseInt(datos.horas_laboratorio) || 0,
+        creditos: parseInt(datos.creditos),
         plan_estudios: datos.plan_estudios || null,
         activo: datos.activo ?? true
       }
@@ -85,6 +97,16 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('Error creando curso:', error);
+    
+    // Manejo específico de errores de Prisma
+    if (error.code === 'P2002') {
+      // Unique constraint violation
+      return NextResponse.json(
+        { exito: false, mensaje: `El campo "${error.meta?.target?.[0] || 'codigo'}" ya existe` },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { exito: false, mensaje: `Error al crear curso: ${error.message}` },
       { status: 500 }
