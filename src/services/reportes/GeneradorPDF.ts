@@ -3,14 +3,6 @@ import puppeteer from 'puppeteer';
 import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
 
-// Importar chromium opcional para Render
-let chromium: any = null;
-try {
-  chromium = require('@sparticuz/chromium');
-} catch (e) {
-  // @sparticuz/chromium es opcional
-}
-
 interface DiaHorario {
   [key: string]: Array<{
     hora_inicio: string;
@@ -2103,17 +2095,19 @@ export class GeneradorPDF {
   private static async convertirAPDF(html: string): Promise<Buffer> {
     const launchOptions: any = {
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage' // Crítico para Render
+      ]
     };
 
-    // Usar @sparticuz/chromium si está disponible (Render)
-    if (chromium) {
-      launchOptions.executablePath = await chromium.executablePath();
-    }
-    // O usar PUPPETEER_EXECUTABLE_PATH si está configurado (local Windows)
-    else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    // En local Windows, usar Chrome del path si está configurado
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
       launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     }
+    // En Render, Puppeteer lo detectará automáticamente
 
     const browser = await puppeteer.launch(launchOptions);
 
