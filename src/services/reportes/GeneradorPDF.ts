@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/prisma'; 
 import puppeteer from 'puppeteer';
 import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
