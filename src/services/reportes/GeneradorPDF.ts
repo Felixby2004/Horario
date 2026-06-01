@@ -31,8 +31,26 @@ const COLORES_CURSOS: string[] = [
 ];
 
 export class GeneradorPDF {
+  // Obtener configuración del sistema
+  private static async obtenerConfiguracion() {
+    let config = await prisma.configuracionSistema.findFirst();
+    if (!config) {
+      config = await prisma.configuracionSistema.create({
+        data: {
+          bloques_horarios: 10,
+          duracion_bloque: 90,
+          hora_inicio: '07:00',
+          hora_fin: '22:00'
+        }
+      });
+    }
+    return config;
+  }
+
   // Reporte por Aula
   static async generarReporteAula(idAmbiente: number, idPeriodo: number) {
+    const config = await this.obtenerConfiguracion();
+    
     const ambiente = await prisma.ambiente.findUnique({
       where: { id_ambiente: idAmbiente }
     });
@@ -71,7 +89,7 @@ export class GeneradorPDF {
 
     // Crear matriz de horarios para grid
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const horasDisponibles = this.generarHorasStandard();
+    const horasDisponibles = this.generarHorasStandard(config);
     const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasDisponibles);
 
     const html = this.generarHTMLReporteAulaFormato(
@@ -88,6 +106,8 @@ export class GeneradorPDF {
 
   // Reporte por Ciclo
   static async generarReporteCiclo(idPeriodo: number, ciclo: number) {
+    const config = await this.obtenerConfiguracion();
+
     const periodo = await prisma.periodoAcademico.findUnique({
       where: { id_periodo: idPeriodo }
     });
@@ -118,7 +138,8 @@ export class GeneradorPDF {
       periodo,
       ciclo,
       horarios,
-      cursosUnicos
+      cursosUnicos,
+      config
     );
 
     return await this.convertirAPDF(html);
@@ -131,6 +152,8 @@ export class GeneradorPDF {
 
   // Reporte de Auditoría por Día
   static async generarReporteDia(idPeriodo: number, diaSemana: number) {
+    const config = await this.obtenerConfiguracion();
+
     const periodo = await prisma.periodoAcademico.findUnique({
       where: { id_periodo: idPeriodo }
     });
@@ -152,12 +175,14 @@ export class GeneradorPDF {
       ]
     });
 
-    const html = this.generarHTMLReporteDia(periodo, diaSemana, horarios);
+    const html = this.generarHTMLReporteDia(periodo, diaSemana, horarios, config);
     return await this.convertirAPDF(html);
   }
 
   // Excel por Día
   static async generarExcelDia(idPeriodo: number, diaSemana: number): Promise<Buffer> {
+    const config = await this.obtenerConfiguracion();
+
     const periodo = await prisma.periodoAcademico.findUnique({
       where: { id_periodo: idPeriodo }
     });
@@ -262,12 +287,38 @@ export class GeneradorPDF {
     return buffer as Buffer;
   }
 
-  // Generar horas estándar del día (7-8, 8-9, etc.)
-  private static generarHorasStandard(): string[] {
+  // Generar horas estándar del día según configuración
+  private static generarHorasStandard(config?: any): string[] {
     const horas: string[] = [];
-    for (let i = 7; i < 22; i++) {
-      horas.push(`${String(i).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`);
+    const inicio = config?.hora_inicio || '07:00';
+    const fin = config?.hora_fin || '22:00';
+    const duracion = config?.duracion_bloque || 90;
+
+    const [hI, mI] = inicio.split(':').map(Number);
+    const [hF, mF] = fin.split(':').map(Number);
+
+    let actualMin = hI * 60 + mI;
+    const finMin = hF * 60 + mF;
+
+    while (actualMin + duracion <= finMin) {
+      const hInicio = Math.floor(actualMin / 60);
+      const mInicio = actualMin % 60;
+      const hFin = Math.floor((actualMin + duracion) / 60);
+      const mFin = (actualMin + duracion) % 60;
+
+      horas.push(
+        `${String(hInicio).padStart(2, '0')}:${String(mInicio).padStart(2, '0')}-${String(hFin).padStart(2, '0')}:${String(mFin).padStart(2, '0')}`
+      );
+      actualMin += duracion;
     }
+
+    // Si no se generaron horas (ej. config inválida), usar default anterior
+    if (horas.length === 0) {
+      for (let i = 7; i < 22; i++) {
+        horas.push(`${String(i).padStart(2, '0')}:00-${String(i + 1).padStart(2, '0')}:00`);
+      }
+    }
+
     return horas;
   }
 
@@ -286,10 +337,11 @@ export class GeneradorPDF {
     horarios.forEach(h => {
       const diaNombre = this.obtenerNombreDia(h.dia_semana);
       if (diaNombre && diaNombre !== 'N/A') {
-        const [horaI] = h.hora_inicio.split(':').map(Number);
-        const horaKey = horasRango.find(hora => {
-          const horaFormato = `${String(horaI).padStart(2, '0')}`;
-          return hora.startsWith(horaFormato);
+        // Encontrar el bloque que corresponde a la hora de inicio
+        const horaKey = horasRango.find(rango => {
+          const [inicioRango, finRango] = rango.split('-');
+          // La clase cae en este bloque si su hora de inicio está dentro del rango
+          return h.hora_inicio >= inicioRango && h.hora_inicio < finRango;
         });
 
         if (horaKey && matriz[diaNombre]) {
@@ -311,7 +363,7 @@ export class GeneradorPDF {
   }
 
   // HTML para reporte de auditoría por día
-  private static generarHTMLReporteDia(periodo: any, diaSemana: number, horarios: any[]) {
+  private static generarHTMLReporteDia(periodo: any, diaSemana: number, horarios: any[], config?: any) {
     const nombresDias = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     const nombreDia = nombresDias[diaSemana] || 'Día desconocido';
 
@@ -833,6 +885,8 @@ export class GeneradorPDF {
 
   // Generación de Excel - Formato profesional con colores y estilos
   static async generarExcelAula(idAmbiente: number, idPeriodo: number): Promise<Buffer> {
+    const config = await this.obtenerConfiguracion();
+
     const ambiente = await prisma.ambiente.findUnique({
       where: { id_ambiente: idAmbiente }
     });
@@ -966,7 +1020,7 @@ export class GeneradorPDF {
     });
 
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const horasRango = this.generarHorasStandard();
+    const horasRango = this.generarHorasStandard(config);
     const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasRango);
 
     // Encabezado del horario
@@ -1383,6 +1437,8 @@ export class GeneradorPDF {
   // Métodos auxiliares de HTML
   // Reporte por Docente - Horario Semanal
   static async generarReporteDocenteHorario(idDocente: number, idPeriodo: number) {
+    const config = await this.obtenerConfiguracion();
+
     const docente = await prisma.docente.findUnique({
       where: { id_docente: idDocente }
     });
@@ -1418,7 +1474,7 @@ export class GeneradorPDF {
       });
     });
 
-    const html = this.generarHTMLReporteDocenteHorario(docente, periodo, horariosPorDia, diasSemana);
+    const html = this.generarHTMLReporteDocenteHorario(docente, periodo, horariosPorDia, diasSemana, config);
     return await this.convertirAPDF(html);
   }
 
@@ -1527,7 +1583,7 @@ export class GeneradorPDF {
     return await this.convertirAPDF(html);
   }
 
-  private static generarHTMLReporteDocenteHorario(docente: any, periodo: any, horariosPorDia: any, diasSemana: string[]) {
+  private static generarHTMLReporteDocenteHorario(docente: any, periodo: any, horariosPorDia: any, diasSemana: string[], config?: any) {
     const tablasHorario = diasSemana.map((dia, diaIdx) => {
       const horariosDelDia = horariosPorDia[dia];
       if (horariosDelDia.length === 0) return '';
@@ -1617,7 +1673,7 @@ export class GeneradorPDF {
     `;
   }
 
-  private static generarHTMLReporteCiclo(periodo: any, ciclo: number, horarios: any[], cursosUnicos: any[]) {
+  private static generarHTMLReporteCiclo(periodo: any, ciclo: number, horarios: any[], cursosUnicos: any[], config?: any) {
     const horariosSet = new Map();
     horarios.forEach(h => {
       const key = `${h.id_docente}-${h.id_curso}`;
@@ -1640,7 +1696,7 @@ export class GeneradorPDF {
     });
 
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const horasRango = this.generarHorasStandard();
+    const horasRango = this.generarHorasStandard(config);
     const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasRango);
 
     const filasProf = horariosUnicos.map((h, idx) => {
