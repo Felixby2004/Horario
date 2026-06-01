@@ -3,11 +3,10 @@ version: 1
 services:
   - type: web
     name: horarios-unt-app
-    env: node
+    env: docker
     plan: free
     branch: main
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    # El buildCommand y startCommand se definen en el Dockerfile
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL

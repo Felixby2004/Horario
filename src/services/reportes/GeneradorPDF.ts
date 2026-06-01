@@ -1,4 +1,4 @@
-﻿import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import puppeteer from 'puppeteer';
 import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
@@ -2099,15 +2099,18 @@ export class GeneradorPDF {
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-gpu',
-        '--disable-dev-shm-usage' // Crítico para Render
+        '--disable-dev-shm-usage'
       ]
     };
 
-    // En local Windows, usar Chrome del path si está configurado
+    // Configuración de la ruta del ejecutable de Chromium
     if (process.env.PUPPETEER_EXECUTABLE_PATH) {
       launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    } 
+    // En Render (Linux) sin variable de entorno, intentar rutas comunes
+    else if (process.env.NODE_ENV === 'production') {
+      launchOptions.executablePath = '/usr/bin/chromium';
     }
-    // En Render, Puppeteer lo detectará automáticamente
 
     const browser = await puppeteer.launch(launchOptions);
 
