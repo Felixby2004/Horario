@@ -10,13 +10,38 @@ export async function GET(request: NextRequest) {
     const modalidad = searchParams.get('modalidad');
     const categoria = searchParams.get('categoria');
     const activo = searchParams.get('activo');
+    const ciclo = searchParams.get('ciclo');
+
+    let where: any = {
+      ...(modalidad && { modalidad: modalidad as any }),
+      ...(categoria && { categoria: categoria as any }),
+      ...(activo !== null && { activo: activo === 'true' })
+    };
+
+    // If ciclo is provided, filter docentes who have active DocenteCurso for courses in that ciclo
+    if (ciclo) {
+      const docenteCursos = await prisma.docenteCurso.findMany({
+        where: {
+          activo: true,
+          curso: {
+            ciclo: parseInt(ciclo)
+          }
+        },
+        select: { id_docente: true }
+      });
+      const validDocenteIds = [...new Set(docenteCursos.map(dc => dc.id_docente))];
+      if (validDocenteIds.length === 0) {
+        return NextResponse.json({
+          exito: true,
+          datos: [],
+          total: 0
+        });
+      }
+      where.id_docente = { in: validDocenteIds };
+    }
 
     const docentes = await prisma.docente.findMany({
-      where: {
-        ...(modalidad && { modalidad: modalidad as any }),
-        ...(categoria && { categoria: categoria as any }),
-        ...(activo !== null && { activo: activo === 'true' })
-      },
+      where,
       include: {
         usuario: {
           select: {

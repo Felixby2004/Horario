@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-export function usePaginacion<T>(datos: T[], itemsPorPagina: number = 10) {
+export function usePaginacion<T>(datos: T[], itemsPorPagina: number = 8) {
   const [paginaActual, setPaginaActual] = useState(1);
 
   const totalPaginas = Math.ceil(datos.length / itemsPorPagina);

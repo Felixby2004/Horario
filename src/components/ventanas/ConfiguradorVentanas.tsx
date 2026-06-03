@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import { CampoTexto } from '@/components/ui/CampoTexto';
 import { Boton } from '@/components/ui/Boton';
+import { useAlerta } from '@/contexts/AlertaContext';
 
 export const ConfiguradorVentanas: React.FC = () => {
+  const { exito, error } = useAlerta();
+  
   const [formulario, setFormulario] = useState({
     fecha: '',
     hora_inicio: '',
@@ -29,7 +32,7 @@ export const ConfiguradorVentanas: React.FC = () => {
       const data = await response.json();
 
       if (data.exito) {
-        alert('Ventana creada exitosamente');
+        exito('Ventana creada', 'La ventana de atención se creó exitosamente');
         setFormulario({
           fecha: '',
           hora_inicio: '',
@@ -37,9 +40,11 @@ export const ConfiguradorVentanas: React.FC = () => {
           modalidad_docente: 'nombrado',
           categoria_docente: 'principal'
         });
+      } else {
+        error('Error', data.mensaje || 'No se pudo crear la ventana');
       }
-    } catch (error) {
-      alert('Error al crear ventana');
+    } catch (err) {
+      error('Error', 'Ocurrió un error al crear la ventana');
     }
   };
 

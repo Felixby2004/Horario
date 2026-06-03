@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Boton } from '@/components/ui/Boton';
+import { useAlerta } from '@/contexts/AlertaContext';
 
 interface Turno {
   id: number;
@@ -37,6 +38,7 @@ const CRITERIOS = [
 ];
 
 export default function VentanasPage() {
+  const { exito, error, advertencia } = useAlerta();
   const [dias, setDias] = useState<Dia[]>([]);
   const [periodos, setPeriodos] = useState<any[]>([]);
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState<number | null>(null);
@@ -191,14 +193,14 @@ export default function VentanasPage() {
       });
 
       if (res.ok) {
-        alert('✅ Fase de disponibilidad guardada');
+        exito('Fase guardada', 'La fase de disponibilidad se guardó correctamente');
         cargarFase(periodoSeleccionado);
       } else {
         const data = await res.json();
-        alert(`❌ Error: ${data.error}`);
+        error('Error', data.error || 'No se pudo guardar la fase');
       }
-    } catch (error) {
-      alert('❌ Error de conexión');
+    } catch (err) {
+      error('Error de conexión', 'Ocurrió un problema al conectar con el servidor');
     } finally {
       setGuardando(false);
     }
@@ -206,12 +208,12 @@ export default function VentanasPage() {
 
   const handleProcesarDisponibilidad = () => {
     if (!fase.id_fase_disponibilidad) {
-      alert('⚠️ Primero debe guardar la fase de disponibilidad');
+      advertencia('Fase no guardada', 'Primero debe guardar la fase de disponibilidad');
       return;
     }
 
     if (fase.estado !== 'cerrada') {
-      alert('⚠️ La fase debe estar CERRADA para poder procesar las citaciones');
+      advertencia('Fase abierta', 'La fase debe estar CERRADA para poder procesar las citaciones');
       return;
     }
 
@@ -244,7 +246,7 @@ export default function VentanasPage() {
 
       const data = await res.json();
       if (res.ok) {
-        alert(`✅ Procesamiento completado. Se generaron ${data.citacionesCreadas || 0} citaciones.`);
+        exito('Procesamiento completado', `Se generaron ${data.citacionesCreadas || 0} citaciones.`);
         setShowConvModal(false);
         cargarFase(periodoSeleccionado!);
       } else if (data && data.advertenciaOrden) {
@@ -255,10 +257,10 @@ export default function VentanasPage() {
           // keep modal open for adjustments
         }
       } else {
-        alert(`❌ Error: ${data.error || data.mensaje || JSON.stringify(data)}`);
+        error('Error al procesar', data.error || data.mensaje || 'Ocurrió un problema durante el procesamiento');
       }
-    } catch (error) {
-      alert('❌ Error al procesar');
+    } catch (err) {
+      error('Error al procesar', 'Ocurrió un problema al conectar con el servidor');
     } finally {
       setConvSubmitting(false);
     }
@@ -350,7 +352,7 @@ export default function VentanasPage() {
 
   const guardarConfiguracion = async () => {
     if (!periodoSeleccionado) {
-      alert('⚠️ Por favor seleccione un período académico');
+      advertencia('Período no seleccionado', 'Por favor seleccione un período académico');
       return;
     }
 
@@ -386,9 +388,9 @@ export default function VentanasPage() {
         }
       }
 
-      alert('✅ Configuración de ventanas guardada');
-    } catch (error) {
-      alert('❌ Error al guardar la configuración');
+      exito('Configuración guardada', 'La configuración de ventanas se guardó correctamente');
+    } catch (err) {
+      error('Error al guardar', 'Ocurrió un problema al guardar la configuración');
     } finally {
       setGuardando(false);
     }

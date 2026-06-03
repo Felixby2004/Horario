@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { TablaDatos } from '@/components/ui/TablaDatos';
+import { TablaPaginada } from '@/components/ui/TablaPaginada';
+import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 
 export default function UsuariosPage() {
@@ -75,14 +76,101 @@ export default function UsuariosPage() {
     const nombre = `${u.nombres || ''} ${u.apellidos || ''}`.toLowerCase();
     const codigo = String(u.codigo || '').toLowerCase();
     const correo = String(u.correo_electronico || '').toLowerCase();
-    const rol = String(u.rol || '').replace(/_/g, ' ').toLowerCase();
+    // Handle rol safely if it's an object
+    let rolStr = '';
+    if (typeof u.rol === 'string') {
+      rolStr = u.rol.replace(/_/g, ' ').toLowerCase();
+    } else if (u.rol && typeof u.rol === 'object' && 'nombre' in u.rol) {
+      rolStr = String(u.rol.nombre).toLowerCase();
+    }
     return (
       nombre.includes(textoBusqueda) ||
       codigo.includes(textoBusqueda) ||
       correo.includes(textoBusqueda) ||
-      rol.includes(textoBusqueda)
+      rolStr.includes(textoBusqueda)
     );
   });
+
+  // Helper function to safely get string values
+  const getStringValue = (value: any, defaultValue: string = 'Sin asignar'): string => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value && typeof value === 'object' && 'nombre' in value) {
+      return String(value.nombre);
+    }
+    return defaultValue;
+  };
+
+  const columnas: ColumnaAntigua<any>[] = [
+    { campo: 'codigo' as const, encabezado: 'Código' },
+    { 
+      campo: 'nombres' as const, 
+      encabezado: 'Nombre Completo',
+      renderizar: (_: any, u: any) => `${u.apellidos || ''}, ${u.nombres || ''}`
+    },
+    { 
+      campo: 'correo_electronico' as const, 
+      encabezado: 'Email',
+      renderizar: (email: any) => getStringValue(email, '-')
+    },
+    { 
+      campo: 'rol' as const, 
+      encabezado: 'Rol',
+      renderizar: (rol: any) => {
+        const rolName = getStringValue(rol);
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
+            {rolName.replace(/_/g, ' ')}
+          </span>
+        );
+      }
+    },
+    { 
+      campo: 'activo' as const, 
+      encabezado: 'Estado',
+      renderizar: (activo: any, u: any) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+          u.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {u.activo ? 'Activo' : 'Inactivo'}
+        </span>
+      )
+    },
+    { 
+      campo: 'ultimo_acceso' as const, 
+      encabezado: 'Último Acceso',
+      renderizar: (ultimoAcceso: any) => {
+        if (!ultimoAcceso) return 'Nunca';
+        try {
+          return new Date(ultimoAcceso).toLocaleString();
+        } catch {
+          return 'Nunca';
+        }
+      }
+    },
+    { 
+      campo: 'id_usuario' as const, 
+      encabezado: 'Acciones',
+      renderizar: (_: any, u: any) => (
+        <div className="flex gap-2">
+          <Boton
+            onClick={() => toggleActivo(u.id_usuario, u.activo)}
+            tamaño="sm"
+            variante={u.activo ? 'secondary' : 'primary'}
+          >
+            {u.activo ? 'Desactivar' : 'Activar'}
+          </Boton>
+          <Boton
+            onClick={() => eliminar(u.id_usuario)}
+            variante="error"
+            tamaño="sm"
+          >
+            Eliminar
+          </Boton>
+        </div>
+      )
+    }
+  ];
 
   return (
     <div className="space-y-6">
@@ -115,54 +203,10 @@ export default function UsuariosPage() {
             No hay usuarios registrados.
           </div>
         ) : (
-          <TablaDatos
-            columnas={[
-              { clave: 'codigo', etiqueta: 'Código' },
-              { clave: 'nombre', etiqueta: 'Nombre Completo' },
-              { clave: 'email', etiqueta: 'Email' },
-              { clave: 'rol', etiqueta: 'Rol' },
-              { clave: 'estado', etiqueta: 'Estado' },
-              { clave: 'ultimo_acceso', etiqueta: 'Último Acceso' },
-              { clave: 'acciones', etiqueta: 'Acciones' }
-            ]}
-            datos={usuariosFiltrados.map((u: any) => ({
-              codigo: u.codigo,
-              nombre: `${u.apellidos}, ${u.nombres}`,
-              email: u.correo_electronico || '-',
-              rol: (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
-                  {u.rol.replace(/_/g, ' ')}
-                </span>
-              ),
-              estado: (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  u.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                }`}>
-                  {u.activo ? 'Activo' : 'Inactivo'}
-                </span>
-              ),
-              ultimo_acceso: u.ultimo_acceso 
-                ? new Date(u.ultimo_acceso).toLocaleString() 
-                : 'Nunca',
-              acciones: (
-                <div className="flex gap-2">
-                  <Boton
-                    onClick={() => toggleActivo(u.id_usuario, u.activo)}
-                    tamaño="sm"
-                    variante={u.activo ? 'secondary' : 'primary'}
-                  >
-                    {u.activo ? 'Desactivar' : 'Activar'}
-                  </Boton>
-                  <Boton
-                    onClick={() => eliminar(u.id_usuario)}
-                    variante="error"
-                    tamaño="sm"
-                  >
-                    Eliminar
-                  </Boton>
-                </div>
-              )
-            }))}
+          <TablaPaginada
+            columnas={columnas}
+            datos={usuariosFiltrados}
+            keyField="id_usuario"
           />
         )}
       </div>
@@ -189,7 +233,14 @@ export default function UsuariosPage() {
 
         <div className="bg-purple-50 p-4 rounded-lg">
           <div className="text-2xl font-bold text-purple-600">
-            {usuarios.filter((u: any) => u.rol === 'administrador_sistema').length}
+            {usuarios.filter((u: any) => {
+              // Check rol safely
+              if (typeof u.rol === 'string') return u.rol === 'administrador_sistema';
+              if (u.rol && typeof u.rol === 'object' && 'nombre' in u.rol) {
+                return u.rol.nombre === 'administrador_sistema' || u.rol.nombre === 'Administrador Sistema';
+              }
+              return false;
+            }).length}
           </div>
           <div className="text-sm text-gray-600">Administradores</div>
         </div>

@@ -360,15 +360,16 @@ function ordenarDocentes(registros: any[], criterio: string): any[] {
   const copia = [...registros];
 
   switch (criterio) {
-    case 'antiguedad':
+    case 'antiguedad': {
       // Mayor antigüedad primero
       return copia.sort((a, b) => {
         const antigA = a.docente.antiguedad || 0;
         const antigB = b.docente.antiguedad || 0;
         return antigB - antigA;
       });
+    }
 
-    case 'categoria':
+    case 'categoria': {
       // Orden: Principal > Asociado > Auxiliar > Jefe de Práctica
       const ordenCategoria = { principal: 4, asociado: 3, auxiliar: 2, jefe_practica: 1 };
       return copia.sort((a, b) => {
@@ -376,9 +377,10 @@ function ordenarDocentes(registros: any[], criterio: string): any[] {
         const ordB = ordenCategoria[b.docente.categoria.toLowerCase() as keyof typeof ordenCategoria] || 0;
         return ordB - ordA;
       });
+    }
 
     case 'combinado':
-    default:
+    default: {
       // Orden: Nombrado > Contratado
       // Luego por categoría: Principal > Asociado > Auxiliar > Jefe de Práctica
       // Finalmente por antigüedad: Mayor a menor
@@ -403,6 +405,7 @@ function ordenarDocentes(registros: any[], criterio: string): any[] {
         const antigB = b.docente.antiguedad || 0;
         return antigB - antigA;
       });
+    }
   }
 }
 

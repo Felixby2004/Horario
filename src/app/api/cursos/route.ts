@@ -8,34 +8,72 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const periodo = searchParams.get('periodo');
     const ciclo = searchParams.get('ciclo');
+    const id_docente = searchParams.get('id_docente');
 
-    let cursos = await prisma.curso.findMany({
-      orderBy: { codigo: 'asc' }
-    });
+    let cursos;
 
-    // Filtrar por ciclo si se proporciona
-    if (ciclo) {
-      cursos = cursos.filter(c => c.ciclo === parseInt(ciclo));
-    }
-
-    // Si hay período, filtrar por ciclo según semestre
-    if (periodo && !ciclo) {
-      const periodoData = await prisma.periodoAcademico.findUnique({
-        where: { id_periodo: parseInt(periodo) }
+    // Si se proporciona id_docente, obtener solo los cursos asignados al docente
+    if (id_docente) {
+      const docenteId = parseInt(id_docente);
+      
+      const docenteCursos = await prisma.docenteCurso.findMany({
+        where: {
+          id_docente: docenteId,
+          activo: true
+        },
+        include: {
+          curso: true
+        },
+        orderBy: {
+          curso: {
+            codigo: 'asc'
+          }
+        }
       });
 
-      if (periodoData) {
-        const codigoPeriodo = periodoData.codigo;
-        
-        // Determinar qué ciclos mostrar según el código del período
-        if (codigoPeriodo.endsWith('-I')) {
-          // Período I: ciclos impares (1, 3, 5, 7, 9)
-          cursos = cursos.filter(c => c.ciclo && c.ciclo % 2 === 1);
-        } else if (codigoPeriodo.endsWith('-II')) {
-          // Período II: ciclos pares (2, 4, 6, 8, 10)
-          cursos = cursos.filter(c => c.ciclo && c.ciclo % 2 === 0);
+      // Extraer los cursos únicos
+      let uniqueCursos = docenteCursos
+        .map(dc => dc.curso)
+        .filter((curso, index, self) => 
+          self.findIndex(c => c.id_curso === curso.id_curso) === index
+        );
+
+      // Filtrar por ciclo si se proporciona
+      if (ciclo) {
+        uniqueCursos = uniqueCursos.filter(c => c.ciclo === parseInt(ciclo));
+      }
+
+      cursos = uniqueCursos;
+    } else {
+      // Búsqueda normal sin filtro de docente
+      cursos = await prisma.curso.findMany({
+        orderBy: { codigo: 'asc' }
+      });
+
+      // Filtrar por ciclo si se proporciona
+      if (ciclo) {
+        cursos = cursos.filter(c => c.ciclo === parseInt(ciclo));
+      }
+
+      // Si hay período, filtrar por ciclo según semestre
+      if (periodo && !ciclo) {
+        const periodoData = await prisma.periodoAcademico.findUnique({
+          where: { id_periodo: parseInt(periodo) }
+        });
+
+        if (periodoData) {
+          const codigoPeriodo = periodoData.codigo;
+          
+          // Determinar qué ciclos mostrar según el código del período
+          if (codigoPeriodo.endsWith('-I')) {
+            // Período I: ciclos impares (1, 3, 5, 7, 9)
+            cursos = cursos.filter(c => c.ciclo && c.ciclo % 2 === 1);
+          } else if (codigoPeriodo.endsWith('-II')) {
+            // Período II: ciclos pares (2, 4, 6, 8, 10)
+            cursos = cursos.filter(c => c.ciclo && c.ciclo % 2 === 0);
+          }
+          // Si es -EXT o cualquier otro, mostrar todos los cursos
         }
-        // Si es -EXT o cualquier otro, mostrar todos los cursos
       }
     }
 

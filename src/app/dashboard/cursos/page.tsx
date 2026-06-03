@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TablaDatos } from '@/components/ui/TablaDatos';
+import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { Boton } from '@/components/ui/Boton';
 import { ContenedorAlertas } from '@/components/ui/ContenedorAlertas';
 import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
@@ -186,10 +186,10 @@ export default function CursosPage() {
   });
 
   return (
-    <div>
+    <div className="space-y-4">
       <ContenedorAlertas alertas={alertas} onEliminar={eliminarAlerta} />
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Gestión de cursos</h1>
           <p className="text-gray-600 mt-1">Catálogo de cursos académicos</p>
@@ -198,7 +198,7 @@ export default function CursosPage() {
           <Boton>➕ Nuevo curso</Boton>
         </Link>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 mb-4">
+      <div className="bg-white rounded-lg shadow p-4">
         <label className="block text-sm font-medium mb-2">Buscar curso</label>
         <input
           type="text"
@@ -212,7 +212,7 @@ export default function CursosPage() {
         </p>
       </div>
       <div className="bg-white rounded-lg shadow">
-        <TablaDatos datos={cursosFiltrados} columnas={columnas} keyField="id_curso" />
+        <TablaPaginada datos={cursosFiltrados} columnas={columnas} keyField="id_curso" />
       </div>
 
       {/* Modal de Edición */}

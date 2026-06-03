@@ -547,15 +547,17 @@ class GeneradorHorariosAG {
     const tipMutacion = Math.floor(Math.random() * 3);
 
     switch (tipMutacion) {
-      case 0: // Cambiar día
+      case 0: { // Cambiar día
         horarioMutante.dia_semana = Math.floor(Math.random() * 5);
         break;
-      case 1: // Cambiar hora
+      }
+      case 1: { // Cambiar hora
         const horaBase = 8 + Math.floor(Math.random() * 12);
         horarioMutante.hora_inicio = `${String(horaBase).padStart(2, '0')}:00`;
         horarioMutante.hora_fin = `${String(horaBase + 2).padStart(2, '0')}:00`;
         break;
-      case 2: // Cambiar ambiente
+      }
+      case 2: { // Cambiar ambiente
         if (this.ambientes.length > 0) {
           const ambienteAleatorio = this.ambientes[
             Math.floor(Math.random() * this.ambientes.length)
@@ -563,6 +565,7 @@ class GeneradorHorariosAG {
           horarioMutante.id_ambiente = ambienteAleatorio.id_ambiente;
         }
         break;
+      }
     }
 
     clon.aptitud = this.evaluarAptitud(clon);

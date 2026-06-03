@@ -52,45 +52,8 @@ export function ContenedorAlertas({ alertas, onEliminar, eliminarAlerta }: Conte
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-3 max-w-md pointer-events-none">
-      {alertas.map((alerta) => {
-        const estilos = obtenerEstilos(alerta.tipo);
-
-        return (
-          <div
-            key={alerta.id}
-            className={`${estilos.contenedor} rounded-lg p-4 shadow-lg animate-slide-in pointer-events-auto`}
-          >
-            <div className="flex gap-3">
-              <div className="text-xl flex-shrink-0 mt-0.5">{estilos.icono}</div>
-              <div className="flex-1">
-                <h4 className={estilos.titulo}>{alerta.titulo}</h4>
-                <p className={`text-sm mt-1 ${estilos.mensaje}`}>{alerta.mensaje}</p>
-              </div>
-              <button
-                onClick={() => handlerEliminar?.(alerta.id)}
-                className={`flex-shrink-0 text-xl leading-none ${estilos.boton} transition-colors`}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Barra de progreso */}
-            {alerta.duracion && alerta.duracion > 0 && (
-              <div className="mt-3 h-1 bg-current opacity-20 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-current opacity-50 rounded-full"
-                  style={{
-                    animation: `shrink ${alerta.duracion}ms linear forwards`
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      <style jsx>{`
+    <>
+      <style>{`
         @keyframes slide-in {
           from {
             transform: translateX(400px);
@@ -115,6 +78,44 @@ export function ContenedorAlertas({ alertas, onEliminar, eliminarAlerta }: Conte
           animation: slide-in 0.3s ease-out;
         }
       `}</style>
-    </div>
+      <div className="fixed top-4 right-4 z-50 space-y-3 max-w-md pointer-events-none">
+        {alertas.map((alerta) => {
+          const estilos = obtenerEstilos(alerta.tipo);
+
+          return (
+            <div
+              key={alerta.id}
+              className={`${estilos.contenedor} rounded-lg p-4 shadow-lg animate-slide-in pointer-events-auto`}
+            >
+              <div className="flex gap-3">
+                <div className="text-xl flex-shrink-0 mt-0.5">{estilos.icono}</div>
+                <div className="flex-1">
+                  <h4 className={estilos.titulo}>{alerta.titulo}</h4>
+                  <p className={`text-sm mt-1 ${estilos.mensaje}`}>{alerta.mensaje}</p>
+                </div>
+                <button
+                  onClick={() => handlerEliminar?.(alerta.id)}
+                  className={`flex-shrink-0 text-xl leading-none ${estilos.boton} transition-colors`}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Barra de progreso */}
+              {alerta.duracion && alerta.duracion > 0 && (
+                <div className="mt-3 h-1 bg-current opacity-20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-current opacity-50 rounded-full"
+                    style={{
+                      animation: `shrink ${alerta.duracion}ms linear forwards`
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }

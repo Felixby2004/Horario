@@ -8,8 +8,77 @@ import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
+// Function to clear horarios form data from localStorage
+const clearHorariosFormStorage = () => {
+  localStorage.removeItem('horarios-periodo');
+  localStorage.removeItem('horarios-ciclo');
+  localStorage.removeItem('horarios-ciclos-disponibles');
+  localStorage.removeItem('horarios-docente');
+  localStorage.removeItem('horarios-curso');
+  localStorage.removeItem('horarios-grupo');
+  localStorage.removeItem('horarios-ambiente');
+  localStorage.removeItem('horarios-tipo-clase');
+  localStorage.removeItem('horarios-celdas');
+};
+
 export default function HorariosPage() {
   const router = useRouter();
+  
+  // Effect to listen for internal navigation to clear form
+  useEffect(() => {
+    // Only run in browser
+    if (typeof window === 'undefined') return;
+    
+    // Listen to all history changes
+    const originalPushState = window.history.pushState.bind(window.history);
+    const originalReplaceState = window.history.replaceState.bind(window.history);
+    const currentPathname = window.location.pathname;
+    
+    const handleHistoryChange = (newPath: string | URL | null) => {
+      // Clear form storage only when navigating to different page
+      let newPathname = '';
+      if (newPath instanceof URL) {
+        newPathname = newPath.pathname;
+      } else if (typeof newPath === 'string') {
+        try {
+          const url = new URL(newPath, window.location.origin);
+          newPathname = url.pathname;
+        } catch {
+          newPathname = newPath;
+        }
+      }
+      
+      if (newPathname && newPathname !== currentPathname) {
+        clearHorariosFormStorage();
+      }
+    };
+    
+    const handlePopState = () => {
+      // Clear form storage when using back/forward button to different page
+      if (window.location.pathname !== currentPathname) {
+        clearHorariosFormStorage();
+      }
+    };
+
+    window.history.pushState = function(...args) {
+      handleHistoryChange(args[2] ?? null);
+      originalPushState(...args);
+    };
+    
+    window.history.replaceState = function(...args) {
+      handleHistoryChange(args[2] ?? null);
+      originalReplaceState(...args);
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      // Restore original history functions and remove listener
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
   const [horas, setHoras] = useState<{ inicio: string, fin: string }[]>([]);
   const [config, setConfig] = useState<any>(null);
   const [periodos, setPeriodos] = useState<any[]>([]);
@@ -18,22 +87,94 @@ export default function HorariosPage() {
   const [ambientes, setAmbientes] = useState<any[]>([]);
   const [grupos, setGrupos] = useState<any[]>([]);
   
-  const [periodoSeleccionado, setPeriodoSeleccionado] = useState('');
-  const [cicloSeleccionado, setCicloSeleccionado] = useState('');
-  const [ciclosDisponibles, setCiclosDisponibles] = useState<number[]>([]);
-  const [docenteSeleccionado, setDocenteSeleccionado] = useState('');
-  const [cursoSeleccionado, setCursoSeleccionado] = useState('');
-  const [grupoSeleccionado, setGrupoSeleccionado] = useState('');
-  const [ambienteSeleccionado, setAmbienteSeleccionado] = useState('');
-  const [tipoClase, setTipoClase] = useState('teoria');
+  // Initialize state from localStorage if available
+  const [periodoSeleccionado, setPeriodoSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-periodo') || '';
+    }
+    return '';
+  });
+  const [cicloSeleccionado, setCicloSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-ciclo') || '';
+    }
+    return '';
+  });
+  const [ciclosDisponibles, setCiclosDisponibles] = useState<number[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('horarios-ciclos-disponibles');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  const [docenteSeleccionado, setDocenteSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-docente') || '';
+    }
+    return '';
+  });
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-curso') || '';
+    }
+    return '';
+  });
+  const [grupoSeleccionado, setGrupoSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-grupo') || '';
+    }
+    return '';
+  });
+  const [ambienteSeleccionado, setAmbienteSeleccionado] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-ambiente') || '';
+    }
+    return '';
+  });
+  const [tipoClase, setTipoClase] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('horarios-tipo-clase') || 'teoria';
+    }
+    return 'teoria';
+  });
   
   const [horarios, setHorarios] = useState<any[]>([]);
-  const [celdasSeleccionadas, setCeldasSeleccionadas] = useState<Set<string>>(new Set());
+  const [celdasSeleccionadas, setCeldasSeleccionadas] = useState<Set<string>>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('horarios-celdas');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    }
+    return new Set();
+  });
   const [modoSeleccion, setModoSeleccion] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [horarioAEliminar, setHorarioAEliminar] = useState<any>(null);
   const [horariosParaEliminar, setHorariosParaEliminar] = useState<any[]>([]);
   const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
+
+  // Effect to save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('horarios-periodo', periodoSeleccionado);
+    localStorage.setItem('horarios-ciclo', cicloSeleccionado);
+    localStorage.setItem('horarios-ciclos-disponibles', JSON.stringify(ciclosDisponibles));
+    localStorage.setItem('horarios-docente', docenteSeleccionado);
+    localStorage.setItem('horarios-curso', cursoSeleccionado);
+    localStorage.setItem('horarios-grupo', grupoSeleccionado);
+    localStorage.setItem('horarios-ambiente', ambienteSeleccionado);
+    localStorage.setItem('horarios-tipo-clase', tipoClase);
+    localStorage.setItem('horarios-celdas', JSON.stringify([...celdasSeleccionadas]));
+  }, [
+    periodoSeleccionado,
+    cicloSeleccionado,
+    ciclosDisponibles,
+    docenteSeleccionado,
+    cursoSeleccionado,
+    grupoSeleccionado,
+    ambienteSeleccionado,
+    tipoClase,
+    celdasSeleccionadas
+  ]);
 
   const obtenerHorasLimite = () => {
     const cursoActual = cursos.find((c: any) => c.id_curso === parseInt(cursoSeleccionado));
@@ -66,16 +207,14 @@ export default function HorariosPage() {
 
   const cargarDatosIniciales = useCallback(async () => {
     try {
-      const [resPeriodos, resDocentes, resAmbientes, resConfig] = await Promise.all([
+      const [resPeriodos, resAmbientes, resConfig] = await Promise.all([
         fetch('/api/periodos'),
-        fetch('/api/docentes'),
         fetch('/api/ambientes'),
         fetch('/api/configuracion')
       ]);
 
-      const [dataPeriodos, dataDocentes, dataAmbientes, dataConfig] = await Promise.all([
+      const [dataPeriodos, dataAmbientes, dataConfig] = await Promise.all([
         resPeriodos.json(),
-        resDocentes.json(),
         resAmbientes.json(),
         resConfig.json()
       ]);
@@ -110,12 +249,26 @@ export default function HorariosPage() {
         );
         setPeriodos(periodosActivos);
       }
-      if (dataDocentes.exito) setDocentes(dataDocentes.datos || []);
       if (dataAmbientes.exito) setAmbientes(dataAmbientes.datos || []);
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
   }, []);
+
+  const cargarDocentes = useCallback(async () => {
+    try {
+      let url = '/api/docentes';
+      if (cicloSeleccionado) {
+        url += `?ciclo=${cicloSeleccionado}`;
+      }
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.exito) setDocentes(data.datos || []);
+    } catch (error) {
+      console.error('Error cargando docentes:', error);
+    }
+  }, [cicloSeleccionado]);
 
   const determinarCiclos = useCallback(async () => {
     try {
@@ -136,8 +289,14 @@ export default function HorariosPage() {
       }
 
       setCiclosDisponibles(ciclos);
-      setCicloSeleccionado(''); // Reset ciclo al cambiar período
-      setCursos([]); // Limpiar cursos
+      
+      // Only reset ciclo if the saved one isn't in the new list
+      const savedCiclo = localStorage.getItem('horarios-ciclo');
+      const savedCicloNum = savedCiclo ? parseInt(savedCiclo) : null;
+      if (!savedCicloNum || !ciclos.includes(savedCicloNum)) {
+        setCicloSeleccionado('');
+        setCursos([]);
+      }
     } catch (error) {
       console.error('Error determinando ciclos:', error);
     }
@@ -147,23 +306,32 @@ export default function HorariosPage() {
     if (!cicloSeleccionado) return;
     
     try {
-      const response = await fetch('/api/cursos');
+      let url = `/api/cursos?ciclo=${cicloSeleccionado}`;
+      if (docenteSeleccionado) {
+        url += `&id_docente=${docenteSeleccionado}`;
+      }
+      if (periodoSeleccionado) {
+        url += `&periodo=${periodoSeleccionado}`;
+      }
+      
+      const response = await fetch(url);
       const data = await response.json();
       if (data.exito) {
-        // Filtrar cursos por el ciclo seleccionado
-        const cursosFiltrados = (data.datos || []).filter(
-          (c: any) => c.ciclo === parseInt(cicloSeleccionado)
-        );
-        setCursos(cursosFiltrados);
+        setCursos(data.datos || []);
       }
     } catch (error) {
       console.error('Error cargando cursos:', error);
     }
-  }, [cicloSeleccionado]);
+  }, [cicloSeleccionado, docenteSeleccionado, periodoSeleccionado]);
 
   const cargarGrupos = useCallback(async () => {
     try {
-      const response = await fetch(`/api/grupos?curso=${cursoSeleccionado}&periodo=${periodoSeleccionado}`);
+      let url = `/api/grupos?curso=${cursoSeleccionado}&periodo=${periodoSeleccionado}`;
+      if (docenteSeleccionado) {
+        url += `&id_docente=${docenteSeleccionado}`;
+      }
+      
+      const response = await fetch(url);
       const data = await response.json();
       if (data.exito) {
         setGrupos(data.datos || []);
@@ -171,7 +339,7 @@ export default function HorariosPage() {
     } catch (error) {
       console.error('Error cargando grupos:', error);
     }
-  }, [cursoSeleccionado, periodoSeleccionado]);
+  }, [cursoSeleccionado, periodoSeleccionado, docenteSeleccionado]);
 
   const cargarHorarios = useCallback(async () => {
     try {
@@ -211,16 +379,38 @@ export default function HorariosPage() {
   }, [periodoSeleccionado, determinarCiclos, cargarHorarios]);
 
   useEffect(() => {
-    if (periodoSeleccionado && cicloSeleccionado) {
+    if (cicloSeleccionado) {
+      cargarDocentes();
+    } else {
+      setDocentes([]); // Clear docentes if no ciclo selected
+    }
+  }, [cicloSeleccionado, cargarDocentes]);
+
+  useEffect(() => {
+    if (periodoSeleccionado && cicloSeleccionado && docenteSeleccionado) {
       cargarCursos();
     }
-  }, [periodoSeleccionado, cicloSeleccionado, cargarCursos]);
+  }, [periodoSeleccionado, cicloSeleccionado, docenteSeleccionado, cargarCursos]);
 
   useEffect(() => {
     if (cursoSeleccionado && periodoSeleccionado) {
       cargarGrupos();
     }
   }, [cursoSeleccionado, periodoSeleccionado, cargarGrupos]);
+  
+  // Nuevo efecto para cargar cursos cuando docente cambia
+  useEffect(() => {
+    if (periodoSeleccionado && cicloSeleccionado && docenteSeleccionado) {
+      cargarCursos();
+    }
+  }, [docenteSeleccionado, periodoSeleccionado, cicloSeleccionado, cargarCursos]);
+  
+  // Nuevo efecto para cargar grupos cuando docente cambia
+  useEffect(() => {
+    if (periodoSeleccionado && cursoSeleccionado && docenteSeleccionado) {
+      cargarGrupos();
+    }
+  }, [docenteSeleccionado, periodoSeleccionado, cursoSeleccionado, cargarGrupos]);
 
   const getCeldaKey = (diaIndex: number, horaIndex: number) => {
     return `${diaIndex}-${horaIndex}`;
@@ -288,8 +478,12 @@ export default function HorariosPage() {
     setModoSeleccion(nuevasSeleccionadas.size > 0);
   };
 
+  const [eliminarError, setEliminarError] = useState('');
+
   const eliminarHorario = async () => {
     if (!horarioAEliminar) return;
+    
+    setEliminarError('');
 
     try {
       const response = await fetch(`/api/horarios/${horarioAEliminar.id_asignacion}`, {
@@ -301,21 +495,22 @@ export default function HorariosPage() {
       if (data.exito) {
         // Cerrar modal primero
         setHorarioAEliminar(null);
-        // Recargar horarios
-        await cargarHorarios();
-        // Mostrar mensaje
-        alert('✅ Horario eliminado exitosamente');
+        // Update local state by removing the deleted horario
+        setHorarios(prev => prev.filter(h => h.id_asignacion !== horarioAEliminar.id_asignacion));
+        // Mostrar mensaje detallado de éxito
+        setSuccess(
+          `✅ Horario eliminado exitosamente:\n` +
+          `${horarioAEliminar.curso?.nombre} (${horarioAEliminar.curso?.codigo})\n` +
+          `${DIAS[horarioAEliminar.dia_semana]} ${horarioAEliminar.hora_inicio} - ${horarioAEliminar.hora_fin}`
+        );
+        setTimeout(() => setSuccess(''), 5000);
       } else {
-        // Cerrar modal
-        setHorarioAEliminar(null);
-        // Mostrar error
-        alert('❌ ' + (data.mensaje || 'Error al eliminar'));
+        // NO cerrar modal - mostrar error en modal para reintentar
+        setEliminarError(data.mensaje || 'Error al eliminar horario');
       }
     } catch (error) {
-      // Cerrar modal
-      setHorarioAEliminar(null);
-      // Mostrar error
-      alert('❌ Error al eliminar horario');
+      // NO cerrar modal - mostrar error para reintentar
+      setEliminarError('Error al conectar con el servidor. Verifica tu conexión.');
       console.error('Error:', error);
     }
   };
@@ -387,7 +582,10 @@ export default function HorariosPage() {
     }
 
     if (exitosos > 0) {
-      alert(`✅ ${exitosos} horario(s) asignado(s) exitosamente${errores > 0 ? ` (${errores} con error)` : ''}`);
+      setSuccess(`✅ ${exitosos} horario(s) asignado(s) exitosamente${errores > 0 ? ` (${errores} con error)` : ''}`);
+      setTimeout(() => setSuccess(''), 5000);
+      // Clear localStorage
+      localStorage.removeItem('horarios-celdas');
       setCeldasSeleccionadas(new Set());
       setModoSeleccion(false);
       cargarHorarios();
@@ -472,34 +670,72 @@ export default function HorariosPage() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          ❌ {error}
+        <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg flex justify-between items-center">
+          <span>❌ {error}</span>
+          <button onClick={() => setError('')} className="text-red-500 hover:text-red-700 font-bold">
+            ✕
+          </button>
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg flex justify-between items-center">
+          <span>{success}</span>
+          <button onClick={() => setSuccess('')} className="text-green-500 hover:text-green-700 font-bold">
+            ✕
+          </button>
         </div>
       )}
 
       {horarioAEliminar && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" 
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-modal-title"
+          onClick={(e) => { if (e.target === e.currentTarget) setHorarioAEliminar(null); }}
+        >
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">¿Eliminar Horario?</h3>
+            <div className="flex items-start justify-between mb-4">
+              <h3 id="delete-modal-title" className="text-lg font-semibold text-gray-800">¿Eliminar Horario?</h3>
+              <button 
+                onClick={() => { setHorarioAEliminar(null); setEliminarError(''); }} 
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Cerrar modal"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             
-            <div className="space-y-2 mb-6 text-sm">
-              <p><strong>Curso:</strong> {horarioAEliminar.curso?.nombre}</p>
+            <div className="space-y-2 mb-4 text-sm text-gray-700">
+              <p><strong>Curso:</strong> {horarioAEliminar.curso?.nombre} ({horarioAEliminar.curso?.codigo})</p>
               <p><strong>Ciclo:</strong> {horarioAEliminar.curso?.ciclo}</p>
               <p><strong>Docente:</strong> {horarioAEliminar.docente?.apellidos}, {horarioAEliminar.docente?.nombres}</p>
+              <p><strong>Grupo:</strong> {horarioAEliminar.grupo?.codigo_grupo}</p>
               <p><strong>Ambiente:</strong> {horarioAEliminar.ambiente?.nombre}</p>
               <p><strong>Horario:</strong> {DIAS[horarioAEliminar.dia_semana]} {horarioAEliminar.hora_inicio} - {horarioAEliminar.hora_fin}</p>
             </div>
 
+            {eliminarError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                <div className="flex items-center gap-2">
+                  <span>❌</span>
+                  <span>{eliminarError}</span>
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-3">
               <button
                 onClick={eliminarHorario}
-                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
               >
-                Eliminar
+                {eliminarError ? 'Reintentar Eliminar' : 'Eliminar'}
               </button>
               <button
-                onClick={() => setHorarioAEliminar(null)}
-                className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+                onClick={() => { setHorarioAEliminar(null); setEliminarError(''); }}
+                className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
               >
                 Cancelar
               </button>
@@ -514,7 +750,7 @@ export default function HorariosPage() {
             <h3 className="text-lg font-semibold mb-4">Selecciona el horario a eliminar</h3>
             
             <div className="space-y-3 mb-6">
-              {horariosParaEliminar.map((h, index) => (
+              {horariosParaEliminar.map((h: any, index: number) => (
                 <div 
                   key={h.id_asignacion}
                   className="border-2 border-gray-200 rounded-lg p-4 hover:border-red-500 cursor-pointer transition-colors"
@@ -568,7 +804,7 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={periodoSeleccionado}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setPeriodoSeleccionado(e.target.value);
                 setCicloSeleccionado('');
                 setCursoSeleccionado('');
@@ -591,7 +827,7 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={cicloSeleccionado}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setCicloSeleccionado(e.target.value);
                 setCursoSeleccionado('');
                 setGrupoSeleccionado('');
@@ -599,7 +835,7 @@ export default function HorariosPage() {
               disabled={!periodoSeleccionado}
             >
               <option value="">Seleccione ciclo</option>
-              {ciclosDisponibles.map(ciclo => (
+              {ciclosDisponibles.map((ciclo: number) => (
                 <option key={ciclo} value={ciclo}>
                   Ciclo {ciclo}
                 </option>
@@ -614,7 +850,14 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={docenteSeleccionado}
-              onChange={(e) => setDocenteSeleccionado(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setDocenteSeleccionado(e.target.value);
+                setCursoSeleccionado('');
+                setGrupoSeleccionado('');
+                setCeldasSeleccionadas(new Set());
+                setModoSeleccion(false);
+                setError('');
+              }}
             >
               <option value="">Seleccione docente</option>
               {docentes.map((d: any) => (
@@ -632,14 +875,14 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={cursoSeleccionado}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setCursoSeleccionado(e.target.value);
                 setGrupoSeleccionado('');
                 setCeldasSeleccionadas(new Set());
                 setModoSeleccion(false);
                 setError('');
               }}
-              disabled={!cicloSeleccionado}
+              disabled={!cicloSeleccionado || !docenteSeleccionado}
             >
               <option value="">Seleccione curso</option>
               {cursos.map((c: any) => (
@@ -648,7 +891,12 @@ export default function HorariosPage() {
                 </option>
               ))}
             </select>
-            {cicloSeleccionado && cursos.length === 0 && (
+            {cicloSeleccionado && docenteSeleccionado && cursos.length === 0 && (
+              <p className="text-xs text-amber-600 mt-1">
+                ⚠️ Este docente no tiene cursos asignados en el ciclo {cicloSeleccionado}
+              </p>
+            )}
+            {cicloSeleccionado && !docenteSeleccionado && cursos.length === 0 && (
               <p className="text-xs text-amber-600 mt-1">
                 ⚠️ No hay cursos de ciclo {cicloSeleccionado}
               </p>
@@ -662,7 +910,7 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={grupoSeleccionado}
-              onChange={(e) => setGrupoSeleccionado(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setGrupoSeleccionado(e.target.value)}
               disabled={!cursoSeleccionado}
             >
               <option value="">Seleccione grupo</option>
@@ -672,6 +920,11 @@ export default function HorariosPage() {
                 </option>
               ))}
             </select>
+            {cursoSeleccionado && docenteSeleccionado && grupos.length === 0 && (
+              <p className="text-xs text-amber-600 mt-1">
+                ⚠️ Este docente no tiene grupos asignados para este curso y período
+              </p>
+            )}
           </div>
 
           <div>
@@ -682,7 +935,7 @@ export default function HorariosPage() {
               <select
                 className="flex-1 border rounded px-3 py-2"
                 value={ambienteSeleccionado}
-                onChange={(e) => setAmbienteSeleccionado(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAmbienteSeleccionado(e.target.value)}
               >
                 <option value="">Seleccione ambiente</option>
                 {ambientes.map((a: any) => (
@@ -717,7 +970,7 @@ export default function HorariosPage() {
             <select
               className="w-full border rounded px-3 py-2"
               value={tipoClase}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setTipoClase(e.target.value);
                 setCeldasSeleccionadas(new Set());
                 setModoSeleccion(false);

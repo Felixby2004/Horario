@@ -1,18 +1,18 @@
 import React from 'react';
 
 // Soporta ambas estructuras para compatibilidad
-interface ColumnaNueva {
+export interface ColumnaNueva {
   clave: string;
   etiqueta: string;
 }
 
-interface ColumnaAntigua<T = any> {
+export interface ColumnaAntigua<T = any> {
   campo: keyof T;
   encabezado: string;
   renderizar?: (valor: any, fila: T) => React.ReactNode;
 }
 
-type Columna<T = any> = ColumnaNueva | ColumnaAntigua<T>;
+export type Columna<T = any> = ColumnaNueva | ColumnaAntigua<T>;
 
 interface TablaDatosBaseProps {
   alHacerClic?: (fila: any) => void;

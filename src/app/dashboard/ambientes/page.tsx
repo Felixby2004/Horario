@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TablaDatos } from '@/components/ui/TablaDatos';
+import { TablaPaginada } from '@/components/ui/TablaPaginada';
+import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 import Link from 'next/link';
 
@@ -61,7 +62,7 @@ export default function AmbientesPage() {
     }
   };
 
-  const columnas = [
+  const columnas: ColumnaAntigua<Ambiente>[] = [
     { campo: 'codigo' as const, encabezado: 'Código' },
     { campo: 'nombre' as const, encabezado: 'Ambiente' },
     { 
@@ -76,7 +77,7 @@ export default function AmbientesPage() {
     { campo: 'capacidad' as const, encabezado: 'Capacidad' },
     { campo: 'pabellon' as const, encabezado: 'Pabellón' },
     {
-      campo: 'id_ambiente',
+      campo: 'id_ambiente' as const,
       encabezado: 'Acciones',
       renderizar: (id: number, fila: Ambiente) => (
         <div className="flex gap-2">
@@ -122,8 +123,8 @@ export default function AmbientesPage() {
   });
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Gestión de ambientes</h1>
           <p className="text-gray-600 mt-1">Aulas y laboratorios disponibles</p>
@@ -133,7 +134,7 @@ export default function AmbientesPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow mb-4 p-4">
+      <div className="bg-white rounded-lg shadow p-4">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Buscar ambiente</label>
           <input
@@ -171,7 +172,7 @@ export default function AmbientesPage() {
       </div>
 
       <div className="bg-white rounded-lg shadow">
-        <TablaDatos datos={ambientesFiltrados} columnas={columnas} keyField="id_ambiente" />
+        <TablaPaginada datos={ambientesFiltrados} columnas={columnas} keyField="id_ambiente" />
       </div>
     </div>
   );

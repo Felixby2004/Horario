@@ -114,7 +114,15 @@ export default function AsignarGruposPage() {
           grupo.asignado ? '✅ Grupo desasignado' : '✅ Grupo asignado',
           `${grupo.codigo_grupo} de ${grupo.curso.nombre}`
         );
-        cargarDatos();
+        
+        // Actualizar estado local sin recargar datos
+        setGrupos(prevGrupos =>
+          prevGrupos.map(g =>
+            g.id_grupo === grupo.id_grupo
+              ? { ...g, asignado: !g.asignado }
+              : g
+          )
+        );
       } else {
         error('Error', data.error || 'No se pudo actualizar la asignación');
       }

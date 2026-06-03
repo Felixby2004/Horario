@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TablaDatos } from '@/components/ui/TablaDatos';
+import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { Boton } from '@/components/ui/Boton';
 import { ModalDocente } from '@/components/dashboard/ModalDocente';
 import Link from 'next/link';
@@ -103,8 +103,8 @@ export default function DocentesPage() {
   });
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Gestión de docentes</h1>
           <p className="text-gray-600 mt-1">Administra la información de los docentes</p>
@@ -119,7 +119,7 @@ export default function DocentesPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-4 mb-4">
+      <div className="bg-white rounded-lg shadow p-4">
         <label className="block text-sm font-medium mb-2">Buscar docente</label>
         <input
           type="text"
@@ -134,7 +134,7 @@ export default function DocentesPage() {
       </div>
 
       <div className="bg-white rounded-lg shadow">
-        <TablaDatos
+        <TablaPaginada
           datos={docentesFiltrados}
           columnas={columnas}
           keyField="id_docente"

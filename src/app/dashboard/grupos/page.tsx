@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { TablaDatos } from '@/components/ui/TablaDatos';
+import { TablaPaginada } from '@/components/ui/TablaPaginada';
+import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 
 export default function GruposPage() {
@@ -51,6 +52,16 @@ export default function GruposPage() {
     }
   };
 
+  // Helper function to safely get string values
+  const getStringValue = (value: any, defaultValue: string = '-'): string => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (value && typeof value === 'object' && 'nombre' in value) {
+      return String(value.nombre);
+    }
+    return defaultValue;
+  };
+
   if (cargando) {
     return <div className="flex justify-center py-12"><div className="loader"></div></div>;
   }
@@ -59,14 +70,74 @@ export default function GruposPage() {
   const gruposFiltrados = grupos.filter((g: any) => {
     if (!textoBusqueda) return true;
     const codigoGrupo = String(g.codigo_grupo || '').toLowerCase();
-    const curso = `${g.curso?.codigo || ''} ${g.curso?.nombre || ''}`.toLowerCase();
-    const periodo = String(g.periodo?.nombre || '').toLowerCase();
+    const cursoCode = getStringValue(g.curso?.codigo, '');
+    const cursoName = getStringValue(g.curso?.nombre, '');
+    const curso = `${cursoCode} ${cursoName}`.toLowerCase();
+    const periodo = getStringValue(g.periodo?.nombre, '').toLowerCase();
     return (
       codigoGrupo.includes(textoBusqueda) ||
       curso.includes(textoBusqueda) ||
       periodo.includes(textoBusqueda)
     );
   });
+
+  const columnas: ColumnaAntigua<any>[] = [
+    { 
+      campo: 'curso' as const, 
+      encabezado: 'Curso',
+      renderizar: (_: any, g: any) => {
+        const cursoCode = getStringValue(g.curso?.codigo, '');
+        const cursoName = getStringValue(g.curso?.nombre, '');
+        return cursoCode ? `${cursoCode} - ${cursoName}` : cursoName;
+      }
+    },
+    { campo: 'codigo_grupo' as const, encabezado: 'Grupo' },
+    { 
+      campo: 'periodo' as const, 
+      encabezado: 'Período',
+      renderizar: (periodo: any) => getStringValue(periodo?.nombre || periodo)
+    },
+    { campo: 'capacidad_maxima' as const, encabezado: 'Capacidad' },
+    { 
+      campo: 'cantidad_matriculados' as const, 
+      encabezado: 'Matriculados',
+      renderizar: (value: any) => value || 0
+    },
+    { 
+      campo: 'activo' as const, 
+      encabezado: 'Estado',
+      renderizar: (_: any, g: any) => (
+        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+          g.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+        }`}>
+          {g.activo ? '✅ Activo' : '⛔ Inactivo'}
+        </span>
+      )
+    },
+    { 
+      campo: 'id_grupo' as const, 
+      encabezado: 'Acciones',
+      renderizar: (_: any, g: any) => (
+        <div className="flex gap-2">
+          <Boton
+            onClick={() => router.push(`/dashboard/grupos/${g.id_grupo}`)}
+            tamaño="sm"
+          >
+            ✏️ Editar
+          </Boton>
+          {g.activo && (
+            <Boton
+              onClick={() => desactivar(g.id_grupo, g.codigo_grupo)}
+              variante="error"
+              tamaño="sm"
+            >
+              🔴 Desactivar
+            </Boton>
+          )}
+        </div>
+      )
+    }
+  ];
 
   return (
     <div className="space-y-6">
@@ -97,51 +168,10 @@ export default function GruposPage() {
             No hay grupos registrados. Cree uno nuevo para comenzar.
           </div>
         ) : (
-          <TablaDatos
-            columnas={[
-              { clave: 'curso', etiqueta: 'Curso' },
-              { clave: 'codigo', etiqueta: 'Grupo' },
-              { clave: 'periodo', etiqueta: 'Período' },
-              { clave: 'capacidad', etiqueta: 'Capacidad' },
-              { clave: 'matriculados', etiqueta: 'Matriculados' },
-              { clave: 'estado', etiqueta: 'Estado' },
-              { clave: 'acciones', etiqueta: 'Acciones' }
-            ]}
-            datos={gruposFiltrados.map((g: any) => ({
-              curso: `${g.curso?.codigo} - ${g.curso?.nombre}`,
-              codigo: g.codigo_grupo,
-              periodo: g.periodo?.nombre,
-              capacidad: g.capacidad_maxima,
-              matriculados: g.cantidad_matriculados || 0,
-              estado: g.activo ? (
-                <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                  ✅ Activo
-                </span>
-              ) : (
-                <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
-                  ⛔ Inactivo
-                </span>
-              ),
-              acciones: (
-                <div className="flex gap-2">
-                  <Boton
-                    onClick={() => router.push(`/dashboard/grupos/${g.id_grupo}`)}
-                    tamaño="sm"
-                  >
-                    ✏️ Editar
-                  </Boton>
-                  {g.activo && (
-                    <Boton
-                      onClick={() => desactivar(g.id_grupo, g.codigo_grupo)}
-                      variante="error"
-                      tamaño="sm"
-                    >
-                      🔴 Desactivar
-                    </Boton>
-                  )}
-                </div>
-              )
-            }))}
+          <TablaPaginada
+            columnas={columnas}
+            datos={gruposFiltrados}
+            keyField="id_grupo"
           />
         )}
       </div>

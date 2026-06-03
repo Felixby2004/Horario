@@ -128,9 +128,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const periodo = searchParams.get('periodo');
+    const ambiente = searchParams.get('ambiente');
 
     const where: any = {};
     if (periodo) where.id_periodo = parseInt(periodo);
+    if (ambiente) where.id_ambiente = parseInt(ambiente);
     where.estado = { not: 'cancelado' };
 
     const horarios = await prisma.horarioAsignado.findMany({
@@ -188,6 +190,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         exito: false,
         mensaje: 'Curso no encontrado'
+      }, { status: 400 });
+    }
+    
+    // VALIDACIÓN: Docente tiene asignado el curso
+    const docenteCurso = await prisma.docenteCurso.findFirst({
+      where: {
+        id_docente: datos.id_docente,
+        id_curso: datos.id_curso,
+        activo: true
+      }
+    });
+    
+    if (!docenteCurso) {
+      return NextResponse.json({
+        exito: false,
+        mensaje: 'El docente no tiene asignado este curso'
+      }, { status: 400 });
+    }
+    
+    // VALIDACIÓN: Grupo pertenece al curso y período seleccionados
+    const grupo = await prisma.grupo.findFirst({
+      where: {
+        id_grupo: datos.id_grupo,
+        id_curso: datos.id_curso,
+        id_periodo: datos.id_periodo
+      }
+    });
+    
+    if (!grupo) {
+      return NextResponse.json({
+        exito: false,
+        mensaje: 'El grupo no pertenece al curso y período seleccionados'
       }, { status: 400 });
     }
 
