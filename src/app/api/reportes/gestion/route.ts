@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GeneradorPDF } from '@/services/reportes/GeneradorPDF';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 25; // Permitir hasta 25 segundos para generar reporte
 
 export async function POST(request: NextRequest) {
   try {

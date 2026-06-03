@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import puppeteer from 'puppeteer';
 import * as XLSX from 'xlsx';
 import * as ExcelJS from 'exceljs';
+import { puppeteerPool } from './PuppeteerPool';
 
 interface DiaHorario {
   [key: string]: Array<{
@@ -2149,41 +2150,32 @@ export class GeneradorPDF {
   }
 
   private static async convertirAPDF(html: string): Promise<Buffer> {
-    const launchOptions: any = {
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-gpu',
-        '--disable-dev-shm-usage'
-      ]
-    };
-
-    // Configuración de la ruta del ejecutable de Chromium
-    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    } 
-    // En Render (Linux) sin variable de entorno, intentar rutas comunes
-    else if (process.env.NODE_ENV === 'production') {
-      launchOptions.executablePath = '/usr/bin/chromium';
-    }
-
-    const browser = await puppeteer.launch(launchOptions);
+    // Obtener página del pool (optimizado)
+    const page = await puppeteerPool.getPage();
 
     try {
-      const page = await browser.newPage();
-      await page.setContent(html, { waitUntil: 'networkidle0' });
+      // Timeout de 15s para cargar contenido (waitUntil: 'networkidle2' es más rápido que 'networkidle0')
+      await page.setContent(html, { 
+        waitUntil: 'networkidle2',
+        timeout: 15000 // 15 segundos máximo
+      });
       
+      // Timeout de 10s para generar PDF
       const pdf = await page.pdf({
         format: 'A4',
         landscape: true,
         printBackground: true,
-        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
+        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+        timeout: 10000 // 10 segundos máximo
       });
 
       return pdf;
+    } catch (error) {
+      console.error('❌ Error en convertirAPDF:', error);
+      throw error;
     } finally {
-      await browser.close();
+      // IMPORTANTE: Siempre liberar la página del pool
+      await puppeteerPool.releasePage(page);
     }
   }
 }
