@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 
 export default function ReporteLaboratorioPage() {
   const [periodos, setPeriodos] = useState<any[]>([]);
@@ -128,18 +129,18 @@ export default function ReporteLaboratorioPage() {
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Selecciona un Laboratorio
             </label>
-            <select
+            <SearchableSelect
+              placeholder="Busca por nombre o código..."
               value={laboratorioSeleccionado}
-              onChange={(e) => setLaboratorioSeleccionado(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">-- Selecciona un laboratorio --</option>
-              {laboratorios.map((lab: any) => (
-                <option key={lab.id_ambiente} value={lab.id_ambiente}>
-                  {lab.nombre} - Capacidad: {lab.capacidad}
-                </option>
-              ))}
-            </select>
+              onChange={(valor) => setLaboratorioSeleccionado(String(valor))}
+              opciones={laboratorios.map((lab: any) => ({
+                valor: lab.id_ambiente,
+                etiqueta: `${lab.nombre} (Cap: ${lab.capacidad})`,
+                nombre: lab.nombre,
+                codigo: lab.codigo
+              }))}
+              camposBusqueda={['nombre', 'codigo']}
+            />
           </div>
         </div>
 

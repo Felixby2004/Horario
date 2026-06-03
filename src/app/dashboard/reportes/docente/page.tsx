@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 
 export default function ReporteDocentePage() {
   const [periodos, setPeriodos] = useState<any[]>([]);
@@ -131,18 +132,18 @@ export default function ReporteDocentePage() {
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Selecciona un Docente
             </label>
-            <select
+            <SearchableSelect
+              placeholder="Busca por nombre o apellido..."
               value={docenteSeleccionado}
-              onChange={(e) => setDocenteSeleccionado(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">-- Selecciona un docente --</option>
-              {docentes.map((docente: any) => (
-                <option key={docente.id_docente} value={docente.id_docente}>
-                  {docente.apellidos}, {docente.nombres}
-                </option>
-              ))}
-            </select>
+              onChange={(valor) => setDocenteSeleccionado(String(valor))}
+              opciones={docentes.map((docente: any) => ({
+                valor: docente.id_docente,
+                etiqueta: `${docente.apellidos}, ${docente.nombres}`,
+                apellidos: docente.apellidos,
+                nombres: docente.nombres
+              }))}
+              camposBusqueda={['apellidos', 'nombres']}
+            />
           </div>
         </div>
 

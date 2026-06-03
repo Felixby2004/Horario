@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Boton } from '@/components/ui/Boton';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
@@ -483,56 +484,55 @@ export default function SeleccionarHorariosPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Curso *</label>
-              <select
-                className="w-full border rounded px-3 py-2"
+              <SearchableSelect
+                etiqueta="Curso *"
+                placeholder="Busca por código o nombre..."
                 value={cursoSeleccionado}
-                onChange={(e) => {
-                  setCursoSeleccionado(e.target.value);
+                onChange={(valor) => {
+                  setCursoSeleccionado(String(valor));
                   setGrupoSeleccionado('');
                 }}
                 disabled={!cicloSeleccionado}
-              >
-                <option value="">Seleccione curso</option>
-                {cursos.map((c: any) => (
-                  <option key={c.id_curso} value={c.id_curso}>
-                    {c.codigo} - {c.nombre}
-                  </option>
-                ))}
-              </select>
+                opciones={cursos.map((c: any) => ({
+                  valor: c.id_curso,
+                  etiqueta: `${c.codigo} - ${c.nombre}`,
+                  codigo: c.codigo,
+                  nombre: c.nombre
+                }))}
+                camposBusqueda={['codigo', 'nombre']}
+              />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Grupo *</label>
-              <select
-                className="w-full border rounded px-3 py-2"
+              <SearchableSelect
+                etiqueta="Grupo *"
+                placeholder="Busca por grupo..."
                 value={grupoSeleccionado}
-                onChange={(e) => setGrupoSeleccionado(e.target.value)}
+                onChange={(valor) => setGrupoSeleccionado(String(valor))}
                 disabled={!cursoSeleccionado}
-              >
-                <option value="">Seleccione grupo</option>
-                {grupos.map((g: any) => (
-                  <option key={g.id_grupo} value={g.id_grupo}>
-                    Grupo {g.codigo_grupo}
-                  </option>
-                ))}
-              </select>
+                opciones={grupos.map((g: any) => ({
+                  valor: g.id_grupo,
+                  etiqueta: `Grupo ${g.codigo_grupo}`,
+                  codigo_grupo: g.codigo_grupo
+                }))}
+                camposBusqueda={['codigo_grupo']}
+              />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Ambiente *</label>
-              <select
-                className="w-full border rounded px-3 py-2"
+              <SearchableSelect
+                etiqueta="Ambiente *"
+                placeholder="Busca por nombre o tipo..."
                 value={ambienteSeleccionado}
-                onChange={(e) => setAmbienteSeleccionado(e.target.value)}
-              >
-                <option value="">Seleccione ambiente</option>
-                {ambientes.map((a: any) => (
-                  <option key={a.id_ambiente} value={a.id_ambiente}>
-                    {a.nombre}
-                  </option>
-                ))}
-              </select>
+                onChange={(valor) => setAmbienteSeleccionado(String(valor))}
+                opciones={ambientes.map((a: any) => ({
+                  valor: a.id_ambiente,
+                  etiqueta: `${a.nombre} (${a.tipo})`,
+                  nombre: a.nombre,
+                  tipo: a.tipo
+                }))}
+                camposBusqueda={['nombre', 'tipo']}
+              />
             </div>
 
             <div>
