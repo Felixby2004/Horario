@@ -20,6 +20,7 @@ interface Grupo {
   capacidad_maxima: number;
   cantidad_matriculados: number;
   asignado: boolean;
+  activo: boolean;
   curso: {
     id_curso: number;
     codigo: string;
@@ -214,7 +215,11 @@ export default function AsignarGruposPage() {
                   {gruposAsignados.map(grupo => (
                     <div
                       key={grupo.id_grupo}
-                      className="bg-green-50 border-2 border-green-300 rounded-lg p-4 hover:shadow-md transition"
+                      className={`border-2 rounded-lg p-4 hover:shadow-md transition ${
+                        grupo.activo
+                          ? 'bg-green-50 border-green-300'
+                          : 'bg-gray-50 border-gray-300 opacity-75'
+                      }`}
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -222,13 +227,22 @@ export default function AsignarGruposPage() {
                             {grupo.curso.codigo} - {grupo.codigo_grupo}
                           </h3>
                           <p className="text-sm text-gray-600">{grupo.curso.nombre}</p>
+                          {!grupo.activo && (
+                            <p className="text-xs text-red-600 font-semibold mt-1">⚠️ Grupo Inactivo</p>
+                          )}
                         </div>
-                        <span className="bg-green-200 text-green-800 text-xs font-bold px-2 py-1 rounded">
-                          Asignado
+                        <span className={`text-xs font-bold px-2 py-1 rounded ${
+                          grupo.activo
+                            ? 'bg-green-200 text-green-800'
+                            : 'bg-gray-200 text-gray-800'
+                        }`}>
+                          {grupo.activo ? 'Asignado' : 'Asignado (Inactivo)'}
                         </span>
                       </div>
 
-                      <div className="bg-green-100 rounded p-2 text-sm text-gray-700 mb-3">
+                      <div className={`rounded p-2 text-sm text-gray-700 mb-3 ${
+                        grupo.activo ? 'bg-green-100' : 'bg-gray-100'
+                      }`}>
                         <p>Capacidad: {grupo.capacidad_maxima}</p>
                         <p>Matriculados: {grupo.cantidad_matriculados}</p>
                       </div>
@@ -236,7 +250,11 @@ export default function AsignarGruposPage() {
                       <button
                         onClick={() => handleAsignarGrupo(grupo)}
                         disabled={procesando === grupo.id_grupo}
-                        className="w-full px-3 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        className={`w-full px-3 py-2 text-white text-sm rounded transition ${
+                          grupo.activo
+                            ? 'bg-red-600 hover:bg-red-700'
+                            : 'bg-gray-600 hover:bg-gray-700'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         {procesando === grupo.id_grupo ? '⏳ Procesando...' : '✕ Desasignar'}
                       </button>

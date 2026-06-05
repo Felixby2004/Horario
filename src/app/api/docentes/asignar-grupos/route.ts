@@ -80,11 +80,14 @@ export async function GET(request: NextRequest) {
 
     const gruposAsignadosIds = new Set(gruposAsignados.map(dg => dg.id_grupo));
 
-    // Marcar cuáles ya están asignados
-    const gruposConEstado = gruposDisponibles.map(grupo => ({
-      ...grupo,
-      asignado: gruposAsignadosIds.has(grupo.id_grupo)
-    }));
+    // Filtrar: solo mostrar grupos activos O grupos inactivos que ya están asignados
+    // Esto permite desasignar grupos que fueron desactivados
+    const gruposConEstado = gruposDisponibles
+      .filter(grupo => grupo.activo || gruposAsignadosIds.has(grupo.id_grupo))
+      .map(grupo => ({
+        ...grupo,
+        asignado: gruposAsignadosIds.has(grupo.id_grupo)
+      }));
 
     return NextResponse.json({
       exito: true,
