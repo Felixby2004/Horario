@@ -57,13 +57,13 @@ export async function GET(request: NextRequest) {
       ]
     });
 
-    // Actualizar antigüedad dinámicamente si tienen fecha de ingreso
+    // Actualizar antigüedad dinámicamente - siempre recalcular si hay fecha de ingreso
     const docentesActualizados = docentes.map(d => {
+      let antiguedadCalculada = d.antiguedad || 0;
       if (d.fecha_ingreso) {
-        const antiguedadCalculada = utilidadesFecha.calcularAntiguedad(d.fecha_ingreso);
-        return { ...d, antiguedad: antiguedadCalculada };
+        antiguedadCalculada = utilidadesFecha.calcularAntiguedad(d.fecha_ingreso);
       }
-      return d;
+      return { ...d, antiguedad: antiguedadCalculada };
     });
 
     return NextResponse.json({
@@ -84,9 +84,21 @@ export async function POST(request: NextRequest) {
   try {
     const datos = await request.json();
 
+    // Validar fecha de ingreso
+    let fechaIngreso = null;
+    if (datos.fecha_ingreso) {
+      fechaIngreso = new Date(datos.fecha_ingreso);
+      if (isNaN(fechaIngreso.getTime())) {
+        return NextResponse.json({
+          exito: false,
+          mensaje: 'Fecha de ingreso inválida'
+        }, { status: 400 });
+      }
+    }
+
     // Calcular antigüedad si hay fecha de ingreso
-    const antiguedad = datos.fecha_ingreso 
-      ? utilidadesFecha.calcularAntiguedad(datos.fecha_ingreso)
+    const antiguedad = fechaIngreso 
+      ? utilidadesFecha.calcularAntiguedad(fechaIngreso)
       : (datos.antiguedad || 0);
 
     const docente = await prisma.docente.create({
@@ -99,7 +111,7 @@ export async function POST(request: NextRequest) {
         antiguedad: antiguedad,
         correo_electronico: datos.correo_electronico,
         telefono: datos.telefono,
-        fecha_ingreso: datos.fecha_ingreso ? new Date(datos.fecha_ingreso) : null,
+        fecha_ingreso: fechaIngreso,
         grado_academico: datos.grado_academico,
         especialidad: datos.especialidad,
         dedicacion: datos.dedicacion

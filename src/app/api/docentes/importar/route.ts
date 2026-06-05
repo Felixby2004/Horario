@@ -61,8 +61,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Calcular antigüedad si hay fecha de ingreso
-    const antiguedadCalculada = fecha_ingreso 
-      ? utilidadesFecha.calcularAntiguedad(fecha_ingreso)
+    let fechaIngresoFormato = null;
+    if (fecha_ingreso) {
+      fechaIngresoFormato = new Date(fecha_ingreso);
+      if (isNaN(fechaIngresoFormato.getTime())) {
+        return NextResponse.json({
+          exito: false,
+          mensaje: 'Fecha de ingreso inválida'
+        }, { status: 400 });
+      }
+    }
+    
+    const antiguedadCalculada = fechaIngresoFormato 
+      ? utilidadesFecha.calcularAntiguedad(fechaIngresoFormato)
       : (antiguedad || 0);
 
     // Crear docente
@@ -75,7 +86,7 @@ export async function POST(request: NextRequest) {
         categoria,
         dedicacion: dedicacion || 'tiempo_completo',
         antiguedad: antiguedadCalculada,
-        fecha_ingreso: fecha_ingreso ? new Date(fecha_ingreso) : null,
+        fecha_ingreso: fechaIngresoFormato,
         correo_electronico: usuario.correo_electronico,
         telefono: telefono || null,
         grado_academico: grado_academico || null,

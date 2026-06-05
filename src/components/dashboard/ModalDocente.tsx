@@ -144,7 +144,9 @@ export const ModalDocente: React.FC<ModalDocenteProps> = ({ abierto, alCerrar, i
                 </div>
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase">Antigüedad (años)</p>
-                  <p className="text-gray-900">{docente.antiguedad}</p>
+                  <p className="text-gray-900 font-semibold">
+                    {docente.antiguedad ?? 0} años
+                  </p>
                 </div>
                 {docente.fecha_ingreso && (
                   <div>

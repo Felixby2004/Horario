@@ -45,7 +45,24 @@ export default function DocentesPage() {
     },
     { campo: 'modalidad' as const, encabezado: 'Modalidad' },
     { campo: 'categoria' as const, encabezado: 'Categoría' },
-    { campo: 'antiguedad' as const, encabezado: 'Antigüedad' },
+    { 
+      campo: 'antiguedad' as const, 
+      encabezado: 'Antigüedad',
+      renderizar: (valor: any, fila: any) => {
+        let antiguedad = valor;
+        if (fila.fecha_ingreso) {
+          const ingreso = new Date(fila.fecha_ingreso);
+          const hoy = new Date();
+          let años = hoy.getFullYear() - ingreso.getFullYear();
+          const mes = hoy.getMonth() - ingreso.getMonth();
+          if (mes < 0 || (mes === 0 && hoy.getDate() < ingreso.getDate())) {
+            años--;
+          }
+          antiguedad = Math.max(0, años);
+        }
+        return `${antiguedad ?? 0} años`;
+      }
+    },
     {
       campo: 'activo' as const,
       encabezado: 'Estado',
