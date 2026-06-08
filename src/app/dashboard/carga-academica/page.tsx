@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect, useRef } from 'react'
 import { TablaPaginada } from '@/components/ui/TablaPaginada'
 import { Boton } from '@/components/ui/Boton'

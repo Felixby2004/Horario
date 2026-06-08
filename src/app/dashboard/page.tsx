@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -12,9 +14,9 @@ export default function DashboardPage() {
     totalHorarios: 0,
     totalGrupos: 0,
     totalUsuarios: 0,
-    docentesPorCategoria: [],
-    cursosPorCiclo: [],
-    horariosRecientes: []
+    docentesPorCategoria: [] as { categoria: string; cantidad: number }[],
+    cursosPorCiclo: [] as { ciclo: string | number; cantidad: number }[],
+    horariosRecientes: [] as any[]
   });
   const [cargando, setCargando] = useState(true);
 
@@ -58,7 +60,7 @@ export default function DashboardPage() {
       // Contar por ciclo
       const ciclos = [...new Set(cursos.map((c: any) => c.ciclo))].filter(Boolean).sort();
       const cursosPorCiclo = ciclos.map(ciclo => ({
-        ciclo,
+        ciclo: ciclo as string | number,
         cantidad: cursos.filter((c: any) => c.ciclo === ciclo).length
       }));
 
