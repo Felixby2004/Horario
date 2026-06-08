@@ -9,6 +9,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Facultad {
+  id_facultad   Int               @id @default(autoincrement())
+  codigo        String            @unique @db.VarChar(20)
+  nombre        String            @db.VarChar(150)
+  activo        Boolean           @default(true)
+  fecha_creacion DateTime         @default(now())
+  departamentos DepartamentoAcademico[]
+  docentes      Docente[]
+
+  @@map("facultad")
+}
+
+model DepartamentoAcademico {
+  id_departamento       Int               @id @default(autoincrement())
+  id_facultad          Int
+  codigo               String            @unique @db.VarChar(20)
+  nombre               String            @db.VarChar(150)
+  activo               Boolean           @default(true)
+  fecha_creacion       DateTime         @default(now())
+  facultad             Facultad          @relation(fields: [id_facultad], references: [id_facultad])
+  docentes            Docente[]
+
+  @@map("departamento_academico")
+}
+
 model Usuario {
   id_usuario           Int                @id @default(autoincrement())
   codigo               String             @unique @db.VarChar(20)
@@ -20,12 +45,16 @@ model Usuario {
   activo               Boolean            @default(true)
   ultimo_acceso        DateTime?
   fecha_creacion       DateTime           @default(now())
-  fecha_actualizacion  DateTime           @updatedAt
+  fecha_actualizacion  DateTime           @default(now()) @updatedAt
   auditorias           AuditoriaHorario[]
   conflictos_resueltos ConflictoHorario[] @relation("ResueltosPor")
   docente              Docente?
   horarios_creados     HorarioAsignado[]  @relation("CreadosPor")
+  cargas_aprobadas     CargaAcademica[]   @relation("CargasAprobadas")
+  historial_carga      HistorialCargaAcademica[]
 
+  @@index([codigo])
+  @@index([correo_electronico])
   @@map("usuario")
 }
 
@@ -42,17 +71,18 @@ model PeriodoAcademico {
   activo                        Boolean                    @default(true)
   estado                        EstadoPeriodo              @default(planificacion)
   fecha_creacion                DateTime                   @default(now())
+  citaciones_docentes           CitacionDocente[]
   conflictos                    ConflictoHorario[]
   dias_no_laborables            DiaNoLaborable[]
   disponibilidad_docentes       DisponibilidadDocente[]
+  fase_disponibilidad           FaseDisponibilidad?
   grupos                        Grupo[]
   horarios                      HorarioAsignado[]
   preasignaciones               Preasignacion[]
   restricciones_institucionales RestriccionInstitucional[]
   selecciones_temporales        SeleccionTemporalHorario[]
   ventanas_atencion             VentanaAtencion[]
-  fase_disponibilidad           FaseDisponibilidad?
-  citaciones_docentes           CitacionDocente[]
+  cargas_academicas              CargaAcademica[]
 
   @@map("periodo_academico")
 }
@@ -60,6 +90,8 @@ model PeriodoAcademico {
 model Docente {
   id_docente                Int                               @id @default(autoincrement())
   id_usuario                Int?                              @unique
+  id_facultad               Int?
+  id_departamento           Int?
   codigo_docente            String                            @unique @db.VarChar(20)
   nombres                   String                            @db.VarChar(100)
   apellidos                 String                            @db.VarChar(100)
@@ -75,13 +107,18 @@ model Docente {
   horas_maximas_semanales   Int                               @default(40)
   activo                    Boolean                           @default(true)
   fecha_creacion            DateTime                          @default(now())
-  fecha_actualizacion       DateTime                          @updatedAt
+  fecha_actualizacion       DateTime                          @default(now()) @updatedAt
   direccion                 String?                           @db.VarChar(200)
   disponibilidad            String?
   escuela_profesional       String?                           @db.VarChar(150)
   foto_perfil               String?                           @db.VarChar(255)
   perfil_completo           Boolean                           @default(false)
   horas_totales_asignadas   Int                               @default(0)
+  dni_docente               String?                           @unique @db.VarChar(12)
+  tipo_dedicacion_laboral   TipoDedicacionLaboral?
+  facultad                  Facultad?                          @relation(fields: [id_facultad], references: [id_facultad])
+  departamento              DepartamentoAcademico?             @relation(fields: [id_departamento], references: [id_departamento])
+  citaciones                CitacionDocente[]
   cola_notificaciones       ColaNotificaciones[]
   conflictos_1              ConflictoHorario[]                @relation("Docente1")
   conflictos_2              ConflictoHorario[]                @relation("Docente2")
@@ -95,8 +132,9 @@ model Docente {
   preasignaciones           Preasignacion[]
   preferencias_notificacion PreferenciasNotificacionDocente[]
   selecciones_temporales    SeleccionTemporalHorario[]
-  citaciones                CitacionDocente[]
+  cargas_academicas          CargaAcademica[]
 
+  @@index([id_usuario])
   @@map("docente")
 }
 
@@ -142,13 +180,13 @@ model DocenteCurso {
 }
 
 model DocenteGrupo {
-  id_docente_grupo  Int       @id @default(autoincrement())
-  id_docente        Int
-  id_grupo          Int
-  activo            Boolean   @default(true)
-  fecha_asignacion  DateTime  @default(now())
-  docente           Docente   @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
-  grupo             Grupo     @relation(fields: [id_grupo], references: [id_grupo], onDelete: Cascade)
+  id_docente_grupo Int      @id @default(autoincrement())
+  id_docente       Int
+  id_grupo         Int
+  activo           Boolean  @default(true)
+  fecha_asignacion DateTime @default(now())
+  docente          Docente  @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
+  grupo            Grupo    @relation(fields: [id_grupo], references: [id_grupo], onDelete: Cascade)
 
   @@unique([id_docente, id_grupo])
   @@map("docente_grupo")
@@ -164,14 +202,15 @@ model Grupo {
   activo                 Boolean                    @default(true)
   observaciones          String?
   fecha_creacion         DateTime                   @default(now())
+  docentes               DocenteGrupo[]
   curso                  Curso                      @relation(fields: [id_curso], references: [id_curso])
   periodo                PeriodoAcademico           @relation(fields: [id_periodo], references: [id_periodo])
-  docentes               DocenteGrupo[]
   horarios               HorarioAsignado[]
   preasignaciones        Preasignacion[]
   selecciones_temporales SeleccionTemporalHorario[]
 
   @@unique([id_curso, codigo_grupo, id_periodo])
+  @@index([id_curso, id_periodo])
   @@map("grupo")
 }
 
@@ -189,7 +228,7 @@ model Ambiente {
   requiere_mantenimiento Boolean                    @default(false)
   observaciones          String?
   fecha_creacion         DateTime                   @default(now())
-  fecha_actualizacion    DateTime                   @updatedAt
+  fecha_actualizacion    DateTime                   @default(now()) @updatedAt
   conflictos             ConflictoHorario[]
   cursos                 CursoAmbiente[]
   horarios               HorarioAsignado[]
@@ -212,26 +251,27 @@ model CursoAmbiente {
 }
 
 model VentanaAtencion {
-  id_ventana         Int                           @id @default(autoincrement())
-  id_periodo         Int
-  fecha              DateTime                      @db.Date
-  orden_prioridad    Int
-  modalidad          TipoModalidad
-  categoria          TipoCategoria
-  hora_inicio        String                        @db.VarChar(5)
-  hora_fin           String                        @db.VarChar(5)
-  intervalo_minutos  Int                           @default(15)
-  cantidad_docentes  Int?                          @default(0)
-  cantidad_atendidos Int?                          @default(0)
-  completado         Boolean                       @default(false)
-  activo             Boolean                       @default(true)
-  fecha_creacion     DateTime                      @default(now())
-  horarios           HorarioAsignado[]
-  citaciones         CitacionDocente[]
+  id_ventana           Int                          @id @default(autoincrement())
+  id_periodo           Int
+  fecha                DateTime                     @db.Date
+  orden_prioridad      Int
+  modalidad            TipoModalidad
+  categoria            TipoCategoria
+  hora_inicio          String                       @db.VarChar(5)
+  hora_fin             String                       @db.VarChar(5)
+  intervalo_minutos    Int                          @default(15)
+  cantidad_docentes    Int?                         @default(0)
+  cantidad_atendidos   Int?                         @default(0)
+  completado           Boolean                      @default(false)
+  activo               Boolean                      @default(true)
+  fecha_creacion       DateTime                     @default(now())
+  citaciones           CitacionDocente[]
   configuracion_turnos ConfiguracionTurnosAtencion?
-  periodo            PeriodoAcademico              @relation(fields: [id_periodo], references: [id_periodo])
+  horarios             HorarioAsignado[]
+  periodo              PeriodoAcademico             @relation(fields: [id_periodo], references: [id_periodo])
 
-  @@unique([id_periodo, orden_prioridad, modalidad, categoria])
+  @@unique([id_periodo, orden_prioridad, modalidad, categoria], map: "ventana_atencion_id_periodo_orden_prioridad_modalidad_categoria")
+  @@index([id_periodo])
   @@map("ventana_atencion")
 }
 
@@ -251,7 +291,7 @@ model HorarioAsignado {
   observaciones       String?
   creado_por          Int?
   fecha_creacion      DateTime           @default(now())
-  fecha_actualizacion DateTime           @updatedAt
+  fecha_actualizacion DateTime           @default(now()) @updatedAt
   auditorias          AuditoriaHorario[]
   usuario_creador     Usuario?           @relation("CreadosPor", fields: [creado_por], references: [id_usuario])
   ambiente            Ambiente           @relation(fields: [id_ambiente], references: [id_ambiente])
@@ -261,6 +301,11 @@ model HorarioAsignado {
   periodo             PeriodoAcademico   @relation(fields: [id_periodo], references: [id_periodo])
   ventana             VentanaAtencion?   @relation(fields: [id_ventana], references: [id_ventana])
 
+  @@index([id_periodo])
+  @@index([id_ventana])
+  @@index([id_ambiente, id_periodo, estado], map: "idx_horario_ambiente_periodo")
+  @@index([id_docente, id_periodo, estado], map: "idx_horario_docente_periodo")
+  @@index([id_periodo, estado, dia_semana], map: "idx_horario_periodo_dia")
   @@map("horario_asignado")
 }
 
@@ -303,7 +348,7 @@ model DisponibilidadDocente {
   docente            Docente          @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
   periodo            PeriodoAcademico @relation(fields: [id_periodo], references: [id_periodo])
 
-  @@unique([id_docente, dia_semana, hora_inicio, id_periodo])
+  @@unique([id_docente, dia_semana, hora_inicio, id_periodo], map: "disponibilidad_docente_id_docente_dia_semana_hora_inicio_id_per")
   @@map("disponibilidad_docente")
 }
 
@@ -409,7 +454,7 @@ model ConfiguracionNotificaciones {
   minutos_antelacion      Int?
   configuracion_adicional Json?
   fecha_creacion          DateTime          @default(now())
-  fecha_actualizacion     DateTime          @updatedAt
+  fecha_actualizacion     DateTime          @default(now()) @updatedAt
 
   @@unique([tipo_notificacion, canal])
   @@map("configuracion_notificaciones")
@@ -424,10 +469,11 @@ model PreferenciasNotificacionDocente {
   verificado          Boolean           @default(false)
   fecha_verificacion  DateTime?
   fecha_creacion      DateTime          @default(now())
-  fecha_actualizacion DateTime          @updatedAt
+  fecha_actualizacion DateTime          @default(now()) @updatedAt
   docente             Docente           @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
 
   @@unique([id_docente, canal])
+  @@index([id_docente, canal])
   @@map("preferencias_notificacion_docente")
 }
 
@@ -469,6 +515,187 @@ model ColaNotificaciones {
 
   @@index([fecha_programada, estado, prioridad])
   @@map("cola_notificaciones")
+}
+
+model FaseDisponibilidad {
+  id_fase_disponibilidad   Int                             @id @default(autoincrement())
+  id_periodo               Int                             @unique
+  estado                   EstadoFaseDisponibilidad        @default(no_iniciada)
+  fecha_inicio             DateTime
+  fecha_fin                DateTime
+  bloques_tiempo           String                          @default("30") @db.VarChar(50)
+  instrucciones            String?
+  activo                   Boolean                         @default(true)
+  fecha_creacion           DateTime                        @default(now())
+  fecha_actualizacion      DateTime                        @default(now()) @updatedAt
+  registros_disponibilidad DisponibilidadDocenteRegistro[]
+  periodo                  PeriodoAcademico                @relation(fields: [id_periodo], references: [id_periodo])
+
+  @@map("fase_disponibilidad")
+}
+
+model DisponibilidadDocenteRegistro {
+  id_registro           Int                @id @default(autoincrement())
+  id_docente            Int
+  id_fase               Int
+  matriz_disponibilidad Json
+  bloques_preferidos    Json?
+  notas                 String?            @db.VarChar(500)
+  completado            Boolean            @default(false)
+  fecha_registro        DateTime           @default(now())
+  fecha_actualizacion   DateTime           @default(now()) @updatedAt
+  docente               Docente            @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
+  fase                  FaseDisponibilidad @relation(fields: [id_fase], references: [id_fase_disponibilidad], onDelete: Cascade)
+
+  @@unique([id_docente, id_fase])
+  @@map("disponibilidad_docente_registro")
+}
+
+model CitacionDocente {
+  id_citacion          Int              @id @default(autoincrement())
+  id_docente           Int
+  id_periodo           Int
+  id_ventana           Int
+  fecha_citacion       DateTime         @db.Date
+  hora_inicio          String           @db.VarChar(5)
+  hora_fin             String           @db.VarChar(5)
+  numero_orden_turno   Int
+  estado               EstadoCitacion   @default(programada)
+  confirmado_docente   Boolean          @default(false)
+  fecha_confirmacion   DateTime?
+  razon_rechazo        String?          @db.VarChar(300)
+  observaciones        String?
+  notificacion_enviada Boolean          @default(false)
+  recordatorio_enviado Boolean          @default(false)
+  fecha_creacion       DateTime         @default(now())
+  fecha_actualizacion  DateTime         @default(now()) @updatedAt
+  docente              Docente          @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
+  periodo              PeriodoAcademico @relation(fields: [id_periodo], references: [id_periodo])
+  ventana              VentanaAtencion  @relation(fields: [id_ventana], references: [id_ventana])
+
+  @@unique([id_docente, id_periodo, id_ventana])
+  @@index([fecha_citacion, hora_inicio])
+  @@index([estado, notificacion_enviada])
+  @@map("citacion_docente")
+}
+
+model ConfiguracionTurnosAtencion {
+  id_configuracion        Int             @id @default(autoincrement())
+  id_ventana              Int             @unique
+  minutos_por_turno       Int             @default(15)
+  cantidad_turnos         Int
+  permitir_reprogramacion Boolean         @default(true)
+  dias_previos_minimo     Int             @default(1)
+  activo                  Boolean         @default(true)
+  fecha_creacion          DateTime        @default(now())
+  fecha_actualizacion     DateTime        @default(now()) @updatedAt
+  ventana                 VentanaAtencion @relation(fields: [id_ventana], references: [id_ventana], onDelete: Cascade)
+
+  @@map("configuracion_turnos_atencion")
+}
+
+model HistorialCitacion {
+  id_historial    Int             @id @default(autoincrement())
+  id_citacion     Int
+  accion          String          @db.VarChar(50)
+  estado_anterior EstadoCitacion?
+  estado_nuevo    EstadoCitacion
+  cambios         Json?
+  razon           String?
+  usuario_id      Int?
+  fecha_registro  DateTime        @default(now())
+
+  @@map("historial_citacion")
+}
+
+model ConfiguracionSistema {
+  id_configuracion           Int      @id @default(autoincrement())
+  bloques_horarios           Int      @default(10)
+  duracion_bloque            Int      @default(90)
+  hora_inicio                String   @default("07:00") @db.VarChar(5)
+  hora_fin                   String   @default("22:00") @db.VarChar(5)
+  max_horas_docente          Int      @default(40)
+  min_horas_entre_clases     Int      @default(0)
+  permitir_clases_seguidas   Boolean  @default(true)
+  validar_capacidad_ambiente Boolean  @default(true)
+  fecha_creacion             DateTime @default(now())
+  fecha_actualizacion        DateTime @default(now()) @updatedAt
+
+  @@map("configuracion_sistema")
+}
+
+model actividad_no_lectiva_docente {
+  id_actividad_no_lectiva Int       @id @default(autoincrement())
+  id_docente              Int
+  tipo_actividad          String    @db.VarChar(100)
+  cantidad_horas          Int
+  descripcion             String?
+  fecha_creacion          DateTime? @default(now()) @db.Timestamp(6)
+  fecha_actualizacion     DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model CargaAcademica {
+  id_carga              Int                    @id @default(autoincrement())
+  id_docente            Int
+  id_periodo            Int
+  estado                EstadoCargaAcademica   @default(borrador)
+  horas_lectivas        Int                    @default(0)
+  horas_no_lectivas     Int                    @default(0)
+  horas_preparacion     Int                    @default(0)
+  horas_totales         Int                    @default(0)
+  horas_meta            Int                    @default(40)
+  observaciones         String?
+  observaciones_generales String?
+  fecha_envio           DateTime?
+  fecha_aprobacion      DateTime?
+  aprobado_por          Int?
+  fecha_creacion        DateTime               @default(now())
+  fecha_actualizacion   DateTime               @default(now()) @updatedAt
+  docente               Docente                @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
+  periodo               PeriodoAcademico       @relation(fields: [id_periodo], references: [id_periodo])
+  usuario_aprobador     Usuario?               @relation("CargasAprobadas", fields: [aprobado_por], references: [id_usuario])
+  actividades_no_lectivas ActividadNoLectiva[]
+  historial             HistorialCargaAcademica[]
+
+  @@index([id_docente, id_periodo])
+  @@index([estado])
+  @@map("carga_academica")
+}
+
+model ActividadNoLectiva {
+  id_actividad          Int                      @id @default(autoincrement())
+  id_carga              Int
+  tipo_actividad        TipoActividadNoLectiva
+  nombre                String                   @db.VarChar(200)
+  descripcion           String?
+  horas_semanales       Int
+  horas_asignadas       Int                      @default(0)
+  dias_semana           Json?
+  fecha_inicio          DateTime?
+  fecha_fin             DateTime?
+  datos_adicionales     Json?
+  datos_sustento        Json?
+  horarios_actividad    Json?
+  observaciones         String?
+  fecha_creacion        DateTime                 @default(now())
+  fecha_actualizacion   DateTime                 @default(now()) @updatedAt
+  carga_academica       CargaAcademica           @relation(fields: [id_carga], references: [id_carga], onDelete: Cascade)
+
+  @@map("actividad_no_lectiva")
+}
+
+model HistorialCargaAcademica {
+  id_historial          Int                    @id @default(autoincrement())
+  id_carga              Int
+  id_usuario            Int
+  estado_anterior       EstadoCargaAcademica?
+  estado_nuevo          EstadoCargaAcademica
+  observaciones         String?
+  fecha_creacion        DateTime               @default(now())
+  carga_academica       CargaAcademica         @relation(fields: [id_carga], references: [id_carga], onDelete: Cascade)
+  usuario               Usuario                @relation(fields: [id_usuario], references: [id_usuario])
+
+  @@map("historial_carga_academica")
 }
 
 enum TipoRol {
@@ -631,115 +858,35 @@ enum EstadoFaseDisponibilidad {
   @@map("estado_fase_disponibilidad")
 }
 
-// Modelo para gestionar la fase de disponibilidad de cada período
-model FaseDisponibilidad {
-  id_fase_disponibilidad Int                       @id @default(autoincrement())
-  id_periodo             Int                       @unique
-  estado                 EstadoFaseDisponibilidad  @default(no_iniciada)
-  fecha_inicio           DateTime
-  fecha_fin              DateTime
-  bloques_tiempo         String                    @db.VarChar(50) @default("30") // Intervalo en minutos
-  instrucciones          String?                   @db.Text
-  activo                 Boolean                   @default(true)
-  fecha_creacion         DateTime                  @default(now())
-  fecha_actualizacion    DateTime                  @updatedAt
-  periodo                PeriodoAcademico          @relation(fields: [id_periodo], references: [id_periodo])
-  registros_disponibilidad DisponibilidadDocenteRegistro[]
+enum TipoDedicacionLaboral {
+  dedicacion_exclusiva
+  tiempo_completo
+  tiempo_parcial_20
+  por_horas
 
-  @@map("fase_disponibilidad")
+  @@map("tipo_dedicacion_laboral")
 }
 
-// Registro mejorado de disponibilidad con matriz diaria
-model DisponibilidadDocenteRegistro {
-  id_registro            Int                  @id @default(autoincrement())
-  id_docente             Int
-  id_fase                Int
-  matriz_disponibilidad  Json                 // {"lunes": [true, false, ...], "martes": [...]}
-  bloques_preferidos     Json?                // Bloques específicos que el docente prefiere
-  notas                  String?              @db.VarChar(500)
-  completado             Boolean              @default(false)
-  fecha_registro         DateTime             @default(now())
-  fecha_actualizacion    DateTime             @updatedAt
-  docente                Docente              @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
-  fase                   FaseDisponibilidad   @relation(fields: [id_fase], references: [id_fase_disponibilidad], onDelete: Cascade)
+enum TipoActividadNoLectiva {
+  tutoria_consejeria
+  investigacion
+  responsabilidad_social
+  gestion_gobierno
+  asesoria_tesis_jurado
+  perfeccionamiento
 
-  @@unique([id_docente, id_fase])
-  @@map("disponibilidad_docente_registro")
+  @@map("tipo_actividad_no_lectiva")
 }
 
-// Modelo para las citaciones programadas por la secretaria
-model CitacionDocente {
-  id_citacion            Int               @id @default(autoincrement())
-  id_docente             Int
-  id_periodo             Int
-  id_ventana             Int
-  fecha_citacion         DateTime          @db.Date
-  hora_inicio            String            @db.VarChar(5)
-  hora_fin               String            @db.VarChar(5)
-  numero_orden_turno     Int               // Orden en el que será atendido (1, 2, 3...)
-  estado                 EstadoCitacion    @default(programada)
-  confirmado_docente     Boolean           @default(false)
-  fecha_confirmacion     DateTime?
-  razon_rechazo          String?           @db.VarChar(300)
-  observaciones          String?           @db.Text
-  notificacion_enviada   Boolean           @default(false)
-  recordatorio_enviado   Boolean           @default(false)
-  fecha_creacion         DateTime          @default(now())
-  fecha_actualizacion    DateTime          @updatedAt
-  docente                Docente           @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
-  periodo                PeriodoAcademico  @relation(fields: [id_periodo], references: [id_periodo])
-  ventana                VentanaAtencion   @relation(fields: [id_ventana], references: [id_ventana])
+enum EstadoCargaAcademica {
+  borrador
+  enviado
+  en_revision
+  observado
+  validado
+  aprobado
+  publicado
+  cancelado
 
-  @@unique([id_docente, id_periodo, id_ventana])
-  @@index([fecha_citacion, hora_inicio])
-  @@index([estado, notificacion_enviada])
-  @@map("citacion_docente")
-}
-
-// Configuración de turnos de atención (extiende VentanaAtencion)
-model ConfiguracionTurnosAtencion {
-  id_configuracion       Int               @id @default(autoincrement())
-  id_ventana             Int               @unique
-  minutos_por_turno      Int               @default(15)
-  cantidad_turnos        Int               // Calculado: (fin - inicio) / minutos
-  permitir_reprogramacion Boolean           @default(true)
-  dias_previos_minimo    Int               @default(1) // Mínimo de días previos para confirmar
-  activo                 Boolean           @default(true)
-  fecha_creacion         DateTime          @default(now())
-  fecha_actualizacion    DateTime          @updatedAt
-  ventana                VentanaAtencion   @relation(fields: [id_ventana], references: [id_ventana], onDelete: Cascade)
-
-  @@map("configuracion_turnos_atencion")
-}
-
-// Historial de cambios en citaciones
-model HistorialCitacion {
-  id_historial           Int               @id @default(autoincrement())
-  id_citacion            Int
-  accion                 String            @db.VarChar(50) // 'crear', 'programar', 'confirmar', 'rechazar', 'reprogramar', 'cancelar'
-  estado_anterior        EstadoCitacion?
-  estado_nuevo           EstadoCitacion
-  cambios                Json?             // JSON con campos modificados
-  razon                  String?           @db.Text
-  usuario_id             Int?
-  fecha_registro         DateTime          @default(now())
-
-  @@map("historial_citacion")
-}
-
-// Configuración del sistema
-model ConfiguracionSistema {
-  id_configuracion           Int       @id @default(autoincrement())
-  bloques_horarios           Int       @default(10)
-  duracion_bloque            Int       @default(90)
-  hora_inicio                String    @db.VarChar(5) @default("07:00")
-  hora_fin                   String    @db.VarChar(5) @default("22:00")
-  max_horas_docente          Int       @default(40)
-  min_horas_entre_clases     Int       @default(0)
-  permitir_clases_seguidas   Boolean   @default(true)
-  validar_capacidad_ambiente Boolean   @default(true)
-  fecha_creacion             DateTime  @default(now())
-  fecha_actualizacion        DateTime  @updatedAt
-
-  @@map("configuracion_sistema")
+  @@map("estado_carga_academica")
 }

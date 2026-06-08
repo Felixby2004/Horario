@@ -14,6 +14,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model Facultad
+ * 
+ */
+export type Facultad = $Result.DefaultSelection<Prisma.$FacultadPayload>
+/**
+ * Model DepartamentoAcademico
+ * 
+ */
+export type DepartamentoAcademico = $Result.DefaultSelection<Prisma.$DepartamentoAcademicoPayload>
+/**
  * Model Usuario
  * 
  */
@@ -153,6 +163,26 @@ export type HistorialCitacion = $Result.DefaultSelection<Prisma.$HistorialCitaci
  * 
  */
 export type ConfiguracionSistema = $Result.DefaultSelection<Prisma.$ConfiguracionSistemaPayload>
+/**
+ * Model actividad_no_lectiva_docente
+ * 
+ */
+export type actividad_no_lectiva_docente = $Result.DefaultSelection<Prisma.$actividad_no_lectiva_docentePayload>
+/**
+ * Model CargaAcademica
+ * 
+ */
+export type CargaAcademica = $Result.DefaultSelection<Prisma.$CargaAcademicaPayload>
+/**
+ * Model ActividadNoLectiva
+ * 
+ */
+export type ActividadNoLectiva = $Result.DefaultSelection<Prisma.$ActividadNoLectivaPayload>
+/**
+ * Model HistorialCargaAcademica
+ * 
+ */
+export type HistorialCargaAcademica = $Result.DefaultSelection<Prisma.$HistorialCargaAcademicaPayload>
 
 /**
  * Enums
@@ -334,6 +364,42 @@ export const EstadoFaseDisponibilidad: {
 
 export type EstadoFaseDisponibilidad = (typeof EstadoFaseDisponibilidad)[keyof typeof EstadoFaseDisponibilidad]
 
+
+export const TipoDedicacionLaboral: {
+  dedicacion_exclusiva: 'dedicacion_exclusiva',
+  tiempo_completo: 'tiempo_completo',
+  tiempo_parcial_20: 'tiempo_parcial_20',
+  por_horas: 'por_horas'
+};
+
+export type TipoDedicacionLaboral = (typeof TipoDedicacionLaboral)[keyof typeof TipoDedicacionLaboral]
+
+
+export const TipoActividadNoLectiva: {
+  tutoria_consejeria: 'tutoria_consejeria',
+  investigacion: 'investigacion',
+  responsabilidad_social: 'responsabilidad_social',
+  gestion_gobierno: 'gestion_gobierno',
+  asesoria_tesis_jurado: 'asesoria_tesis_jurado',
+  perfeccionamiento: 'perfeccionamiento'
+};
+
+export type TipoActividadNoLectiva = (typeof TipoActividadNoLectiva)[keyof typeof TipoActividadNoLectiva]
+
+
+export const EstadoCargaAcademica: {
+  borrador: 'borrador',
+  enviado: 'enviado',
+  en_revision: 'en_revision',
+  observado: 'observado',
+  validado: 'validado',
+  aprobado: 'aprobado',
+  publicado: 'publicado',
+  cancelado: 'cancelado'
+};
+
+export type EstadoCargaAcademica = (typeof EstadoCargaAcademica)[keyof typeof EstadoCargaAcademica]
+
 }
 
 export type TipoRol = $Enums.TipoRol
@@ -404,6 +470,18 @@ export type EstadoFaseDisponibilidad = $Enums.EstadoFaseDisponibilidad
 
 export const EstadoFaseDisponibilidad: typeof $Enums.EstadoFaseDisponibilidad
 
+export type TipoDedicacionLaboral = $Enums.TipoDedicacionLaboral
+
+export const TipoDedicacionLaboral: typeof $Enums.TipoDedicacionLaboral
+
+export type TipoActividadNoLectiva = $Enums.TipoActividadNoLectiva
+
+export const TipoActividadNoLectiva: typeof $Enums.TipoActividadNoLectiva
+
+export type EstadoCargaAcademica = $Enums.EstadoCargaAcademica
+
+export const EstadoCargaAcademica: typeof $Enums.EstadoCargaAcademica
+
 /**
  * ##  Prisma Client ʲˢ
  *
@@ -411,8 +489,8 @@ export const EstadoFaseDisponibilidad: typeof $Enums.EstadoFaseDisponibilidad
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Usuarios
- * const usuarios = await prisma.usuario.findMany()
+ * // Fetch zero or more Facultads
+ * const facultads = await prisma.facultad.findMany()
  * ```
  *
  *
@@ -432,8 +510,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Usuarios
-   * const usuarios = await prisma.usuario.findMany()
+   * // Fetch zero or more Facultads
+   * const facultads = await prisma.facultad.findMany()
    * ```
    *
    *
@@ -523,6 +601,26 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.facultad`: Exposes CRUD operations for the **Facultad** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Facultads
+    * const facultads = await prisma.facultad.findMany()
+    * ```
+    */
+  get facultad(): Prisma.FacultadDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.departamentoAcademico`: Exposes CRUD operations for the **DepartamentoAcademico** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DepartamentoAcademicos
+    * const departamentoAcademicos = await prisma.departamentoAcademico.findMany()
+    * ```
+    */
+  get departamentoAcademico(): Prisma.DepartamentoAcademicoDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.usuario`: Exposes CRUD operations for the **Usuario** model.
     * Example usage:
     * ```ts
@@ -801,6 +899,46 @@ export class PrismaClient<
     * ```
     */
   get configuracionSistema(): Prisma.ConfiguracionSistemaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.actividad_no_lectiva_docente`: Exposes CRUD operations for the **actividad_no_lectiva_docente** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Actividad_no_lectiva_docentes
+    * const actividad_no_lectiva_docentes = await prisma.actividad_no_lectiva_docente.findMany()
+    * ```
+    */
+  get actividad_no_lectiva_docente(): Prisma.actividad_no_lectiva_docenteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cargaAcademica`: Exposes CRUD operations for the **CargaAcademica** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CargaAcademicas
+    * const cargaAcademicas = await prisma.cargaAcademica.findMany()
+    * ```
+    */
+  get cargaAcademica(): Prisma.CargaAcademicaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.actividadNoLectiva`: Exposes CRUD operations for the **ActividadNoLectiva** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActividadNoLectivas
+    * const actividadNoLectivas = await prisma.actividadNoLectiva.findMany()
+    * ```
+    */
+  get actividadNoLectiva(): Prisma.ActividadNoLectivaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.historialCargaAcademica`: Exposes CRUD operations for the **HistorialCargaAcademica** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HistorialCargaAcademicas
+    * const historialCargaAcademicas = await prisma.historialCargaAcademica.findMany()
+    * ```
+    */
+  get historialCargaAcademica(): Prisma.HistorialCargaAcademicaDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1242,6 +1380,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    Facultad: 'Facultad',
+    DepartamentoAcademico: 'DepartamentoAcademico',
     Usuario: 'Usuario',
     PeriodoAcademico: 'PeriodoAcademico',
     Docente: 'Docente',
@@ -1269,7 +1409,11 @@ export namespace Prisma {
     CitacionDocente: 'CitacionDocente',
     ConfiguracionTurnosAtencion: 'ConfiguracionTurnosAtencion',
     HistorialCitacion: 'HistorialCitacion',
-    ConfiguracionSistema: 'ConfiguracionSistema'
+    ConfiguracionSistema: 'ConfiguracionSistema',
+    actividad_no_lectiva_docente: 'actividad_no_lectiva_docente',
+    CargaAcademica: 'CargaAcademica',
+    ActividadNoLectiva: 'ActividadNoLectiva',
+    HistorialCargaAcademica: 'HistorialCargaAcademica'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1288,10 +1432,158 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "usuario" | "periodoAcademico" | "docente" | "curso" | "docenteCurso" | "docenteGrupo" | "grupo" | "ambiente" | "cursoAmbiente" | "ventanaAtencion" | "horarioAsignado" | "seleccionTemporalHorario" | "disponibilidadDocente" | "restriccionInstitucional" | "diaNoLaborable" | "preasignacion" | "conflictoHorario" | "auditoriaHorario" | "configuracionNotificaciones" | "preferenciasNotificacionDocente" | "historialNotificaciones" | "colaNotificaciones" | "faseDisponibilidad" | "disponibilidadDocenteRegistro" | "citacionDocente" | "configuracionTurnosAtencion" | "historialCitacion" | "configuracionSistema"
+      modelProps: "facultad" | "departamentoAcademico" | "usuario" | "periodoAcademico" | "docente" | "curso" | "docenteCurso" | "docenteGrupo" | "grupo" | "ambiente" | "cursoAmbiente" | "ventanaAtencion" | "horarioAsignado" | "seleccionTemporalHorario" | "disponibilidadDocente" | "restriccionInstitucional" | "diaNoLaborable" | "preasignacion" | "conflictoHorario" | "auditoriaHorario" | "configuracionNotificaciones" | "preferenciasNotificacionDocente" | "historialNotificaciones" | "colaNotificaciones" | "faseDisponibilidad" | "disponibilidadDocenteRegistro" | "citacionDocente" | "configuracionTurnosAtencion" | "historialCitacion" | "configuracionSistema" | "actividad_no_lectiva_docente" | "cargaAcademica" | "actividadNoLectiva" | "historialCargaAcademica"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      Facultad: {
+        payload: Prisma.$FacultadPayload<ExtArgs>
+        fields: Prisma.FacultadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FacultadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FacultadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          findFirst: {
+            args: Prisma.FacultadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FacultadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          findMany: {
+            args: Prisma.FacultadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>[]
+          }
+          create: {
+            args: Prisma.FacultadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          createMany: {
+            args: Prisma.FacultadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FacultadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>[]
+          }
+          delete: {
+            args: Prisma.FacultadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          update: {
+            args: Prisma.FacultadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          deleteMany: {
+            args: Prisma.FacultadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FacultadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FacultadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>[]
+          }
+          upsert: {
+            args: Prisma.FacultadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacultadPayload>
+          }
+          aggregate: {
+            args: Prisma.FacultadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFacultad>
+          }
+          groupBy: {
+            args: Prisma.FacultadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FacultadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FacultadCountArgs<ExtArgs>
+            result: $Utils.Optional<FacultadCountAggregateOutputType> | number
+          }
+        }
+      }
+      DepartamentoAcademico: {
+        payload: Prisma.$DepartamentoAcademicoPayload<ExtArgs>
+        fields: Prisma.DepartamentoAcademicoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DepartamentoAcademicoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DepartamentoAcademicoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          findFirst: {
+            args: Prisma.DepartamentoAcademicoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DepartamentoAcademicoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          findMany: {
+            args: Prisma.DepartamentoAcademicoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>[]
+          }
+          create: {
+            args: Prisma.DepartamentoAcademicoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          createMany: {
+            args: Prisma.DepartamentoAcademicoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DepartamentoAcademicoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>[]
+          }
+          delete: {
+            args: Prisma.DepartamentoAcademicoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          update: {
+            args: Prisma.DepartamentoAcademicoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          deleteMany: {
+            args: Prisma.DepartamentoAcademicoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DepartamentoAcademicoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DepartamentoAcademicoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>[]
+          }
+          upsert: {
+            args: Prisma.DepartamentoAcademicoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartamentoAcademicoPayload>
+          }
+          aggregate: {
+            args: Prisma.DepartamentoAcademicoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDepartamentoAcademico>
+          }
+          groupBy: {
+            args: Prisma.DepartamentoAcademicoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DepartamentoAcademicoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DepartamentoAcademicoCountArgs<ExtArgs>
+            result: $Utils.Optional<DepartamentoAcademicoCountAggregateOutputType> | number
+          }
+        }
+      }
       Usuario: {
         payload: Prisma.$UsuarioPayload<ExtArgs>
         fields: Prisma.UsuarioFieldRefs
@@ -3364,6 +3656,302 @@ export namespace Prisma {
           }
         }
       }
+      actividad_no_lectiva_docente: {
+        payload: Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>
+        fields: Prisma.actividad_no_lectiva_docenteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.actividad_no_lectiva_docenteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.actividad_no_lectiva_docenteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          findFirst: {
+            args: Prisma.actividad_no_lectiva_docenteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.actividad_no_lectiva_docenteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          findMany: {
+            args: Prisma.actividad_no_lectiva_docenteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>[]
+          }
+          create: {
+            args: Prisma.actividad_no_lectiva_docenteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          createMany: {
+            args: Prisma.actividad_no_lectiva_docenteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.actividad_no_lectiva_docenteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>[]
+          }
+          delete: {
+            args: Prisma.actividad_no_lectiva_docenteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          update: {
+            args: Prisma.actividad_no_lectiva_docenteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          deleteMany: {
+            args: Prisma.actividad_no_lectiva_docenteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.actividad_no_lectiva_docenteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.actividad_no_lectiva_docenteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>[]
+          }
+          upsert: {
+            args: Prisma.actividad_no_lectiva_docenteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$actividad_no_lectiva_docentePayload>
+          }
+          aggregate: {
+            args: Prisma.Actividad_no_lectiva_docenteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActividad_no_lectiva_docente>
+          }
+          groupBy: {
+            args: Prisma.actividad_no_lectiva_docenteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Actividad_no_lectiva_docenteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.actividad_no_lectiva_docenteCountArgs<ExtArgs>
+            result: $Utils.Optional<Actividad_no_lectiva_docenteCountAggregateOutputType> | number
+          }
+        }
+      }
+      CargaAcademica: {
+        payload: Prisma.$CargaAcademicaPayload<ExtArgs>
+        fields: Prisma.CargaAcademicaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CargaAcademicaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CargaAcademicaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          findFirst: {
+            args: Prisma.CargaAcademicaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CargaAcademicaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          findMany: {
+            args: Prisma.CargaAcademicaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>[]
+          }
+          create: {
+            args: Prisma.CargaAcademicaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          createMany: {
+            args: Prisma.CargaAcademicaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CargaAcademicaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>[]
+          }
+          delete: {
+            args: Prisma.CargaAcademicaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          update: {
+            args: Prisma.CargaAcademicaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          deleteMany: {
+            args: Prisma.CargaAcademicaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CargaAcademicaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CargaAcademicaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>[]
+          }
+          upsert: {
+            args: Prisma.CargaAcademicaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CargaAcademicaPayload>
+          }
+          aggregate: {
+            args: Prisma.CargaAcademicaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCargaAcademica>
+          }
+          groupBy: {
+            args: Prisma.CargaAcademicaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CargaAcademicaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CargaAcademicaCountArgs<ExtArgs>
+            result: $Utils.Optional<CargaAcademicaCountAggregateOutputType> | number
+          }
+        }
+      }
+      ActividadNoLectiva: {
+        payload: Prisma.$ActividadNoLectivaPayload<ExtArgs>
+        fields: Prisma.ActividadNoLectivaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ActividadNoLectivaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ActividadNoLectivaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          findFirst: {
+            args: Prisma.ActividadNoLectivaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ActividadNoLectivaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          findMany: {
+            args: Prisma.ActividadNoLectivaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>[]
+          }
+          create: {
+            args: Prisma.ActividadNoLectivaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          createMany: {
+            args: Prisma.ActividadNoLectivaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ActividadNoLectivaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>[]
+          }
+          delete: {
+            args: Prisma.ActividadNoLectivaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          update: {
+            args: Prisma.ActividadNoLectivaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          deleteMany: {
+            args: Prisma.ActividadNoLectivaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ActividadNoLectivaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ActividadNoLectivaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>[]
+          }
+          upsert: {
+            args: Prisma.ActividadNoLectivaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ActividadNoLectivaPayload>
+          }
+          aggregate: {
+            args: Prisma.ActividadNoLectivaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateActividadNoLectiva>
+          }
+          groupBy: {
+            args: Prisma.ActividadNoLectivaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ActividadNoLectivaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ActividadNoLectivaCountArgs<ExtArgs>
+            result: $Utils.Optional<ActividadNoLectivaCountAggregateOutputType> | number
+          }
+        }
+      }
+      HistorialCargaAcademica: {
+        payload: Prisma.$HistorialCargaAcademicaPayload<ExtArgs>
+        fields: Prisma.HistorialCargaAcademicaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HistorialCargaAcademicaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HistorialCargaAcademicaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          findFirst: {
+            args: Prisma.HistorialCargaAcademicaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HistorialCargaAcademicaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          findMany: {
+            args: Prisma.HistorialCargaAcademicaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>[]
+          }
+          create: {
+            args: Prisma.HistorialCargaAcademicaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          createMany: {
+            args: Prisma.HistorialCargaAcademicaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HistorialCargaAcademicaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>[]
+          }
+          delete: {
+            args: Prisma.HistorialCargaAcademicaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          update: {
+            args: Prisma.HistorialCargaAcademicaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          deleteMany: {
+            args: Prisma.HistorialCargaAcademicaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HistorialCargaAcademicaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HistorialCargaAcademicaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>[]
+          }
+          upsert: {
+            args: Prisma.HistorialCargaAcademicaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HistorialCargaAcademicaPayload>
+          }
+          aggregate: {
+            args: Prisma.HistorialCargaAcademicaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHistorialCargaAcademica>
+          }
+          groupBy: {
+            args: Prisma.HistorialCargaAcademicaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HistorialCargaAcademicaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HistorialCargaAcademicaCountArgs<ExtArgs>
+            result: $Utils.Optional<HistorialCargaAcademicaCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3460,6 +4048,8 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
+    facultad?: FacultadOmit
+    departamentoAcademico?: DepartamentoAcademicoOmit
     usuario?: UsuarioOmit
     periodoAcademico?: PeriodoAcademicoOmit
     docente?: DocenteOmit
@@ -3488,6 +4078,10 @@ export namespace Prisma {
     configuracionTurnosAtencion?: ConfiguracionTurnosAtencionOmit
     historialCitacion?: HistorialCitacionOmit
     configuracionSistema?: ConfiguracionSistemaOmit
+    actividad_no_lectiva_docente?: actividad_no_lectiva_docenteOmit
+    cargaAcademica?: CargaAcademicaOmit
+    actividadNoLectiva?: ActividadNoLectivaOmit
+    historialCargaAcademica?: HistorialCargaAcademicaOmit
   }
 
   /* Types for Logging */
@@ -3564,6 +4158,77 @@ export namespace Prisma {
 
 
   /**
+   * Count Type FacultadCountOutputType
+   */
+
+  export type FacultadCountOutputType = {
+    departamentos: number
+    docentes: number
+  }
+
+  export type FacultadCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    departamentos?: boolean | FacultadCountOutputTypeCountDepartamentosArgs
+    docentes?: boolean | FacultadCountOutputTypeCountDocentesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FacultadCountOutputType without action
+   */
+  export type FacultadCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacultadCountOutputType
+     */
+    select?: FacultadCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FacultadCountOutputType without action
+   */
+  export type FacultadCountOutputTypeCountDepartamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DepartamentoAcademicoWhereInput
+  }
+
+  /**
+   * FacultadCountOutputType without action
+   */
+  export type FacultadCountOutputTypeCountDocentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocenteWhereInput
+  }
+
+
+  /**
+   * Count Type DepartamentoAcademicoCountOutputType
+   */
+
+  export type DepartamentoAcademicoCountOutputType = {
+    docentes: number
+  }
+
+  export type DepartamentoAcademicoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    docentes?: boolean | DepartamentoAcademicoCountOutputTypeCountDocentesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DepartamentoAcademicoCountOutputType without action
+   */
+  export type DepartamentoAcademicoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademicoCountOutputType
+     */
+    select?: DepartamentoAcademicoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DepartamentoAcademicoCountOutputType without action
+   */
+  export type DepartamentoAcademicoCountOutputTypeCountDocentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocenteWhereInput
+  }
+
+
+  /**
    * Count Type UsuarioCountOutputType
    */
 
@@ -3571,12 +4236,16 @@ export namespace Prisma {
     auditorias: number
     conflictos_resueltos: number
     horarios_creados: number
+    cargas_aprobadas: number
+    historial_carga: number
   }
 
   export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auditorias?: boolean | UsuarioCountOutputTypeCountAuditoriasArgs
     conflictos_resueltos?: boolean | UsuarioCountOutputTypeCountConflictos_resueltosArgs
     horarios_creados?: boolean | UsuarioCountOutputTypeCountHorarios_creadosArgs
+    cargas_aprobadas?: boolean | UsuarioCountOutputTypeCountCargas_aprobadasArgs
+    historial_carga?: boolean | UsuarioCountOutputTypeCountHistorial_cargaArgs
   }
 
   // Custom InputTypes
@@ -3611,12 +4280,27 @@ export namespace Prisma {
     where?: HorarioAsignadoWhereInput
   }
 
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountCargas_aprobadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CargaAcademicaWhereInput
+  }
+
+  /**
+   * UsuarioCountOutputType without action
+   */
+  export type UsuarioCountOutputTypeCountHistorial_cargaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistorialCargaAcademicaWhereInput
+  }
+
 
   /**
    * Count Type PeriodoAcademicoCountOutputType
    */
 
   export type PeriodoAcademicoCountOutputType = {
+    citaciones_docentes: number
     conflictos: number
     dias_no_laborables: number
     disponibilidad_docentes: number
@@ -3626,10 +4310,11 @@ export namespace Prisma {
     restricciones_institucionales: number
     selecciones_temporales: number
     ventanas_atencion: number
-    citaciones_docentes: number
+    cargas_academicas: number
   }
 
   export type PeriodoAcademicoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    citaciones_docentes?: boolean | PeriodoAcademicoCountOutputTypeCountCitaciones_docentesArgs
     conflictos?: boolean | PeriodoAcademicoCountOutputTypeCountConflictosArgs
     dias_no_laborables?: boolean | PeriodoAcademicoCountOutputTypeCountDias_no_laborablesArgs
     disponibilidad_docentes?: boolean | PeriodoAcademicoCountOutputTypeCountDisponibilidad_docentesArgs
@@ -3639,7 +4324,7 @@ export namespace Prisma {
     restricciones_institucionales?: boolean | PeriodoAcademicoCountOutputTypeCountRestricciones_institucionalesArgs
     selecciones_temporales?: boolean | PeriodoAcademicoCountOutputTypeCountSelecciones_temporalesArgs
     ventanas_atencion?: boolean | PeriodoAcademicoCountOutputTypeCountVentanas_atencionArgs
-    citaciones_docentes?: boolean | PeriodoAcademicoCountOutputTypeCountCitaciones_docentesArgs
+    cargas_academicas?: boolean | PeriodoAcademicoCountOutputTypeCountCargas_academicasArgs
   }
 
   // Custom InputTypes
@@ -3651,6 +4336,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the PeriodoAcademicoCountOutputType
      */
     select?: PeriodoAcademicoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PeriodoAcademicoCountOutputType without action
+   */
+  export type PeriodoAcademicoCountOutputTypeCountCitaciones_docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CitacionDocenteWhereInput
   }
 
   /**
@@ -3719,8 +4411,8 @@ export namespace Prisma {
   /**
    * PeriodoAcademicoCountOutputType without action
    */
-  export type PeriodoAcademicoCountOutputTypeCountCitaciones_docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CitacionDocenteWhereInput
+  export type PeriodoAcademicoCountOutputTypeCountCargas_academicasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CargaAcademicaWhereInput
   }
 
 
@@ -3729,6 +4421,7 @@ export namespace Prisma {
    */
 
   export type DocenteCountOutputType = {
+    citaciones: number
     cola_notificaciones: number
     conflictos_1: number
     conflictos_2: number
@@ -3741,10 +4434,11 @@ export namespace Prisma {
     preasignaciones: number
     preferencias_notificacion: number
     selecciones_temporales: number
-    citaciones: number
+    cargas_academicas: number
   }
 
   export type DocenteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    citaciones?: boolean | DocenteCountOutputTypeCountCitacionesArgs
     cola_notificaciones?: boolean | DocenteCountOutputTypeCountCola_notificacionesArgs
     conflictos_1?: boolean | DocenteCountOutputTypeCountConflictos_1Args
     conflictos_2?: boolean | DocenteCountOutputTypeCountConflictos_2Args
@@ -3757,7 +4451,7 @@ export namespace Prisma {
     preasignaciones?: boolean | DocenteCountOutputTypeCountPreasignacionesArgs
     preferencias_notificacion?: boolean | DocenteCountOutputTypeCountPreferencias_notificacionArgs
     selecciones_temporales?: boolean | DocenteCountOutputTypeCountSelecciones_temporalesArgs
-    citaciones?: boolean | DocenteCountOutputTypeCountCitacionesArgs
+    cargas_academicas?: boolean | DocenteCountOutputTypeCountCargas_academicasArgs
   }
 
   // Custom InputTypes
@@ -3769,6 +4463,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the DocenteCountOutputType
      */
     select?: DocenteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DocenteCountOutputType without action
+   */
+  export type DocenteCountOutputTypeCountCitacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CitacionDocenteWhereInput
   }
 
   /**
@@ -3858,8 +4559,8 @@ export namespace Prisma {
   /**
    * DocenteCountOutputType without action
    */
-  export type DocenteCountOutputTypeCountCitacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CitacionDocenteWhereInput
+  export type DocenteCountOutputTypeCountCargas_academicasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CargaAcademicaWhereInput
   }
 
 
@@ -4078,13 +4779,13 @@ export namespace Prisma {
    */
 
   export type VentanaAtencionCountOutputType = {
-    horarios: number
     citaciones: number
+    horarios: number
   }
 
   export type VentanaAtencionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    horarios?: boolean | VentanaAtencionCountOutputTypeCountHorariosArgs
     citaciones?: boolean | VentanaAtencionCountOutputTypeCountCitacionesArgs
+    horarios?: boolean | VentanaAtencionCountOutputTypeCountHorariosArgs
   }
 
   // Custom InputTypes
@@ -4101,15 +4802,15 @@ export namespace Prisma {
   /**
    * VentanaAtencionCountOutputType without action
    */
-  export type VentanaAtencionCountOutputTypeCountHorariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: HorarioAsignadoWhereInput
+  export type VentanaAtencionCountOutputTypeCountCitacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CitacionDocenteWhereInput
   }
 
   /**
    * VentanaAtencionCountOutputType without action
    */
-  export type VentanaAtencionCountOutputTypeCountCitacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CitacionDocenteWhereInput
+  export type VentanaAtencionCountOutputTypeCountHorariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HorarioAsignadoWhereInput
   }
 
 
@@ -4176,8 +4877,2319 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CargaAcademicaCountOutputType
+   */
+
+  export type CargaAcademicaCountOutputType = {
+    actividades_no_lectivas: number
+    historial: number
+  }
+
+  export type CargaAcademicaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    actividades_no_lectivas?: boolean | CargaAcademicaCountOutputTypeCountActividades_no_lectivasArgs
+    historial?: boolean | CargaAcademicaCountOutputTypeCountHistorialArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CargaAcademicaCountOutputType without action
+   */
+  export type CargaAcademicaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademicaCountOutputType
+     */
+    select?: CargaAcademicaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CargaAcademicaCountOutputType without action
+   */
+  export type CargaAcademicaCountOutputTypeCountActividades_no_lectivasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActividadNoLectivaWhereInput
+  }
+
+  /**
+   * CargaAcademicaCountOutputType without action
+   */
+  export type CargaAcademicaCountOutputTypeCountHistorialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistorialCargaAcademicaWhereInput
+  }
+
+
+  /**
    * Models
    */
+
+  /**
+   * Model Facultad
+   */
+
+  export type AggregateFacultad = {
+    _count: FacultadCountAggregateOutputType | null
+    _avg: FacultadAvgAggregateOutputType | null
+    _sum: FacultadSumAggregateOutputType | null
+    _min: FacultadMinAggregateOutputType | null
+    _max: FacultadMaxAggregateOutputType | null
+  }
+
+  export type FacultadAvgAggregateOutputType = {
+    id_facultad: number | null
+  }
+
+  export type FacultadSumAggregateOutputType = {
+    id_facultad: number | null
+  }
+
+  export type FacultadMinAggregateOutputType = {
+    id_facultad: number | null
+    codigo: string | null
+    nombre: string | null
+    activo: boolean | null
+    fecha_creacion: Date | null
+  }
+
+  export type FacultadMaxAggregateOutputType = {
+    id_facultad: number | null
+    codigo: string | null
+    nombre: string | null
+    activo: boolean | null
+    fecha_creacion: Date | null
+  }
+
+  export type FacultadCountAggregateOutputType = {
+    id_facultad: number
+    codigo: number
+    nombre: number
+    activo: number
+    fecha_creacion: number
+    _all: number
+  }
+
+
+  export type FacultadAvgAggregateInputType = {
+    id_facultad?: true
+  }
+
+  export type FacultadSumAggregateInputType = {
+    id_facultad?: true
+  }
+
+  export type FacultadMinAggregateInputType = {
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+  }
+
+  export type FacultadMaxAggregateInputType = {
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+  }
+
+  export type FacultadCountAggregateInputType = {
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+    _all?: true
+  }
+
+  export type FacultadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Facultad to aggregate.
+     */
+    where?: FacultadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Facultads to fetch.
+     */
+    orderBy?: FacultadOrderByWithRelationInput | FacultadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FacultadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Facultads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Facultads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Facultads
+    **/
+    _count?: true | FacultadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FacultadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FacultadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FacultadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FacultadMaxAggregateInputType
+  }
+
+  export type GetFacultadAggregateType<T extends FacultadAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacultad]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFacultad[P]>
+      : GetScalarType<T[P], AggregateFacultad[P]>
+  }
+
+
+
+
+  export type FacultadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacultadWhereInput
+    orderBy?: FacultadOrderByWithAggregationInput | FacultadOrderByWithAggregationInput[]
+    by: FacultadScalarFieldEnum[] | FacultadScalarFieldEnum
+    having?: FacultadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FacultadCountAggregateInputType | true
+    _avg?: FacultadAvgAggregateInputType
+    _sum?: FacultadSumAggregateInputType
+    _min?: FacultadMinAggregateInputType
+    _max?: FacultadMaxAggregateInputType
+  }
+
+  export type FacultadGroupByOutputType = {
+    id_facultad: number
+    codigo: string
+    nombre: string
+    activo: boolean
+    fecha_creacion: Date
+    _count: FacultadCountAggregateOutputType | null
+    _avg: FacultadAvgAggregateOutputType | null
+    _sum: FacultadSumAggregateOutputType | null
+    _min: FacultadMinAggregateOutputType | null
+    _max: FacultadMaxAggregateOutputType | null
+  }
+
+  type GetFacultadGroupByPayload<T extends FacultadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FacultadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FacultadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FacultadGroupByOutputType[P]>
+            : GetScalarType<T[P], FacultadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FacultadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+    departamentos?: boolean | Facultad$departamentosArgs<ExtArgs>
+    docentes?: boolean | Facultad$docentesArgs<ExtArgs>
+    _count?: boolean | FacultadCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["facultad"]>
+
+  export type FacultadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+  }, ExtArgs["result"]["facultad"]>
+
+  export type FacultadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+  }, ExtArgs["result"]["facultad"]>
+
+  export type FacultadSelectScalar = {
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+  }
+
+  export type FacultadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_facultad" | "codigo" | "nombre" | "activo" | "fecha_creacion", ExtArgs["result"]["facultad"]>
+  export type FacultadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    departamentos?: boolean | Facultad$departamentosArgs<ExtArgs>
+    docentes?: boolean | Facultad$docentesArgs<ExtArgs>
+    _count?: boolean | FacultadCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FacultadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FacultadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FacultadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Facultad"
+    objects: {
+      departamentos: Prisma.$DepartamentoAcademicoPayload<ExtArgs>[]
+      docentes: Prisma.$DocentePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_facultad: number
+      codigo: string
+      nombre: string
+      activo: boolean
+      fecha_creacion: Date
+    }, ExtArgs["result"]["facultad"]>
+    composites: {}
+  }
+
+  type FacultadGetPayload<S extends boolean | null | undefined | FacultadDefaultArgs> = $Result.GetResult<Prisma.$FacultadPayload, S>
+
+  type FacultadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FacultadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FacultadCountAggregateInputType | true
+    }
+
+  export interface FacultadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Facultad'], meta: { name: 'Facultad' } }
+    /**
+     * Find zero or one Facultad that matches the filter.
+     * @param {FacultadFindUniqueArgs} args - Arguments to find a Facultad
+     * @example
+     * // Get one Facultad
+     * const facultad = await prisma.facultad.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FacultadFindUniqueArgs>(args: SelectSubset<T, FacultadFindUniqueArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Facultad that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FacultadFindUniqueOrThrowArgs} args - Arguments to find a Facultad
+     * @example
+     * // Get one Facultad
+     * const facultad = await prisma.facultad.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FacultadFindUniqueOrThrowArgs>(args: SelectSubset<T, FacultadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Facultad that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadFindFirstArgs} args - Arguments to find a Facultad
+     * @example
+     * // Get one Facultad
+     * const facultad = await prisma.facultad.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FacultadFindFirstArgs>(args?: SelectSubset<T, FacultadFindFirstArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Facultad that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadFindFirstOrThrowArgs} args - Arguments to find a Facultad
+     * @example
+     * // Get one Facultad
+     * const facultad = await prisma.facultad.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FacultadFindFirstOrThrowArgs>(args?: SelectSubset<T, FacultadFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Facultads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Facultads
+     * const facultads = await prisma.facultad.findMany()
+     * 
+     * // Get first 10 Facultads
+     * const facultads = await prisma.facultad.findMany({ take: 10 })
+     * 
+     * // Only select the `id_facultad`
+     * const facultadWithId_facultadOnly = await prisma.facultad.findMany({ select: { id_facultad: true } })
+     * 
+     */
+    findMany<T extends FacultadFindManyArgs>(args?: SelectSubset<T, FacultadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Facultad.
+     * @param {FacultadCreateArgs} args - Arguments to create a Facultad.
+     * @example
+     * // Create one Facultad
+     * const Facultad = await prisma.facultad.create({
+     *   data: {
+     *     // ... data to create a Facultad
+     *   }
+     * })
+     * 
+     */
+    create<T extends FacultadCreateArgs>(args: SelectSubset<T, FacultadCreateArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Facultads.
+     * @param {FacultadCreateManyArgs} args - Arguments to create many Facultads.
+     * @example
+     * // Create many Facultads
+     * const facultad = await prisma.facultad.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FacultadCreateManyArgs>(args?: SelectSubset<T, FacultadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Facultads and returns the data saved in the database.
+     * @param {FacultadCreateManyAndReturnArgs} args - Arguments to create many Facultads.
+     * @example
+     * // Create many Facultads
+     * const facultad = await prisma.facultad.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Facultads and only return the `id_facultad`
+     * const facultadWithId_facultadOnly = await prisma.facultad.createManyAndReturn({
+     *   select: { id_facultad: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FacultadCreateManyAndReturnArgs>(args?: SelectSubset<T, FacultadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Facultad.
+     * @param {FacultadDeleteArgs} args - Arguments to delete one Facultad.
+     * @example
+     * // Delete one Facultad
+     * const Facultad = await prisma.facultad.delete({
+     *   where: {
+     *     // ... filter to delete one Facultad
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FacultadDeleteArgs>(args: SelectSubset<T, FacultadDeleteArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Facultad.
+     * @param {FacultadUpdateArgs} args - Arguments to update one Facultad.
+     * @example
+     * // Update one Facultad
+     * const facultad = await prisma.facultad.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FacultadUpdateArgs>(args: SelectSubset<T, FacultadUpdateArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Facultads.
+     * @param {FacultadDeleteManyArgs} args - Arguments to filter Facultads to delete.
+     * @example
+     * // Delete a few Facultads
+     * const { count } = await prisma.facultad.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FacultadDeleteManyArgs>(args?: SelectSubset<T, FacultadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Facultads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Facultads
+     * const facultad = await prisma.facultad.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FacultadUpdateManyArgs>(args: SelectSubset<T, FacultadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Facultads and returns the data updated in the database.
+     * @param {FacultadUpdateManyAndReturnArgs} args - Arguments to update many Facultads.
+     * @example
+     * // Update many Facultads
+     * const facultad = await prisma.facultad.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Facultads and only return the `id_facultad`
+     * const facultadWithId_facultadOnly = await prisma.facultad.updateManyAndReturn({
+     *   select: { id_facultad: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FacultadUpdateManyAndReturnArgs>(args: SelectSubset<T, FacultadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Facultad.
+     * @param {FacultadUpsertArgs} args - Arguments to update or create a Facultad.
+     * @example
+     * // Update or create a Facultad
+     * const facultad = await prisma.facultad.upsert({
+     *   create: {
+     *     // ... data to create a Facultad
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Facultad we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FacultadUpsertArgs>(args: SelectSubset<T, FacultadUpsertArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Facultads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadCountArgs} args - Arguments to filter Facultads to count.
+     * @example
+     * // Count the number of Facultads
+     * const count = await prisma.facultad.count({
+     *   where: {
+     *     // ... the filter for the Facultads we want to count
+     *   }
+     * })
+    **/
+    count<T extends FacultadCountArgs>(
+      args?: Subset<T, FacultadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FacultadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Facultad.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FacultadAggregateArgs>(args: Subset<T, FacultadAggregateArgs>): Prisma.PrismaPromise<GetFacultadAggregateType<T>>
+
+    /**
+     * Group by Facultad.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacultadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FacultadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FacultadGroupByArgs['orderBy'] }
+        : { orderBy?: FacultadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FacultadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacultadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Facultad model
+   */
+  readonly fields: FacultadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Facultad.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FacultadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    departamentos<T extends Facultad$departamentosArgs<ExtArgs> = {}>(args?: Subset<T, Facultad$departamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    docentes<T extends Facultad$docentesArgs<ExtArgs> = {}>(args?: Subset<T, Facultad$docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Facultad model
+   */
+  interface FacultadFieldRefs {
+    readonly id_facultad: FieldRef<"Facultad", 'Int'>
+    readonly codigo: FieldRef<"Facultad", 'String'>
+    readonly nombre: FieldRef<"Facultad", 'String'>
+    readonly activo: FieldRef<"Facultad", 'Boolean'>
+    readonly fecha_creacion: FieldRef<"Facultad", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Facultad findUnique
+   */
+  export type FacultadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter, which Facultad to fetch.
+     */
+    where: FacultadWhereUniqueInput
+  }
+
+  /**
+   * Facultad findUniqueOrThrow
+   */
+  export type FacultadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter, which Facultad to fetch.
+     */
+    where: FacultadWhereUniqueInput
+  }
+
+  /**
+   * Facultad findFirst
+   */
+  export type FacultadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter, which Facultad to fetch.
+     */
+    where?: FacultadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Facultads to fetch.
+     */
+    orderBy?: FacultadOrderByWithRelationInput | FacultadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Facultads.
+     */
+    cursor?: FacultadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Facultads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Facultads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Facultads.
+     */
+    distinct?: FacultadScalarFieldEnum | FacultadScalarFieldEnum[]
+  }
+
+  /**
+   * Facultad findFirstOrThrow
+   */
+  export type FacultadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter, which Facultad to fetch.
+     */
+    where?: FacultadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Facultads to fetch.
+     */
+    orderBy?: FacultadOrderByWithRelationInput | FacultadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Facultads.
+     */
+    cursor?: FacultadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Facultads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Facultads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Facultads.
+     */
+    distinct?: FacultadScalarFieldEnum | FacultadScalarFieldEnum[]
+  }
+
+  /**
+   * Facultad findMany
+   */
+  export type FacultadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter, which Facultads to fetch.
+     */
+    where?: FacultadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Facultads to fetch.
+     */
+    orderBy?: FacultadOrderByWithRelationInput | FacultadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Facultads.
+     */
+    cursor?: FacultadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Facultads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Facultads.
+     */
+    skip?: number
+    distinct?: FacultadScalarFieldEnum | FacultadScalarFieldEnum[]
+  }
+
+  /**
+   * Facultad create
+   */
+  export type FacultadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Facultad.
+     */
+    data: XOR<FacultadCreateInput, FacultadUncheckedCreateInput>
+  }
+
+  /**
+   * Facultad createMany
+   */
+  export type FacultadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Facultads.
+     */
+    data: FacultadCreateManyInput | FacultadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Facultad createManyAndReturn
+   */
+  export type FacultadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * The data used to create many Facultads.
+     */
+    data: FacultadCreateManyInput | FacultadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Facultad update
+   */
+  export type FacultadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Facultad.
+     */
+    data: XOR<FacultadUpdateInput, FacultadUncheckedUpdateInput>
+    /**
+     * Choose, which Facultad to update.
+     */
+    where: FacultadWhereUniqueInput
+  }
+
+  /**
+   * Facultad updateMany
+   */
+  export type FacultadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Facultads.
+     */
+    data: XOR<FacultadUpdateManyMutationInput, FacultadUncheckedUpdateManyInput>
+    /**
+     * Filter which Facultads to update
+     */
+    where?: FacultadWhereInput
+    /**
+     * Limit how many Facultads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Facultad updateManyAndReturn
+   */
+  export type FacultadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * The data used to update Facultads.
+     */
+    data: XOR<FacultadUpdateManyMutationInput, FacultadUncheckedUpdateManyInput>
+    /**
+     * Filter which Facultads to update
+     */
+    where?: FacultadWhereInput
+    /**
+     * Limit how many Facultads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Facultad upsert
+   */
+  export type FacultadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Facultad to update in case it exists.
+     */
+    where: FacultadWhereUniqueInput
+    /**
+     * In case the Facultad found by the `where` argument doesn't exist, create a new Facultad with this data.
+     */
+    create: XOR<FacultadCreateInput, FacultadUncheckedCreateInput>
+    /**
+     * In case the Facultad was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FacultadUpdateInput, FacultadUncheckedUpdateInput>
+  }
+
+  /**
+   * Facultad delete
+   */
+  export type FacultadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    /**
+     * Filter which Facultad to delete.
+     */
+    where: FacultadWhereUniqueInput
+  }
+
+  /**
+   * Facultad deleteMany
+   */
+  export type FacultadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Facultads to delete
+     */
+    where?: FacultadWhereInput
+    /**
+     * Limit how many Facultads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Facultad.departamentos
+   */
+  export type Facultad$departamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    where?: DepartamentoAcademicoWhereInput
+    orderBy?: DepartamentoAcademicoOrderByWithRelationInput | DepartamentoAcademicoOrderByWithRelationInput[]
+    cursor?: DepartamentoAcademicoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DepartamentoAcademicoScalarFieldEnum | DepartamentoAcademicoScalarFieldEnum[]
+  }
+
+  /**
+   * Facultad.docentes
+   */
+  export type Facultad$docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Docente
+     */
+    select?: DocenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Docente
+     */
+    omit?: DocenteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocenteInclude<ExtArgs> | null
+    where?: DocenteWhereInput
+    orderBy?: DocenteOrderByWithRelationInput | DocenteOrderByWithRelationInput[]
+    cursor?: DocenteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocenteScalarFieldEnum | DocenteScalarFieldEnum[]
+  }
+
+  /**
+   * Facultad without action
+   */
+  export type FacultadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DepartamentoAcademico
+   */
+
+  export type AggregateDepartamentoAcademico = {
+    _count: DepartamentoAcademicoCountAggregateOutputType | null
+    _avg: DepartamentoAcademicoAvgAggregateOutputType | null
+    _sum: DepartamentoAcademicoSumAggregateOutputType | null
+    _min: DepartamentoAcademicoMinAggregateOutputType | null
+    _max: DepartamentoAcademicoMaxAggregateOutputType | null
+  }
+
+  export type DepartamentoAcademicoAvgAggregateOutputType = {
+    id_departamento: number | null
+    id_facultad: number | null
+  }
+
+  export type DepartamentoAcademicoSumAggregateOutputType = {
+    id_departamento: number | null
+    id_facultad: number | null
+  }
+
+  export type DepartamentoAcademicoMinAggregateOutputType = {
+    id_departamento: number | null
+    id_facultad: number | null
+    codigo: string | null
+    nombre: string | null
+    activo: boolean | null
+    fecha_creacion: Date | null
+  }
+
+  export type DepartamentoAcademicoMaxAggregateOutputType = {
+    id_departamento: number | null
+    id_facultad: number | null
+    codigo: string | null
+    nombre: string | null
+    activo: boolean | null
+    fecha_creacion: Date | null
+  }
+
+  export type DepartamentoAcademicoCountAggregateOutputType = {
+    id_departamento: number
+    id_facultad: number
+    codigo: number
+    nombre: number
+    activo: number
+    fecha_creacion: number
+    _all: number
+  }
+
+
+  export type DepartamentoAcademicoAvgAggregateInputType = {
+    id_departamento?: true
+    id_facultad?: true
+  }
+
+  export type DepartamentoAcademicoSumAggregateInputType = {
+    id_departamento?: true
+    id_facultad?: true
+  }
+
+  export type DepartamentoAcademicoMinAggregateInputType = {
+    id_departamento?: true
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+  }
+
+  export type DepartamentoAcademicoMaxAggregateInputType = {
+    id_departamento?: true
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+  }
+
+  export type DepartamentoAcademicoCountAggregateInputType = {
+    id_departamento?: true
+    id_facultad?: true
+    codigo?: true
+    nombre?: true
+    activo?: true
+    fecha_creacion?: true
+    _all?: true
+  }
+
+  export type DepartamentoAcademicoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DepartamentoAcademico to aggregate.
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DepartamentoAcademicos to fetch.
+     */
+    orderBy?: DepartamentoAcademicoOrderByWithRelationInput | DepartamentoAcademicoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DepartamentoAcademicoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DepartamentoAcademicos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DepartamentoAcademicos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DepartamentoAcademicos
+    **/
+    _count?: true | DepartamentoAcademicoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DepartamentoAcademicoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DepartamentoAcademicoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DepartamentoAcademicoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DepartamentoAcademicoMaxAggregateInputType
+  }
+
+  export type GetDepartamentoAcademicoAggregateType<T extends DepartamentoAcademicoAggregateArgs> = {
+        [P in keyof T & keyof AggregateDepartamentoAcademico]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDepartamentoAcademico[P]>
+      : GetScalarType<T[P], AggregateDepartamentoAcademico[P]>
+  }
+
+
+
+
+  export type DepartamentoAcademicoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DepartamentoAcademicoWhereInput
+    orderBy?: DepartamentoAcademicoOrderByWithAggregationInput | DepartamentoAcademicoOrderByWithAggregationInput[]
+    by: DepartamentoAcademicoScalarFieldEnum[] | DepartamentoAcademicoScalarFieldEnum
+    having?: DepartamentoAcademicoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DepartamentoAcademicoCountAggregateInputType | true
+    _avg?: DepartamentoAcademicoAvgAggregateInputType
+    _sum?: DepartamentoAcademicoSumAggregateInputType
+    _min?: DepartamentoAcademicoMinAggregateInputType
+    _max?: DepartamentoAcademicoMaxAggregateInputType
+  }
+
+  export type DepartamentoAcademicoGroupByOutputType = {
+    id_departamento: number
+    id_facultad: number
+    codigo: string
+    nombre: string
+    activo: boolean
+    fecha_creacion: Date
+    _count: DepartamentoAcademicoCountAggregateOutputType | null
+    _avg: DepartamentoAcademicoAvgAggregateOutputType | null
+    _sum: DepartamentoAcademicoSumAggregateOutputType | null
+    _min: DepartamentoAcademicoMinAggregateOutputType | null
+    _max: DepartamentoAcademicoMaxAggregateOutputType | null
+  }
+
+  type GetDepartamentoAcademicoGroupByPayload<T extends DepartamentoAcademicoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DepartamentoAcademicoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DepartamentoAcademicoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DepartamentoAcademicoGroupByOutputType[P]>
+            : GetScalarType<T[P], DepartamentoAcademicoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DepartamentoAcademicoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_departamento?: boolean
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+    docentes?: boolean | DepartamentoAcademico$docentesArgs<ExtArgs>
+    _count?: boolean | DepartamentoAcademicoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["departamentoAcademico"]>
+
+  export type DepartamentoAcademicoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_departamento?: boolean
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["departamentoAcademico"]>
+
+  export type DepartamentoAcademicoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_departamento?: boolean
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["departamentoAcademico"]>
+
+  export type DepartamentoAcademicoSelectScalar = {
+    id_departamento?: boolean
+    id_facultad?: boolean
+    codigo?: boolean
+    nombre?: boolean
+    activo?: boolean
+    fecha_creacion?: boolean
+  }
+
+  export type DepartamentoAcademicoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_departamento" | "id_facultad" | "codigo" | "nombre" | "activo" | "fecha_creacion", ExtArgs["result"]["departamentoAcademico"]>
+  export type DepartamentoAcademicoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+    docentes?: boolean | DepartamentoAcademico$docentesArgs<ExtArgs>
+    _count?: boolean | DepartamentoAcademicoCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DepartamentoAcademicoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+  }
+  export type DepartamentoAcademicoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | FacultadDefaultArgs<ExtArgs>
+  }
+
+  export type $DepartamentoAcademicoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DepartamentoAcademico"
+    objects: {
+      facultad: Prisma.$FacultadPayload<ExtArgs>
+      docentes: Prisma.$DocentePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_departamento: number
+      id_facultad: number
+      codigo: string
+      nombre: string
+      activo: boolean
+      fecha_creacion: Date
+    }, ExtArgs["result"]["departamentoAcademico"]>
+    composites: {}
+  }
+
+  type DepartamentoAcademicoGetPayload<S extends boolean | null | undefined | DepartamentoAcademicoDefaultArgs> = $Result.GetResult<Prisma.$DepartamentoAcademicoPayload, S>
+
+  type DepartamentoAcademicoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DepartamentoAcademicoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DepartamentoAcademicoCountAggregateInputType | true
+    }
+
+  export interface DepartamentoAcademicoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DepartamentoAcademico'], meta: { name: 'DepartamentoAcademico' } }
+    /**
+     * Find zero or one DepartamentoAcademico that matches the filter.
+     * @param {DepartamentoAcademicoFindUniqueArgs} args - Arguments to find a DepartamentoAcademico
+     * @example
+     * // Get one DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DepartamentoAcademicoFindUniqueArgs>(args: SelectSubset<T, DepartamentoAcademicoFindUniqueArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DepartamentoAcademico that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DepartamentoAcademicoFindUniqueOrThrowArgs} args - Arguments to find a DepartamentoAcademico
+     * @example
+     * // Get one DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DepartamentoAcademicoFindUniqueOrThrowArgs>(args: SelectSubset<T, DepartamentoAcademicoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DepartamentoAcademico that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoFindFirstArgs} args - Arguments to find a DepartamentoAcademico
+     * @example
+     * // Get one DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DepartamentoAcademicoFindFirstArgs>(args?: SelectSubset<T, DepartamentoAcademicoFindFirstArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DepartamentoAcademico that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoFindFirstOrThrowArgs} args - Arguments to find a DepartamentoAcademico
+     * @example
+     * // Get one DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DepartamentoAcademicoFindFirstOrThrowArgs>(args?: SelectSubset<T, DepartamentoAcademicoFindFirstOrThrowArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DepartamentoAcademicos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DepartamentoAcademicos
+     * const departamentoAcademicos = await prisma.departamentoAcademico.findMany()
+     * 
+     * // Get first 10 DepartamentoAcademicos
+     * const departamentoAcademicos = await prisma.departamentoAcademico.findMany({ take: 10 })
+     * 
+     * // Only select the `id_departamento`
+     * const departamentoAcademicoWithId_departamentoOnly = await prisma.departamentoAcademico.findMany({ select: { id_departamento: true } })
+     * 
+     */
+    findMany<T extends DepartamentoAcademicoFindManyArgs>(args?: SelectSubset<T, DepartamentoAcademicoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DepartamentoAcademico.
+     * @param {DepartamentoAcademicoCreateArgs} args - Arguments to create a DepartamentoAcademico.
+     * @example
+     * // Create one DepartamentoAcademico
+     * const DepartamentoAcademico = await prisma.departamentoAcademico.create({
+     *   data: {
+     *     // ... data to create a DepartamentoAcademico
+     *   }
+     * })
+     * 
+     */
+    create<T extends DepartamentoAcademicoCreateArgs>(args: SelectSubset<T, DepartamentoAcademicoCreateArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DepartamentoAcademicos.
+     * @param {DepartamentoAcademicoCreateManyArgs} args - Arguments to create many DepartamentoAcademicos.
+     * @example
+     * // Create many DepartamentoAcademicos
+     * const departamentoAcademico = await prisma.departamentoAcademico.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DepartamentoAcademicoCreateManyArgs>(args?: SelectSubset<T, DepartamentoAcademicoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DepartamentoAcademicos and returns the data saved in the database.
+     * @param {DepartamentoAcademicoCreateManyAndReturnArgs} args - Arguments to create many DepartamentoAcademicos.
+     * @example
+     * // Create many DepartamentoAcademicos
+     * const departamentoAcademico = await prisma.departamentoAcademico.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DepartamentoAcademicos and only return the `id_departamento`
+     * const departamentoAcademicoWithId_departamentoOnly = await prisma.departamentoAcademico.createManyAndReturn({
+     *   select: { id_departamento: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DepartamentoAcademicoCreateManyAndReturnArgs>(args?: SelectSubset<T, DepartamentoAcademicoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DepartamentoAcademico.
+     * @param {DepartamentoAcademicoDeleteArgs} args - Arguments to delete one DepartamentoAcademico.
+     * @example
+     * // Delete one DepartamentoAcademico
+     * const DepartamentoAcademico = await prisma.departamentoAcademico.delete({
+     *   where: {
+     *     // ... filter to delete one DepartamentoAcademico
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DepartamentoAcademicoDeleteArgs>(args: SelectSubset<T, DepartamentoAcademicoDeleteArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DepartamentoAcademico.
+     * @param {DepartamentoAcademicoUpdateArgs} args - Arguments to update one DepartamentoAcademico.
+     * @example
+     * // Update one DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DepartamentoAcademicoUpdateArgs>(args: SelectSubset<T, DepartamentoAcademicoUpdateArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DepartamentoAcademicos.
+     * @param {DepartamentoAcademicoDeleteManyArgs} args - Arguments to filter DepartamentoAcademicos to delete.
+     * @example
+     * // Delete a few DepartamentoAcademicos
+     * const { count } = await prisma.departamentoAcademico.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DepartamentoAcademicoDeleteManyArgs>(args?: SelectSubset<T, DepartamentoAcademicoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DepartamentoAcademicos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DepartamentoAcademicos
+     * const departamentoAcademico = await prisma.departamentoAcademico.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DepartamentoAcademicoUpdateManyArgs>(args: SelectSubset<T, DepartamentoAcademicoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DepartamentoAcademicos and returns the data updated in the database.
+     * @param {DepartamentoAcademicoUpdateManyAndReturnArgs} args - Arguments to update many DepartamentoAcademicos.
+     * @example
+     * // Update many DepartamentoAcademicos
+     * const departamentoAcademico = await prisma.departamentoAcademico.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DepartamentoAcademicos and only return the `id_departamento`
+     * const departamentoAcademicoWithId_departamentoOnly = await prisma.departamentoAcademico.updateManyAndReturn({
+     *   select: { id_departamento: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DepartamentoAcademicoUpdateManyAndReturnArgs>(args: SelectSubset<T, DepartamentoAcademicoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DepartamentoAcademico.
+     * @param {DepartamentoAcademicoUpsertArgs} args - Arguments to update or create a DepartamentoAcademico.
+     * @example
+     * // Update or create a DepartamentoAcademico
+     * const departamentoAcademico = await prisma.departamentoAcademico.upsert({
+     *   create: {
+     *     // ... data to create a DepartamentoAcademico
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DepartamentoAcademico we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DepartamentoAcademicoUpsertArgs>(args: SelectSubset<T, DepartamentoAcademicoUpsertArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DepartamentoAcademicos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoCountArgs} args - Arguments to filter DepartamentoAcademicos to count.
+     * @example
+     * // Count the number of DepartamentoAcademicos
+     * const count = await prisma.departamentoAcademico.count({
+     *   where: {
+     *     // ... the filter for the DepartamentoAcademicos we want to count
+     *   }
+     * })
+    **/
+    count<T extends DepartamentoAcademicoCountArgs>(
+      args?: Subset<T, DepartamentoAcademicoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DepartamentoAcademicoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DepartamentoAcademico.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DepartamentoAcademicoAggregateArgs>(args: Subset<T, DepartamentoAcademicoAggregateArgs>): Prisma.PrismaPromise<GetDepartamentoAcademicoAggregateType<T>>
+
+    /**
+     * Group by DepartamentoAcademico.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DepartamentoAcademicoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DepartamentoAcademicoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DepartamentoAcademicoGroupByArgs['orderBy'] }
+        : { orderBy?: DepartamentoAcademicoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DepartamentoAcademicoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDepartamentoAcademicoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DepartamentoAcademico model
+   */
+  readonly fields: DepartamentoAcademicoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DepartamentoAcademico.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DepartamentoAcademicoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    facultad<T extends FacultadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FacultadDefaultArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    docentes<T extends DepartamentoAcademico$docentesArgs<ExtArgs> = {}>(args?: Subset<T, DepartamentoAcademico$docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DepartamentoAcademico model
+   */
+  interface DepartamentoAcademicoFieldRefs {
+    readonly id_departamento: FieldRef<"DepartamentoAcademico", 'Int'>
+    readonly id_facultad: FieldRef<"DepartamentoAcademico", 'Int'>
+    readonly codigo: FieldRef<"DepartamentoAcademico", 'String'>
+    readonly nombre: FieldRef<"DepartamentoAcademico", 'String'>
+    readonly activo: FieldRef<"DepartamentoAcademico", 'Boolean'>
+    readonly fecha_creacion: FieldRef<"DepartamentoAcademico", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DepartamentoAcademico findUnique
+   */
+  export type DepartamentoAcademicoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter, which DepartamentoAcademico to fetch.
+     */
+    where: DepartamentoAcademicoWhereUniqueInput
+  }
+
+  /**
+   * DepartamentoAcademico findUniqueOrThrow
+   */
+  export type DepartamentoAcademicoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter, which DepartamentoAcademico to fetch.
+     */
+    where: DepartamentoAcademicoWhereUniqueInput
+  }
+
+  /**
+   * DepartamentoAcademico findFirst
+   */
+  export type DepartamentoAcademicoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter, which DepartamentoAcademico to fetch.
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DepartamentoAcademicos to fetch.
+     */
+    orderBy?: DepartamentoAcademicoOrderByWithRelationInput | DepartamentoAcademicoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DepartamentoAcademicos.
+     */
+    cursor?: DepartamentoAcademicoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DepartamentoAcademicos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DepartamentoAcademicos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DepartamentoAcademicos.
+     */
+    distinct?: DepartamentoAcademicoScalarFieldEnum | DepartamentoAcademicoScalarFieldEnum[]
+  }
+
+  /**
+   * DepartamentoAcademico findFirstOrThrow
+   */
+  export type DepartamentoAcademicoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter, which DepartamentoAcademico to fetch.
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DepartamentoAcademicos to fetch.
+     */
+    orderBy?: DepartamentoAcademicoOrderByWithRelationInput | DepartamentoAcademicoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DepartamentoAcademicos.
+     */
+    cursor?: DepartamentoAcademicoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DepartamentoAcademicos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DepartamentoAcademicos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DepartamentoAcademicos.
+     */
+    distinct?: DepartamentoAcademicoScalarFieldEnum | DepartamentoAcademicoScalarFieldEnum[]
+  }
+
+  /**
+   * DepartamentoAcademico findMany
+   */
+  export type DepartamentoAcademicoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter, which DepartamentoAcademicos to fetch.
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DepartamentoAcademicos to fetch.
+     */
+    orderBy?: DepartamentoAcademicoOrderByWithRelationInput | DepartamentoAcademicoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DepartamentoAcademicos.
+     */
+    cursor?: DepartamentoAcademicoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DepartamentoAcademicos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DepartamentoAcademicos.
+     */
+    skip?: number
+    distinct?: DepartamentoAcademicoScalarFieldEnum | DepartamentoAcademicoScalarFieldEnum[]
+  }
+
+  /**
+   * DepartamentoAcademico create
+   */
+  export type DepartamentoAcademicoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DepartamentoAcademico.
+     */
+    data: XOR<DepartamentoAcademicoCreateInput, DepartamentoAcademicoUncheckedCreateInput>
+  }
+
+  /**
+   * DepartamentoAcademico createMany
+   */
+  export type DepartamentoAcademicoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DepartamentoAcademicos.
+     */
+    data: DepartamentoAcademicoCreateManyInput | DepartamentoAcademicoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DepartamentoAcademico createManyAndReturn
+   */
+  export type DepartamentoAcademicoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * The data used to create many DepartamentoAcademicos.
+     */
+    data: DepartamentoAcademicoCreateManyInput | DepartamentoAcademicoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DepartamentoAcademico update
+   */
+  export type DepartamentoAcademicoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DepartamentoAcademico.
+     */
+    data: XOR<DepartamentoAcademicoUpdateInput, DepartamentoAcademicoUncheckedUpdateInput>
+    /**
+     * Choose, which DepartamentoAcademico to update.
+     */
+    where: DepartamentoAcademicoWhereUniqueInput
+  }
+
+  /**
+   * DepartamentoAcademico updateMany
+   */
+  export type DepartamentoAcademicoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DepartamentoAcademicos.
+     */
+    data: XOR<DepartamentoAcademicoUpdateManyMutationInput, DepartamentoAcademicoUncheckedUpdateManyInput>
+    /**
+     * Filter which DepartamentoAcademicos to update
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * Limit how many DepartamentoAcademicos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DepartamentoAcademico updateManyAndReturn
+   */
+  export type DepartamentoAcademicoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * The data used to update DepartamentoAcademicos.
+     */
+    data: XOR<DepartamentoAcademicoUpdateManyMutationInput, DepartamentoAcademicoUncheckedUpdateManyInput>
+    /**
+     * Filter which DepartamentoAcademicos to update
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * Limit how many DepartamentoAcademicos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DepartamentoAcademico upsert
+   */
+  export type DepartamentoAcademicoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DepartamentoAcademico to update in case it exists.
+     */
+    where: DepartamentoAcademicoWhereUniqueInput
+    /**
+     * In case the DepartamentoAcademico found by the `where` argument doesn't exist, create a new DepartamentoAcademico with this data.
+     */
+    create: XOR<DepartamentoAcademicoCreateInput, DepartamentoAcademicoUncheckedCreateInput>
+    /**
+     * In case the DepartamentoAcademico was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DepartamentoAcademicoUpdateInput, DepartamentoAcademicoUncheckedUpdateInput>
+  }
+
+  /**
+   * DepartamentoAcademico delete
+   */
+  export type DepartamentoAcademicoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    /**
+     * Filter which DepartamentoAcademico to delete.
+     */
+    where: DepartamentoAcademicoWhereUniqueInput
+  }
+
+  /**
+   * DepartamentoAcademico deleteMany
+   */
+  export type DepartamentoAcademicoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DepartamentoAcademicos to delete
+     */
+    where?: DepartamentoAcademicoWhereInput
+    /**
+     * Limit how many DepartamentoAcademicos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DepartamentoAcademico.docentes
+   */
+  export type DepartamentoAcademico$docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Docente
+     */
+    select?: DocenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Docente
+     */
+    omit?: DocenteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocenteInclude<ExtArgs> | null
+    where?: DocenteWhereInput
+    orderBy?: DocenteOrderByWithRelationInput | DocenteOrderByWithRelationInput[]
+    cursor?: DocenteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocenteScalarFieldEnum | DocenteScalarFieldEnum[]
+  }
+
+  /**
+   * DepartamentoAcademico without action
+   */
+  export type DepartamentoAcademicoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+  }
+
 
   /**
    * Model Usuario
@@ -4429,6 +7441,8 @@ export namespace Prisma {
     conflictos_resueltos?: boolean | Usuario$conflictos_resueltosArgs<ExtArgs>
     docente?: boolean | Usuario$docenteArgs<ExtArgs>
     horarios_creados?: boolean | Usuario$horarios_creadosArgs<ExtArgs>
+    cargas_aprobadas?: boolean | Usuario$cargas_aprobadasArgs<ExtArgs>
+    historial_carga?: boolean | Usuario$historial_cargaArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["usuario"]>
 
@@ -4480,6 +7494,8 @@ export namespace Prisma {
     conflictos_resueltos?: boolean | Usuario$conflictos_resueltosArgs<ExtArgs>
     docente?: boolean | Usuario$docenteArgs<ExtArgs>
     horarios_creados?: boolean | Usuario$horarios_creadosArgs<ExtArgs>
+    cargas_aprobadas?: boolean | Usuario$cargas_aprobadasArgs<ExtArgs>
+    historial_carga?: boolean | Usuario$historial_cargaArgs<ExtArgs>
     _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4492,6 +7508,8 @@ export namespace Prisma {
       conflictos_resueltos: Prisma.$ConflictoHorarioPayload<ExtArgs>[]
       docente: Prisma.$DocentePayload<ExtArgs> | null
       horarios_creados: Prisma.$HorarioAsignadoPayload<ExtArgs>[]
+      cargas_aprobadas: Prisma.$CargaAcademicaPayload<ExtArgs>[]
+      historial_carga: Prisma.$HistorialCargaAcademicaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id_usuario: number
@@ -4903,6 +7921,8 @@ export namespace Prisma {
     conflictos_resueltos<T extends Usuario$conflictos_resueltosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$conflictos_resueltosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConflictoHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     docente<T extends Usuario$docenteArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$docenteArgs<ExtArgs>>): Prisma__DocenteClient<$Result.GetResult<Prisma.$DocentePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     horarios_creados<T extends Usuario$horarios_creadosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$horarios_creadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HorarioAsignadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cargas_aprobadas<T extends Usuario$cargas_aprobadasArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$cargas_aprobadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    historial_carga<T extends Usuario$historial_cargaArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$historial_cargaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5422,6 +8442,54 @@ export namespace Prisma {
   }
 
   /**
+   * Usuario.cargas_aprobadas
+   */
+  export type Usuario$cargas_aprobadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    where?: CargaAcademicaWhereInput
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    cursor?: CargaAcademicaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * Usuario.historial_carga
+   */
+  export type Usuario$historial_cargaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    where?: HistorialCargaAcademicaWhereInput
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HistorialCargaAcademicaScalarFieldEnum | HistorialCargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
    * Usuario without action
    */
   export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5702,17 +8770,18 @@ export namespace Prisma {
     activo?: boolean
     estado?: boolean
     fecha_creacion?: boolean
+    citaciones_docentes?: boolean | PeriodoAcademico$citaciones_docentesArgs<ExtArgs>
     conflictos?: boolean | PeriodoAcademico$conflictosArgs<ExtArgs>
     dias_no_laborables?: boolean | PeriodoAcademico$dias_no_laborablesArgs<ExtArgs>
     disponibilidad_docentes?: boolean | PeriodoAcademico$disponibilidad_docentesArgs<ExtArgs>
+    fase_disponibilidad?: boolean | PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>
     grupos?: boolean | PeriodoAcademico$gruposArgs<ExtArgs>
     horarios?: boolean | PeriodoAcademico$horariosArgs<ExtArgs>
     preasignaciones?: boolean | PeriodoAcademico$preasignacionesArgs<ExtArgs>
     restricciones_institucionales?: boolean | PeriodoAcademico$restricciones_institucionalesArgs<ExtArgs>
     selecciones_temporales?: boolean | PeriodoAcademico$selecciones_temporalesArgs<ExtArgs>
     ventanas_atencion?: boolean | PeriodoAcademico$ventanas_atencionArgs<ExtArgs>
-    fase_disponibilidad?: boolean | PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>
-    citaciones_docentes?: boolean | PeriodoAcademico$citaciones_docentesArgs<ExtArgs>
+    cargas_academicas?: boolean | PeriodoAcademico$cargas_academicasArgs<ExtArgs>
     _count?: boolean | PeriodoAcademicoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["periodoAcademico"]>
 
@@ -5763,17 +8832,18 @@ export namespace Prisma {
 
   export type PeriodoAcademicoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_periodo" | "codigo" | "nombre" | "anio" | "semestre" | "fecha_inicio" | "fecha_fin" | "fecha_inicio_clases" | "fecha_fin_clases" | "activo" | "estado" | "fecha_creacion", ExtArgs["result"]["periodoAcademico"]>
   export type PeriodoAcademicoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    citaciones_docentes?: boolean | PeriodoAcademico$citaciones_docentesArgs<ExtArgs>
     conflictos?: boolean | PeriodoAcademico$conflictosArgs<ExtArgs>
     dias_no_laborables?: boolean | PeriodoAcademico$dias_no_laborablesArgs<ExtArgs>
     disponibilidad_docentes?: boolean | PeriodoAcademico$disponibilidad_docentesArgs<ExtArgs>
+    fase_disponibilidad?: boolean | PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>
     grupos?: boolean | PeriodoAcademico$gruposArgs<ExtArgs>
     horarios?: boolean | PeriodoAcademico$horariosArgs<ExtArgs>
     preasignaciones?: boolean | PeriodoAcademico$preasignacionesArgs<ExtArgs>
     restricciones_institucionales?: boolean | PeriodoAcademico$restricciones_institucionalesArgs<ExtArgs>
     selecciones_temporales?: boolean | PeriodoAcademico$selecciones_temporalesArgs<ExtArgs>
     ventanas_atencion?: boolean | PeriodoAcademico$ventanas_atencionArgs<ExtArgs>
-    fase_disponibilidad?: boolean | PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>
-    citaciones_docentes?: boolean | PeriodoAcademico$citaciones_docentesArgs<ExtArgs>
+    cargas_academicas?: boolean | PeriodoAcademico$cargas_academicasArgs<ExtArgs>
     _count?: boolean | PeriodoAcademicoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PeriodoAcademicoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5782,17 +8852,18 @@ export namespace Prisma {
   export type $PeriodoAcademicoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PeriodoAcademico"
     objects: {
+      citaciones_docentes: Prisma.$CitacionDocentePayload<ExtArgs>[]
       conflictos: Prisma.$ConflictoHorarioPayload<ExtArgs>[]
       dias_no_laborables: Prisma.$DiaNoLaborablePayload<ExtArgs>[]
       disponibilidad_docentes: Prisma.$DisponibilidadDocentePayload<ExtArgs>[]
+      fase_disponibilidad: Prisma.$FaseDisponibilidadPayload<ExtArgs> | null
       grupos: Prisma.$GrupoPayload<ExtArgs>[]
       horarios: Prisma.$HorarioAsignadoPayload<ExtArgs>[]
       preasignaciones: Prisma.$PreasignacionPayload<ExtArgs>[]
       restricciones_institucionales: Prisma.$RestriccionInstitucionalPayload<ExtArgs>[]
       selecciones_temporales: Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>[]
       ventanas_atencion: Prisma.$VentanaAtencionPayload<ExtArgs>[]
-      fase_disponibilidad: Prisma.$FaseDisponibilidadPayload<ExtArgs> | null
-      citaciones_docentes: Prisma.$CitacionDocentePayload<ExtArgs>[]
+      cargas_academicas: Prisma.$CargaAcademicaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id_periodo: number
@@ -6201,17 +9272,18 @@ export namespace Prisma {
    */
   export interface Prisma__PeriodoAcademicoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    citaciones_docentes<T extends PeriodoAcademico$citaciones_docentesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$citaciones_docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conflictos<T extends PeriodoAcademico$conflictosArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$conflictosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConflictoHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dias_no_laborables<T extends PeriodoAcademico$dias_no_laborablesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$dias_no_laborablesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiaNoLaborablePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     disponibilidad_docentes<T extends PeriodoAcademico$disponibilidad_docentesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$disponibilidad_docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisponibilidadDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fase_disponibilidad<T extends PeriodoAcademico$fase_disponibilidadArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>>): Prisma__FaseDisponibilidadClient<$Result.GetResult<Prisma.$FaseDisponibilidadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     grupos<T extends PeriodoAcademico$gruposArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$gruposArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrupoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     horarios<T extends PeriodoAcademico$horariosArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$horariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HorarioAsignadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     preasignaciones<T extends PeriodoAcademico$preasignacionesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$preasignacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreasignacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     restricciones_institucionales<T extends PeriodoAcademico$restricciones_institucionalesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$restricciones_institucionalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RestriccionInstitucionalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     selecciones_temporales<T extends PeriodoAcademico$selecciones_temporalesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$selecciones_temporalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ventanas_atencion<T extends PeriodoAcademico$ventanas_atencionArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$ventanas_atencionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VentanaAtencionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    fase_disponibilidad<T extends PeriodoAcademico$fase_disponibilidadArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$fase_disponibilidadArgs<ExtArgs>>): Prisma__FaseDisponibilidadClient<$Result.GetResult<Prisma.$FaseDisponibilidadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    citaciones_docentes<T extends PeriodoAcademico$citaciones_docentesArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$citaciones_docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cargas_academicas<T extends PeriodoAcademico$cargas_academicasArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademico$cargas_academicasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6641,6 +9713,30 @@ export namespace Prisma {
   }
 
   /**
+   * PeriodoAcademico.citaciones_docentes
+   */
+  export type PeriodoAcademico$citaciones_docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitacionDocente
+     */
+    select?: CitacionDocenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitacionDocente
+     */
+    omit?: CitacionDocenteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitacionDocenteInclude<ExtArgs> | null
+    where?: CitacionDocenteWhereInput
+    orderBy?: CitacionDocenteOrderByWithRelationInput | CitacionDocenteOrderByWithRelationInput[]
+    cursor?: CitacionDocenteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CitacionDocenteScalarFieldEnum | CitacionDocenteScalarFieldEnum[]
+  }
+
+  /**
    * PeriodoAcademico.conflictos
    */
   export type PeriodoAcademico$conflictosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6710,6 +9806,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DisponibilidadDocenteScalarFieldEnum | DisponibilidadDocenteScalarFieldEnum[]
+  }
+
+  /**
+   * PeriodoAcademico.fase_disponibilidad
+   */
+  export type PeriodoAcademico$fase_disponibilidadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FaseDisponibilidad
+     */
+    select?: FaseDisponibilidadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FaseDisponibilidad
+     */
+    omit?: FaseDisponibilidadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FaseDisponibilidadInclude<ExtArgs> | null
+    where?: FaseDisponibilidadWhereInput
   }
 
   /**
@@ -6857,46 +9972,27 @@ export namespace Prisma {
   }
 
   /**
-   * PeriodoAcademico.fase_disponibilidad
+   * PeriodoAcademico.cargas_academicas
    */
-  export type PeriodoAcademico$fase_disponibilidadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PeriodoAcademico$cargas_academicasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the FaseDisponibilidad
+     * Select specific fields to fetch from the CargaAcademica
      */
-    select?: FaseDisponibilidadSelect<ExtArgs> | null
+    select?: CargaAcademicaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the FaseDisponibilidad
+     * Omit specific fields from the CargaAcademica
      */
-    omit?: FaseDisponibilidadOmit<ExtArgs> | null
+    omit?: CargaAcademicaOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: FaseDisponibilidadInclude<ExtArgs> | null
-    where?: FaseDisponibilidadWhereInput
-  }
-
-  /**
-   * PeriodoAcademico.citaciones_docentes
-   */
-  export type PeriodoAcademico$citaciones_docentesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CitacionDocente
-     */
-    select?: CitacionDocenteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CitacionDocente
-     */
-    omit?: CitacionDocenteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CitacionDocenteInclude<ExtArgs> | null
-    where?: CitacionDocenteWhereInput
-    orderBy?: CitacionDocenteOrderByWithRelationInput | CitacionDocenteOrderByWithRelationInput[]
-    cursor?: CitacionDocenteWhereUniqueInput
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    where?: CargaAcademicaWhereInput
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    cursor?: CargaAcademicaWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: CitacionDocenteScalarFieldEnum | CitacionDocenteScalarFieldEnum[]
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
   }
 
   /**
@@ -6933,6 +10029,8 @@ export namespace Prisma {
   export type DocenteAvgAggregateOutputType = {
     id_docente: number | null
     id_usuario: number | null
+    id_facultad: number | null
+    id_departamento: number | null
     antiguedad: number | null
     horas_maximas_semanales: number | null
     horas_totales_asignadas: number | null
@@ -6941,6 +10039,8 @@ export namespace Prisma {
   export type DocenteSumAggregateOutputType = {
     id_docente: number | null
     id_usuario: number | null
+    id_facultad: number | null
+    id_departamento: number | null
     antiguedad: number | null
     horas_maximas_semanales: number | null
     horas_totales_asignadas: number | null
@@ -6949,6 +10049,8 @@ export namespace Prisma {
   export type DocenteMinAggregateOutputType = {
     id_docente: number | null
     id_usuario: number | null
+    id_facultad: number | null
+    id_departamento: number | null
     codigo_docente: string | null
     nombres: string | null
     apellidos: string | null
@@ -6971,11 +10073,15 @@ export namespace Prisma {
     foto_perfil: string | null
     perfil_completo: boolean | null
     horas_totales_asignadas: number | null
+    dni_docente: string | null
+    tipo_dedicacion_laboral: $Enums.TipoDedicacionLaboral | null
   }
 
   export type DocenteMaxAggregateOutputType = {
     id_docente: number | null
     id_usuario: number | null
+    id_facultad: number | null
+    id_departamento: number | null
     codigo_docente: string | null
     nombres: string | null
     apellidos: string | null
@@ -6998,11 +10104,15 @@ export namespace Prisma {
     foto_perfil: string | null
     perfil_completo: boolean | null
     horas_totales_asignadas: number | null
+    dni_docente: string | null
+    tipo_dedicacion_laboral: $Enums.TipoDedicacionLaboral | null
   }
 
   export type DocenteCountAggregateOutputType = {
     id_docente: number
     id_usuario: number
+    id_facultad: number
+    id_departamento: number
     codigo_docente: number
     nombres: number
     apellidos: number
@@ -7025,6 +10135,8 @@ export namespace Prisma {
     foto_perfil: number
     perfil_completo: number
     horas_totales_asignadas: number
+    dni_docente: number
+    tipo_dedicacion_laboral: number
     _all: number
   }
 
@@ -7032,6 +10144,8 @@ export namespace Prisma {
   export type DocenteAvgAggregateInputType = {
     id_docente?: true
     id_usuario?: true
+    id_facultad?: true
+    id_departamento?: true
     antiguedad?: true
     horas_maximas_semanales?: true
     horas_totales_asignadas?: true
@@ -7040,6 +10154,8 @@ export namespace Prisma {
   export type DocenteSumAggregateInputType = {
     id_docente?: true
     id_usuario?: true
+    id_facultad?: true
+    id_departamento?: true
     antiguedad?: true
     horas_maximas_semanales?: true
     horas_totales_asignadas?: true
@@ -7048,6 +10164,8 @@ export namespace Prisma {
   export type DocenteMinAggregateInputType = {
     id_docente?: true
     id_usuario?: true
+    id_facultad?: true
+    id_departamento?: true
     codigo_docente?: true
     nombres?: true
     apellidos?: true
@@ -7070,11 +10188,15 @@ export namespace Prisma {
     foto_perfil?: true
     perfil_completo?: true
     horas_totales_asignadas?: true
+    dni_docente?: true
+    tipo_dedicacion_laboral?: true
   }
 
   export type DocenteMaxAggregateInputType = {
     id_docente?: true
     id_usuario?: true
+    id_facultad?: true
+    id_departamento?: true
     codigo_docente?: true
     nombres?: true
     apellidos?: true
@@ -7097,11 +10219,15 @@ export namespace Prisma {
     foto_perfil?: true
     perfil_completo?: true
     horas_totales_asignadas?: true
+    dni_docente?: true
+    tipo_dedicacion_laboral?: true
   }
 
   export type DocenteCountAggregateInputType = {
     id_docente?: true
     id_usuario?: true
+    id_facultad?: true
+    id_departamento?: true
     codigo_docente?: true
     nombres?: true
     apellidos?: true
@@ -7124,6 +10250,8 @@ export namespace Prisma {
     foto_perfil?: true
     perfil_completo?: true
     horas_totales_asignadas?: true
+    dni_docente?: true
+    tipo_dedicacion_laboral?: true
     _all?: true
   }
 
@@ -7216,6 +10344,8 @@ export namespace Prisma {
   export type DocenteGroupByOutputType = {
     id_docente: number
     id_usuario: number | null
+    id_facultad: number | null
+    id_departamento: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -7238,6 +10368,8 @@ export namespace Prisma {
     foto_perfil: string | null
     perfil_completo: boolean
     horas_totales_asignadas: number
+    dni_docente: string | null
+    tipo_dedicacion_laboral: $Enums.TipoDedicacionLaboral | null
     _count: DocenteCountAggregateOutputType | null
     _avg: DocenteAvgAggregateOutputType | null
     _sum: DocenteSumAggregateOutputType | null
@@ -7262,6 +10394,8 @@ export namespace Prisma {
   export type DocenteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id_docente?: boolean
     id_usuario?: boolean
+    id_facultad?: boolean
+    id_departamento?: boolean
     codigo_docente?: boolean
     nombres?: boolean
     apellidos?: boolean
@@ -7284,6 +10418,11 @@ export namespace Prisma {
     foto_perfil?: boolean
     perfil_completo?: boolean
     horas_totales_asignadas?: boolean
+    dni_docente?: boolean
+    tipo_dedicacion_laboral?: boolean
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
+    citaciones?: boolean | Docente$citacionesArgs<ExtArgs>
     cola_notificaciones?: boolean | Docente$cola_notificacionesArgs<ExtArgs>
     conflictos_1?: boolean | Docente$conflictos_1Args<ExtArgs>
     conflictos_2?: boolean | Docente$conflictos_2Args<ExtArgs>
@@ -7297,13 +10436,15 @@ export namespace Prisma {
     preasignaciones?: boolean | Docente$preasignacionesArgs<ExtArgs>
     preferencias_notificacion?: boolean | Docente$preferencias_notificacionArgs<ExtArgs>
     selecciones_temporales?: boolean | Docente$selecciones_temporalesArgs<ExtArgs>
-    citaciones?: boolean | Docente$citacionesArgs<ExtArgs>
+    cargas_academicas?: boolean | Docente$cargas_academicasArgs<ExtArgs>
     _count?: boolean | DocenteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["docente"]>
 
   export type DocenteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id_docente?: boolean
     id_usuario?: boolean
+    id_facultad?: boolean
+    id_departamento?: boolean
     codigo_docente?: boolean
     nombres?: boolean
     apellidos?: boolean
@@ -7326,12 +10467,18 @@ export namespace Prisma {
     foto_perfil?: boolean
     perfil_completo?: boolean
     horas_totales_asignadas?: boolean
+    dni_docente?: boolean
+    tipo_dedicacion_laboral?: boolean
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
     usuario?: boolean | Docente$usuarioArgs<ExtArgs>
   }, ExtArgs["result"]["docente"]>
 
   export type DocenteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id_docente?: boolean
     id_usuario?: boolean
+    id_facultad?: boolean
+    id_departamento?: boolean
     codigo_docente?: boolean
     nombres?: boolean
     apellidos?: boolean
@@ -7354,12 +10501,18 @@ export namespace Prisma {
     foto_perfil?: boolean
     perfil_completo?: boolean
     horas_totales_asignadas?: boolean
+    dni_docente?: boolean
+    tipo_dedicacion_laboral?: boolean
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
     usuario?: boolean | Docente$usuarioArgs<ExtArgs>
   }, ExtArgs["result"]["docente"]>
 
   export type DocenteSelectScalar = {
     id_docente?: boolean
     id_usuario?: boolean
+    id_facultad?: boolean
+    id_departamento?: boolean
     codigo_docente?: boolean
     nombres?: boolean
     apellidos?: boolean
@@ -7382,10 +10535,15 @@ export namespace Prisma {
     foto_perfil?: boolean
     perfil_completo?: boolean
     horas_totales_asignadas?: boolean
+    dni_docente?: boolean
+    tipo_dedicacion_laboral?: boolean
   }
 
-  export type DocenteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_docente" | "id_usuario" | "codigo_docente" | "nombres" | "apellidos" | "modalidad" | "categoria" | "dedicacion" | "antiguedad" | "fecha_ingreso" | "correo_electronico" | "telefono" | "grado_academico" | "especialidad" | "horas_maximas_semanales" | "activo" | "fecha_creacion" | "fecha_actualizacion" | "direccion" | "disponibilidad" | "escuela_profesional" | "foto_perfil" | "perfil_completo" | "horas_totales_asignadas", ExtArgs["result"]["docente"]>
+  export type DocenteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_docente" | "id_usuario" | "id_facultad" | "id_departamento" | "codigo_docente" | "nombres" | "apellidos" | "modalidad" | "categoria" | "dedicacion" | "antiguedad" | "fecha_ingreso" | "correo_electronico" | "telefono" | "grado_academico" | "especialidad" | "horas_maximas_semanales" | "activo" | "fecha_creacion" | "fecha_actualizacion" | "direccion" | "disponibilidad" | "escuela_profesional" | "foto_perfil" | "perfil_completo" | "horas_totales_asignadas" | "dni_docente" | "tipo_dedicacion_laboral", ExtArgs["result"]["docente"]>
   export type DocenteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
+    citaciones?: boolean | Docente$citacionesArgs<ExtArgs>
     cola_notificaciones?: boolean | Docente$cola_notificacionesArgs<ExtArgs>
     conflictos_1?: boolean | Docente$conflictos_1Args<ExtArgs>
     conflictos_2?: boolean | Docente$conflictos_2Args<ExtArgs>
@@ -7399,19 +10557,26 @@ export namespace Prisma {
     preasignaciones?: boolean | Docente$preasignacionesArgs<ExtArgs>
     preferencias_notificacion?: boolean | Docente$preferencias_notificacionArgs<ExtArgs>
     selecciones_temporales?: boolean | Docente$selecciones_temporalesArgs<ExtArgs>
-    citaciones?: boolean | Docente$citacionesArgs<ExtArgs>
+    cargas_academicas?: boolean | Docente$cargas_academicasArgs<ExtArgs>
     _count?: boolean | DocenteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DocenteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
     usuario?: boolean | Docente$usuarioArgs<ExtArgs>
   }
   export type DocenteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    facultad?: boolean | Docente$facultadArgs<ExtArgs>
+    departamento?: boolean | Docente$departamentoArgs<ExtArgs>
     usuario?: boolean | Docente$usuarioArgs<ExtArgs>
   }
 
   export type $DocentePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Docente"
     objects: {
+      facultad: Prisma.$FacultadPayload<ExtArgs> | null
+      departamento: Prisma.$DepartamentoAcademicoPayload<ExtArgs> | null
+      citaciones: Prisma.$CitacionDocentePayload<ExtArgs>[]
       cola_notificaciones: Prisma.$ColaNotificacionesPayload<ExtArgs>[]
       conflictos_1: Prisma.$ConflictoHorarioPayload<ExtArgs>[]
       conflictos_2: Prisma.$ConflictoHorarioPayload<ExtArgs>[]
@@ -7425,11 +10590,13 @@ export namespace Prisma {
       preasignaciones: Prisma.$PreasignacionPayload<ExtArgs>[]
       preferencias_notificacion: Prisma.$PreferenciasNotificacionDocentePayload<ExtArgs>[]
       selecciones_temporales: Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>[]
-      citaciones: Prisma.$CitacionDocentePayload<ExtArgs>[]
+      cargas_academicas: Prisma.$CargaAcademicaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id_docente: number
       id_usuario: number | null
+      id_facultad: number | null
+      id_departamento: number | null
       codigo_docente: string
       nombres: string
       apellidos: string
@@ -7452,6 +10619,8 @@ export namespace Prisma {
       foto_perfil: string | null
       perfil_completo: boolean
       horas_totales_asignadas: number
+      dni_docente: string | null
+      tipo_dedicacion_laboral: $Enums.TipoDedicacionLaboral | null
     }, ExtArgs["result"]["docente"]>
     composites: {}
   }
@@ -7846,6 +11015,9 @@ export namespace Prisma {
    */
   export interface Prisma__DocenteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    facultad<T extends Docente$facultadArgs<ExtArgs> = {}>(args?: Subset<T, Docente$facultadArgs<ExtArgs>>): Prisma__FacultadClient<$Result.GetResult<Prisma.$FacultadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    departamento<T extends Docente$departamentoArgs<ExtArgs> = {}>(args?: Subset<T, Docente$departamentoArgs<ExtArgs>>): Prisma__DepartamentoAcademicoClient<$Result.GetResult<Prisma.$DepartamentoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    citaciones<T extends Docente$citacionesArgs<ExtArgs> = {}>(args?: Subset<T, Docente$citacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cola_notificaciones<T extends Docente$cola_notificacionesArgs<ExtArgs> = {}>(args?: Subset<T, Docente$cola_notificacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ColaNotificacionesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conflictos_1<T extends Docente$conflictos_1Args<ExtArgs> = {}>(args?: Subset<T, Docente$conflictos_1Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConflictoHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conflictos_2<T extends Docente$conflictos_2Args<ExtArgs> = {}>(args?: Subset<T, Docente$conflictos_2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConflictoHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7859,7 +11031,7 @@ export namespace Prisma {
     preasignaciones<T extends Docente$preasignacionesArgs<ExtArgs> = {}>(args?: Subset<T, Docente$preasignacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreasignacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     preferencias_notificacion<T extends Docente$preferencias_notificacionArgs<ExtArgs> = {}>(args?: Subset<T, Docente$preferencias_notificacionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreferenciasNotificacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     selecciones_temporales<T extends Docente$selecciones_temporalesArgs<ExtArgs> = {}>(args?: Subset<T, Docente$selecciones_temporalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    citaciones<T extends Docente$citacionesArgs<ExtArgs> = {}>(args?: Subset<T, Docente$citacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cargas_academicas<T extends Docente$cargas_academicasArgs<ExtArgs> = {}>(args?: Subset<T, Docente$cargas_academicasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7891,6 +11063,8 @@ export namespace Prisma {
   interface DocenteFieldRefs {
     readonly id_docente: FieldRef<"Docente", 'Int'>
     readonly id_usuario: FieldRef<"Docente", 'Int'>
+    readonly id_facultad: FieldRef<"Docente", 'Int'>
+    readonly id_departamento: FieldRef<"Docente", 'Int'>
     readonly codigo_docente: FieldRef<"Docente", 'String'>
     readonly nombres: FieldRef<"Docente", 'String'>
     readonly apellidos: FieldRef<"Docente", 'String'>
@@ -7913,6 +11087,8 @@ export namespace Prisma {
     readonly foto_perfil: FieldRef<"Docente", 'String'>
     readonly perfil_completo: FieldRef<"Docente", 'Boolean'>
     readonly horas_totales_asignadas: FieldRef<"Docente", 'Int'>
+    readonly dni_docente: FieldRef<"Docente", 'String'>
+    readonly tipo_dedicacion_laboral: FieldRef<"Docente", 'TipoDedicacionLaboral'>
   }
     
 
@@ -8309,6 +11485,68 @@ export namespace Prisma {
   }
 
   /**
+   * Docente.facultad
+   */
+  export type Docente$facultadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Facultad
+     */
+    select?: FacultadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Facultad
+     */
+    omit?: FacultadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultadInclude<ExtArgs> | null
+    where?: FacultadWhereInput
+  }
+
+  /**
+   * Docente.departamento
+   */
+  export type Docente$departamentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DepartamentoAcademico
+     */
+    select?: DepartamentoAcademicoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DepartamentoAcademico
+     */
+    omit?: DepartamentoAcademicoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartamentoAcademicoInclude<ExtArgs> | null
+    where?: DepartamentoAcademicoWhereInput
+  }
+
+  /**
+   * Docente.citaciones
+   */
+  export type Docente$citacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitacionDocente
+     */
+    select?: CitacionDocenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitacionDocente
+     */
+    omit?: CitacionDocenteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitacionDocenteInclude<ExtArgs> | null
+    where?: CitacionDocenteWhereInput
+    orderBy?: CitacionDocenteOrderByWithRelationInput | CitacionDocenteOrderByWithRelationInput[]
+    cursor?: CitacionDocenteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CitacionDocenteScalarFieldEnum | CitacionDocenteScalarFieldEnum[]
+  }
+
+  /**
    * Docente.cola_notificaciones
    */
   export type Docente$cola_notificacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8616,27 +11854,27 @@ export namespace Prisma {
   }
 
   /**
-   * Docente.citaciones
+   * Docente.cargas_academicas
    */
-  export type Docente$citacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Docente$cargas_academicasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CitacionDocente
+     * Select specific fields to fetch from the CargaAcademica
      */
-    select?: CitacionDocenteSelect<ExtArgs> | null
+    select?: CargaAcademicaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CitacionDocente
+     * Omit specific fields from the CargaAcademica
      */
-    omit?: CitacionDocenteOmit<ExtArgs> | null
+    omit?: CargaAcademicaOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CitacionDocenteInclude<ExtArgs> | null
-    where?: CitacionDocenteWhereInput
-    orderBy?: CitacionDocenteOrderByWithRelationInput | CitacionDocenteOrderByWithRelationInput[]
-    cursor?: CitacionDocenteWhereUniqueInput
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    where?: CargaAcademicaWhereInput
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    cursor?: CargaAcademicaWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: CitacionDocenteScalarFieldEnum | CitacionDocenteScalarFieldEnum[]
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
   }
 
   /**
@@ -12567,9 +15805,9 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: boolean
     fecha_creacion?: boolean
+    docentes?: boolean | Grupo$docentesArgs<ExtArgs>
     curso?: boolean | CursoDefaultArgs<ExtArgs>
     periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
-    docentes?: boolean | Grupo$docentesArgs<ExtArgs>
     horarios?: boolean | Grupo$horariosArgs<ExtArgs>
     preasignaciones?: boolean | Grupo$preasignacionesArgs<ExtArgs>
     selecciones_temporales?: boolean | Grupo$selecciones_temporalesArgs<ExtArgs>
@@ -12618,9 +15856,9 @@ export namespace Prisma {
 
   export type GrupoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_grupo" | "id_curso" | "id_periodo" | "codigo_grupo" | "capacidad_maxima" | "cantidad_matriculados" | "activo" | "observaciones" | "fecha_creacion", ExtArgs["result"]["grupo"]>
   export type GrupoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    docentes?: boolean | Grupo$docentesArgs<ExtArgs>
     curso?: boolean | CursoDefaultArgs<ExtArgs>
     periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
-    docentes?: boolean | Grupo$docentesArgs<ExtArgs>
     horarios?: boolean | Grupo$horariosArgs<ExtArgs>
     preasignaciones?: boolean | Grupo$preasignacionesArgs<ExtArgs>
     selecciones_temporales?: boolean | Grupo$selecciones_temporalesArgs<ExtArgs>
@@ -12638,9 +15876,9 @@ export namespace Prisma {
   export type $GrupoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Grupo"
     objects: {
+      docentes: Prisma.$DocenteGrupoPayload<ExtArgs>[]
       curso: Prisma.$CursoPayload<ExtArgs>
       periodo: Prisma.$PeriodoAcademicoPayload<ExtArgs>
-      docentes: Prisma.$DocenteGrupoPayload<ExtArgs>[]
       horarios: Prisma.$HorarioAsignadoPayload<ExtArgs>[]
       preasignaciones: Prisma.$PreasignacionPayload<ExtArgs>[]
       selecciones_temporales: Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>[]
@@ -13049,9 +16287,9 @@ export namespace Prisma {
    */
   export interface Prisma__GrupoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    docentes<T extends Grupo$docentesArgs<ExtArgs> = {}>(args?: Subset<T, Grupo$docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocenteGrupoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     curso<T extends CursoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CursoDefaultArgs<ExtArgs>>): Prisma__CursoClient<$Result.GetResult<Prisma.$CursoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     periodo<T extends PeriodoAcademicoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademicoDefaultArgs<ExtArgs>>): Prisma__PeriodoAcademicoClient<$Result.GetResult<Prisma.$PeriodoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    docentes<T extends Grupo$docentesArgs<ExtArgs> = {}>(args?: Subset<T, Grupo$docentesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocenteGrupoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     horarios<T extends Grupo$horariosArgs<ExtArgs> = {}>(args?: Subset<T, Grupo$horariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HorarioAsignadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     preasignaciones<T extends Grupo$preasignacionesArgs<ExtArgs> = {}>(args?: Subset<T, Grupo$preasignacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreasignacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     selecciones_temporales<T extends Grupo$selecciones_temporalesArgs<ExtArgs> = {}>(args?: Subset<T, Grupo$selecciones_temporalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeleccionTemporalHorarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -16321,9 +19559,9 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: boolean
-    horarios?: boolean | VentanaAtencion$horariosArgs<ExtArgs>
     citaciones?: boolean | VentanaAtencion$citacionesArgs<ExtArgs>
     configuracion_turnos?: boolean | VentanaAtencion$configuracion_turnosArgs<ExtArgs>
+    horarios?: boolean | VentanaAtencion$horariosArgs<ExtArgs>
     periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     _count?: boolean | VentanaAtencionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ventanaAtencion"]>
@@ -16383,9 +19621,9 @@ export namespace Prisma {
 
   export type VentanaAtencionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_ventana" | "id_periodo" | "fecha" | "orden_prioridad" | "modalidad" | "categoria" | "hora_inicio" | "hora_fin" | "intervalo_minutos" | "cantidad_docentes" | "cantidad_atendidos" | "completado" | "activo" | "fecha_creacion", ExtArgs["result"]["ventanaAtencion"]>
   export type VentanaAtencionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    horarios?: boolean | VentanaAtencion$horariosArgs<ExtArgs>
     citaciones?: boolean | VentanaAtencion$citacionesArgs<ExtArgs>
     configuracion_turnos?: boolean | VentanaAtencion$configuracion_turnosArgs<ExtArgs>
+    horarios?: boolean | VentanaAtencion$horariosArgs<ExtArgs>
     periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     _count?: boolean | VentanaAtencionCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -16399,9 +19637,9 @@ export namespace Prisma {
   export type $VentanaAtencionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "VentanaAtencion"
     objects: {
-      horarios: Prisma.$HorarioAsignadoPayload<ExtArgs>[]
       citaciones: Prisma.$CitacionDocentePayload<ExtArgs>[]
       configuracion_turnos: Prisma.$ConfiguracionTurnosAtencionPayload<ExtArgs> | null
+      horarios: Prisma.$HorarioAsignadoPayload<ExtArgs>[]
       periodo: Prisma.$PeriodoAcademicoPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -16813,9 +20051,9 @@ export namespace Prisma {
    */
   export interface Prisma__VentanaAtencionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    horarios<T extends VentanaAtencion$horariosArgs<ExtArgs> = {}>(args?: Subset<T, VentanaAtencion$horariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HorarioAsignadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     citaciones<T extends VentanaAtencion$citacionesArgs<ExtArgs> = {}>(args?: Subset<T, VentanaAtencion$citacionesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitacionDocentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     configuracion_turnos<T extends VentanaAtencion$configuracion_turnosArgs<ExtArgs> = {}>(args?: Subset<T, VentanaAtencion$configuracion_turnosArgs<ExtArgs>>): Prisma__ConfiguracionTurnosAtencionClient<$Result.GetResult<Prisma.$ConfiguracionTurnosAtencionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    horarios<T extends VentanaAtencion$horariosArgs<ExtArgs> = {}>(args?: Subset<T, VentanaAtencion$horariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HorarioAsignadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     periodo<T extends PeriodoAcademicoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademicoDefaultArgs<ExtArgs>>): Prisma__PeriodoAcademicoClient<$Result.GetResult<Prisma.$PeriodoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -17256,30 +20494,6 @@ export namespace Prisma {
   }
 
   /**
-   * VentanaAtencion.horarios
-   */
-  export type VentanaAtencion$horariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the HorarioAsignado
-     */
-    select?: HorarioAsignadoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the HorarioAsignado
-     */
-    omit?: HorarioAsignadoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: HorarioAsignadoInclude<ExtArgs> | null
-    where?: HorarioAsignadoWhereInput
-    orderBy?: HorarioAsignadoOrderByWithRelationInput | HorarioAsignadoOrderByWithRelationInput[]
-    cursor?: HorarioAsignadoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: HorarioAsignadoScalarFieldEnum | HorarioAsignadoScalarFieldEnum[]
-  }
-
-  /**
    * VentanaAtencion.citaciones
    */
   export type VentanaAtencion$citacionesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17320,6 +20534,30 @@ export namespace Prisma {
      */
     include?: ConfiguracionTurnosAtencionInclude<ExtArgs> | null
     where?: ConfiguracionTurnosAtencionWhereInput
+  }
+
+  /**
+   * VentanaAtencion.horarios
+   */
+  export type VentanaAtencion$horariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HorarioAsignado
+     */
+    select?: HorarioAsignadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HorarioAsignado
+     */
+    omit?: HorarioAsignadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HorarioAsignadoInclude<ExtArgs> | null
+    where?: HorarioAsignadoWhereInput
+    orderBy?: HorarioAsignadoOrderByWithRelationInput | HorarioAsignadoOrderByWithRelationInput[]
+    cursor?: HorarioAsignadoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HorarioAsignadoScalarFieldEnum | HorarioAsignadoScalarFieldEnum[]
   }
 
   /**
@@ -32145,8 +35383,8 @@ export namespace Prisma {
     activo?: boolean
     fecha_creacion?: boolean
     fecha_actualizacion?: boolean
-    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     registros_disponibilidad?: boolean | FaseDisponibilidad$registros_disponibilidadArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     _count?: boolean | FaseDisponibilidadCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["faseDisponibilidad"]>
 
@@ -32193,8 +35431,8 @@ export namespace Prisma {
 
   export type FaseDisponibilidadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_fase_disponibilidad" | "id_periodo" | "estado" | "fecha_inicio" | "fecha_fin" | "bloques_tiempo" | "instrucciones" | "activo" | "fecha_creacion" | "fecha_actualizacion", ExtArgs["result"]["faseDisponibilidad"]>
   export type FaseDisponibilidadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     registros_disponibilidad?: boolean | FaseDisponibilidad$registros_disponibilidadArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
     _count?: boolean | FaseDisponibilidadCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FaseDisponibilidadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32207,8 +35445,8 @@ export namespace Prisma {
   export type $FaseDisponibilidadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FaseDisponibilidad"
     objects: {
-      periodo: Prisma.$PeriodoAcademicoPayload<ExtArgs>
       registros_disponibilidad: Prisma.$DisponibilidadDocenteRegistroPayload<ExtArgs>[]
+      periodo: Prisma.$PeriodoAcademicoPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id_fase_disponibilidad: number
@@ -32615,8 +35853,8 @@ export namespace Prisma {
    */
   export interface Prisma__FaseDisponibilidadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    periodo<T extends PeriodoAcademicoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademicoDefaultArgs<ExtArgs>>): Prisma__PeriodoAcademicoClient<$Result.GetResult<Prisma.$PeriodoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     registros_disponibilidad<T extends FaseDisponibilidad$registros_disponibilidadArgs<ExtArgs> = {}>(args?: Subset<T, FaseDisponibilidad$registros_disponibilidadArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisponibilidadDocenteRegistroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    periodo<T extends PeriodoAcademicoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademicoDefaultArgs<ExtArgs>>): Prisma__PeriodoAcademicoClient<$Result.GetResult<Prisma.$PeriodoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -38722,7 +41960,7 @@ export namespace Prisma {
     /**
      * The data needed to create a ConfiguracionSistema.
      */
-    data: XOR<ConfiguracionSistemaCreateInput, ConfiguracionSistemaUncheckedCreateInput>
+    data?: XOR<ConfiguracionSistemaCreateInput, ConfiguracionSistemaUncheckedCreateInput>
   }
 
   /**
@@ -38895,6 +42133,4794 @@ export namespace Prisma {
 
 
   /**
+   * Model actividad_no_lectiva_docente
+   */
+
+  export type AggregateActividad_no_lectiva_docente = {
+    _count: Actividad_no_lectiva_docenteCountAggregateOutputType | null
+    _avg: Actividad_no_lectiva_docenteAvgAggregateOutputType | null
+    _sum: Actividad_no_lectiva_docenteSumAggregateOutputType | null
+    _min: Actividad_no_lectiva_docenteMinAggregateOutputType | null
+    _max: Actividad_no_lectiva_docenteMaxAggregateOutputType | null
+  }
+
+  export type Actividad_no_lectiva_docenteAvgAggregateOutputType = {
+    id_actividad_no_lectiva: number | null
+    id_docente: number | null
+    cantidad_horas: number | null
+  }
+
+  export type Actividad_no_lectiva_docenteSumAggregateOutputType = {
+    id_actividad_no_lectiva: number | null
+    id_docente: number | null
+    cantidad_horas: number | null
+  }
+
+  export type Actividad_no_lectiva_docenteMinAggregateOutputType = {
+    id_actividad_no_lectiva: number | null
+    id_docente: number | null
+    tipo_actividad: string | null
+    cantidad_horas: number | null
+    descripcion: string | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type Actividad_no_lectiva_docenteMaxAggregateOutputType = {
+    id_actividad_no_lectiva: number | null
+    id_docente: number | null
+    tipo_actividad: string | null
+    cantidad_horas: number | null
+    descripcion: string | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type Actividad_no_lectiva_docenteCountAggregateOutputType = {
+    id_actividad_no_lectiva: number
+    id_docente: number
+    tipo_actividad: number
+    cantidad_horas: number
+    descripcion: number
+    fecha_creacion: number
+    fecha_actualizacion: number
+    _all: number
+  }
+
+
+  export type Actividad_no_lectiva_docenteAvgAggregateInputType = {
+    id_actividad_no_lectiva?: true
+    id_docente?: true
+    cantidad_horas?: true
+  }
+
+  export type Actividad_no_lectiva_docenteSumAggregateInputType = {
+    id_actividad_no_lectiva?: true
+    id_docente?: true
+    cantidad_horas?: true
+  }
+
+  export type Actividad_no_lectiva_docenteMinAggregateInputType = {
+    id_actividad_no_lectiva?: true
+    id_docente?: true
+    tipo_actividad?: true
+    cantidad_horas?: true
+    descripcion?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type Actividad_no_lectiva_docenteMaxAggregateInputType = {
+    id_actividad_no_lectiva?: true
+    id_docente?: true
+    tipo_actividad?: true
+    cantidad_horas?: true
+    descripcion?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type Actividad_no_lectiva_docenteCountAggregateInputType = {
+    id_actividad_no_lectiva?: true
+    id_docente?: true
+    tipo_actividad?: true
+    cantidad_horas?: true
+    descripcion?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+    _all?: true
+  }
+
+  export type Actividad_no_lectiva_docenteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which actividad_no_lectiva_docente to aggregate.
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of actividad_no_lectiva_docentes to fetch.
+     */
+    orderBy?: actividad_no_lectiva_docenteOrderByWithRelationInput | actividad_no_lectiva_docenteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: actividad_no_lectiva_docenteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` actividad_no_lectiva_docentes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` actividad_no_lectiva_docentes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned actividad_no_lectiva_docentes
+    **/
+    _count?: true | Actividad_no_lectiva_docenteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Actividad_no_lectiva_docenteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Actividad_no_lectiva_docenteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Actividad_no_lectiva_docenteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Actividad_no_lectiva_docenteMaxAggregateInputType
+  }
+
+  export type GetActividad_no_lectiva_docenteAggregateType<T extends Actividad_no_lectiva_docenteAggregateArgs> = {
+        [P in keyof T & keyof AggregateActividad_no_lectiva_docente]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActividad_no_lectiva_docente[P]>
+      : GetScalarType<T[P], AggregateActividad_no_lectiva_docente[P]>
+  }
+
+
+
+
+  export type actividad_no_lectiva_docenteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: actividad_no_lectiva_docenteWhereInput
+    orderBy?: actividad_no_lectiva_docenteOrderByWithAggregationInput | actividad_no_lectiva_docenteOrderByWithAggregationInput[]
+    by: Actividad_no_lectiva_docenteScalarFieldEnum[] | Actividad_no_lectiva_docenteScalarFieldEnum
+    having?: actividad_no_lectiva_docenteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Actividad_no_lectiva_docenteCountAggregateInputType | true
+    _avg?: Actividad_no_lectiva_docenteAvgAggregateInputType
+    _sum?: Actividad_no_lectiva_docenteSumAggregateInputType
+    _min?: Actividad_no_lectiva_docenteMinAggregateInputType
+    _max?: Actividad_no_lectiva_docenteMaxAggregateInputType
+  }
+
+  export type Actividad_no_lectiva_docenteGroupByOutputType = {
+    id_actividad_no_lectiva: number
+    id_docente: number
+    tipo_actividad: string
+    cantidad_horas: number
+    descripcion: string | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+    _count: Actividad_no_lectiva_docenteCountAggregateOutputType | null
+    _avg: Actividad_no_lectiva_docenteAvgAggregateOutputType | null
+    _sum: Actividad_no_lectiva_docenteSumAggregateOutputType | null
+    _min: Actividad_no_lectiva_docenteMinAggregateOutputType | null
+    _max: Actividad_no_lectiva_docenteMaxAggregateOutputType | null
+  }
+
+  type GetActividad_no_lectiva_docenteGroupByPayload<T extends actividad_no_lectiva_docenteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Actividad_no_lectiva_docenteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Actividad_no_lectiva_docenteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Actividad_no_lectiva_docenteGroupByOutputType[P]>
+            : GetScalarType<T[P], Actividad_no_lectiva_docenteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type actividad_no_lectiva_docenteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad_no_lectiva?: boolean
+    id_docente?: boolean
+    tipo_actividad?: boolean
+    cantidad_horas?: boolean
+    descripcion?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }, ExtArgs["result"]["actividad_no_lectiva_docente"]>
+
+  export type actividad_no_lectiva_docenteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad_no_lectiva?: boolean
+    id_docente?: boolean
+    tipo_actividad?: boolean
+    cantidad_horas?: boolean
+    descripcion?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }, ExtArgs["result"]["actividad_no_lectiva_docente"]>
+
+  export type actividad_no_lectiva_docenteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad_no_lectiva?: boolean
+    id_docente?: boolean
+    tipo_actividad?: boolean
+    cantidad_horas?: boolean
+    descripcion?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }, ExtArgs["result"]["actividad_no_lectiva_docente"]>
+
+  export type actividad_no_lectiva_docenteSelectScalar = {
+    id_actividad_no_lectiva?: boolean
+    id_docente?: boolean
+    tipo_actividad?: boolean
+    cantidad_horas?: boolean
+    descripcion?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }
+
+  export type actividad_no_lectiva_docenteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_actividad_no_lectiva" | "id_docente" | "tipo_actividad" | "cantidad_horas" | "descripcion" | "fecha_creacion" | "fecha_actualizacion", ExtArgs["result"]["actividad_no_lectiva_docente"]>
+
+  export type $actividad_no_lectiva_docentePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "actividad_no_lectiva_docente"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id_actividad_no_lectiva: number
+      id_docente: number
+      tipo_actividad: string
+      cantidad_horas: number
+      descripcion: string | null
+      fecha_creacion: Date | null
+      fecha_actualizacion: Date | null
+    }, ExtArgs["result"]["actividad_no_lectiva_docente"]>
+    composites: {}
+  }
+
+  type actividad_no_lectiva_docenteGetPayload<S extends boolean | null | undefined | actividad_no_lectiva_docenteDefaultArgs> = $Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload, S>
+
+  type actividad_no_lectiva_docenteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<actividad_no_lectiva_docenteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Actividad_no_lectiva_docenteCountAggregateInputType | true
+    }
+
+  export interface actividad_no_lectiva_docenteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['actividad_no_lectiva_docente'], meta: { name: 'actividad_no_lectiva_docente' } }
+    /**
+     * Find zero or one Actividad_no_lectiva_docente that matches the filter.
+     * @param {actividad_no_lectiva_docenteFindUniqueArgs} args - Arguments to find a Actividad_no_lectiva_docente
+     * @example
+     * // Get one Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends actividad_no_lectiva_docenteFindUniqueArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteFindUniqueArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Actividad_no_lectiva_docente that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {actividad_no_lectiva_docenteFindUniqueOrThrowArgs} args - Arguments to find a Actividad_no_lectiva_docente
+     * @example
+     * // Get one Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends actividad_no_lectiva_docenteFindUniqueOrThrowArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Actividad_no_lectiva_docente that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteFindFirstArgs} args - Arguments to find a Actividad_no_lectiva_docente
+     * @example
+     * // Get one Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends actividad_no_lectiva_docenteFindFirstArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteFindFirstArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Actividad_no_lectiva_docente that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteFindFirstOrThrowArgs} args - Arguments to find a Actividad_no_lectiva_docente
+     * @example
+     * // Get one Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends actividad_no_lectiva_docenteFindFirstOrThrowArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteFindFirstOrThrowArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Actividad_no_lectiva_docentes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docentes = await prisma.actividad_no_lectiva_docente.findMany()
+     * 
+     * // Get first 10 Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docentes = await prisma.actividad_no_lectiva_docente.findMany({ take: 10 })
+     * 
+     * // Only select the `id_actividad_no_lectiva`
+     * const actividad_no_lectiva_docenteWithId_actividad_no_lectivaOnly = await prisma.actividad_no_lectiva_docente.findMany({ select: { id_actividad_no_lectiva: true } })
+     * 
+     */
+    findMany<T extends actividad_no_lectiva_docenteFindManyArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Actividad_no_lectiva_docente.
+     * @param {actividad_no_lectiva_docenteCreateArgs} args - Arguments to create a Actividad_no_lectiva_docente.
+     * @example
+     * // Create one Actividad_no_lectiva_docente
+     * const Actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.create({
+     *   data: {
+     *     // ... data to create a Actividad_no_lectiva_docente
+     *   }
+     * })
+     * 
+     */
+    create<T extends actividad_no_lectiva_docenteCreateArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteCreateArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Actividad_no_lectiva_docentes.
+     * @param {actividad_no_lectiva_docenteCreateManyArgs} args - Arguments to create many Actividad_no_lectiva_docentes.
+     * @example
+     * // Create many Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends actividad_no_lectiva_docenteCreateManyArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Actividad_no_lectiva_docentes and returns the data saved in the database.
+     * @param {actividad_no_lectiva_docenteCreateManyAndReturnArgs} args - Arguments to create many Actividad_no_lectiva_docentes.
+     * @example
+     * // Create many Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Actividad_no_lectiva_docentes and only return the `id_actividad_no_lectiva`
+     * const actividad_no_lectiva_docenteWithId_actividad_no_lectivaOnly = await prisma.actividad_no_lectiva_docente.createManyAndReturn({
+     *   select: { id_actividad_no_lectiva: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends actividad_no_lectiva_docenteCreateManyAndReturnArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Actividad_no_lectiva_docente.
+     * @param {actividad_no_lectiva_docenteDeleteArgs} args - Arguments to delete one Actividad_no_lectiva_docente.
+     * @example
+     * // Delete one Actividad_no_lectiva_docente
+     * const Actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.delete({
+     *   where: {
+     *     // ... filter to delete one Actividad_no_lectiva_docente
+     *   }
+     * })
+     * 
+     */
+    delete<T extends actividad_no_lectiva_docenteDeleteArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteDeleteArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Actividad_no_lectiva_docente.
+     * @param {actividad_no_lectiva_docenteUpdateArgs} args - Arguments to update one Actividad_no_lectiva_docente.
+     * @example
+     * // Update one Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends actividad_no_lectiva_docenteUpdateArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteUpdateArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Actividad_no_lectiva_docentes.
+     * @param {actividad_no_lectiva_docenteDeleteManyArgs} args - Arguments to filter Actividad_no_lectiva_docentes to delete.
+     * @example
+     * // Delete a few Actividad_no_lectiva_docentes
+     * const { count } = await prisma.actividad_no_lectiva_docente.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends actividad_no_lectiva_docenteDeleteManyArgs>(args?: SelectSubset<T, actividad_no_lectiva_docenteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Actividad_no_lectiva_docentes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends actividad_no_lectiva_docenteUpdateManyArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Actividad_no_lectiva_docentes and returns the data updated in the database.
+     * @param {actividad_no_lectiva_docenteUpdateManyAndReturnArgs} args - Arguments to update many Actividad_no_lectiva_docentes.
+     * @example
+     * // Update many Actividad_no_lectiva_docentes
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Actividad_no_lectiva_docentes and only return the `id_actividad_no_lectiva`
+     * const actividad_no_lectiva_docenteWithId_actividad_no_lectivaOnly = await prisma.actividad_no_lectiva_docente.updateManyAndReturn({
+     *   select: { id_actividad_no_lectiva: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends actividad_no_lectiva_docenteUpdateManyAndReturnArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Actividad_no_lectiva_docente.
+     * @param {actividad_no_lectiva_docenteUpsertArgs} args - Arguments to update or create a Actividad_no_lectiva_docente.
+     * @example
+     * // Update or create a Actividad_no_lectiva_docente
+     * const actividad_no_lectiva_docente = await prisma.actividad_no_lectiva_docente.upsert({
+     *   create: {
+     *     // ... data to create a Actividad_no_lectiva_docente
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Actividad_no_lectiva_docente we want to update
+     *   }
+     * })
+     */
+    upsert<T extends actividad_no_lectiva_docenteUpsertArgs>(args: SelectSubset<T, actividad_no_lectiva_docenteUpsertArgs<ExtArgs>>): Prisma__actividad_no_lectiva_docenteClient<$Result.GetResult<Prisma.$actividad_no_lectiva_docentePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Actividad_no_lectiva_docentes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteCountArgs} args - Arguments to filter Actividad_no_lectiva_docentes to count.
+     * @example
+     * // Count the number of Actividad_no_lectiva_docentes
+     * const count = await prisma.actividad_no_lectiva_docente.count({
+     *   where: {
+     *     // ... the filter for the Actividad_no_lectiva_docentes we want to count
+     *   }
+     * })
+    **/
+    count<T extends actividad_no_lectiva_docenteCountArgs>(
+      args?: Subset<T, actividad_no_lectiva_docenteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Actividad_no_lectiva_docenteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Actividad_no_lectiva_docente.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Actividad_no_lectiva_docenteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Actividad_no_lectiva_docenteAggregateArgs>(args: Subset<T, Actividad_no_lectiva_docenteAggregateArgs>): Prisma.PrismaPromise<GetActividad_no_lectiva_docenteAggregateType<T>>
+
+    /**
+     * Group by Actividad_no_lectiva_docente.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {actividad_no_lectiva_docenteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends actividad_no_lectiva_docenteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: actividad_no_lectiva_docenteGroupByArgs['orderBy'] }
+        : { orderBy?: actividad_no_lectiva_docenteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, actividad_no_lectiva_docenteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActividad_no_lectiva_docenteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the actividad_no_lectiva_docente model
+   */
+  readonly fields: actividad_no_lectiva_docenteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for actividad_no_lectiva_docente.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__actividad_no_lectiva_docenteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the actividad_no_lectiva_docente model
+   */
+  interface actividad_no_lectiva_docenteFieldRefs {
+    readonly id_actividad_no_lectiva: FieldRef<"actividad_no_lectiva_docente", 'Int'>
+    readonly id_docente: FieldRef<"actividad_no_lectiva_docente", 'Int'>
+    readonly tipo_actividad: FieldRef<"actividad_no_lectiva_docente", 'String'>
+    readonly cantidad_horas: FieldRef<"actividad_no_lectiva_docente", 'Int'>
+    readonly descripcion: FieldRef<"actividad_no_lectiva_docente", 'String'>
+    readonly fecha_creacion: FieldRef<"actividad_no_lectiva_docente", 'DateTime'>
+    readonly fecha_actualizacion: FieldRef<"actividad_no_lectiva_docente", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * actividad_no_lectiva_docente findUnique
+   */
+  export type actividad_no_lectiva_docenteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter, which actividad_no_lectiva_docente to fetch.
+     */
+    where: actividad_no_lectiva_docenteWhereUniqueInput
+  }
+
+  /**
+   * actividad_no_lectiva_docente findUniqueOrThrow
+   */
+  export type actividad_no_lectiva_docenteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter, which actividad_no_lectiva_docente to fetch.
+     */
+    where: actividad_no_lectiva_docenteWhereUniqueInput
+  }
+
+  /**
+   * actividad_no_lectiva_docente findFirst
+   */
+  export type actividad_no_lectiva_docenteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter, which actividad_no_lectiva_docente to fetch.
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of actividad_no_lectiva_docentes to fetch.
+     */
+    orderBy?: actividad_no_lectiva_docenteOrderByWithRelationInput | actividad_no_lectiva_docenteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for actividad_no_lectiva_docentes.
+     */
+    cursor?: actividad_no_lectiva_docenteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` actividad_no_lectiva_docentes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` actividad_no_lectiva_docentes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of actividad_no_lectiva_docentes.
+     */
+    distinct?: Actividad_no_lectiva_docenteScalarFieldEnum | Actividad_no_lectiva_docenteScalarFieldEnum[]
+  }
+
+  /**
+   * actividad_no_lectiva_docente findFirstOrThrow
+   */
+  export type actividad_no_lectiva_docenteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter, which actividad_no_lectiva_docente to fetch.
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of actividad_no_lectiva_docentes to fetch.
+     */
+    orderBy?: actividad_no_lectiva_docenteOrderByWithRelationInput | actividad_no_lectiva_docenteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for actividad_no_lectiva_docentes.
+     */
+    cursor?: actividad_no_lectiva_docenteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` actividad_no_lectiva_docentes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` actividad_no_lectiva_docentes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of actividad_no_lectiva_docentes.
+     */
+    distinct?: Actividad_no_lectiva_docenteScalarFieldEnum | Actividad_no_lectiva_docenteScalarFieldEnum[]
+  }
+
+  /**
+   * actividad_no_lectiva_docente findMany
+   */
+  export type actividad_no_lectiva_docenteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter, which actividad_no_lectiva_docentes to fetch.
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of actividad_no_lectiva_docentes to fetch.
+     */
+    orderBy?: actividad_no_lectiva_docenteOrderByWithRelationInput | actividad_no_lectiva_docenteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing actividad_no_lectiva_docentes.
+     */
+    cursor?: actividad_no_lectiva_docenteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` actividad_no_lectiva_docentes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` actividad_no_lectiva_docentes.
+     */
+    skip?: number
+    distinct?: Actividad_no_lectiva_docenteScalarFieldEnum | Actividad_no_lectiva_docenteScalarFieldEnum[]
+  }
+
+  /**
+   * actividad_no_lectiva_docente create
+   */
+  export type actividad_no_lectiva_docenteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * The data needed to create a actividad_no_lectiva_docente.
+     */
+    data: XOR<actividad_no_lectiva_docenteCreateInput, actividad_no_lectiva_docenteUncheckedCreateInput>
+  }
+
+  /**
+   * actividad_no_lectiva_docente createMany
+   */
+  export type actividad_no_lectiva_docenteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many actividad_no_lectiva_docentes.
+     */
+    data: actividad_no_lectiva_docenteCreateManyInput | actividad_no_lectiva_docenteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * actividad_no_lectiva_docente createManyAndReturn
+   */
+  export type actividad_no_lectiva_docenteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * The data used to create many actividad_no_lectiva_docentes.
+     */
+    data: actividad_no_lectiva_docenteCreateManyInput | actividad_no_lectiva_docenteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * actividad_no_lectiva_docente update
+   */
+  export type actividad_no_lectiva_docenteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * The data needed to update a actividad_no_lectiva_docente.
+     */
+    data: XOR<actividad_no_lectiva_docenteUpdateInput, actividad_no_lectiva_docenteUncheckedUpdateInput>
+    /**
+     * Choose, which actividad_no_lectiva_docente to update.
+     */
+    where: actividad_no_lectiva_docenteWhereUniqueInput
+  }
+
+  /**
+   * actividad_no_lectiva_docente updateMany
+   */
+  export type actividad_no_lectiva_docenteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update actividad_no_lectiva_docentes.
+     */
+    data: XOR<actividad_no_lectiva_docenteUpdateManyMutationInput, actividad_no_lectiva_docenteUncheckedUpdateManyInput>
+    /**
+     * Filter which actividad_no_lectiva_docentes to update
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * Limit how many actividad_no_lectiva_docentes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * actividad_no_lectiva_docente updateManyAndReturn
+   */
+  export type actividad_no_lectiva_docenteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * The data used to update actividad_no_lectiva_docentes.
+     */
+    data: XOR<actividad_no_lectiva_docenteUpdateManyMutationInput, actividad_no_lectiva_docenteUncheckedUpdateManyInput>
+    /**
+     * Filter which actividad_no_lectiva_docentes to update
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * Limit how many actividad_no_lectiva_docentes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * actividad_no_lectiva_docente upsert
+   */
+  export type actividad_no_lectiva_docenteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * The filter to search for the actividad_no_lectiva_docente to update in case it exists.
+     */
+    where: actividad_no_lectiva_docenteWhereUniqueInput
+    /**
+     * In case the actividad_no_lectiva_docente found by the `where` argument doesn't exist, create a new actividad_no_lectiva_docente with this data.
+     */
+    create: XOR<actividad_no_lectiva_docenteCreateInput, actividad_no_lectiva_docenteUncheckedCreateInput>
+    /**
+     * In case the actividad_no_lectiva_docente was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<actividad_no_lectiva_docenteUpdateInput, actividad_no_lectiva_docenteUncheckedUpdateInput>
+  }
+
+  /**
+   * actividad_no_lectiva_docente delete
+   */
+  export type actividad_no_lectiva_docenteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+    /**
+     * Filter which actividad_no_lectiva_docente to delete.
+     */
+    where: actividad_no_lectiva_docenteWhereUniqueInput
+  }
+
+  /**
+   * actividad_no_lectiva_docente deleteMany
+   */
+  export type actividad_no_lectiva_docenteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which actividad_no_lectiva_docentes to delete
+     */
+    where?: actividad_no_lectiva_docenteWhereInput
+    /**
+     * Limit how many actividad_no_lectiva_docentes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * actividad_no_lectiva_docente without action
+   */
+  export type actividad_no_lectiva_docenteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the actividad_no_lectiva_docente
+     */
+    select?: actividad_no_lectiva_docenteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the actividad_no_lectiva_docente
+     */
+    omit?: actividad_no_lectiva_docenteOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CargaAcademica
+   */
+
+  export type AggregateCargaAcademica = {
+    _count: CargaAcademicaCountAggregateOutputType | null
+    _avg: CargaAcademicaAvgAggregateOutputType | null
+    _sum: CargaAcademicaSumAggregateOutputType | null
+    _min: CargaAcademicaMinAggregateOutputType | null
+    _max: CargaAcademicaMaxAggregateOutputType | null
+  }
+
+  export type CargaAcademicaAvgAggregateOutputType = {
+    id_carga: number | null
+    id_docente: number | null
+    id_periodo: number | null
+    horas_lectivas: number | null
+    horas_no_lectivas: number | null
+    horas_preparacion: number | null
+    horas_totales: number | null
+    horas_meta: number | null
+    aprobado_por: number | null
+  }
+
+  export type CargaAcademicaSumAggregateOutputType = {
+    id_carga: number | null
+    id_docente: number | null
+    id_periodo: number | null
+    horas_lectivas: number | null
+    horas_no_lectivas: number | null
+    horas_preparacion: number | null
+    horas_totales: number | null
+    horas_meta: number | null
+    aprobado_por: number | null
+  }
+
+  export type CargaAcademicaMinAggregateOutputType = {
+    id_carga: number | null
+    id_docente: number | null
+    id_periodo: number | null
+    estado: $Enums.EstadoCargaAcademica | null
+    horas_lectivas: number | null
+    horas_no_lectivas: number | null
+    horas_preparacion: number | null
+    horas_totales: number | null
+    horas_meta: number | null
+    observaciones: string | null
+    observaciones_generales: string | null
+    fecha_envio: Date | null
+    fecha_aprobacion: Date | null
+    aprobado_por: number | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type CargaAcademicaMaxAggregateOutputType = {
+    id_carga: number | null
+    id_docente: number | null
+    id_periodo: number | null
+    estado: $Enums.EstadoCargaAcademica | null
+    horas_lectivas: number | null
+    horas_no_lectivas: number | null
+    horas_preparacion: number | null
+    horas_totales: number | null
+    horas_meta: number | null
+    observaciones: string | null
+    observaciones_generales: string | null
+    fecha_envio: Date | null
+    fecha_aprobacion: Date | null
+    aprobado_por: number | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type CargaAcademicaCountAggregateOutputType = {
+    id_carga: number
+    id_docente: number
+    id_periodo: number
+    estado: number
+    horas_lectivas: number
+    horas_no_lectivas: number
+    horas_preparacion: number
+    horas_totales: number
+    horas_meta: number
+    observaciones: number
+    observaciones_generales: number
+    fecha_envio: number
+    fecha_aprobacion: number
+    aprobado_por: number
+    fecha_creacion: number
+    fecha_actualizacion: number
+    _all: number
+  }
+
+
+  export type CargaAcademicaAvgAggregateInputType = {
+    id_carga?: true
+    id_docente?: true
+    id_periodo?: true
+    horas_lectivas?: true
+    horas_no_lectivas?: true
+    horas_preparacion?: true
+    horas_totales?: true
+    horas_meta?: true
+    aprobado_por?: true
+  }
+
+  export type CargaAcademicaSumAggregateInputType = {
+    id_carga?: true
+    id_docente?: true
+    id_periodo?: true
+    horas_lectivas?: true
+    horas_no_lectivas?: true
+    horas_preparacion?: true
+    horas_totales?: true
+    horas_meta?: true
+    aprobado_por?: true
+  }
+
+  export type CargaAcademicaMinAggregateInputType = {
+    id_carga?: true
+    id_docente?: true
+    id_periodo?: true
+    estado?: true
+    horas_lectivas?: true
+    horas_no_lectivas?: true
+    horas_preparacion?: true
+    horas_totales?: true
+    horas_meta?: true
+    observaciones?: true
+    observaciones_generales?: true
+    fecha_envio?: true
+    fecha_aprobacion?: true
+    aprobado_por?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type CargaAcademicaMaxAggregateInputType = {
+    id_carga?: true
+    id_docente?: true
+    id_periodo?: true
+    estado?: true
+    horas_lectivas?: true
+    horas_no_lectivas?: true
+    horas_preparacion?: true
+    horas_totales?: true
+    horas_meta?: true
+    observaciones?: true
+    observaciones_generales?: true
+    fecha_envio?: true
+    fecha_aprobacion?: true
+    aprobado_por?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type CargaAcademicaCountAggregateInputType = {
+    id_carga?: true
+    id_docente?: true
+    id_periodo?: true
+    estado?: true
+    horas_lectivas?: true
+    horas_no_lectivas?: true
+    horas_preparacion?: true
+    horas_totales?: true
+    horas_meta?: true
+    observaciones?: true
+    observaciones_generales?: true
+    fecha_envio?: true
+    fecha_aprobacion?: true
+    aprobado_por?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+    _all?: true
+  }
+
+  export type CargaAcademicaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CargaAcademica to aggregate.
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CargaAcademicas to fetch.
+     */
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CargaAcademicas
+    **/
+    _count?: true | CargaAcademicaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CargaAcademicaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CargaAcademicaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CargaAcademicaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CargaAcademicaMaxAggregateInputType
+  }
+
+  export type GetCargaAcademicaAggregateType<T extends CargaAcademicaAggregateArgs> = {
+        [P in keyof T & keyof AggregateCargaAcademica]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCargaAcademica[P]>
+      : GetScalarType<T[P], AggregateCargaAcademica[P]>
+  }
+
+
+
+
+  export type CargaAcademicaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CargaAcademicaWhereInput
+    orderBy?: CargaAcademicaOrderByWithAggregationInput | CargaAcademicaOrderByWithAggregationInput[]
+    by: CargaAcademicaScalarFieldEnum[] | CargaAcademicaScalarFieldEnum
+    having?: CargaAcademicaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CargaAcademicaCountAggregateInputType | true
+    _avg?: CargaAcademicaAvgAggregateInputType
+    _sum?: CargaAcademicaSumAggregateInputType
+    _min?: CargaAcademicaMinAggregateInputType
+    _max?: CargaAcademicaMaxAggregateInputType
+  }
+
+  export type CargaAcademicaGroupByOutputType = {
+    id_carga: number
+    id_docente: number
+    id_periodo: number
+    estado: $Enums.EstadoCargaAcademica
+    horas_lectivas: number
+    horas_no_lectivas: number
+    horas_preparacion: number
+    horas_totales: number
+    horas_meta: number
+    observaciones: string | null
+    observaciones_generales: string | null
+    fecha_envio: Date | null
+    fecha_aprobacion: Date | null
+    aprobado_por: number | null
+    fecha_creacion: Date
+    fecha_actualizacion: Date
+    _count: CargaAcademicaCountAggregateOutputType | null
+    _avg: CargaAcademicaAvgAggregateOutputType | null
+    _sum: CargaAcademicaSumAggregateOutputType | null
+    _min: CargaAcademicaMinAggregateOutputType | null
+    _max: CargaAcademicaMaxAggregateOutputType | null
+  }
+
+  type GetCargaAcademicaGroupByPayload<T extends CargaAcademicaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CargaAcademicaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CargaAcademicaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CargaAcademicaGroupByOutputType[P]>
+            : GetScalarType<T[P], CargaAcademicaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CargaAcademicaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_carga?: boolean
+    id_docente?: boolean
+    id_periodo?: boolean
+    estado?: boolean
+    horas_lectivas?: boolean
+    horas_no_lectivas?: boolean
+    horas_preparacion?: boolean
+    horas_totales?: boolean
+    horas_meta?: boolean
+    observaciones?: boolean
+    observaciones_generales?: boolean
+    fecha_envio?: boolean
+    fecha_aprobacion?: boolean
+    aprobado_por?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+    actividades_no_lectivas?: boolean | CargaAcademica$actividades_no_lectivasArgs<ExtArgs>
+    historial?: boolean | CargaAcademica$historialArgs<ExtArgs>
+    _count?: boolean | CargaAcademicaCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cargaAcademica"]>
+
+  export type CargaAcademicaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_carga?: boolean
+    id_docente?: boolean
+    id_periodo?: boolean
+    estado?: boolean
+    horas_lectivas?: boolean
+    horas_no_lectivas?: boolean
+    horas_preparacion?: boolean
+    horas_totales?: boolean
+    horas_meta?: boolean
+    observaciones?: boolean
+    observaciones_generales?: boolean
+    fecha_envio?: boolean
+    fecha_aprobacion?: boolean
+    aprobado_por?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+  }, ExtArgs["result"]["cargaAcademica"]>
+
+  export type CargaAcademicaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_carga?: boolean
+    id_docente?: boolean
+    id_periodo?: boolean
+    estado?: boolean
+    horas_lectivas?: boolean
+    horas_no_lectivas?: boolean
+    horas_preparacion?: boolean
+    horas_totales?: boolean
+    horas_meta?: boolean
+    observaciones?: boolean
+    observaciones_generales?: boolean
+    fecha_envio?: boolean
+    fecha_aprobacion?: boolean
+    aprobado_por?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+  }, ExtArgs["result"]["cargaAcademica"]>
+
+  export type CargaAcademicaSelectScalar = {
+    id_carga?: boolean
+    id_docente?: boolean
+    id_periodo?: boolean
+    estado?: boolean
+    horas_lectivas?: boolean
+    horas_no_lectivas?: boolean
+    horas_preparacion?: boolean
+    horas_totales?: boolean
+    horas_meta?: boolean
+    observaciones?: boolean
+    observaciones_generales?: boolean
+    fecha_envio?: boolean
+    fecha_aprobacion?: boolean
+    aprobado_por?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }
+
+  export type CargaAcademicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_carga" | "id_docente" | "id_periodo" | "estado" | "horas_lectivas" | "horas_no_lectivas" | "horas_preparacion" | "horas_totales" | "horas_meta" | "observaciones" | "observaciones_generales" | "fecha_envio" | "fecha_aprobacion" | "aprobado_por" | "fecha_creacion" | "fecha_actualizacion", ExtArgs["result"]["cargaAcademica"]>
+  export type CargaAcademicaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+    actividades_no_lectivas?: boolean | CargaAcademica$actividades_no_lectivasArgs<ExtArgs>
+    historial?: boolean | CargaAcademica$historialArgs<ExtArgs>
+    _count?: boolean | CargaAcademicaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CargaAcademicaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+  }
+  export type CargaAcademicaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    docente?: boolean | DocenteDefaultArgs<ExtArgs>
+    periodo?: boolean | PeriodoAcademicoDefaultArgs<ExtArgs>
+    usuario_aprobador?: boolean | CargaAcademica$usuario_aprobadorArgs<ExtArgs>
+  }
+
+  export type $CargaAcademicaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CargaAcademica"
+    objects: {
+      docente: Prisma.$DocentePayload<ExtArgs>
+      periodo: Prisma.$PeriodoAcademicoPayload<ExtArgs>
+      usuario_aprobador: Prisma.$UsuarioPayload<ExtArgs> | null
+      actividades_no_lectivas: Prisma.$ActividadNoLectivaPayload<ExtArgs>[]
+      historial: Prisma.$HistorialCargaAcademicaPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_carga: number
+      id_docente: number
+      id_periodo: number
+      estado: $Enums.EstadoCargaAcademica
+      horas_lectivas: number
+      horas_no_lectivas: number
+      horas_preparacion: number
+      horas_totales: number
+      horas_meta: number
+      observaciones: string | null
+      observaciones_generales: string | null
+      fecha_envio: Date | null
+      fecha_aprobacion: Date | null
+      aprobado_por: number | null
+      fecha_creacion: Date
+      fecha_actualizacion: Date
+    }, ExtArgs["result"]["cargaAcademica"]>
+    composites: {}
+  }
+
+  type CargaAcademicaGetPayload<S extends boolean | null | undefined | CargaAcademicaDefaultArgs> = $Result.GetResult<Prisma.$CargaAcademicaPayload, S>
+
+  type CargaAcademicaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CargaAcademicaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CargaAcademicaCountAggregateInputType | true
+    }
+
+  export interface CargaAcademicaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CargaAcademica'], meta: { name: 'CargaAcademica' } }
+    /**
+     * Find zero or one CargaAcademica that matches the filter.
+     * @param {CargaAcademicaFindUniqueArgs} args - Arguments to find a CargaAcademica
+     * @example
+     * // Get one CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CargaAcademicaFindUniqueArgs>(args: SelectSubset<T, CargaAcademicaFindUniqueArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CargaAcademica that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CargaAcademicaFindUniqueOrThrowArgs} args - Arguments to find a CargaAcademica
+     * @example
+     * // Get one CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CargaAcademicaFindUniqueOrThrowArgs>(args: SelectSubset<T, CargaAcademicaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CargaAcademica that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaFindFirstArgs} args - Arguments to find a CargaAcademica
+     * @example
+     * // Get one CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CargaAcademicaFindFirstArgs>(args?: SelectSubset<T, CargaAcademicaFindFirstArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CargaAcademica that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaFindFirstOrThrowArgs} args - Arguments to find a CargaAcademica
+     * @example
+     * // Get one CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CargaAcademicaFindFirstOrThrowArgs>(args?: SelectSubset<T, CargaAcademicaFindFirstOrThrowArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CargaAcademicas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CargaAcademicas
+     * const cargaAcademicas = await prisma.cargaAcademica.findMany()
+     * 
+     * // Get first 10 CargaAcademicas
+     * const cargaAcademicas = await prisma.cargaAcademica.findMany({ take: 10 })
+     * 
+     * // Only select the `id_carga`
+     * const cargaAcademicaWithId_cargaOnly = await prisma.cargaAcademica.findMany({ select: { id_carga: true } })
+     * 
+     */
+    findMany<T extends CargaAcademicaFindManyArgs>(args?: SelectSubset<T, CargaAcademicaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CargaAcademica.
+     * @param {CargaAcademicaCreateArgs} args - Arguments to create a CargaAcademica.
+     * @example
+     * // Create one CargaAcademica
+     * const CargaAcademica = await prisma.cargaAcademica.create({
+     *   data: {
+     *     // ... data to create a CargaAcademica
+     *   }
+     * })
+     * 
+     */
+    create<T extends CargaAcademicaCreateArgs>(args: SelectSubset<T, CargaAcademicaCreateArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CargaAcademicas.
+     * @param {CargaAcademicaCreateManyArgs} args - Arguments to create many CargaAcademicas.
+     * @example
+     * // Create many CargaAcademicas
+     * const cargaAcademica = await prisma.cargaAcademica.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CargaAcademicaCreateManyArgs>(args?: SelectSubset<T, CargaAcademicaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CargaAcademicas and returns the data saved in the database.
+     * @param {CargaAcademicaCreateManyAndReturnArgs} args - Arguments to create many CargaAcademicas.
+     * @example
+     * // Create many CargaAcademicas
+     * const cargaAcademica = await prisma.cargaAcademica.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CargaAcademicas and only return the `id_carga`
+     * const cargaAcademicaWithId_cargaOnly = await prisma.cargaAcademica.createManyAndReturn({
+     *   select: { id_carga: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CargaAcademicaCreateManyAndReturnArgs>(args?: SelectSubset<T, CargaAcademicaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CargaAcademica.
+     * @param {CargaAcademicaDeleteArgs} args - Arguments to delete one CargaAcademica.
+     * @example
+     * // Delete one CargaAcademica
+     * const CargaAcademica = await prisma.cargaAcademica.delete({
+     *   where: {
+     *     // ... filter to delete one CargaAcademica
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CargaAcademicaDeleteArgs>(args: SelectSubset<T, CargaAcademicaDeleteArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CargaAcademica.
+     * @param {CargaAcademicaUpdateArgs} args - Arguments to update one CargaAcademica.
+     * @example
+     * // Update one CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CargaAcademicaUpdateArgs>(args: SelectSubset<T, CargaAcademicaUpdateArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CargaAcademicas.
+     * @param {CargaAcademicaDeleteManyArgs} args - Arguments to filter CargaAcademicas to delete.
+     * @example
+     * // Delete a few CargaAcademicas
+     * const { count } = await prisma.cargaAcademica.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CargaAcademicaDeleteManyArgs>(args?: SelectSubset<T, CargaAcademicaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CargaAcademicas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CargaAcademicas
+     * const cargaAcademica = await prisma.cargaAcademica.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CargaAcademicaUpdateManyArgs>(args: SelectSubset<T, CargaAcademicaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CargaAcademicas and returns the data updated in the database.
+     * @param {CargaAcademicaUpdateManyAndReturnArgs} args - Arguments to update many CargaAcademicas.
+     * @example
+     * // Update many CargaAcademicas
+     * const cargaAcademica = await prisma.cargaAcademica.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CargaAcademicas and only return the `id_carga`
+     * const cargaAcademicaWithId_cargaOnly = await prisma.cargaAcademica.updateManyAndReturn({
+     *   select: { id_carga: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CargaAcademicaUpdateManyAndReturnArgs>(args: SelectSubset<T, CargaAcademicaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CargaAcademica.
+     * @param {CargaAcademicaUpsertArgs} args - Arguments to update or create a CargaAcademica.
+     * @example
+     * // Update or create a CargaAcademica
+     * const cargaAcademica = await prisma.cargaAcademica.upsert({
+     *   create: {
+     *     // ... data to create a CargaAcademica
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CargaAcademica we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CargaAcademicaUpsertArgs>(args: SelectSubset<T, CargaAcademicaUpsertArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CargaAcademicas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaCountArgs} args - Arguments to filter CargaAcademicas to count.
+     * @example
+     * // Count the number of CargaAcademicas
+     * const count = await prisma.cargaAcademica.count({
+     *   where: {
+     *     // ... the filter for the CargaAcademicas we want to count
+     *   }
+     * })
+    **/
+    count<T extends CargaAcademicaCountArgs>(
+      args?: Subset<T, CargaAcademicaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CargaAcademicaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CargaAcademica.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CargaAcademicaAggregateArgs>(args: Subset<T, CargaAcademicaAggregateArgs>): Prisma.PrismaPromise<GetCargaAcademicaAggregateType<T>>
+
+    /**
+     * Group by CargaAcademica.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CargaAcademicaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CargaAcademicaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CargaAcademicaGroupByArgs['orderBy'] }
+        : { orderBy?: CargaAcademicaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CargaAcademicaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCargaAcademicaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CargaAcademica model
+   */
+  readonly fields: CargaAcademicaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CargaAcademica.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CargaAcademicaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    docente<T extends DocenteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocenteDefaultArgs<ExtArgs>>): Prisma__DocenteClient<$Result.GetResult<Prisma.$DocentePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    periodo<T extends PeriodoAcademicoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodoAcademicoDefaultArgs<ExtArgs>>): Prisma__PeriodoAcademicoClient<$Result.GetResult<Prisma.$PeriodoAcademicoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario_aprobador<T extends CargaAcademica$usuario_aprobadorArgs<ExtArgs> = {}>(args?: Subset<T, CargaAcademica$usuario_aprobadorArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    actividades_no_lectivas<T extends CargaAcademica$actividades_no_lectivasArgs<ExtArgs> = {}>(args?: Subset<T, CargaAcademica$actividades_no_lectivasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    historial<T extends CargaAcademica$historialArgs<ExtArgs> = {}>(args?: Subset<T, CargaAcademica$historialArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CargaAcademica model
+   */
+  interface CargaAcademicaFieldRefs {
+    readonly id_carga: FieldRef<"CargaAcademica", 'Int'>
+    readonly id_docente: FieldRef<"CargaAcademica", 'Int'>
+    readonly id_periodo: FieldRef<"CargaAcademica", 'Int'>
+    readonly estado: FieldRef<"CargaAcademica", 'EstadoCargaAcademica'>
+    readonly horas_lectivas: FieldRef<"CargaAcademica", 'Int'>
+    readonly horas_no_lectivas: FieldRef<"CargaAcademica", 'Int'>
+    readonly horas_preparacion: FieldRef<"CargaAcademica", 'Int'>
+    readonly horas_totales: FieldRef<"CargaAcademica", 'Int'>
+    readonly horas_meta: FieldRef<"CargaAcademica", 'Int'>
+    readonly observaciones: FieldRef<"CargaAcademica", 'String'>
+    readonly observaciones_generales: FieldRef<"CargaAcademica", 'String'>
+    readonly fecha_envio: FieldRef<"CargaAcademica", 'DateTime'>
+    readonly fecha_aprobacion: FieldRef<"CargaAcademica", 'DateTime'>
+    readonly aprobado_por: FieldRef<"CargaAcademica", 'Int'>
+    readonly fecha_creacion: FieldRef<"CargaAcademica", 'DateTime'>
+    readonly fecha_actualizacion: FieldRef<"CargaAcademica", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CargaAcademica findUnique
+   */
+  export type CargaAcademicaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which CargaAcademica to fetch.
+     */
+    where: CargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * CargaAcademica findUniqueOrThrow
+   */
+  export type CargaAcademicaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which CargaAcademica to fetch.
+     */
+    where: CargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * CargaAcademica findFirst
+   */
+  export type CargaAcademicaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which CargaAcademica to fetch.
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CargaAcademicas to fetch.
+     */
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CargaAcademicas.
+     */
+    cursor?: CargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CargaAcademicas.
+     */
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * CargaAcademica findFirstOrThrow
+   */
+  export type CargaAcademicaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which CargaAcademica to fetch.
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CargaAcademicas to fetch.
+     */
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CargaAcademicas.
+     */
+    cursor?: CargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CargaAcademicas.
+     */
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * CargaAcademica findMany
+   */
+  export type CargaAcademicaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which CargaAcademicas to fetch.
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CargaAcademicas to fetch.
+     */
+    orderBy?: CargaAcademicaOrderByWithRelationInput | CargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CargaAcademicas.
+     */
+    cursor?: CargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CargaAcademicas.
+     */
+    skip?: number
+    distinct?: CargaAcademicaScalarFieldEnum | CargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * CargaAcademica create
+   */
+  export type CargaAcademicaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CargaAcademica.
+     */
+    data: XOR<CargaAcademicaCreateInput, CargaAcademicaUncheckedCreateInput>
+  }
+
+  /**
+   * CargaAcademica createMany
+   */
+  export type CargaAcademicaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CargaAcademicas.
+     */
+    data: CargaAcademicaCreateManyInput | CargaAcademicaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CargaAcademica createManyAndReturn
+   */
+  export type CargaAcademicaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * The data used to create many CargaAcademicas.
+     */
+    data: CargaAcademicaCreateManyInput | CargaAcademicaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CargaAcademica update
+   */
+  export type CargaAcademicaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CargaAcademica.
+     */
+    data: XOR<CargaAcademicaUpdateInput, CargaAcademicaUncheckedUpdateInput>
+    /**
+     * Choose, which CargaAcademica to update.
+     */
+    where: CargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * CargaAcademica updateMany
+   */
+  export type CargaAcademicaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CargaAcademicas.
+     */
+    data: XOR<CargaAcademicaUpdateManyMutationInput, CargaAcademicaUncheckedUpdateManyInput>
+    /**
+     * Filter which CargaAcademicas to update
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * Limit how many CargaAcademicas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CargaAcademica updateManyAndReturn
+   */
+  export type CargaAcademicaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * The data used to update CargaAcademicas.
+     */
+    data: XOR<CargaAcademicaUpdateManyMutationInput, CargaAcademicaUncheckedUpdateManyInput>
+    /**
+     * Filter which CargaAcademicas to update
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * Limit how many CargaAcademicas to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CargaAcademica upsert
+   */
+  export type CargaAcademicaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CargaAcademica to update in case it exists.
+     */
+    where: CargaAcademicaWhereUniqueInput
+    /**
+     * In case the CargaAcademica found by the `where` argument doesn't exist, create a new CargaAcademica with this data.
+     */
+    create: XOR<CargaAcademicaCreateInput, CargaAcademicaUncheckedCreateInput>
+    /**
+     * In case the CargaAcademica was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CargaAcademicaUpdateInput, CargaAcademicaUncheckedUpdateInput>
+  }
+
+  /**
+   * CargaAcademica delete
+   */
+  export type CargaAcademicaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter which CargaAcademica to delete.
+     */
+    where: CargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * CargaAcademica deleteMany
+   */
+  export type CargaAcademicaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CargaAcademicas to delete
+     */
+    where?: CargaAcademicaWhereInput
+    /**
+     * Limit how many CargaAcademicas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CargaAcademica.usuario_aprobador
+   */
+  export type CargaAcademica$usuario_aprobadorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Usuario
+     */
+    select?: UsuarioSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Usuario
+     */
+    omit?: UsuarioOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsuarioInclude<ExtArgs> | null
+    where?: UsuarioWhereInput
+  }
+
+  /**
+   * CargaAcademica.actividades_no_lectivas
+   */
+  export type CargaAcademica$actividades_no_lectivasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    where?: ActividadNoLectivaWhereInput
+    orderBy?: ActividadNoLectivaOrderByWithRelationInput | ActividadNoLectivaOrderByWithRelationInput[]
+    cursor?: ActividadNoLectivaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActividadNoLectivaScalarFieldEnum | ActividadNoLectivaScalarFieldEnum[]
+  }
+
+  /**
+   * CargaAcademica.historial
+   */
+  export type CargaAcademica$historialArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    where?: HistorialCargaAcademicaWhereInput
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HistorialCargaAcademicaScalarFieldEnum | HistorialCargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * CargaAcademica without action
+   */
+  export type CargaAcademicaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CargaAcademica
+     */
+    select?: CargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CargaAcademica
+     */
+    omit?: CargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CargaAcademicaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ActividadNoLectiva
+   */
+
+  export type AggregateActividadNoLectiva = {
+    _count: ActividadNoLectivaCountAggregateOutputType | null
+    _avg: ActividadNoLectivaAvgAggregateOutputType | null
+    _sum: ActividadNoLectivaSumAggregateOutputType | null
+    _min: ActividadNoLectivaMinAggregateOutputType | null
+    _max: ActividadNoLectivaMaxAggregateOutputType | null
+  }
+
+  export type ActividadNoLectivaAvgAggregateOutputType = {
+    id_actividad: number | null
+    id_carga: number | null
+    horas_semanales: number | null
+    horas_asignadas: number | null
+  }
+
+  export type ActividadNoLectivaSumAggregateOutputType = {
+    id_actividad: number | null
+    id_carga: number | null
+    horas_semanales: number | null
+    horas_asignadas: number | null
+  }
+
+  export type ActividadNoLectivaMinAggregateOutputType = {
+    id_actividad: number | null
+    id_carga: number | null
+    tipo_actividad: $Enums.TipoActividadNoLectiva | null
+    nombre: string | null
+    descripcion: string | null
+    horas_semanales: number | null
+    horas_asignadas: number | null
+    fecha_inicio: Date | null
+    fecha_fin: Date | null
+    observaciones: string | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type ActividadNoLectivaMaxAggregateOutputType = {
+    id_actividad: number | null
+    id_carga: number | null
+    tipo_actividad: $Enums.TipoActividadNoLectiva | null
+    nombre: string | null
+    descripcion: string | null
+    horas_semanales: number | null
+    horas_asignadas: number | null
+    fecha_inicio: Date | null
+    fecha_fin: Date | null
+    observaciones: string | null
+    fecha_creacion: Date | null
+    fecha_actualizacion: Date | null
+  }
+
+  export type ActividadNoLectivaCountAggregateOutputType = {
+    id_actividad: number
+    id_carga: number
+    tipo_actividad: number
+    nombre: number
+    descripcion: number
+    horas_semanales: number
+    horas_asignadas: number
+    dias_semana: number
+    fecha_inicio: number
+    fecha_fin: number
+    datos_adicionales: number
+    datos_sustento: number
+    horarios_actividad: number
+    observaciones: number
+    fecha_creacion: number
+    fecha_actualizacion: number
+    _all: number
+  }
+
+
+  export type ActividadNoLectivaAvgAggregateInputType = {
+    id_actividad?: true
+    id_carga?: true
+    horas_semanales?: true
+    horas_asignadas?: true
+  }
+
+  export type ActividadNoLectivaSumAggregateInputType = {
+    id_actividad?: true
+    id_carga?: true
+    horas_semanales?: true
+    horas_asignadas?: true
+  }
+
+  export type ActividadNoLectivaMinAggregateInputType = {
+    id_actividad?: true
+    id_carga?: true
+    tipo_actividad?: true
+    nombre?: true
+    descripcion?: true
+    horas_semanales?: true
+    horas_asignadas?: true
+    fecha_inicio?: true
+    fecha_fin?: true
+    observaciones?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type ActividadNoLectivaMaxAggregateInputType = {
+    id_actividad?: true
+    id_carga?: true
+    tipo_actividad?: true
+    nombre?: true
+    descripcion?: true
+    horas_semanales?: true
+    horas_asignadas?: true
+    fecha_inicio?: true
+    fecha_fin?: true
+    observaciones?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+  }
+
+  export type ActividadNoLectivaCountAggregateInputType = {
+    id_actividad?: true
+    id_carga?: true
+    tipo_actividad?: true
+    nombre?: true
+    descripcion?: true
+    horas_semanales?: true
+    horas_asignadas?: true
+    dias_semana?: true
+    fecha_inicio?: true
+    fecha_fin?: true
+    datos_adicionales?: true
+    datos_sustento?: true
+    horarios_actividad?: true
+    observaciones?: true
+    fecha_creacion?: true
+    fecha_actualizacion?: true
+    _all?: true
+  }
+
+  export type ActividadNoLectivaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActividadNoLectiva to aggregate.
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActividadNoLectivas to fetch.
+     */
+    orderBy?: ActividadNoLectivaOrderByWithRelationInput | ActividadNoLectivaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ActividadNoLectivaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActividadNoLectivas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActividadNoLectivas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ActividadNoLectivas
+    **/
+    _count?: true | ActividadNoLectivaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ActividadNoLectivaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ActividadNoLectivaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ActividadNoLectivaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ActividadNoLectivaMaxAggregateInputType
+  }
+
+  export type GetActividadNoLectivaAggregateType<T extends ActividadNoLectivaAggregateArgs> = {
+        [P in keyof T & keyof AggregateActividadNoLectiva]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActividadNoLectiva[P]>
+      : GetScalarType<T[P], AggregateActividadNoLectiva[P]>
+  }
+
+
+
+
+  export type ActividadNoLectivaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActividadNoLectivaWhereInput
+    orderBy?: ActividadNoLectivaOrderByWithAggregationInput | ActividadNoLectivaOrderByWithAggregationInput[]
+    by: ActividadNoLectivaScalarFieldEnum[] | ActividadNoLectivaScalarFieldEnum
+    having?: ActividadNoLectivaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ActividadNoLectivaCountAggregateInputType | true
+    _avg?: ActividadNoLectivaAvgAggregateInputType
+    _sum?: ActividadNoLectivaSumAggregateInputType
+    _min?: ActividadNoLectivaMinAggregateInputType
+    _max?: ActividadNoLectivaMaxAggregateInputType
+  }
+
+  export type ActividadNoLectivaGroupByOutputType = {
+    id_actividad: number
+    id_carga: number
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion: string | null
+    horas_semanales: number
+    horas_asignadas: number
+    dias_semana: JsonValue | null
+    fecha_inicio: Date | null
+    fecha_fin: Date | null
+    datos_adicionales: JsonValue | null
+    datos_sustento: JsonValue | null
+    horarios_actividad: JsonValue | null
+    observaciones: string | null
+    fecha_creacion: Date
+    fecha_actualizacion: Date
+    _count: ActividadNoLectivaCountAggregateOutputType | null
+    _avg: ActividadNoLectivaAvgAggregateOutputType | null
+    _sum: ActividadNoLectivaSumAggregateOutputType | null
+    _min: ActividadNoLectivaMinAggregateOutputType | null
+    _max: ActividadNoLectivaMaxAggregateOutputType | null
+  }
+
+  type GetActividadNoLectivaGroupByPayload<T extends ActividadNoLectivaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ActividadNoLectivaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ActividadNoLectivaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActividadNoLectivaGroupByOutputType[P]>
+            : GetScalarType<T[P], ActividadNoLectivaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ActividadNoLectivaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad?: boolean
+    id_carga?: boolean
+    tipo_actividad?: boolean
+    nombre?: boolean
+    descripcion?: boolean
+    horas_semanales?: boolean
+    horas_asignadas?: boolean
+    dias_semana?: boolean
+    fecha_inicio?: boolean
+    fecha_fin?: boolean
+    datos_adicionales?: boolean
+    datos_sustento?: boolean
+    horarios_actividad?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["actividadNoLectiva"]>
+
+  export type ActividadNoLectivaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad?: boolean
+    id_carga?: boolean
+    tipo_actividad?: boolean
+    nombre?: boolean
+    descripcion?: boolean
+    horas_semanales?: boolean
+    horas_asignadas?: boolean
+    dias_semana?: boolean
+    fecha_inicio?: boolean
+    fecha_fin?: boolean
+    datos_adicionales?: boolean
+    datos_sustento?: boolean
+    horarios_actividad?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["actividadNoLectiva"]>
+
+  export type ActividadNoLectivaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_actividad?: boolean
+    id_carga?: boolean
+    tipo_actividad?: boolean
+    nombre?: boolean
+    descripcion?: boolean
+    horas_semanales?: boolean
+    horas_asignadas?: boolean
+    dias_semana?: boolean
+    fecha_inicio?: boolean
+    fecha_fin?: boolean
+    datos_adicionales?: boolean
+    datos_sustento?: boolean
+    horarios_actividad?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["actividadNoLectiva"]>
+
+  export type ActividadNoLectivaSelectScalar = {
+    id_actividad?: boolean
+    id_carga?: boolean
+    tipo_actividad?: boolean
+    nombre?: boolean
+    descripcion?: boolean
+    horas_semanales?: boolean
+    horas_asignadas?: boolean
+    dias_semana?: boolean
+    fecha_inicio?: boolean
+    fecha_fin?: boolean
+    datos_adicionales?: boolean
+    datos_sustento?: boolean
+    horarios_actividad?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    fecha_actualizacion?: boolean
+  }
+
+  export type ActividadNoLectivaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_actividad" | "id_carga" | "tipo_actividad" | "nombre" | "descripcion" | "horas_semanales" | "horas_asignadas" | "dias_semana" | "fecha_inicio" | "fecha_fin" | "datos_adicionales" | "datos_sustento" | "horarios_actividad" | "observaciones" | "fecha_creacion" | "fecha_actualizacion", ExtArgs["result"]["actividadNoLectiva"]>
+  export type ActividadNoLectivaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }
+  export type ActividadNoLectivaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }
+  export type ActividadNoLectivaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+  }
+
+  export type $ActividadNoLectivaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ActividadNoLectiva"
+    objects: {
+      carga_academica: Prisma.$CargaAcademicaPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_actividad: number
+      id_carga: number
+      tipo_actividad: $Enums.TipoActividadNoLectiva
+      nombre: string
+      descripcion: string | null
+      horas_semanales: number
+      horas_asignadas: number
+      dias_semana: Prisma.JsonValue | null
+      fecha_inicio: Date | null
+      fecha_fin: Date | null
+      datos_adicionales: Prisma.JsonValue | null
+      datos_sustento: Prisma.JsonValue | null
+      horarios_actividad: Prisma.JsonValue | null
+      observaciones: string | null
+      fecha_creacion: Date
+      fecha_actualizacion: Date
+    }, ExtArgs["result"]["actividadNoLectiva"]>
+    composites: {}
+  }
+
+  type ActividadNoLectivaGetPayload<S extends boolean | null | undefined | ActividadNoLectivaDefaultArgs> = $Result.GetResult<Prisma.$ActividadNoLectivaPayload, S>
+
+  type ActividadNoLectivaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ActividadNoLectivaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ActividadNoLectivaCountAggregateInputType | true
+    }
+
+  export interface ActividadNoLectivaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActividadNoLectiva'], meta: { name: 'ActividadNoLectiva' } }
+    /**
+     * Find zero or one ActividadNoLectiva that matches the filter.
+     * @param {ActividadNoLectivaFindUniqueArgs} args - Arguments to find a ActividadNoLectiva
+     * @example
+     * // Get one ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActividadNoLectivaFindUniqueArgs>(args: SelectSubset<T, ActividadNoLectivaFindUniqueArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ActividadNoLectiva that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActividadNoLectivaFindUniqueOrThrowArgs} args - Arguments to find a ActividadNoLectiva
+     * @example
+     * // Get one ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActividadNoLectivaFindUniqueOrThrowArgs>(args: SelectSubset<T, ActividadNoLectivaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActividadNoLectiva that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaFindFirstArgs} args - Arguments to find a ActividadNoLectiva
+     * @example
+     * // Get one ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActividadNoLectivaFindFirstArgs>(args?: SelectSubset<T, ActividadNoLectivaFindFirstArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ActividadNoLectiva that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaFindFirstOrThrowArgs} args - Arguments to find a ActividadNoLectiva
+     * @example
+     * // Get one ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActividadNoLectivaFindFirstOrThrowArgs>(args?: SelectSubset<T, ActividadNoLectivaFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ActividadNoLectivas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActividadNoLectivas
+     * const actividadNoLectivas = await prisma.actividadNoLectiva.findMany()
+     * 
+     * // Get first 10 ActividadNoLectivas
+     * const actividadNoLectivas = await prisma.actividadNoLectiva.findMany({ take: 10 })
+     * 
+     * // Only select the `id_actividad`
+     * const actividadNoLectivaWithId_actividadOnly = await prisma.actividadNoLectiva.findMany({ select: { id_actividad: true } })
+     * 
+     */
+    findMany<T extends ActividadNoLectivaFindManyArgs>(args?: SelectSubset<T, ActividadNoLectivaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ActividadNoLectiva.
+     * @param {ActividadNoLectivaCreateArgs} args - Arguments to create a ActividadNoLectiva.
+     * @example
+     * // Create one ActividadNoLectiva
+     * const ActividadNoLectiva = await prisma.actividadNoLectiva.create({
+     *   data: {
+     *     // ... data to create a ActividadNoLectiva
+     *   }
+     * })
+     * 
+     */
+    create<T extends ActividadNoLectivaCreateArgs>(args: SelectSubset<T, ActividadNoLectivaCreateArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ActividadNoLectivas.
+     * @param {ActividadNoLectivaCreateManyArgs} args - Arguments to create many ActividadNoLectivas.
+     * @example
+     * // Create many ActividadNoLectivas
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ActividadNoLectivaCreateManyArgs>(args?: SelectSubset<T, ActividadNoLectivaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ActividadNoLectivas and returns the data saved in the database.
+     * @param {ActividadNoLectivaCreateManyAndReturnArgs} args - Arguments to create many ActividadNoLectivas.
+     * @example
+     * // Create many ActividadNoLectivas
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ActividadNoLectivas and only return the `id_actividad`
+     * const actividadNoLectivaWithId_actividadOnly = await prisma.actividadNoLectiva.createManyAndReturn({
+     *   select: { id_actividad: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ActividadNoLectivaCreateManyAndReturnArgs>(args?: SelectSubset<T, ActividadNoLectivaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ActividadNoLectiva.
+     * @param {ActividadNoLectivaDeleteArgs} args - Arguments to delete one ActividadNoLectiva.
+     * @example
+     * // Delete one ActividadNoLectiva
+     * const ActividadNoLectiva = await prisma.actividadNoLectiva.delete({
+     *   where: {
+     *     // ... filter to delete one ActividadNoLectiva
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ActividadNoLectivaDeleteArgs>(args: SelectSubset<T, ActividadNoLectivaDeleteArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ActividadNoLectiva.
+     * @param {ActividadNoLectivaUpdateArgs} args - Arguments to update one ActividadNoLectiva.
+     * @example
+     * // Update one ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ActividadNoLectivaUpdateArgs>(args: SelectSubset<T, ActividadNoLectivaUpdateArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ActividadNoLectivas.
+     * @param {ActividadNoLectivaDeleteManyArgs} args - Arguments to filter ActividadNoLectivas to delete.
+     * @example
+     * // Delete a few ActividadNoLectivas
+     * const { count } = await prisma.actividadNoLectiva.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ActividadNoLectivaDeleteManyArgs>(args?: SelectSubset<T, ActividadNoLectivaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActividadNoLectivas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActividadNoLectivas
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ActividadNoLectivaUpdateManyArgs>(args: SelectSubset<T, ActividadNoLectivaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ActividadNoLectivas and returns the data updated in the database.
+     * @param {ActividadNoLectivaUpdateManyAndReturnArgs} args - Arguments to update many ActividadNoLectivas.
+     * @example
+     * // Update many ActividadNoLectivas
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ActividadNoLectivas and only return the `id_actividad`
+     * const actividadNoLectivaWithId_actividadOnly = await prisma.actividadNoLectiva.updateManyAndReturn({
+     *   select: { id_actividad: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ActividadNoLectivaUpdateManyAndReturnArgs>(args: SelectSubset<T, ActividadNoLectivaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ActividadNoLectiva.
+     * @param {ActividadNoLectivaUpsertArgs} args - Arguments to update or create a ActividadNoLectiva.
+     * @example
+     * // Update or create a ActividadNoLectiva
+     * const actividadNoLectiva = await prisma.actividadNoLectiva.upsert({
+     *   create: {
+     *     // ... data to create a ActividadNoLectiva
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActividadNoLectiva we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActividadNoLectivaUpsertArgs>(args: SelectSubset<T, ActividadNoLectivaUpsertArgs<ExtArgs>>): Prisma__ActividadNoLectivaClient<$Result.GetResult<Prisma.$ActividadNoLectivaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ActividadNoLectivas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaCountArgs} args - Arguments to filter ActividadNoLectivas to count.
+     * @example
+     * // Count the number of ActividadNoLectivas
+     * const count = await prisma.actividadNoLectiva.count({
+     *   where: {
+     *     // ... the filter for the ActividadNoLectivas we want to count
+     *   }
+     * })
+    **/
+    count<T extends ActividadNoLectivaCountArgs>(
+      args?: Subset<T, ActividadNoLectivaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ActividadNoLectivaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ActividadNoLectiva.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ActividadNoLectivaAggregateArgs>(args: Subset<T, ActividadNoLectivaAggregateArgs>): Prisma.PrismaPromise<GetActividadNoLectivaAggregateType<T>>
+
+    /**
+     * Group by ActividadNoLectiva.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActividadNoLectivaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ActividadNoLectivaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActividadNoLectivaGroupByArgs['orderBy'] }
+        : { orderBy?: ActividadNoLectivaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ActividadNoLectivaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActividadNoLectivaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ActividadNoLectiva model
+   */
+  readonly fields: ActividadNoLectivaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActividadNoLectiva.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActividadNoLectivaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    carga_academica<T extends CargaAcademicaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CargaAcademicaDefaultArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ActividadNoLectiva model
+   */
+  interface ActividadNoLectivaFieldRefs {
+    readonly id_actividad: FieldRef<"ActividadNoLectiva", 'Int'>
+    readonly id_carga: FieldRef<"ActividadNoLectiva", 'Int'>
+    readonly tipo_actividad: FieldRef<"ActividadNoLectiva", 'TipoActividadNoLectiva'>
+    readonly nombre: FieldRef<"ActividadNoLectiva", 'String'>
+    readonly descripcion: FieldRef<"ActividadNoLectiva", 'String'>
+    readonly horas_semanales: FieldRef<"ActividadNoLectiva", 'Int'>
+    readonly horas_asignadas: FieldRef<"ActividadNoLectiva", 'Int'>
+    readonly dias_semana: FieldRef<"ActividadNoLectiva", 'Json'>
+    readonly fecha_inicio: FieldRef<"ActividadNoLectiva", 'DateTime'>
+    readonly fecha_fin: FieldRef<"ActividadNoLectiva", 'DateTime'>
+    readonly datos_adicionales: FieldRef<"ActividadNoLectiva", 'Json'>
+    readonly datos_sustento: FieldRef<"ActividadNoLectiva", 'Json'>
+    readonly horarios_actividad: FieldRef<"ActividadNoLectiva", 'Json'>
+    readonly observaciones: FieldRef<"ActividadNoLectiva", 'String'>
+    readonly fecha_creacion: FieldRef<"ActividadNoLectiva", 'DateTime'>
+    readonly fecha_actualizacion: FieldRef<"ActividadNoLectiva", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ActividadNoLectiva findUnique
+   */
+  export type ActividadNoLectivaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter, which ActividadNoLectiva to fetch.
+     */
+    where: ActividadNoLectivaWhereUniqueInput
+  }
+
+  /**
+   * ActividadNoLectiva findUniqueOrThrow
+   */
+  export type ActividadNoLectivaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter, which ActividadNoLectiva to fetch.
+     */
+    where: ActividadNoLectivaWhereUniqueInput
+  }
+
+  /**
+   * ActividadNoLectiva findFirst
+   */
+  export type ActividadNoLectivaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter, which ActividadNoLectiva to fetch.
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActividadNoLectivas to fetch.
+     */
+    orderBy?: ActividadNoLectivaOrderByWithRelationInput | ActividadNoLectivaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActividadNoLectivas.
+     */
+    cursor?: ActividadNoLectivaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActividadNoLectivas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActividadNoLectivas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActividadNoLectivas.
+     */
+    distinct?: ActividadNoLectivaScalarFieldEnum | ActividadNoLectivaScalarFieldEnum[]
+  }
+
+  /**
+   * ActividadNoLectiva findFirstOrThrow
+   */
+  export type ActividadNoLectivaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter, which ActividadNoLectiva to fetch.
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActividadNoLectivas to fetch.
+     */
+    orderBy?: ActividadNoLectivaOrderByWithRelationInput | ActividadNoLectivaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ActividadNoLectivas.
+     */
+    cursor?: ActividadNoLectivaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActividadNoLectivas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActividadNoLectivas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ActividadNoLectivas.
+     */
+    distinct?: ActividadNoLectivaScalarFieldEnum | ActividadNoLectivaScalarFieldEnum[]
+  }
+
+  /**
+   * ActividadNoLectiva findMany
+   */
+  export type ActividadNoLectivaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter, which ActividadNoLectivas to fetch.
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ActividadNoLectivas to fetch.
+     */
+    orderBy?: ActividadNoLectivaOrderByWithRelationInput | ActividadNoLectivaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ActividadNoLectivas.
+     */
+    cursor?: ActividadNoLectivaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ActividadNoLectivas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ActividadNoLectivas.
+     */
+    skip?: number
+    distinct?: ActividadNoLectivaScalarFieldEnum | ActividadNoLectivaScalarFieldEnum[]
+  }
+
+  /**
+   * ActividadNoLectiva create
+   */
+  export type ActividadNoLectivaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ActividadNoLectiva.
+     */
+    data: XOR<ActividadNoLectivaCreateInput, ActividadNoLectivaUncheckedCreateInput>
+  }
+
+  /**
+   * ActividadNoLectiva createMany
+   */
+  export type ActividadNoLectivaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ActividadNoLectivas.
+     */
+    data: ActividadNoLectivaCreateManyInput | ActividadNoLectivaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ActividadNoLectiva createManyAndReturn
+   */
+  export type ActividadNoLectivaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * The data used to create many ActividadNoLectivas.
+     */
+    data: ActividadNoLectivaCreateManyInput | ActividadNoLectivaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActividadNoLectiva update
+   */
+  export type ActividadNoLectivaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ActividadNoLectiva.
+     */
+    data: XOR<ActividadNoLectivaUpdateInput, ActividadNoLectivaUncheckedUpdateInput>
+    /**
+     * Choose, which ActividadNoLectiva to update.
+     */
+    where: ActividadNoLectivaWhereUniqueInput
+  }
+
+  /**
+   * ActividadNoLectiva updateMany
+   */
+  export type ActividadNoLectivaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ActividadNoLectivas.
+     */
+    data: XOR<ActividadNoLectivaUpdateManyMutationInput, ActividadNoLectivaUncheckedUpdateManyInput>
+    /**
+     * Filter which ActividadNoLectivas to update
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * Limit how many ActividadNoLectivas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActividadNoLectiva updateManyAndReturn
+   */
+  export type ActividadNoLectivaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * The data used to update ActividadNoLectivas.
+     */
+    data: XOR<ActividadNoLectivaUpdateManyMutationInput, ActividadNoLectivaUncheckedUpdateManyInput>
+    /**
+     * Filter which ActividadNoLectivas to update
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * Limit how many ActividadNoLectivas to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ActividadNoLectiva upsert
+   */
+  export type ActividadNoLectivaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ActividadNoLectiva to update in case it exists.
+     */
+    where: ActividadNoLectivaWhereUniqueInput
+    /**
+     * In case the ActividadNoLectiva found by the `where` argument doesn't exist, create a new ActividadNoLectiva with this data.
+     */
+    create: XOR<ActividadNoLectivaCreateInput, ActividadNoLectivaUncheckedCreateInput>
+    /**
+     * In case the ActividadNoLectiva was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActividadNoLectivaUpdateInput, ActividadNoLectivaUncheckedUpdateInput>
+  }
+
+  /**
+   * ActividadNoLectiva delete
+   */
+  export type ActividadNoLectivaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+    /**
+     * Filter which ActividadNoLectiva to delete.
+     */
+    where: ActividadNoLectivaWhereUniqueInput
+  }
+
+  /**
+   * ActividadNoLectiva deleteMany
+   */
+  export type ActividadNoLectivaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ActividadNoLectivas to delete
+     */
+    where?: ActividadNoLectivaWhereInput
+    /**
+     * Limit how many ActividadNoLectivas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ActividadNoLectiva without action
+   */
+  export type ActividadNoLectivaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ActividadNoLectiva
+     */
+    select?: ActividadNoLectivaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ActividadNoLectiva
+     */
+    omit?: ActividadNoLectivaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActividadNoLectivaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model HistorialCargaAcademica
+   */
+
+  export type AggregateHistorialCargaAcademica = {
+    _count: HistorialCargaAcademicaCountAggregateOutputType | null
+    _avg: HistorialCargaAcademicaAvgAggregateOutputType | null
+    _sum: HistorialCargaAcademicaSumAggregateOutputType | null
+    _min: HistorialCargaAcademicaMinAggregateOutputType | null
+    _max: HistorialCargaAcademicaMaxAggregateOutputType | null
+  }
+
+  export type HistorialCargaAcademicaAvgAggregateOutputType = {
+    id_historial: number | null
+    id_carga: number | null
+    id_usuario: number | null
+  }
+
+  export type HistorialCargaAcademicaSumAggregateOutputType = {
+    id_historial: number | null
+    id_carga: number | null
+    id_usuario: number | null
+  }
+
+  export type HistorialCargaAcademicaMinAggregateOutputType = {
+    id_historial: number | null
+    id_carga: number | null
+    id_usuario: number | null
+    estado_anterior: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica | null
+    observaciones: string | null
+    fecha_creacion: Date | null
+  }
+
+  export type HistorialCargaAcademicaMaxAggregateOutputType = {
+    id_historial: number | null
+    id_carga: number | null
+    id_usuario: number | null
+    estado_anterior: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica | null
+    observaciones: string | null
+    fecha_creacion: Date | null
+  }
+
+  export type HistorialCargaAcademicaCountAggregateOutputType = {
+    id_historial: number
+    id_carga: number
+    id_usuario: number
+    estado_anterior: number
+    estado_nuevo: number
+    observaciones: number
+    fecha_creacion: number
+    _all: number
+  }
+
+
+  export type HistorialCargaAcademicaAvgAggregateInputType = {
+    id_historial?: true
+    id_carga?: true
+    id_usuario?: true
+  }
+
+  export type HistorialCargaAcademicaSumAggregateInputType = {
+    id_historial?: true
+    id_carga?: true
+    id_usuario?: true
+  }
+
+  export type HistorialCargaAcademicaMinAggregateInputType = {
+    id_historial?: true
+    id_carga?: true
+    id_usuario?: true
+    estado_anterior?: true
+    estado_nuevo?: true
+    observaciones?: true
+    fecha_creacion?: true
+  }
+
+  export type HistorialCargaAcademicaMaxAggregateInputType = {
+    id_historial?: true
+    id_carga?: true
+    id_usuario?: true
+    estado_anterior?: true
+    estado_nuevo?: true
+    observaciones?: true
+    fecha_creacion?: true
+  }
+
+  export type HistorialCargaAcademicaCountAggregateInputType = {
+    id_historial?: true
+    id_carga?: true
+    id_usuario?: true
+    estado_anterior?: true
+    estado_nuevo?: true
+    observaciones?: true
+    fecha_creacion?: true
+    _all?: true
+  }
+
+  export type HistorialCargaAcademicaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HistorialCargaAcademica to aggregate.
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HistorialCargaAcademicas to fetch.
+     */
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HistorialCargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HistorialCargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HistorialCargaAcademicas
+    **/
+    _count?: true | HistorialCargaAcademicaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HistorialCargaAcademicaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HistorialCargaAcademicaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HistorialCargaAcademicaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HistorialCargaAcademicaMaxAggregateInputType
+  }
+
+  export type GetHistorialCargaAcademicaAggregateType<T extends HistorialCargaAcademicaAggregateArgs> = {
+        [P in keyof T & keyof AggregateHistorialCargaAcademica]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHistorialCargaAcademica[P]>
+      : GetScalarType<T[P], AggregateHistorialCargaAcademica[P]>
+  }
+
+
+
+
+  export type HistorialCargaAcademicaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HistorialCargaAcademicaWhereInput
+    orderBy?: HistorialCargaAcademicaOrderByWithAggregationInput | HistorialCargaAcademicaOrderByWithAggregationInput[]
+    by: HistorialCargaAcademicaScalarFieldEnum[] | HistorialCargaAcademicaScalarFieldEnum
+    having?: HistorialCargaAcademicaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HistorialCargaAcademicaCountAggregateInputType | true
+    _avg?: HistorialCargaAcademicaAvgAggregateInputType
+    _sum?: HistorialCargaAcademicaSumAggregateInputType
+    _min?: HistorialCargaAcademicaMinAggregateInputType
+    _max?: HistorialCargaAcademicaMaxAggregateInputType
+  }
+
+  export type HistorialCargaAcademicaGroupByOutputType = {
+    id_historial: number
+    id_carga: number
+    id_usuario: number
+    estado_anterior: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones: string | null
+    fecha_creacion: Date
+    _count: HistorialCargaAcademicaCountAggregateOutputType | null
+    _avg: HistorialCargaAcademicaAvgAggregateOutputType | null
+    _sum: HistorialCargaAcademicaSumAggregateOutputType | null
+    _min: HistorialCargaAcademicaMinAggregateOutputType | null
+    _max: HistorialCargaAcademicaMaxAggregateOutputType | null
+  }
+
+  type GetHistorialCargaAcademicaGroupByPayload<T extends HistorialCargaAcademicaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HistorialCargaAcademicaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HistorialCargaAcademicaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HistorialCargaAcademicaGroupByOutputType[P]>
+            : GetScalarType<T[P], HistorialCargaAcademicaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HistorialCargaAcademicaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_historial?: boolean
+    id_carga?: boolean
+    id_usuario?: boolean
+    estado_anterior?: boolean
+    estado_nuevo?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["historialCargaAcademica"]>
+
+  export type HistorialCargaAcademicaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_historial?: boolean
+    id_carga?: boolean
+    id_usuario?: boolean
+    estado_anterior?: boolean
+    estado_nuevo?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["historialCargaAcademica"]>
+
+  export type HistorialCargaAcademicaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id_historial?: boolean
+    id_carga?: boolean
+    id_usuario?: boolean
+    estado_anterior?: boolean
+    estado_nuevo?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["historialCargaAcademica"]>
+
+  export type HistorialCargaAcademicaSelectScalar = {
+    id_historial?: boolean
+    id_carga?: boolean
+    id_usuario?: boolean
+    estado_anterior?: boolean
+    estado_nuevo?: boolean
+    observaciones?: boolean
+    fecha_creacion?: boolean
+  }
+
+  export type HistorialCargaAcademicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id_historial" | "id_carga" | "id_usuario" | "estado_anterior" | "estado_nuevo" | "observaciones" | "fecha_creacion", ExtArgs["result"]["historialCargaAcademica"]>
+  export type HistorialCargaAcademicaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type HistorialCargaAcademicaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+  export type HistorialCargaAcademicaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    carga_academica?: boolean | CargaAcademicaDefaultArgs<ExtArgs>
+    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
+  }
+
+  export type $HistorialCargaAcademicaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HistorialCargaAcademica"
+    objects: {
+      carga_academica: Prisma.$CargaAcademicaPayload<ExtArgs>
+      usuario: Prisma.$UsuarioPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id_historial: number
+      id_carga: number
+      id_usuario: number
+      estado_anterior: $Enums.EstadoCargaAcademica | null
+      estado_nuevo: $Enums.EstadoCargaAcademica
+      observaciones: string | null
+      fecha_creacion: Date
+    }, ExtArgs["result"]["historialCargaAcademica"]>
+    composites: {}
+  }
+
+  type HistorialCargaAcademicaGetPayload<S extends boolean | null | undefined | HistorialCargaAcademicaDefaultArgs> = $Result.GetResult<Prisma.$HistorialCargaAcademicaPayload, S>
+
+  type HistorialCargaAcademicaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HistorialCargaAcademicaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HistorialCargaAcademicaCountAggregateInputType | true
+    }
+
+  export interface HistorialCargaAcademicaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HistorialCargaAcademica'], meta: { name: 'HistorialCargaAcademica' } }
+    /**
+     * Find zero or one HistorialCargaAcademica that matches the filter.
+     * @param {HistorialCargaAcademicaFindUniqueArgs} args - Arguments to find a HistorialCargaAcademica
+     * @example
+     * // Get one HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HistorialCargaAcademicaFindUniqueArgs>(args: SelectSubset<T, HistorialCargaAcademicaFindUniqueArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HistorialCargaAcademica that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HistorialCargaAcademicaFindUniqueOrThrowArgs} args - Arguments to find a HistorialCargaAcademica
+     * @example
+     * // Get one HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HistorialCargaAcademicaFindUniqueOrThrowArgs>(args: SelectSubset<T, HistorialCargaAcademicaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HistorialCargaAcademica that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaFindFirstArgs} args - Arguments to find a HistorialCargaAcademica
+     * @example
+     * // Get one HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HistorialCargaAcademicaFindFirstArgs>(args?: SelectSubset<T, HistorialCargaAcademicaFindFirstArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HistorialCargaAcademica that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaFindFirstOrThrowArgs} args - Arguments to find a HistorialCargaAcademica
+     * @example
+     * // Get one HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HistorialCargaAcademicaFindFirstOrThrowArgs>(args?: SelectSubset<T, HistorialCargaAcademicaFindFirstOrThrowArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HistorialCargaAcademicas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HistorialCargaAcademicas
+     * const historialCargaAcademicas = await prisma.historialCargaAcademica.findMany()
+     * 
+     * // Get first 10 HistorialCargaAcademicas
+     * const historialCargaAcademicas = await prisma.historialCargaAcademica.findMany({ take: 10 })
+     * 
+     * // Only select the `id_historial`
+     * const historialCargaAcademicaWithId_historialOnly = await prisma.historialCargaAcademica.findMany({ select: { id_historial: true } })
+     * 
+     */
+    findMany<T extends HistorialCargaAcademicaFindManyArgs>(args?: SelectSubset<T, HistorialCargaAcademicaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HistorialCargaAcademica.
+     * @param {HistorialCargaAcademicaCreateArgs} args - Arguments to create a HistorialCargaAcademica.
+     * @example
+     * // Create one HistorialCargaAcademica
+     * const HistorialCargaAcademica = await prisma.historialCargaAcademica.create({
+     *   data: {
+     *     // ... data to create a HistorialCargaAcademica
+     *   }
+     * })
+     * 
+     */
+    create<T extends HistorialCargaAcademicaCreateArgs>(args: SelectSubset<T, HistorialCargaAcademicaCreateArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HistorialCargaAcademicas.
+     * @param {HistorialCargaAcademicaCreateManyArgs} args - Arguments to create many HistorialCargaAcademicas.
+     * @example
+     * // Create many HistorialCargaAcademicas
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HistorialCargaAcademicaCreateManyArgs>(args?: SelectSubset<T, HistorialCargaAcademicaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HistorialCargaAcademicas and returns the data saved in the database.
+     * @param {HistorialCargaAcademicaCreateManyAndReturnArgs} args - Arguments to create many HistorialCargaAcademicas.
+     * @example
+     * // Create many HistorialCargaAcademicas
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HistorialCargaAcademicas and only return the `id_historial`
+     * const historialCargaAcademicaWithId_historialOnly = await prisma.historialCargaAcademica.createManyAndReturn({
+     *   select: { id_historial: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HistorialCargaAcademicaCreateManyAndReturnArgs>(args?: SelectSubset<T, HistorialCargaAcademicaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HistorialCargaAcademica.
+     * @param {HistorialCargaAcademicaDeleteArgs} args - Arguments to delete one HistorialCargaAcademica.
+     * @example
+     * // Delete one HistorialCargaAcademica
+     * const HistorialCargaAcademica = await prisma.historialCargaAcademica.delete({
+     *   where: {
+     *     // ... filter to delete one HistorialCargaAcademica
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HistorialCargaAcademicaDeleteArgs>(args: SelectSubset<T, HistorialCargaAcademicaDeleteArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HistorialCargaAcademica.
+     * @param {HistorialCargaAcademicaUpdateArgs} args - Arguments to update one HistorialCargaAcademica.
+     * @example
+     * // Update one HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HistorialCargaAcademicaUpdateArgs>(args: SelectSubset<T, HistorialCargaAcademicaUpdateArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HistorialCargaAcademicas.
+     * @param {HistorialCargaAcademicaDeleteManyArgs} args - Arguments to filter HistorialCargaAcademicas to delete.
+     * @example
+     * // Delete a few HistorialCargaAcademicas
+     * const { count } = await prisma.historialCargaAcademica.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HistorialCargaAcademicaDeleteManyArgs>(args?: SelectSubset<T, HistorialCargaAcademicaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HistorialCargaAcademicas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HistorialCargaAcademicas
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HistorialCargaAcademicaUpdateManyArgs>(args: SelectSubset<T, HistorialCargaAcademicaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HistorialCargaAcademicas and returns the data updated in the database.
+     * @param {HistorialCargaAcademicaUpdateManyAndReturnArgs} args - Arguments to update many HistorialCargaAcademicas.
+     * @example
+     * // Update many HistorialCargaAcademicas
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HistorialCargaAcademicas and only return the `id_historial`
+     * const historialCargaAcademicaWithId_historialOnly = await prisma.historialCargaAcademica.updateManyAndReturn({
+     *   select: { id_historial: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HistorialCargaAcademicaUpdateManyAndReturnArgs>(args: SelectSubset<T, HistorialCargaAcademicaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HistorialCargaAcademica.
+     * @param {HistorialCargaAcademicaUpsertArgs} args - Arguments to update or create a HistorialCargaAcademica.
+     * @example
+     * // Update or create a HistorialCargaAcademica
+     * const historialCargaAcademica = await prisma.historialCargaAcademica.upsert({
+     *   create: {
+     *     // ... data to create a HistorialCargaAcademica
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HistorialCargaAcademica we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HistorialCargaAcademicaUpsertArgs>(args: SelectSubset<T, HistorialCargaAcademicaUpsertArgs<ExtArgs>>): Prisma__HistorialCargaAcademicaClient<$Result.GetResult<Prisma.$HistorialCargaAcademicaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HistorialCargaAcademicas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaCountArgs} args - Arguments to filter HistorialCargaAcademicas to count.
+     * @example
+     * // Count the number of HistorialCargaAcademicas
+     * const count = await prisma.historialCargaAcademica.count({
+     *   where: {
+     *     // ... the filter for the HistorialCargaAcademicas we want to count
+     *   }
+     * })
+    **/
+    count<T extends HistorialCargaAcademicaCountArgs>(
+      args?: Subset<T, HistorialCargaAcademicaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HistorialCargaAcademicaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HistorialCargaAcademica.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HistorialCargaAcademicaAggregateArgs>(args: Subset<T, HistorialCargaAcademicaAggregateArgs>): Prisma.PrismaPromise<GetHistorialCargaAcademicaAggregateType<T>>
+
+    /**
+     * Group by HistorialCargaAcademica.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HistorialCargaAcademicaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HistorialCargaAcademicaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HistorialCargaAcademicaGroupByArgs['orderBy'] }
+        : { orderBy?: HistorialCargaAcademicaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HistorialCargaAcademicaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHistorialCargaAcademicaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HistorialCargaAcademica model
+   */
+  readonly fields: HistorialCargaAcademicaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HistorialCargaAcademica.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HistorialCargaAcademicaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    carga_academica<T extends CargaAcademicaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CargaAcademicaDefaultArgs<ExtArgs>>): Prisma__CargaAcademicaClient<$Result.GetResult<Prisma.$CargaAcademicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HistorialCargaAcademica model
+   */
+  interface HistorialCargaAcademicaFieldRefs {
+    readonly id_historial: FieldRef<"HistorialCargaAcademica", 'Int'>
+    readonly id_carga: FieldRef<"HistorialCargaAcademica", 'Int'>
+    readonly id_usuario: FieldRef<"HistorialCargaAcademica", 'Int'>
+    readonly estado_anterior: FieldRef<"HistorialCargaAcademica", 'EstadoCargaAcademica'>
+    readonly estado_nuevo: FieldRef<"HistorialCargaAcademica", 'EstadoCargaAcademica'>
+    readonly observaciones: FieldRef<"HistorialCargaAcademica", 'String'>
+    readonly fecha_creacion: FieldRef<"HistorialCargaAcademica", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HistorialCargaAcademica findUnique
+   */
+  export type HistorialCargaAcademicaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which HistorialCargaAcademica to fetch.
+     */
+    where: HistorialCargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * HistorialCargaAcademica findUniqueOrThrow
+   */
+  export type HistorialCargaAcademicaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which HistorialCargaAcademica to fetch.
+     */
+    where: HistorialCargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * HistorialCargaAcademica findFirst
+   */
+  export type HistorialCargaAcademicaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which HistorialCargaAcademica to fetch.
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HistorialCargaAcademicas to fetch.
+     */
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HistorialCargaAcademicas.
+     */
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HistorialCargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HistorialCargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HistorialCargaAcademicas.
+     */
+    distinct?: HistorialCargaAcademicaScalarFieldEnum | HistorialCargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * HistorialCargaAcademica findFirstOrThrow
+   */
+  export type HistorialCargaAcademicaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which HistorialCargaAcademica to fetch.
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HistorialCargaAcademicas to fetch.
+     */
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HistorialCargaAcademicas.
+     */
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HistorialCargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HistorialCargaAcademicas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HistorialCargaAcademicas.
+     */
+    distinct?: HistorialCargaAcademicaScalarFieldEnum | HistorialCargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * HistorialCargaAcademica findMany
+   */
+  export type HistorialCargaAcademicaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter, which HistorialCargaAcademicas to fetch.
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HistorialCargaAcademicas to fetch.
+     */
+    orderBy?: HistorialCargaAcademicaOrderByWithRelationInput | HistorialCargaAcademicaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HistorialCargaAcademicas.
+     */
+    cursor?: HistorialCargaAcademicaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HistorialCargaAcademicas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HistorialCargaAcademicas.
+     */
+    skip?: number
+    distinct?: HistorialCargaAcademicaScalarFieldEnum | HistorialCargaAcademicaScalarFieldEnum[]
+  }
+
+  /**
+   * HistorialCargaAcademica create
+   */
+  export type HistorialCargaAcademicaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a HistorialCargaAcademica.
+     */
+    data: XOR<HistorialCargaAcademicaCreateInput, HistorialCargaAcademicaUncheckedCreateInput>
+  }
+
+  /**
+   * HistorialCargaAcademica createMany
+   */
+  export type HistorialCargaAcademicaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HistorialCargaAcademicas.
+     */
+    data: HistorialCargaAcademicaCreateManyInput | HistorialCargaAcademicaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HistorialCargaAcademica createManyAndReturn
+   */
+  export type HistorialCargaAcademicaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * The data used to create many HistorialCargaAcademicas.
+     */
+    data: HistorialCargaAcademicaCreateManyInput | HistorialCargaAcademicaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HistorialCargaAcademica update
+   */
+  export type HistorialCargaAcademicaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a HistorialCargaAcademica.
+     */
+    data: XOR<HistorialCargaAcademicaUpdateInput, HistorialCargaAcademicaUncheckedUpdateInput>
+    /**
+     * Choose, which HistorialCargaAcademica to update.
+     */
+    where: HistorialCargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * HistorialCargaAcademica updateMany
+   */
+  export type HistorialCargaAcademicaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HistorialCargaAcademicas.
+     */
+    data: XOR<HistorialCargaAcademicaUpdateManyMutationInput, HistorialCargaAcademicaUncheckedUpdateManyInput>
+    /**
+     * Filter which HistorialCargaAcademicas to update
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * Limit how many HistorialCargaAcademicas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HistorialCargaAcademica updateManyAndReturn
+   */
+  export type HistorialCargaAcademicaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * The data used to update HistorialCargaAcademicas.
+     */
+    data: XOR<HistorialCargaAcademicaUpdateManyMutationInput, HistorialCargaAcademicaUncheckedUpdateManyInput>
+    /**
+     * Filter which HistorialCargaAcademicas to update
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * Limit how many HistorialCargaAcademicas to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HistorialCargaAcademica upsert
+   */
+  export type HistorialCargaAcademicaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the HistorialCargaAcademica to update in case it exists.
+     */
+    where: HistorialCargaAcademicaWhereUniqueInput
+    /**
+     * In case the HistorialCargaAcademica found by the `where` argument doesn't exist, create a new HistorialCargaAcademica with this data.
+     */
+    create: XOR<HistorialCargaAcademicaCreateInput, HistorialCargaAcademicaUncheckedCreateInput>
+    /**
+     * In case the HistorialCargaAcademica was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HistorialCargaAcademicaUpdateInput, HistorialCargaAcademicaUncheckedUpdateInput>
+  }
+
+  /**
+   * HistorialCargaAcademica delete
+   */
+  export type HistorialCargaAcademicaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+    /**
+     * Filter which HistorialCargaAcademica to delete.
+     */
+    where: HistorialCargaAcademicaWhereUniqueInput
+  }
+
+  /**
+   * HistorialCargaAcademica deleteMany
+   */
+  export type HistorialCargaAcademicaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HistorialCargaAcademicas to delete
+     */
+    where?: HistorialCargaAcademicaWhereInput
+    /**
+     * Limit how many HistorialCargaAcademicas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HistorialCargaAcademica without action
+   */
+  export type HistorialCargaAcademicaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HistorialCargaAcademica
+     */
+    select?: HistorialCargaAcademicaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HistorialCargaAcademica
+     */
+    omit?: HistorialCargaAcademicaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HistorialCargaAcademicaInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -38906,6 +46932,29 @@ export namespace Prisma {
   };
 
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+  export const FacultadScalarFieldEnum: {
+    id_facultad: 'id_facultad',
+    codigo: 'codigo',
+    nombre: 'nombre',
+    activo: 'activo',
+    fecha_creacion: 'fecha_creacion'
+  };
+
+  export type FacultadScalarFieldEnum = (typeof FacultadScalarFieldEnum)[keyof typeof FacultadScalarFieldEnum]
+
+
+  export const DepartamentoAcademicoScalarFieldEnum: {
+    id_departamento: 'id_departamento',
+    id_facultad: 'id_facultad',
+    codigo: 'codigo',
+    nombre: 'nombre',
+    activo: 'activo',
+    fecha_creacion: 'fecha_creacion'
+  };
+
+  export type DepartamentoAcademicoScalarFieldEnum = (typeof DepartamentoAcademicoScalarFieldEnum)[keyof typeof DepartamentoAcademicoScalarFieldEnum]
 
 
   export const UsuarioScalarFieldEnum: {
@@ -38946,6 +46995,8 @@ export namespace Prisma {
   export const DocenteScalarFieldEnum: {
     id_docente: 'id_docente',
     id_usuario: 'id_usuario',
+    id_facultad: 'id_facultad',
+    id_departamento: 'id_departamento',
     codigo_docente: 'codigo_docente',
     nombres: 'nombres',
     apellidos: 'apellidos',
@@ -38967,7 +47018,9 @@ export namespace Prisma {
     escuela_profesional: 'escuela_profesional',
     foto_perfil: 'foto_perfil',
     perfil_completo: 'perfil_completo',
-    horas_totales_asignadas: 'horas_totales_asignadas'
+    horas_totales_asignadas: 'horas_totales_asignadas',
+    dni_docente: 'dni_docente',
+    tipo_dedicacion_laboral: 'tipo_dedicacion_laboral'
   };
 
   export type DocenteScalarFieldEnum = (typeof DocenteScalarFieldEnum)[keyof typeof DocenteScalarFieldEnum]
@@ -39389,6 +47442,76 @@ export namespace Prisma {
   export type ConfiguracionSistemaScalarFieldEnum = (typeof ConfiguracionSistemaScalarFieldEnum)[keyof typeof ConfiguracionSistemaScalarFieldEnum]
 
 
+  export const Actividad_no_lectiva_docenteScalarFieldEnum: {
+    id_actividad_no_lectiva: 'id_actividad_no_lectiva',
+    id_docente: 'id_docente',
+    tipo_actividad: 'tipo_actividad',
+    cantidad_horas: 'cantidad_horas',
+    descripcion: 'descripcion',
+    fecha_creacion: 'fecha_creacion',
+    fecha_actualizacion: 'fecha_actualizacion'
+  };
+
+  export type Actividad_no_lectiva_docenteScalarFieldEnum = (typeof Actividad_no_lectiva_docenteScalarFieldEnum)[keyof typeof Actividad_no_lectiva_docenteScalarFieldEnum]
+
+
+  export const CargaAcademicaScalarFieldEnum: {
+    id_carga: 'id_carga',
+    id_docente: 'id_docente',
+    id_periodo: 'id_periodo',
+    estado: 'estado',
+    horas_lectivas: 'horas_lectivas',
+    horas_no_lectivas: 'horas_no_lectivas',
+    horas_preparacion: 'horas_preparacion',
+    horas_totales: 'horas_totales',
+    horas_meta: 'horas_meta',
+    observaciones: 'observaciones',
+    observaciones_generales: 'observaciones_generales',
+    fecha_envio: 'fecha_envio',
+    fecha_aprobacion: 'fecha_aprobacion',
+    aprobado_por: 'aprobado_por',
+    fecha_creacion: 'fecha_creacion',
+    fecha_actualizacion: 'fecha_actualizacion'
+  };
+
+  export type CargaAcademicaScalarFieldEnum = (typeof CargaAcademicaScalarFieldEnum)[keyof typeof CargaAcademicaScalarFieldEnum]
+
+
+  export const ActividadNoLectivaScalarFieldEnum: {
+    id_actividad: 'id_actividad',
+    id_carga: 'id_carga',
+    tipo_actividad: 'tipo_actividad',
+    nombre: 'nombre',
+    descripcion: 'descripcion',
+    horas_semanales: 'horas_semanales',
+    horas_asignadas: 'horas_asignadas',
+    dias_semana: 'dias_semana',
+    fecha_inicio: 'fecha_inicio',
+    fecha_fin: 'fecha_fin',
+    datos_adicionales: 'datos_adicionales',
+    datos_sustento: 'datos_sustento',
+    horarios_actividad: 'horarios_actividad',
+    observaciones: 'observaciones',
+    fecha_creacion: 'fecha_creacion',
+    fecha_actualizacion: 'fecha_actualizacion'
+  };
+
+  export type ActividadNoLectivaScalarFieldEnum = (typeof ActividadNoLectivaScalarFieldEnum)[keyof typeof ActividadNoLectivaScalarFieldEnum]
+
+
+  export const HistorialCargaAcademicaScalarFieldEnum: {
+    id_historial: 'id_historial',
+    id_carga: 'id_carga',
+    id_usuario: 'id_usuario',
+    estado_anterior: 'estado_anterior',
+    estado_nuevo: 'estado_nuevo',
+    observaciones: 'observaciones',
+    fecha_creacion: 'fecha_creacion'
+  };
+
+  export type HistorialCargaAcademicaScalarFieldEnum = (typeof HistorialCargaAcademicaScalarFieldEnum)[keyof typeof HistorialCargaAcademicaScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -39471,20 +47594,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TipoRol'
-   */
-  export type EnumTipoRolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRol'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoRol[]'
-   */
-  export type ListEnumTipoRolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRol[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -39502,6 +47611,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoRol'
+   */
+  export type EnumTipoRolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRol'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoRol[]'
+   */
+  export type ListEnumTipoRolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRol[]'>
     
 
 
@@ -39558,6 +47681,20 @@ export namespace Prisma {
    * Reference to a field of type 'TipoDedicacion[]'
    */
   export type ListEnumTipoDedicacionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoDedicacion[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoDedicacionLaboral'
+   */
+  export type EnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoDedicacionLaboral'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoDedicacionLaboral[]'
+   */
+  export type ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoDedicacionLaboral[]'>
     
 
 
@@ -39744,6 +47881,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EstadoCargaAcademica'
+   */
+  export type EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoCargaAcademica'>
+    
+
+
+  /**
+   * Reference to a field of type 'EstadoCargaAcademica[]'
+   */
+  export type ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoCargaAcademica[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoActividadNoLectiva'
+   */
+  export type EnumTipoActividadNoLectivaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoActividadNoLectiva'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoActividadNoLectiva[]'
+   */
+  export type ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoActividadNoLectiva[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -39759,6 +47924,131 @@ export namespace Prisma {
    * Deep Input Types
    */
 
+
+  export type FacultadWhereInput = {
+    AND?: FacultadWhereInput | FacultadWhereInput[]
+    OR?: FacultadWhereInput[]
+    NOT?: FacultadWhereInput | FacultadWhereInput[]
+    id_facultad?: IntFilter<"Facultad"> | number
+    codigo?: StringFilter<"Facultad"> | string
+    nombre?: StringFilter<"Facultad"> | string
+    activo?: BoolFilter<"Facultad"> | boolean
+    fecha_creacion?: DateTimeFilter<"Facultad"> | Date | string
+    departamentos?: DepartamentoAcademicoListRelationFilter
+    docentes?: DocenteListRelationFilter
+  }
+
+  export type FacultadOrderByWithRelationInput = {
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+    departamentos?: DepartamentoAcademicoOrderByRelationAggregateInput
+    docentes?: DocenteOrderByRelationAggregateInput
+  }
+
+  export type FacultadWhereUniqueInput = Prisma.AtLeast<{
+    id_facultad?: number
+    codigo?: string
+    AND?: FacultadWhereInput | FacultadWhereInput[]
+    OR?: FacultadWhereInput[]
+    NOT?: FacultadWhereInput | FacultadWhereInput[]
+    nombre?: StringFilter<"Facultad"> | string
+    activo?: BoolFilter<"Facultad"> | boolean
+    fecha_creacion?: DateTimeFilter<"Facultad"> | Date | string
+    departamentos?: DepartamentoAcademicoListRelationFilter
+    docentes?: DocenteListRelationFilter
+  }, "id_facultad" | "codigo">
+
+  export type FacultadOrderByWithAggregationInput = {
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+    _count?: FacultadCountOrderByAggregateInput
+    _avg?: FacultadAvgOrderByAggregateInput
+    _max?: FacultadMaxOrderByAggregateInput
+    _min?: FacultadMinOrderByAggregateInput
+    _sum?: FacultadSumOrderByAggregateInput
+  }
+
+  export type FacultadScalarWhereWithAggregatesInput = {
+    AND?: FacultadScalarWhereWithAggregatesInput | FacultadScalarWhereWithAggregatesInput[]
+    OR?: FacultadScalarWhereWithAggregatesInput[]
+    NOT?: FacultadScalarWhereWithAggregatesInput | FacultadScalarWhereWithAggregatesInput[]
+    id_facultad?: IntWithAggregatesFilter<"Facultad"> | number
+    codigo?: StringWithAggregatesFilter<"Facultad"> | string
+    nombre?: StringWithAggregatesFilter<"Facultad"> | string
+    activo?: BoolWithAggregatesFilter<"Facultad"> | boolean
+    fecha_creacion?: DateTimeWithAggregatesFilter<"Facultad"> | Date | string
+  }
+
+  export type DepartamentoAcademicoWhereInput = {
+    AND?: DepartamentoAcademicoWhereInput | DepartamentoAcademicoWhereInput[]
+    OR?: DepartamentoAcademicoWhereInput[]
+    NOT?: DepartamentoAcademicoWhereInput | DepartamentoAcademicoWhereInput[]
+    id_departamento?: IntFilter<"DepartamentoAcademico"> | number
+    id_facultad?: IntFilter<"DepartamentoAcademico"> | number
+    codigo?: StringFilter<"DepartamentoAcademico"> | string
+    nombre?: StringFilter<"DepartamentoAcademico"> | string
+    activo?: BoolFilter<"DepartamentoAcademico"> | boolean
+    fecha_creacion?: DateTimeFilter<"DepartamentoAcademico"> | Date | string
+    facultad?: XOR<FacultadScalarRelationFilter, FacultadWhereInput>
+    docentes?: DocenteListRelationFilter
+  }
+
+  export type DepartamentoAcademicoOrderByWithRelationInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+    facultad?: FacultadOrderByWithRelationInput
+    docentes?: DocenteOrderByRelationAggregateInput
+  }
+
+  export type DepartamentoAcademicoWhereUniqueInput = Prisma.AtLeast<{
+    id_departamento?: number
+    codigo?: string
+    AND?: DepartamentoAcademicoWhereInput | DepartamentoAcademicoWhereInput[]
+    OR?: DepartamentoAcademicoWhereInput[]
+    NOT?: DepartamentoAcademicoWhereInput | DepartamentoAcademicoWhereInput[]
+    id_facultad?: IntFilter<"DepartamentoAcademico"> | number
+    nombre?: StringFilter<"DepartamentoAcademico"> | string
+    activo?: BoolFilter<"DepartamentoAcademico"> | boolean
+    fecha_creacion?: DateTimeFilter<"DepartamentoAcademico"> | Date | string
+    facultad?: XOR<FacultadScalarRelationFilter, FacultadWhereInput>
+    docentes?: DocenteListRelationFilter
+  }, "id_departamento" | "codigo">
+
+  export type DepartamentoAcademicoOrderByWithAggregationInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+    _count?: DepartamentoAcademicoCountOrderByAggregateInput
+    _avg?: DepartamentoAcademicoAvgOrderByAggregateInput
+    _max?: DepartamentoAcademicoMaxOrderByAggregateInput
+    _min?: DepartamentoAcademicoMinOrderByAggregateInput
+    _sum?: DepartamentoAcademicoSumOrderByAggregateInput
+  }
+
+  export type DepartamentoAcademicoScalarWhereWithAggregatesInput = {
+    AND?: DepartamentoAcademicoScalarWhereWithAggregatesInput | DepartamentoAcademicoScalarWhereWithAggregatesInput[]
+    OR?: DepartamentoAcademicoScalarWhereWithAggregatesInput[]
+    NOT?: DepartamentoAcademicoScalarWhereWithAggregatesInput | DepartamentoAcademicoScalarWhereWithAggregatesInput[]
+    id_departamento?: IntWithAggregatesFilter<"DepartamentoAcademico"> | number
+    id_facultad?: IntWithAggregatesFilter<"DepartamentoAcademico"> | number
+    codigo?: StringWithAggregatesFilter<"DepartamentoAcademico"> | string
+    nombre?: StringWithAggregatesFilter<"DepartamentoAcademico"> | string
+    activo?: BoolWithAggregatesFilter<"DepartamentoAcademico"> | boolean
+    fecha_creacion?: DateTimeWithAggregatesFilter<"DepartamentoAcademico"> | Date | string
+  }
 
   export type UsuarioWhereInput = {
     AND?: UsuarioWhereInput | UsuarioWhereInput[]
@@ -39779,6 +48069,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioListRelationFilter
     docente?: XOR<DocenteNullableScalarRelationFilter, DocenteWhereInput> | null
     horarios_creados?: HorarioAsignadoListRelationFilter
+    cargas_aprobadas?: CargaAcademicaListRelationFilter
+    historial_carga?: HistorialCargaAcademicaListRelationFilter
   }
 
   export type UsuarioOrderByWithRelationInput = {
@@ -39797,6 +48089,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioOrderByRelationAggregateInput
     docente?: DocenteOrderByWithRelationInput
     horarios_creados?: HorarioAsignadoOrderByRelationAggregateInput
+    cargas_aprobadas?: CargaAcademicaOrderByRelationAggregateInput
+    historial_carga?: HistorialCargaAcademicaOrderByRelationAggregateInput
   }
 
   export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -39818,6 +48112,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioListRelationFilter
     docente?: XOR<DocenteNullableScalarRelationFilter, DocenteWhereInput> | null
     horarios_creados?: HorarioAsignadoListRelationFilter
+    cargas_aprobadas?: CargaAcademicaListRelationFilter
+    historial_carga?: HistorialCargaAcademicaListRelationFilter
   }, "id_usuario" | "codigo" | "correo_electronico">
 
   export type UsuarioOrderByWithAggregationInput = {
@@ -39872,17 +48168,18 @@ export namespace Prisma {
     activo?: BoolFilter<"PeriodoAcademico"> | boolean
     estado?: EnumEstadoPeriodoFilter<"PeriodoAcademico"> | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFilter<"PeriodoAcademico"> | Date | string
+    citaciones_docentes?: CitacionDocenteListRelationFilter
     conflictos?: ConflictoHorarioListRelationFilter
     dias_no_laborables?: DiaNoLaborableListRelationFilter
     disponibilidad_docentes?: DisponibilidadDocenteListRelationFilter
+    fase_disponibilidad?: XOR<FaseDisponibilidadNullableScalarRelationFilter, FaseDisponibilidadWhereInput> | null
     grupos?: GrupoListRelationFilter
     horarios?: HorarioAsignadoListRelationFilter
     preasignaciones?: PreasignacionListRelationFilter
     restricciones_institucionales?: RestriccionInstitucionalListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
     ventanas_atencion?: VentanaAtencionListRelationFilter
-    fase_disponibilidad?: XOR<FaseDisponibilidadNullableScalarRelationFilter, FaseDisponibilidadWhereInput> | null
-    citaciones_docentes?: CitacionDocenteListRelationFilter
+    cargas_academicas?: CargaAcademicaListRelationFilter
   }
 
   export type PeriodoAcademicoOrderByWithRelationInput = {
@@ -39898,17 +48195,18 @@ export namespace Prisma {
     activo?: SortOrder
     estado?: SortOrder
     fecha_creacion?: SortOrder
+    citaciones_docentes?: CitacionDocenteOrderByRelationAggregateInput
     conflictos?: ConflictoHorarioOrderByRelationAggregateInput
     dias_no_laborables?: DiaNoLaborableOrderByRelationAggregateInput
     disponibilidad_docentes?: DisponibilidadDocenteOrderByRelationAggregateInput
+    fase_disponibilidad?: FaseDisponibilidadOrderByWithRelationInput
     grupos?: GrupoOrderByRelationAggregateInput
     horarios?: HorarioAsignadoOrderByRelationAggregateInput
     preasignaciones?: PreasignacionOrderByRelationAggregateInput
     restricciones_institucionales?: RestriccionInstitucionalOrderByRelationAggregateInput
     selecciones_temporales?: SeleccionTemporalHorarioOrderByRelationAggregateInput
     ventanas_atencion?: VentanaAtencionOrderByRelationAggregateInput
-    fase_disponibilidad?: FaseDisponibilidadOrderByWithRelationInput
-    citaciones_docentes?: CitacionDocenteOrderByRelationAggregateInput
+    cargas_academicas?: CargaAcademicaOrderByRelationAggregateInput
   }
 
   export type PeriodoAcademicoWhereUniqueInput = Prisma.AtLeast<{
@@ -39927,17 +48225,18 @@ export namespace Prisma {
     activo?: BoolFilter<"PeriodoAcademico"> | boolean
     estado?: EnumEstadoPeriodoFilter<"PeriodoAcademico"> | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFilter<"PeriodoAcademico"> | Date | string
+    citaciones_docentes?: CitacionDocenteListRelationFilter
     conflictos?: ConflictoHorarioListRelationFilter
     dias_no_laborables?: DiaNoLaborableListRelationFilter
     disponibilidad_docentes?: DisponibilidadDocenteListRelationFilter
+    fase_disponibilidad?: XOR<FaseDisponibilidadNullableScalarRelationFilter, FaseDisponibilidadWhereInput> | null
     grupos?: GrupoListRelationFilter
     horarios?: HorarioAsignadoListRelationFilter
     preasignaciones?: PreasignacionListRelationFilter
     restricciones_institucionales?: RestriccionInstitucionalListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
     ventanas_atencion?: VentanaAtencionListRelationFilter
-    fase_disponibilidad?: XOR<FaseDisponibilidadNullableScalarRelationFilter, FaseDisponibilidadWhereInput> | null
-    citaciones_docentes?: CitacionDocenteListRelationFilter
+    cargas_academicas?: CargaAcademicaListRelationFilter
   }, "id_periodo" | "codigo">
 
   export type PeriodoAcademicoOrderByWithAggregationInput = {
@@ -39984,6 +48283,8 @@ export namespace Prisma {
     NOT?: DocenteWhereInput | DocenteWhereInput[]
     id_docente?: IntFilter<"Docente"> | number
     id_usuario?: IntNullableFilter<"Docente"> | number | null
+    id_facultad?: IntNullableFilter<"Docente"> | number | null
+    id_departamento?: IntNullableFilter<"Docente"> | number | null
     codigo_docente?: StringFilter<"Docente"> | string
     nombres?: StringFilter<"Docente"> | string
     apellidos?: StringFilter<"Docente"> | string
@@ -40006,6 +48307,11 @@ export namespace Prisma {
     foto_perfil?: StringNullableFilter<"Docente"> | string | null
     perfil_completo?: BoolFilter<"Docente"> | boolean
     horas_totales_asignadas?: IntFilter<"Docente"> | number
+    dni_docente?: StringNullableFilter<"Docente"> | string | null
+    tipo_dedicacion_laboral?: EnumTipoDedicacionLaboralNullableFilter<"Docente"> | $Enums.TipoDedicacionLaboral | null
+    facultad?: XOR<FacultadNullableScalarRelationFilter, FacultadWhereInput> | null
+    departamento?: XOR<DepartamentoAcademicoNullableScalarRelationFilter, DepartamentoAcademicoWhereInput> | null
+    citaciones?: CitacionDocenteListRelationFilter
     cola_notificaciones?: ColaNotificacionesListRelationFilter
     conflictos_1?: ConflictoHorarioListRelationFilter
     conflictos_2?: ConflictoHorarioListRelationFilter
@@ -40019,12 +48325,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionListRelationFilter
     preferencias_notificacion?: PreferenciasNotificacionDocenteListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
-    citaciones?: CitacionDocenteListRelationFilter
+    cargas_academicas?: CargaAcademicaListRelationFilter
   }
 
   export type DocenteOrderByWithRelationInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrderInput | SortOrder
+    id_facultad?: SortOrderInput | SortOrder
+    id_departamento?: SortOrderInput | SortOrder
     codigo_docente?: SortOrder
     nombres?: SortOrder
     apellidos?: SortOrder
@@ -40047,6 +48355,11 @@ export namespace Prisma {
     foto_perfil?: SortOrderInput | SortOrder
     perfil_completo?: SortOrder
     horas_totales_asignadas?: SortOrder
+    dni_docente?: SortOrderInput | SortOrder
+    tipo_dedicacion_laboral?: SortOrderInput | SortOrder
+    facultad?: FacultadOrderByWithRelationInput
+    departamento?: DepartamentoAcademicoOrderByWithRelationInput
+    citaciones?: CitacionDocenteOrderByRelationAggregateInput
     cola_notificaciones?: ColaNotificacionesOrderByRelationAggregateInput
     conflictos_1?: ConflictoHorarioOrderByRelationAggregateInput
     conflictos_2?: ConflictoHorarioOrderByRelationAggregateInput
@@ -40060,16 +48373,19 @@ export namespace Prisma {
     preasignaciones?: PreasignacionOrderByRelationAggregateInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteOrderByRelationAggregateInput
     selecciones_temporales?: SeleccionTemporalHorarioOrderByRelationAggregateInput
-    citaciones?: CitacionDocenteOrderByRelationAggregateInput
+    cargas_academicas?: CargaAcademicaOrderByRelationAggregateInput
   }
 
   export type DocenteWhereUniqueInput = Prisma.AtLeast<{
     id_docente?: number
     id_usuario?: number
     codigo_docente?: string
+    dni_docente?: string
     AND?: DocenteWhereInput | DocenteWhereInput[]
     OR?: DocenteWhereInput[]
     NOT?: DocenteWhereInput | DocenteWhereInput[]
+    id_facultad?: IntNullableFilter<"Docente"> | number | null
+    id_departamento?: IntNullableFilter<"Docente"> | number | null
     nombres?: StringFilter<"Docente"> | string
     apellidos?: StringFilter<"Docente"> | string
     modalidad?: EnumTipoModalidadFilter<"Docente"> | $Enums.TipoModalidad
@@ -40091,6 +48407,10 @@ export namespace Prisma {
     foto_perfil?: StringNullableFilter<"Docente"> | string | null
     perfil_completo?: BoolFilter<"Docente"> | boolean
     horas_totales_asignadas?: IntFilter<"Docente"> | number
+    tipo_dedicacion_laboral?: EnumTipoDedicacionLaboralNullableFilter<"Docente"> | $Enums.TipoDedicacionLaboral | null
+    facultad?: XOR<FacultadNullableScalarRelationFilter, FacultadWhereInput> | null
+    departamento?: XOR<DepartamentoAcademicoNullableScalarRelationFilter, DepartamentoAcademicoWhereInput> | null
+    citaciones?: CitacionDocenteListRelationFilter
     cola_notificaciones?: ColaNotificacionesListRelationFilter
     conflictos_1?: ConflictoHorarioListRelationFilter
     conflictos_2?: ConflictoHorarioListRelationFilter
@@ -40104,12 +48424,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionListRelationFilter
     preferencias_notificacion?: PreferenciasNotificacionDocenteListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
-    citaciones?: CitacionDocenteListRelationFilter
-  }, "id_docente" | "id_usuario" | "codigo_docente">
+    cargas_academicas?: CargaAcademicaListRelationFilter
+  }, "id_docente" | "id_usuario" | "codigo_docente" | "dni_docente">
 
   export type DocenteOrderByWithAggregationInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrderInput | SortOrder
+    id_facultad?: SortOrderInput | SortOrder
+    id_departamento?: SortOrderInput | SortOrder
     codigo_docente?: SortOrder
     nombres?: SortOrder
     apellidos?: SortOrder
@@ -40132,6 +48454,8 @@ export namespace Prisma {
     foto_perfil?: SortOrderInput | SortOrder
     perfil_completo?: SortOrder
     horas_totales_asignadas?: SortOrder
+    dni_docente?: SortOrderInput | SortOrder
+    tipo_dedicacion_laboral?: SortOrderInput | SortOrder
     _count?: DocenteCountOrderByAggregateInput
     _avg?: DocenteAvgOrderByAggregateInput
     _max?: DocenteMaxOrderByAggregateInput
@@ -40145,6 +48469,8 @@ export namespace Prisma {
     NOT?: DocenteScalarWhereWithAggregatesInput | DocenteScalarWhereWithAggregatesInput[]
     id_docente?: IntWithAggregatesFilter<"Docente"> | number
     id_usuario?: IntNullableWithAggregatesFilter<"Docente"> | number | null
+    id_facultad?: IntNullableWithAggregatesFilter<"Docente"> | number | null
+    id_departamento?: IntNullableWithAggregatesFilter<"Docente"> | number | null
     codigo_docente?: StringWithAggregatesFilter<"Docente"> | string
     nombres?: StringWithAggregatesFilter<"Docente"> | string
     apellidos?: StringWithAggregatesFilter<"Docente"> | string
@@ -40167,6 +48493,8 @@ export namespace Prisma {
     foto_perfil?: StringNullableWithAggregatesFilter<"Docente"> | string | null
     perfil_completo?: BoolWithAggregatesFilter<"Docente"> | boolean
     horas_totales_asignadas?: IntWithAggregatesFilter<"Docente"> | number
+    dni_docente?: StringNullableWithAggregatesFilter<"Docente"> | string | null
+    tipo_dedicacion_laboral?: EnumTipoDedicacionLaboralNullableWithAggregatesFilter<"Docente"> | $Enums.TipoDedicacionLaboral | null
   }
 
   export type CursoWhereInput = {
@@ -40434,9 +48762,9 @@ export namespace Prisma {
     activo?: BoolFilter<"Grupo"> | boolean
     observaciones?: StringNullableFilter<"Grupo"> | string | null
     fecha_creacion?: DateTimeFilter<"Grupo"> | Date | string
+    docentes?: DocenteGrupoListRelationFilter
     curso?: XOR<CursoScalarRelationFilter, CursoWhereInput>
     periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
-    docentes?: DocenteGrupoListRelationFilter
     horarios?: HorarioAsignadoListRelationFilter
     preasignaciones?: PreasignacionListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
@@ -40452,9 +48780,9 @@ export namespace Prisma {
     activo?: SortOrder
     observaciones?: SortOrderInput | SortOrder
     fecha_creacion?: SortOrder
+    docentes?: DocenteGrupoOrderByRelationAggregateInput
     curso?: CursoOrderByWithRelationInput
     periodo?: PeriodoAcademicoOrderByWithRelationInput
-    docentes?: DocenteGrupoOrderByRelationAggregateInput
     horarios?: HorarioAsignadoOrderByRelationAggregateInput
     preasignaciones?: PreasignacionOrderByRelationAggregateInput
     selecciones_temporales?: SeleccionTemporalHorarioOrderByRelationAggregateInput
@@ -40474,9 +48802,9 @@ export namespace Prisma {
     activo?: BoolFilter<"Grupo"> | boolean
     observaciones?: StringNullableFilter<"Grupo"> | string | null
     fecha_creacion?: DateTimeFilter<"Grupo"> | Date | string
+    docentes?: DocenteGrupoListRelationFilter
     curso?: XOR<CursoScalarRelationFilter, CursoWhereInput>
     periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
-    docentes?: DocenteGrupoListRelationFilter
     horarios?: HorarioAsignadoListRelationFilter
     preasignaciones?: PreasignacionListRelationFilter
     selecciones_temporales?: SeleccionTemporalHorarioListRelationFilter
@@ -40702,9 +49030,9 @@ export namespace Prisma {
     completado?: BoolFilter<"VentanaAtencion"> | boolean
     activo?: BoolFilter<"VentanaAtencion"> | boolean
     fecha_creacion?: DateTimeFilter<"VentanaAtencion"> | Date | string
-    horarios?: HorarioAsignadoListRelationFilter
     citaciones?: CitacionDocenteListRelationFilter
     configuracion_turnos?: XOR<ConfiguracionTurnosAtencionNullableScalarRelationFilter, ConfiguracionTurnosAtencionWhereInput> | null
+    horarios?: HorarioAsignadoListRelationFilter
     periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
   }
 
@@ -40723,9 +49051,9 @@ export namespace Prisma {
     completado?: SortOrder
     activo?: SortOrder
     fecha_creacion?: SortOrder
-    horarios?: HorarioAsignadoOrderByRelationAggregateInput
     citaciones?: CitacionDocenteOrderByRelationAggregateInput
     configuracion_turnos?: ConfiguracionTurnosAtencionOrderByWithRelationInput
+    horarios?: HorarioAsignadoOrderByRelationAggregateInput
     periodo?: PeriodoAcademicoOrderByWithRelationInput
   }
 
@@ -40748,9 +49076,9 @@ export namespace Prisma {
     completado?: BoolFilter<"VentanaAtencion"> | boolean
     activo?: BoolFilter<"VentanaAtencion"> | boolean
     fecha_creacion?: DateTimeFilter<"VentanaAtencion"> | Date | string
-    horarios?: HorarioAsignadoListRelationFilter
     citaciones?: CitacionDocenteListRelationFilter
     configuracion_turnos?: XOR<ConfiguracionTurnosAtencionNullableScalarRelationFilter, ConfiguracionTurnosAtencionWhereInput> | null
+    horarios?: HorarioAsignadoListRelationFilter
     periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
   }, "id_ventana" | "id_periodo_orden_prioridad_modalidad_categoria">
 
@@ -41932,8 +50260,8 @@ export namespace Prisma {
     activo?: BoolFilter<"FaseDisponibilidad"> | boolean
     fecha_creacion?: DateTimeFilter<"FaseDisponibilidad"> | Date | string
     fecha_actualizacion?: DateTimeFilter<"FaseDisponibilidad"> | Date | string
-    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
     registros_disponibilidad?: DisponibilidadDocenteRegistroListRelationFilter
+    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
   }
 
   export type FaseDisponibilidadOrderByWithRelationInput = {
@@ -41947,8 +50275,8 @@ export namespace Prisma {
     activo?: SortOrder
     fecha_creacion?: SortOrder
     fecha_actualizacion?: SortOrder
-    periodo?: PeriodoAcademicoOrderByWithRelationInput
     registros_disponibilidad?: DisponibilidadDocenteRegistroOrderByRelationAggregateInput
+    periodo?: PeriodoAcademicoOrderByWithRelationInput
   }
 
   export type FaseDisponibilidadWhereUniqueInput = Prisma.AtLeast<{
@@ -41965,8 +50293,8 @@ export namespace Prisma {
     activo?: BoolFilter<"FaseDisponibilidad"> | boolean
     fecha_creacion?: DateTimeFilter<"FaseDisponibilidad"> | Date | string
     fecha_actualizacion?: DateTimeFilter<"FaseDisponibilidad"> | Date | string
-    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
     registros_disponibilidad?: DisponibilidadDocenteRegistroListRelationFilter
+    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
   }, "id_fase_disponibilidad" | "id_periodo">
 
   export type FaseDisponibilidadOrderByWithAggregationInput = {
@@ -42443,6 +50771,500 @@ export namespace Prisma {
     fecha_actualizacion?: DateTimeWithAggregatesFilter<"ConfiguracionSistema"> | Date | string
   }
 
+  export type actividad_no_lectiva_docenteWhereInput = {
+    AND?: actividad_no_lectiva_docenteWhereInput | actividad_no_lectiva_docenteWhereInput[]
+    OR?: actividad_no_lectiva_docenteWhereInput[]
+    NOT?: actividad_no_lectiva_docenteWhereInput | actividad_no_lectiva_docenteWhereInput[]
+    id_actividad_no_lectiva?: IntFilter<"actividad_no_lectiva_docente"> | number
+    id_docente?: IntFilter<"actividad_no_lectiva_docente"> | number
+    tipo_actividad?: StringFilter<"actividad_no_lectiva_docente"> | string
+    cantidad_horas?: IntFilter<"actividad_no_lectiva_docente"> | number
+    descripcion?: StringNullableFilter<"actividad_no_lectiva_docente"> | string | null
+    fecha_creacion?: DateTimeNullableFilter<"actividad_no_lectiva_docente"> | Date | string | null
+    fecha_actualizacion?: DateTimeNullableFilter<"actividad_no_lectiva_docente"> | Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteOrderByWithRelationInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    tipo_actividad?: SortOrder
+    cantidad_horas?: SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrderInput | SortOrder
+    fecha_actualizacion?: SortOrderInput | SortOrder
+  }
+
+  export type actividad_no_lectiva_docenteWhereUniqueInput = Prisma.AtLeast<{
+    id_actividad_no_lectiva?: number
+    AND?: actividad_no_lectiva_docenteWhereInput | actividad_no_lectiva_docenteWhereInput[]
+    OR?: actividad_no_lectiva_docenteWhereInput[]
+    NOT?: actividad_no_lectiva_docenteWhereInput | actividad_no_lectiva_docenteWhereInput[]
+    id_docente?: IntFilter<"actividad_no_lectiva_docente"> | number
+    tipo_actividad?: StringFilter<"actividad_no_lectiva_docente"> | string
+    cantidad_horas?: IntFilter<"actividad_no_lectiva_docente"> | number
+    descripcion?: StringNullableFilter<"actividad_no_lectiva_docente"> | string | null
+    fecha_creacion?: DateTimeNullableFilter<"actividad_no_lectiva_docente"> | Date | string | null
+    fecha_actualizacion?: DateTimeNullableFilter<"actividad_no_lectiva_docente"> | Date | string | null
+  }, "id_actividad_no_lectiva">
+
+  export type actividad_no_lectiva_docenteOrderByWithAggregationInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    tipo_actividad?: SortOrder
+    cantidad_horas?: SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrderInput | SortOrder
+    fecha_actualizacion?: SortOrderInput | SortOrder
+    _count?: actividad_no_lectiva_docenteCountOrderByAggregateInput
+    _avg?: actividad_no_lectiva_docenteAvgOrderByAggregateInput
+    _max?: actividad_no_lectiva_docenteMaxOrderByAggregateInput
+    _min?: actividad_no_lectiva_docenteMinOrderByAggregateInput
+    _sum?: actividad_no_lectiva_docenteSumOrderByAggregateInput
+  }
+
+  export type actividad_no_lectiva_docenteScalarWhereWithAggregatesInput = {
+    AND?: actividad_no_lectiva_docenteScalarWhereWithAggregatesInput | actividad_no_lectiva_docenteScalarWhereWithAggregatesInput[]
+    OR?: actividad_no_lectiva_docenteScalarWhereWithAggregatesInput[]
+    NOT?: actividad_no_lectiva_docenteScalarWhereWithAggregatesInput | actividad_no_lectiva_docenteScalarWhereWithAggregatesInput[]
+    id_actividad_no_lectiva?: IntWithAggregatesFilter<"actividad_no_lectiva_docente"> | number
+    id_docente?: IntWithAggregatesFilter<"actividad_no_lectiva_docente"> | number
+    tipo_actividad?: StringWithAggregatesFilter<"actividad_no_lectiva_docente"> | string
+    cantidad_horas?: IntWithAggregatesFilter<"actividad_no_lectiva_docente"> | number
+    descripcion?: StringNullableWithAggregatesFilter<"actividad_no_lectiva_docente"> | string | null
+    fecha_creacion?: DateTimeNullableWithAggregatesFilter<"actividad_no_lectiva_docente"> | Date | string | null
+    fecha_actualizacion?: DateTimeNullableWithAggregatesFilter<"actividad_no_lectiva_docente"> | Date | string | null
+  }
+
+  export type CargaAcademicaWhereInput = {
+    AND?: CargaAcademicaWhereInput | CargaAcademicaWhereInput[]
+    OR?: CargaAcademicaWhereInput[]
+    NOT?: CargaAcademicaWhereInput | CargaAcademicaWhereInput[]
+    id_carga?: IntFilter<"CargaAcademica"> | number
+    id_docente?: IntFilter<"CargaAcademica"> | number
+    id_periodo?: IntFilter<"CargaAcademica"> | number
+    estado?: EnumEstadoCargaAcademicaFilter<"CargaAcademica"> | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_no_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_preparacion?: IntFilter<"CargaAcademica"> | number
+    horas_totales?: IntFilter<"CargaAcademica"> | number
+    horas_meta?: IntFilter<"CargaAcademica"> | number
+    observaciones?: StringNullableFilter<"CargaAcademica"> | string | null
+    observaciones_generales?: StringNullableFilter<"CargaAcademica"> | string | null
+    fecha_envio?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    fecha_aprobacion?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    aprobado_por?: IntNullableFilter<"CargaAcademica"> | number | null
+    fecha_creacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+    docente?: XOR<DocenteScalarRelationFilter, DocenteWhereInput>
+    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
+    usuario_aprobador?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+    actividades_no_lectivas?: ActividadNoLectivaListRelationFilter
+    historial?: HistorialCargaAcademicaListRelationFilter
+  }
+
+  export type CargaAcademicaOrderByWithRelationInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    estado?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    observaciones_generales?: SortOrderInput | SortOrder
+    fecha_envio?: SortOrderInput | SortOrder
+    fecha_aprobacion?: SortOrderInput | SortOrder
+    aprobado_por?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+    docente?: DocenteOrderByWithRelationInput
+    periodo?: PeriodoAcademicoOrderByWithRelationInput
+    usuario_aprobador?: UsuarioOrderByWithRelationInput
+    actividades_no_lectivas?: ActividadNoLectivaOrderByRelationAggregateInput
+    historial?: HistorialCargaAcademicaOrderByRelationAggregateInput
+  }
+
+  export type CargaAcademicaWhereUniqueInput = Prisma.AtLeast<{
+    id_carga?: number
+    AND?: CargaAcademicaWhereInput | CargaAcademicaWhereInput[]
+    OR?: CargaAcademicaWhereInput[]
+    NOT?: CargaAcademicaWhereInput | CargaAcademicaWhereInput[]
+    id_docente?: IntFilter<"CargaAcademica"> | number
+    id_periodo?: IntFilter<"CargaAcademica"> | number
+    estado?: EnumEstadoCargaAcademicaFilter<"CargaAcademica"> | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_no_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_preparacion?: IntFilter<"CargaAcademica"> | number
+    horas_totales?: IntFilter<"CargaAcademica"> | number
+    horas_meta?: IntFilter<"CargaAcademica"> | number
+    observaciones?: StringNullableFilter<"CargaAcademica"> | string | null
+    observaciones_generales?: StringNullableFilter<"CargaAcademica"> | string | null
+    fecha_envio?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    fecha_aprobacion?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    aprobado_por?: IntNullableFilter<"CargaAcademica"> | number | null
+    fecha_creacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+    docente?: XOR<DocenteScalarRelationFilter, DocenteWhereInput>
+    periodo?: XOR<PeriodoAcademicoScalarRelationFilter, PeriodoAcademicoWhereInput>
+    usuario_aprobador?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+    actividades_no_lectivas?: ActividadNoLectivaListRelationFilter
+    historial?: HistorialCargaAcademicaListRelationFilter
+  }, "id_carga">
+
+  export type CargaAcademicaOrderByWithAggregationInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    estado?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    observaciones_generales?: SortOrderInput | SortOrder
+    fecha_envio?: SortOrderInput | SortOrder
+    fecha_aprobacion?: SortOrderInput | SortOrder
+    aprobado_por?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+    _count?: CargaAcademicaCountOrderByAggregateInput
+    _avg?: CargaAcademicaAvgOrderByAggregateInput
+    _max?: CargaAcademicaMaxOrderByAggregateInput
+    _min?: CargaAcademicaMinOrderByAggregateInput
+    _sum?: CargaAcademicaSumOrderByAggregateInput
+  }
+
+  export type CargaAcademicaScalarWhereWithAggregatesInput = {
+    AND?: CargaAcademicaScalarWhereWithAggregatesInput | CargaAcademicaScalarWhereWithAggregatesInput[]
+    OR?: CargaAcademicaScalarWhereWithAggregatesInput[]
+    NOT?: CargaAcademicaScalarWhereWithAggregatesInput | CargaAcademicaScalarWhereWithAggregatesInput[]
+    id_carga?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    id_docente?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    id_periodo?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    estado?: EnumEstadoCargaAcademicaWithAggregatesFilter<"CargaAcademica"> | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    horas_no_lectivas?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    horas_preparacion?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    horas_totales?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    horas_meta?: IntWithAggregatesFilter<"CargaAcademica"> | number
+    observaciones?: StringNullableWithAggregatesFilter<"CargaAcademica"> | string | null
+    observaciones_generales?: StringNullableWithAggregatesFilter<"CargaAcademica"> | string | null
+    fecha_envio?: DateTimeNullableWithAggregatesFilter<"CargaAcademica"> | Date | string | null
+    fecha_aprobacion?: DateTimeNullableWithAggregatesFilter<"CargaAcademica"> | Date | string | null
+    aprobado_por?: IntNullableWithAggregatesFilter<"CargaAcademica"> | number | null
+    fecha_creacion?: DateTimeWithAggregatesFilter<"CargaAcademica"> | Date | string
+    fecha_actualizacion?: DateTimeWithAggregatesFilter<"CargaAcademica"> | Date | string
+  }
+
+  export type ActividadNoLectivaWhereInput = {
+    AND?: ActividadNoLectivaWhereInput | ActividadNoLectivaWhereInput[]
+    OR?: ActividadNoLectivaWhereInput[]
+    NOT?: ActividadNoLectivaWhereInput | ActividadNoLectivaWhereInput[]
+    id_actividad?: IntFilter<"ActividadNoLectiva"> | number
+    id_carga?: IntFilter<"ActividadNoLectiva"> | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFilter<"ActividadNoLectiva"> | $Enums.TipoActividadNoLectiva
+    nombre?: StringFilter<"ActividadNoLectiva"> | string
+    descripcion?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    horas_semanales?: IntFilter<"ActividadNoLectiva"> | number
+    horas_asignadas?: IntFilter<"ActividadNoLectiva"> | number
+    dias_semana?: JsonNullableFilter<"ActividadNoLectiva">
+    fecha_inicio?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    fecha_fin?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    datos_adicionales?: JsonNullableFilter<"ActividadNoLectiva">
+    datos_sustento?: JsonNullableFilter<"ActividadNoLectiva">
+    horarios_actividad?: JsonNullableFilter<"ActividadNoLectiva">
+    observaciones?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    fecha_creacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+    carga_academica?: XOR<CargaAcademicaScalarRelationFilter, CargaAcademicaWhereInput>
+  }
+
+  export type ActividadNoLectivaOrderByWithRelationInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    tipo_actividad?: SortOrder
+    nombre?: SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+    dias_semana?: SortOrderInput | SortOrder
+    fecha_inicio?: SortOrderInput | SortOrder
+    fecha_fin?: SortOrderInput | SortOrder
+    datos_adicionales?: SortOrderInput | SortOrder
+    datos_sustento?: SortOrderInput | SortOrder
+    horarios_actividad?: SortOrderInput | SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+    carga_academica?: CargaAcademicaOrderByWithRelationInput
+  }
+
+  export type ActividadNoLectivaWhereUniqueInput = Prisma.AtLeast<{
+    id_actividad?: number
+    AND?: ActividadNoLectivaWhereInput | ActividadNoLectivaWhereInput[]
+    OR?: ActividadNoLectivaWhereInput[]
+    NOT?: ActividadNoLectivaWhereInput | ActividadNoLectivaWhereInput[]
+    id_carga?: IntFilter<"ActividadNoLectiva"> | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFilter<"ActividadNoLectiva"> | $Enums.TipoActividadNoLectiva
+    nombre?: StringFilter<"ActividadNoLectiva"> | string
+    descripcion?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    horas_semanales?: IntFilter<"ActividadNoLectiva"> | number
+    horas_asignadas?: IntFilter<"ActividadNoLectiva"> | number
+    dias_semana?: JsonNullableFilter<"ActividadNoLectiva">
+    fecha_inicio?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    fecha_fin?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    datos_adicionales?: JsonNullableFilter<"ActividadNoLectiva">
+    datos_sustento?: JsonNullableFilter<"ActividadNoLectiva">
+    horarios_actividad?: JsonNullableFilter<"ActividadNoLectiva">
+    observaciones?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    fecha_creacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+    carga_academica?: XOR<CargaAcademicaScalarRelationFilter, CargaAcademicaWhereInput>
+  }, "id_actividad">
+
+  export type ActividadNoLectivaOrderByWithAggregationInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    tipo_actividad?: SortOrder
+    nombre?: SortOrder
+    descripcion?: SortOrderInput | SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+    dias_semana?: SortOrderInput | SortOrder
+    fecha_inicio?: SortOrderInput | SortOrder
+    fecha_fin?: SortOrderInput | SortOrder
+    datos_adicionales?: SortOrderInput | SortOrder
+    datos_sustento?: SortOrderInput | SortOrder
+    horarios_actividad?: SortOrderInput | SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+    _count?: ActividadNoLectivaCountOrderByAggregateInput
+    _avg?: ActividadNoLectivaAvgOrderByAggregateInput
+    _max?: ActividadNoLectivaMaxOrderByAggregateInput
+    _min?: ActividadNoLectivaMinOrderByAggregateInput
+    _sum?: ActividadNoLectivaSumOrderByAggregateInput
+  }
+
+  export type ActividadNoLectivaScalarWhereWithAggregatesInput = {
+    AND?: ActividadNoLectivaScalarWhereWithAggregatesInput | ActividadNoLectivaScalarWhereWithAggregatesInput[]
+    OR?: ActividadNoLectivaScalarWhereWithAggregatesInput[]
+    NOT?: ActividadNoLectivaScalarWhereWithAggregatesInput | ActividadNoLectivaScalarWhereWithAggregatesInput[]
+    id_actividad?: IntWithAggregatesFilter<"ActividadNoLectiva"> | number
+    id_carga?: IntWithAggregatesFilter<"ActividadNoLectiva"> | number
+    tipo_actividad?: EnumTipoActividadNoLectivaWithAggregatesFilter<"ActividadNoLectiva"> | $Enums.TipoActividadNoLectiva
+    nombre?: StringWithAggregatesFilter<"ActividadNoLectiva"> | string
+    descripcion?: StringNullableWithAggregatesFilter<"ActividadNoLectiva"> | string | null
+    horas_semanales?: IntWithAggregatesFilter<"ActividadNoLectiva"> | number
+    horas_asignadas?: IntWithAggregatesFilter<"ActividadNoLectiva"> | number
+    dias_semana?: JsonNullableWithAggregatesFilter<"ActividadNoLectiva">
+    fecha_inicio?: DateTimeNullableWithAggregatesFilter<"ActividadNoLectiva"> | Date | string | null
+    fecha_fin?: DateTimeNullableWithAggregatesFilter<"ActividadNoLectiva"> | Date | string | null
+    datos_adicionales?: JsonNullableWithAggregatesFilter<"ActividadNoLectiva">
+    datos_sustento?: JsonNullableWithAggregatesFilter<"ActividadNoLectiva">
+    horarios_actividad?: JsonNullableWithAggregatesFilter<"ActividadNoLectiva">
+    observaciones?: StringNullableWithAggregatesFilter<"ActividadNoLectiva"> | string | null
+    fecha_creacion?: DateTimeWithAggregatesFilter<"ActividadNoLectiva"> | Date | string
+    fecha_actualizacion?: DateTimeWithAggregatesFilter<"ActividadNoLectiva"> | Date | string
+  }
+
+  export type HistorialCargaAcademicaWhereInput = {
+    AND?: HistorialCargaAcademicaWhereInput | HistorialCargaAcademicaWhereInput[]
+    OR?: HistorialCargaAcademicaWhereInput[]
+    NOT?: HistorialCargaAcademicaWhereInput | HistorialCargaAcademicaWhereInput[]
+    id_historial?: IntFilter<"HistorialCargaAcademica"> | number
+    id_carga?: IntFilter<"HistorialCargaAcademica"> | number
+    id_usuario?: IntFilter<"HistorialCargaAcademica"> | number
+    estado_anterior?: EnumEstadoCargaAcademicaNullableFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica
+    observaciones?: StringNullableFilter<"HistorialCargaAcademica"> | string | null
+    fecha_creacion?: DateTimeFilter<"HistorialCargaAcademica"> | Date | string
+    carga_academica?: XOR<CargaAcademicaScalarRelationFilter, CargaAcademicaWhereInput>
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }
+
+  export type HistorialCargaAcademicaOrderByWithRelationInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+    estado_anterior?: SortOrderInput | SortOrder
+    estado_nuevo?: SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    carga_academica?: CargaAcademicaOrderByWithRelationInput
+    usuario?: UsuarioOrderByWithRelationInput
+  }
+
+  export type HistorialCargaAcademicaWhereUniqueInput = Prisma.AtLeast<{
+    id_historial?: number
+    AND?: HistorialCargaAcademicaWhereInput | HistorialCargaAcademicaWhereInput[]
+    OR?: HistorialCargaAcademicaWhereInput[]
+    NOT?: HistorialCargaAcademicaWhereInput | HistorialCargaAcademicaWhereInput[]
+    id_carga?: IntFilter<"HistorialCargaAcademica"> | number
+    id_usuario?: IntFilter<"HistorialCargaAcademica"> | number
+    estado_anterior?: EnumEstadoCargaAcademicaNullableFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica
+    observaciones?: StringNullableFilter<"HistorialCargaAcademica"> | string | null
+    fecha_creacion?: DateTimeFilter<"HistorialCargaAcademica"> | Date | string
+    carga_academica?: XOR<CargaAcademicaScalarRelationFilter, CargaAcademicaWhereInput>
+    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
+  }, "id_historial">
+
+  export type HistorialCargaAcademicaOrderByWithAggregationInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+    estado_anterior?: SortOrderInput | SortOrder
+    estado_nuevo?: SortOrder
+    observaciones?: SortOrderInput | SortOrder
+    fecha_creacion?: SortOrder
+    _count?: HistorialCargaAcademicaCountOrderByAggregateInput
+    _avg?: HistorialCargaAcademicaAvgOrderByAggregateInput
+    _max?: HistorialCargaAcademicaMaxOrderByAggregateInput
+    _min?: HistorialCargaAcademicaMinOrderByAggregateInput
+    _sum?: HistorialCargaAcademicaSumOrderByAggregateInput
+  }
+
+  export type HistorialCargaAcademicaScalarWhereWithAggregatesInput = {
+    AND?: HistorialCargaAcademicaScalarWhereWithAggregatesInput | HistorialCargaAcademicaScalarWhereWithAggregatesInput[]
+    OR?: HistorialCargaAcademicaScalarWhereWithAggregatesInput[]
+    NOT?: HistorialCargaAcademicaScalarWhereWithAggregatesInput | HistorialCargaAcademicaScalarWhereWithAggregatesInput[]
+    id_historial?: IntWithAggregatesFilter<"HistorialCargaAcademica"> | number
+    id_carga?: IntWithAggregatesFilter<"HistorialCargaAcademica"> | number
+    id_usuario?: IntWithAggregatesFilter<"HistorialCargaAcademica"> | number
+    estado_anterior?: EnumEstadoCargaAcademicaNullableWithAggregatesFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaWithAggregatesFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica
+    observaciones?: StringNullableWithAggregatesFilter<"HistorialCargaAcademica"> | string | null
+    fecha_creacion?: DateTimeWithAggregatesFilter<"HistorialCargaAcademica"> | Date | string
+  }
+
+  export type FacultadCreateInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    departamentos?: DepartamentoAcademicoCreateNestedManyWithoutFacultadInput
+    docentes?: DocenteCreateNestedManyWithoutFacultadInput
+  }
+
+  export type FacultadUncheckedCreateInput = {
+    id_facultad?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    departamentos?: DepartamentoAcademicoUncheckedCreateNestedManyWithoutFacultadInput
+    docentes?: DocenteUncheckedCreateNestedManyWithoutFacultadInput
+  }
+
+  export type FacultadUpdateInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    departamentos?: DepartamentoAcademicoUpdateManyWithoutFacultadNestedInput
+    docentes?: DocenteUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type FacultadUncheckedUpdateInput = {
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    departamentos?: DepartamentoAcademicoUncheckedUpdateManyWithoutFacultadNestedInput
+    docentes?: DocenteUncheckedUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type FacultadCreateManyInput = {
+    id_facultad?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+  }
+
+  export type FacultadUpdateManyMutationInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacultadUncheckedUpdateManyInput = {
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DepartamentoAcademicoCreateInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    facultad: FacultadCreateNestedOneWithoutDepartamentosInput
+    docentes?: DocenteCreateNestedManyWithoutDepartamentoInput
+  }
+
+  export type DepartamentoAcademicoUncheckedCreateInput = {
+    id_departamento?: number
+    id_facultad: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    docentes?: DocenteUncheckedCreateNestedManyWithoutDepartamentoInput
+  }
+
+  export type DepartamentoAcademicoUpdateInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    facultad?: FacultadUpdateOneRequiredWithoutDepartamentosNestedInput
+    docentes?: DocenteUpdateManyWithoutDepartamentoNestedInput
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateInput = {
+    id_departamento?: IntFieldUpdateOperationsInput | number
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteUncheckedUpdateManyWithoutDepartamentoNestedInput
+  }
+
+  export type DepartamentoAcademicoCreateManyInput = {
+    id_departamento?: number
+    id_facultad: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+  }
+
+  export type DepartamentoAcademicoUpdateManyMutationInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateManyInput = {
+    id_departamento?: IntFieldUpdateOperationsInput | number
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UsuarioCreateInput = {
     codigo: string
     nombres: string
@@ -42458,6 +51280,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateInput = {
@@ -42476,6 +51300,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUpdateInput = {
@@ -42493,6 +51319,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateInput = {
@@ -42511,6 +51339,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioCreateManyInput = {
@@ -42566,17 +51396,18 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateInput = {
@@ -42592,17 +51423,18 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUpdateInput = {
@@ -42617,17 +51449,18 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateInput = {
@@ -42643,17 +51476,18 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoCreateManyInput = {
@@ -42723,6 +51557,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -42736,12 +51575,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -42764,6 +51605,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -42776,7 +51620,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUpdateInput = {
@@ -42802,6 +51646,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -42815,12 +51664,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -42843,6 +51694,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -42855,12 +51709,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteCreateManyInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -42883,6 +51739,8 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
   }
 
   export type DocenteUpdateManyMutationInput = {
@@ -42908,11 +51766,15 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
   }
 
   export type DocenteUncheckedUpdateManyInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -42935,6 +51797,8 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
   }
 
   export type CursoCreateInput = {
@@ -43204,9 +52068,9 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
+    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     curso: CursoCreateNestedOneWithoutGruposInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
-    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutGrupoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutGrupoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutGrupoInput
@@ -43235,9 +52099,9 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
-    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutGrupoNestedInput
@@ -43485,9 +52349,9 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutVentanas_atencionInput
   }
 
@@ -43506,9 +52370,9 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
   }
 
   export type VentanaAtencionUpdateInput = {
@@ -43524,9 +52388,9 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutVentanas_atencionNestedInput
   }
 
@@ -43545,9 +52409,9 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUncheckedUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
   }
 
   export type VentanaAtencionCreateManyInput = {
@@ -44734,8 +53598,8 @@ export namespace Prisma {
     activo?: boolean
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
-    periodo: PeriodoAcademicoCreateNestedOneWithoutFase_disponibilidadInput
     registros_disponibilidad?: DisponibilidadDocenteRegistroCreateNestedManyWithoutFaseInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutFase_disponibilidadInput
   }
 
   export type FaseDisponibilidadUncheckedCreateInput = {
@@ -44761,8 +53625,8 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutFase_disponibilidadNestedInput
     registros_disponibilidad?: DisponibilidadDocenteRegistroUpdateManyWithoutFaseNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutFase_disponibilidadNestedInput
   }
 
   export type FaseDisponibilidadUncheckedUpdateInput = {
@@ -45285,6 +54149,402 @@ export namespace Prisma {
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type actividad_no_lectiva_docenteCreateInput = {
+    id_docente: number
+    tipo_actividad: string
+    cantidad_horas: number
+    descripcion?: string | null
+    fecha_creacion?: Date | string | null
+    fecha_actualizacion?: Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteUncheckedCreateInput = {
+    id_actividad_no_lectiva?: number
+    id_docente: number
+    tipo_actividad: string
+    cantidad_horas: number
+    descripcion?: string | null
+    fecha_creacion?: Date | string | null
+    fecha_actualizacion?: Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteUpdateInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: StringFieldUpdateOperationsInput | string
+    cantidad_horas?: IntFieldUpdateOperationsInput | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_actualizacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteUncheckedUpdateInput = {
+    id_actividad_no_lectiva?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: StringFieldUpdateOperationsInput | string
+    cantidad_horas?: IntFieldUpdateOperationsInput | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_actualizacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteCreateManyInput = {
+    id_actividad_no_lectiva?: number
+    id_docente: number
+    tipo_actividad: string
+    cantidad_horas: number
+    descripcion?: string | null
+    fecha_creacion?: Date | string | null
+    fecha_actualizacion?: Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteUpdateManyMutationInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: StringFieldUpdateOperationsInput | string
+    cantidad_horas?: IntFieldUpdateOperationsInput | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_actualizacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type actividad_no_lectiva_docenteUncheckedUpdateManyInput = {
+    id_actividad_no_lectiva?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: StringFieldUpdateOperationsInput | string
+    cantidad_horas?: IntFieldUpdateOperationsInput | number
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_actualizacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CargaAcademicaCreateInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutCargas_academicasInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput
+    usuario_aprobador?: UsuarioCreateNestedOneWithoutCargas_aprobadasInput
+    actividades_no_lectivas?: ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaUncheckedCreateInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaUpdateInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docente?: DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput
+    usuario_aprobador?: UsuarioUpdateOneWithoutCargas_aprobadasNestedInput
+    actividades_no_lectivas?: ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaCreateManyInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type CargaAcademicaUpdateManyMutationInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CargaAcademicaUncheckedUpdateManyInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaCreateInput = {
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    carga_academica: CargaAcademicaCreateNestedOneWithoutActividades_no_lectivasInput
+  }
+
+  export type ActividadNoLectivaUncheckedCreateInput = {
+    id_actividad?: number
+    id_carga: number
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type ActividadNoLectivaUpdateInput = {
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    carga_academica?: CargaAcademicaUpdateOneRequiredWithoutActividades_no_lectivasNestedInput
+  }
+
+  export type ActividadNoLectivaUncheckedUpdateInput = {
+    id_actividad?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaCreateManyInput = {
+    id_actividad?: number
+    id_carga: number
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type ActividadNoLectivaUpdateManyMutationInput = {
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaUncheckedUpdateManyInput = {
+    id_actividad?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateInput = {
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    carga_academica: CargaAcademicaCreateNestedOneWithoutHistorialInput
+    usuario: UsuarioCreateNestedOneWithoutHistorial_cargaInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedCreateInput = {
+    id_historial?: number
+    id_carga: number
+    id_usuario: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaUpdateInput = {
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    carga_academica?: CargaAcademicaUpdateOneRequiredWithoutHistorialNestedInput
+    usuario?: UsuarioUpdateOneRequiredWithoutHistorial_cargaNestedInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateManyInput = {
+    id_historial?: number
+    id_carga: number
+    id_usuario: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaUpdateManyMutationInput = {
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateManyInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -45311,6 +54571,172 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type DepartamentoAcademicoListRelationFilter = {
+    every?: DepartamentoAcademicoWhereInput
+    some?: DepartamentoAcademicoWhereInput
+    none?: DepartamentoAcademicoWhereInput
+  }
+
+  export type DocenteListRelationFilter = {
+    every?: DocenteWhereInput
+    some?: DocenteWhereInput
+    none?: DocenteWhereInput
+  }
+
+  export type DepartamentoAcademicoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DocenteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacultadCountOrderByAggregateInput = {
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type FacultadAvgOrderByAggregateInput = {
+    id_facultad?: SortOrder
+  }
+
+  export type FacultadMaxOrderByAggregateInput = {
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type FacultadMinOrderByAggregateInput = {
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type FacultadSumOrderByAggregateInput = {
+    id_facultad?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type FacultadScalarRelationFilter = {
+    is?: FacultadWhereInput
+    isNot?: FacultadWhereInput
+  }
+
+  export type DepartamentoAcademicoCountOrderByAggregateInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type DepartamentoAcademicoAvgOrderByAggregateInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+  }
+
+  export type DepartamentoAcademicoMaxOrderByAggregateInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type DepartamentoAcademicoMinOrderByAggregateInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+    codigo?: SortOrder
+    nombre?: SortOrder
+    activo?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type DepartamentoAcademicoSumOrderByAggregateInput = {
+    id_departamento?: SortOrder
+    id_facultad?: SortOrder
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -45333,11 +54759,6 @@ export namespace Prisma {
     not?: NestedEnumTipoRolFilter<$PrismaModel> | $Enums.TipoRol
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -45347,17 +54768,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type AuditoriaHorarioListRelationFilter = {
@@ -45383,6 +54793,18 @@ export namespace Prisma {
     none?: HorarioAsignadoWhereInput
   }
 
+  export type CargaAcademicaListRelationFilter = {
+    every?: CargaAcademicaWhereInput
+    some?: CargaAcademicaWhereInput
+    none?: CargaAcademicaWhereInput
+  }
+
+  export type HistorialCargaAcademicaListRelationFilter = {
+    every?: HistorialCargaAcademicaWhereInput
+    some?: HistorialCargaAcademicaWhereInput
+    none?: HistorialCargaAcademicaWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -45397,6 +54819,14 @@ export namespace Prisma {
   }
 
   export type HorarioAsignadoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CargaAcademicaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type HistorialCargaAcademicaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -45450,40 +54880,6 @@ export namespace Prisma {
     id_usuario?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -45512,14 +54908,6 @@ export namespace Prisma {
     _max?: NestedEnumTipoRolFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -45534,25 +54922,17 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type EnumEstadoPeriodoFilter<$PrismaModel = never> = {
     equals?: $Enums.EstadoPeriodo | EnumEstadoPeriodoFieldRefInput<$PrismaModel>
     in?: $Enums.EstadoPeriodo[] | ListEnumEstadoPeriodoFieldRefInput<$PrismaModel>
     notIn?: $Enums.EstadoPeriodo[] | ListEnumEstadoPeriodoFieldRefInput<$PrismaModel>
     not?: NestedEnumEstadoPeriodoFilter<$PrismaModel> | $Enums.EstadoPeriodo
+  }
+
+  export type CitacionDocenteListRelationFilter = {
+    every?: CitacionDocenteWhereInput
+    some?: CitacionDocenteWhereInput
+    none?: CitacionDocenteWhereInput
   }
 
   export type DiaNoLaborableListRelationFilter = {
@@ -45565,6 +54945,11 @@ export namespace Prisma {
     every?: DisponibilidadDocenteWhereInput
     some?: DisponibilidadDocenteWhereInput
     none?: DisponibilidadDocenteWhereInput
+  }
+
+  export type FaseDisponibilidadNullableScalarRelationFilter = {
+    is?: FaseDisponibilidadWhereInput | null
+    isNot?: FaseDisponibilidadWhereInput | null
   }
 
   export type GrupoListRelationFilter = {
@@ -45597,15 +54982,8 @@ export namespace Prisma {
     none?: VentanaAtencionWhereInput
   }
 
-  export type FaseDisponibilidadNullableScalarRelationFilter = {
-    is?: FaseDisponibilidadWhereInput | null
-    isNot?: FaseDisponibilidadWhereInput | null
-  }
-
-  export type CitacionDocenteListRelationFilter = {
-    every?: CitacionDocenteWhereInput
-    some?: CitacionDocenteWhereInput
-    none?: CitacionDocenteWhereInput
+  export type CitacionDocenteOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type DiaNoLaborableOrderByRelationAggregateInput = {
@@ -45633,10 +55011,6 @@ export namespace Prisma {
   }
 
   export type VentanaAtencionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type CitacionDocenteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -45739,6 +55113,23 @@ export namespace Prisma {
     not?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel> | $Enums.TipoDedicacion | null
   }
 
+  export type EnumTipoDedicacionLaboralNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoDedicacionLaboral | EnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel> | $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type FacultadNullableScalarRelationFilter = {
+    is?: FacultadWhereInput | null
+    isNot?: FacultadWhereInput | null
+  }
+
+  export type DepartamentoAcademicoNullableScalarRelationFilter = {
+    is?: DepartamentoAcademicoWhereInput | null
+    isNot?: DepartamentoAcademicoWhereInput | null
+  }
+
   export type ColaNotificacionesListRelationFilter = {
     every?: ColaNotificacionesWhereInput
     some?: ColaNotificacionesWhereInput
@@ -45807,6 +55198,8 @@ export namespace Prisma {
   export type DocenteCountOrderByAggregateInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrder
+    id_facultad?: SortOrder
+    id_departamento?: SortOrder
     codigo_docente?: SortOrder
     nombres?: SortOrder
     apellidos?: SortOrder
@@ -45829,11 +55222,15 @@ export namespace Prisma {
     foto_perfil?: SortOrder
     perfil_completo?: SortOrder
     horas_totales_asignadas?: SortOrder
+    dni_docente?: SortOrder
+    tipo_dedicacion_laboral?: SortOrder
   }
 
   export type DocenteAvgOrderByAggregateInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrder
+    id_facultad?: SortOrder
+    id_departamento?: SortOrder
     antiguedad?: SortOrder
     horas_maximas_semanales?: SortOrder
     horas_totales_asignadas?: SortOrder
@@ -45842,6 +55239,8 @@ export namespace Prisma {
   export type DocenteMaxOrderByAggregateInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrder
+    id_facultad?: SortOrder
+    id_departamento?: SortOrder
     codigo_docente?: SortOrder
     nombres?: SortOrder
     apellidos?: SortOrder
@@ -45864,11 +55263,15 @@ export namespace Prisma {
     foto_perfil?: SortOrder
     perfil_completo?: SortOrder
     horas_totales_asignadas?: SortOrder
+    dni_docente?: SortOrder
+    tipo_dedicacion_laboral?: SortOrder
   }
 
   export type DocenteMinOrderByAggregateInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrder
+    id_facultad?: SortOrder
+    id_departamento?: SortOrder
     codigo_docente?: SortOrder
     nombres?: SortOrder
     apellidos?: SortOrder
@@ -45891,11 +55294,15 @@ export namespace Prisma {
     foto_perfil?: SortOrder
     perfil_completo?: SortOrder
     horas_totales_asignadas?: SortOrder
+    dni_docente?: SortOrder
+    tipo_dedicacion_laboral?: SortOrder
   }
 
   export type DocenteSumOrderByAggregateInput = {
     id_docente?: SortOrder
     id_usuario?: SortOrder
+    id_facultad?: SortOrder
+    id_departamento?: SortOrder
     antiguedad?: SortOrder
     horas_maximas_semanales?: SortOrder
     horas_totales_asignadas?: SortOrder
@@ -45945,6 +55352,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel>
     _max?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTipoDedicacionLaboralNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoDedicacionLaboral | EnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTipoDedicacionLaboralNullableWithAggregatesFilter<$PrismaModel> | $Enums.TipoDedicacionLaboral | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel>
+    _max?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel>
   }
 
   export type CursoAmbienteListRelationFilter = {
@@ -47788,6 +57205,460 @@ export namespace Prisma {
     min_horas_entre_clases?: SortOrder
   }
 
+  export type actividad_no_lectiva_docenteCountOrderByAggregateInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    tipo_actividad?: SortOrder
+    cantidad_horas?: SortOrder
+    descripcion?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type actividad_no_lectiva_docenteAvgOrderByAggregateInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    cantidad_horas?: SortOrder
+  }
+
+  export type actividad_no_lectiva_docenteMaxOrderByAggregateInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    tipo_actividad?: SortOrder
+    cantidad_horas?: SortOrder
+    descripcion?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type actividad_no_lectiva_docenteMinOrderByAggregateInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    tipo_actividad?: SortOrder
+    cantidad_horas?: SortOrder
+    descripcion?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type actividad_no_lectiva_docenteSumOrderByAggregateInput = {
+    id_actividad_no_lectiva?: SortOrder
+    id_docente?: SortOrder
+    cantidad_horas?: SortOrder
+  }
+
+  export type EnumEstadoCargaAcademicaFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    not?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel> | $Enums.EstadoCargaAcademica
+  }
+
+  export type ActividadNoLectivaListRelationFilter = {
+    every?: ActividadNoLectivaWhereInput
+    some?: ActividadNoLectivaWhereInput
+    none?: ActividadNoLectivaWhereInput
+  }
+
+  export type ActividadNoLectivaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CargaAcademicaCountOrderByAggregateInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    estado?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    observaciones?: SortOrder
+    observaciones_generales?: SortOrder
+    fecha_envio?: SortOrder
+    fecha_aprobacion?: SortOrder
+    aprobado_por?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type CargaAcademicaAvgOrderByAggregateInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    aprobado_por?: SortOrder
+  }
+
+  export type CargaAcademicaMaxOrderByAggregateInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    estado?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    observaciones?: SortOrder
+    observaciones_generales?: SortOrder
+    fecha_envio?: SortOrder
+    fecha_aprobacion?: SortOrder
+    aprobado_por?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type CargaAcademicaMinOrderByAggregateInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    estado?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    observaciones?: SortOrder
+    observaciones_generales?: SortOrder
+    fecha_envio?: SortOrder
+    fecha_aprobacion?: SortOrder
+    aprobado_por?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type CargaAcademicaSumOrderByAggregateInput = {
+    id_carga?: SortOrder
+    id_docente?: SortOrder
+    id_periodo?: SortOrder
+    horas_lectivas?: SortOrder
+    horas_no_lectivas?: SortOrder
+    horas_preparacion?: SortOrder
+    horas_totales?: SortOrder
+    horas_meta?: SortOrder
+    aprobado_por?: SortOrder
+  }
+
+  export type EnumEstadoCargaAcademicaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    not?: NestedEnumEstadoCargaAcademicaWithAggregatesFilter<$PrismaModel> | $Enums.EstadoCargaAcademica
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel>
+    _max?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel>
+  }
+
+  export type EnumTipoActividadNoLectivaFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoActividadNoLectiva | EnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel> | $Enums.TipoActividadNoLectiva
+  }
+
+  export type CargaAcademicaScalarRelationFilter = {
+    is?: CargaAcademicaWhereInput
+    isNot?: CargaAcademicaWhereInput
+  }
+
+  export type ActividadNoLectivaCountOrderByAggregateInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    tipo_actividad?: SortOrder
+    nombre?: SortOrder
+    descripcion?: SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+    dias_semana?: SortOrder
+    fecha_inicio?: SortOrder
+    fecha_fin?: SortOrder
+    datos_adicionales?: SortOrder
+    datos_sustento?: SortOrder
+    horarios_actividad?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type ActividadNoLectivaAvgOrderByAggregateInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+  }
+
+  export type ActividadNoLectivaMaxOrderByAggregateInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    tipo_actividad?: SortOrder
+    nombre?: SortOrder
+    descripcion?: SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+    fecha_inicio?: SortOrder
+    fecha_fin?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type ActividadNoLectivaMinOrderByAggregateInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    tipo_actividad?: SortOrder
+    nombre?: SortOrder
+    descripcion?: SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+    fecha_inicio?: SortOrder
+    fecha_fin?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+    fecha_actualizacion?: SortOrder
+  }
+
+  export type ActividadNoLectivaSumOrderByAggregateInput = {
+    id_actividad?: SortOrder
+    id_carga?: SortOrder
+    horas_semanales?: SortOrder
+    horas_asignadas?: SortOrder
+  }
+
+  export type EnumTipoActividadNoLectivaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoActividadNoLectiva | EnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoActividadNoLectivaWithAggregatesFilter<$PrismaModel> | $Enums.TipoActividadNoLectiva
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel>
+    _max?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel>
+  }
+
+  export type EnumEstadoCargaAcademicaNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel> | $Enums.EstadoCargaAcademica | null
+  }
+
+  export type HistorialCargaAcademicaCountOrderByAggregateInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+    estado_anterior?: SortOrder
+    estado_nuevo?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type HistorialCargaAcademicaAvgOrderByAggregateInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+  }
+
+  export type HistorialCargaAcademicaMaxOrderByAggregateInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+    estado_anterior?: SortOrder
+    estado_nuevo?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type HistorialCargaAcademicaMinOrderByAggregateInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+    estado_anterior?: SortOrder
+    estado_nuevo?: SortOrder
+    observaciones?: SortOrder
+    fecha_creacion?: SortOrder
+  }
+
+  export type HistorialCargaAcademicaSumOrderByAggregateInput = {
+    id_historial?: SortOrder
+    id_carga?: SortOrder
+    id_usuario?: SortOrder
+  }
+
+  export type EnumEstadoCargaAcademicaNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumEstadoCargaAcademicaNullableWithAggregatesFilter<$PrismaModel> | $Enums.EstadoCargaAcademica | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel>
+    _max?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel>
+  }
+
+  export type DepartamentoAcademicoCreateNestedManyWithoutFacultadInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput> | DepartamentoAcademicoCreateWithoutFacultadInput[] | DepartamentoAcademicoUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutFacultadInput | DepartamentoAcademicoCreateOrConnectWithoutFacultadInput[]
+    createMany?: DepartamentoAcademicoCreateManyFacultadInputEnvelope
+    connect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+  }
+
+  export type DocenteCreateNestedManyWithoutFacultadInput = {
+    create?: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput> | DocenteCreateWithoutFacultadInput[] | DocenteUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutFacultadInput | DocenteCreateOrConnectWithoutFacultadInput[]
+    createMany?: DocenteCreateManyFacultadInputEnvelope
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+  }
+
+  export type DepartamentoAcademicoUncheckedCreateNestedManyWithoutFacultadInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput> | DepartamentoAcademicoCreateWithoutFacultadInput[] | DepartamentoAcademicoUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutFacultadInput | DepartamentoAcademicoCreateOrConnectWithoutFacultadInput[]
+    createMany?: DepartamentoAcademicoCreateManyFacultadInputEnvelope
+    connect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+  }
+
+  export type DocenteUncheckedCreateNestedManyWithoutFacultadInput = {
+    create?: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput> | DocenteCreateWithoutFacultadInput[] | DocenteUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutFacultadInput | DocenteCreateOrConnectWithoutFacultadInput[]
+    createMany?: DocenteCreateManyFacultadInputEnvelope
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type DepartamentoAcademicoUpdateManyWithoutFacultadNestedInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput> | DepartamentoAcademicoCreateWithoutFacultadInput[] | DepartamentoAcademicoUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutFacultadInput | DepartamentoAcademicoCreateOrConnectWithoutFacultadInput[]
+    upsert?: DepartamentoAcademicoUpsertWithWhereUniqueWithoutFacultadInput | DepartamentoAcademicoUpsertWithWhereUniqueWithoutFacultadInput[]
+    createMany?: DepartamentoAcademicoCreateManyFacultadInputEnvelope
+    set?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    disconnect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    delete?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    connect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    update?: DepartamentoAcademicoUpdateWithWhereUniqueWithoutFacultadInput | DepartamentoAcademicoUpdateWithWhereUniqueWithoutFacultadInput[]
+    updateMany?: DepartamentoAcademicoUpdateManyWithWhereWithoutFacultadInput | DepartamentoAcademicoUpdateManyWithWhereWithoutFacultadInput[]
+    deleteMany?: DepartamentoAcademicoScalarWhereInput | DepartamentoAcademicoScalarWhereInput[]
+  }
+
+  export type DocenteUpdateManyWithoutFacultadNestedInput = {
+    create?: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput> | DocenteCreateWithoutFacultadInput[] | DocenteUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutFacultadInput | DocenteCreateOrConnectWithoutFacultadInput[]
+    upsert?: DocenteUpsertWithWhereUniqueWithoutFacultadInput | DocenteUpsertWithWhereUniqueWithoutFacultadInput[]
+    createMany?: DocenteCreateManyFacultadInputEnvelope
+    set?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    disconnect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    delete?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    update?: DocenteUpdateWithWhereUniqueWithoutFacultadInput | DocenteUpdateWithWhereUniqueWithoutFacultadInput[]
+    updateMany?: DocenteUpdateManyWithWhereWithoutFacultadInput | DocenteUpdateManyWithWhereWithoutFacultadInput[]
+    deleteMany?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateManyWithoutFacultadNestedInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput> | DepartamentoAcademicoCreateWithoutFacultadInput[] | DepartamentoAcademicoUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutFacultadInput | DepartamentoAcademicoCreateOrConnectWithoutFacultadInput[]
+    upsert?: DepartamentoAcademicoUpsertWithWhereUniqueWithoutFacultadInput | DepartamentoAcademicoUpsertWithWhereUniqueWithoutFacultadInput[]
+    createMany?: DepartamentoAcademicoCreateManyFacultadInputEnvelope
+    set?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    disconnect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    delete?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    connect?: DepartamentoAcademicoWhereUniqueInput | DepartamentoAcademicoWhereUniqueInput[]
+    update?: DepartamentoAcademicoUpdateWithWhereUniqueWithoutFacultadInput | DepartamentoAcademicoUpdateWithWhereUniqueWithoutFacultadInput[]
+    updateMany?: DepartamentoAcademicoUpdateManyWithWhereWithoutFacultadInput | DepartamentoAcademicoUpdateManyWithWhereWithoutFacultadInput[]
+    deleteMany?: DepartamentoAcademicoScalarWhereInput | DepartamentoAcademicoScalarWhereInput[]
+  }
+
+  export type DocenteUncheckedUpdateManyWithoutFacultadNestedInput = {
+    create?: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput> | DocenteCreateWithoutFacultadInput[] | DocenteUncheckedCreateWithoutFacultadInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutFacultadInput | DocenteCreateOrConnectWithoutFacultadInput[]
+    upsert?: DocenteUpsertWithWhereUniqueWithoutFacultadInput | DocenteUpsertWithWhereUniqueWithoutFacultadInput[]
+    createMany?: DocenteCreateManyFacultadInputEnvelope
+    set?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    disconnect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    delete?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    update?: DocenteUpdateWithWhereUniqueWithoutFacultadInput | DocenteUpdateWithWhereUniqueWithoutFacultadInput[]
+    updateMany?: DocenteUpdateManyWithWhereWithoutFacultadInput | DocenteUpdateManyWithWhereWithoutFacultadInput[]
+    deleteMany?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+  }
+
+  export type FacultadCreateNestedOneWithoutDepartamentosInput = {
+    create?: XOR<FacultadCreateWithoutDepartamentosInput, FacultadUncheckedCreateWithoutDepartamentosInput>
+    connectOrCreate?: FacultadCreateOrConnectWithoutDepartamentosInput
+    connect?: FacultadWhereUniqueInput
+  }
+
+  export type DocenteCreateNestedManyWithoutDepartamentoInput = {
+    create?: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput> | DocenteCreateWithoutDepartamentoInput[] | DocenteUncheckedCreateWithoutDepartamentoInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutDepartamentoInput | DocenteCreateOrConnectWithoutDepartamentoInput[]
+    createMany?: DocenteCreateManyDepartamentoInputEnvelope
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+  }
+
+  export type DocenteUncheckedCreateNestedManyWithoutDepartamentoInput = {
+    create?: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput> | DocenteCreateWithoutDepartamentoInput[] | DocenteUncheckedCreateWithoutDepartamentoInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutDepartamentoInput | DocenteCreateOrConnectWithoutDepartamentoInput[]
+    createMany?: DocenteCreateManyDepartamentoInputEnvelope
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+  }
+
+  export type FacultadUpdateOneRequiredWithoutDepartamentosNestedInput = {
+    create?: XOR<FacultadCreateWithoutDepartamentosInput, FacultadUncheckedCreateWithoutDepartamentosInput>
+    connectOrCreate?: FacultadCreateOrConnectWithoutDepartamentosInput
+    upsert?: FacultadUpsertWithoutDepartamentosInput
+    connect?: FacultadWhereUniqueInput
+    update?: XOR<XOR<FacultadUpdateToOneWithWhereWithoutDepartamentosInput, FacultadUpdateWithoutDepartamentosInput>, FacultadUncheckedUpdateWithoutDepartamentosInput>
+  }
+
+  export type DocenteUpdateManyWithoutDepartamentoNestedInput = {
+    create?: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput> | DocenteCreateWithoutDepartamentoInput[] | DocenteUncheckedCreateWithoutDepartamentoInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutDepartamentoInput | DocenteCreateOrConnectWithoutDepartamentoInput[]
+    upsert?: DocenteUpsertWithWhereUniqueWithoutDepartamentoInput | DocenteUpsertWithWhereUniqueWithoutDepartamentoInput[]
+    createMany?: DocenteCreateManyDepartamentoInputEnvelope
+    set?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    disconnect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    delete?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    update?: DocenteUpdateWithWhereUniqueWithoutDepartamentoInput | DocenteUpdateWithWhereUniqueWithoutDepartamentoInput[]
+    updateMany?: DocenteUpdateManyWithWhereWithoutDepartamentoInput | DocenteUpdateManyWithWhereWithoutDepartamentoInput[]
+    deleteMany?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+  }
+
+  export type DocenteUncheckedUpdateManyWithoutDepartamentoNestedInput = {
+    create?: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput> | DocenteCreateWithoutDepartamentoInput[] | DocenteUncheckedCreateWithoutDepartamentoInput[]
+    connectOrCreate?: DocenteCreateOrConnectWithoutDepartamentoInput | DocenteCreateOrConnectWithoutDepartamentoInput[]
+    upsert?: DocenteUpsertWithWhereUniqueWithoutDepartamentoInput | DocenteUpsertWithWhereUniqueWithoutDepartamentoInput[]
+    createMany?: DocenteCreateManyDepartamentoInputEnvelope
+    set?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    disconnect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    delete?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    connect?: DocenteWhereUniqueInput | DocenteWhereUniqueInput[]
+    update?: DocenteUpdateWithWhereUniqueWithoutDepartamentoInput | DocenteUpdateWithWhereUniqueWithoutDepartamentoInput[]
+    updateMany?: DocenteUpdateManyWithWhereWithoutDepartamentoInput | DocenteUpdateManyWithWhereWithoutDepartamentoInput[]
+    deleteMany?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+  }
+
   export type AuditoriaHorarioCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<AuditoriaHorarioCreateWithoutUsuarioInput, AuditoriaHorarioUncheckedCreateWithoutUsuarioInput> | AuditoriaHorarioCreateWithoutUsuarioInput[] | AuditoriaHorarioUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: AuditoriaHorarioCreateOrConnectWithoutUsuarioInput | AuditoriaHorarioCreateOrConnectWithoutUsuarioInput[]
@@ -47813,6 +57684,20 @@ export namespace Prisma {
     connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutUsuario_creadorInput | HorarioAsignadoCreateOrConnectWithoutUsuario_creadorInput[]
     createMany?: HorarioAsignadoCreateManyUsuario_creadorInputEnvelope
     connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+  }
+
+  export type CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput = {
+    create?: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput> | CargaAcademicaCreateWithoutUsuario_aprobadorInput[] | CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput | CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput[]
+    createMany?: CargaAcademicaCreateManyUsuario_aprobadorInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+  }
+
+  export type HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput> | HistorialCargaAcademicaCreateWithoutUsuarioInput[] | HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput | HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput[]
+    createMany?: HistorialCargaAcademicaCreateManyUsuarioInputEnvelope
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
   }
 
   export type AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput = {
@@ -47842,8 +57727,18 @@ export namespace Prisma {
     connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput = {
+    create?: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput> | CargaAcademicaCreateWithoutUsuario_aprobadorInput[] | CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput | CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput[]
+    createMany?: CargaAcademicaCreateManyUsuario_aprobadorInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+  }
+
+  export type HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput> | HistorialCargaAcademicaCreateWithoutUsuarioInput[] | HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput | HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput[]
+    createMany?: HistorialCargaAcademicaCreateManyUsuarioInputEnvelope
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -47854,16 +57749,8 @@ export namespace Prisma {
     set?: $Enums.TipoRol
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput = {
@@ -47918,12 +57805,32 @@ export namespace Prisma {
     deleteMany?: HorarioAsignadoScalarWhereInput | HorarioAsignadoScalarWhereInput[]
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput> | CargaAcademicaCreateWithoutUsuario_aprobadorInput[] | CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput | CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutUsuario_aprobadorInput | CargaAcademicaUpsertWithWhereUniqueWithoutUsuario_aprobadorInput[]
+    createMany?: CargaAcademicaCreateManyUsuario_aprobadorInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutUsuario_aprobadorInput | CargaAcademicaUpdateWithWhereUniqueWithoutUsuario_aprobadorInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutUsuario_aprobadorInput | CargaAcademicaUpdateManyWithWhereWithoutUsuario_aprobadorInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
+  }
+
+  export type HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput> | HistorialCargaAcademicaCreateWithoutUsuarioInput[] | HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput | HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput[]
+    upsert?: HistorialCargaAcademicaUpsertWithWhereUniqueWithoutUsuarioInput | HistorialCargaAcademicaUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: HistorialCargaAcademicaCreateManyUsuarioInputEnvelope
+    set?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    disconnect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    delete?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    update?: HistorialCargaAcademicaUpdateWithWhereUniqueWithoutUsuarioInput | HistorialCargaAcademicaUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: HistorialCargaAcademicaUpdateManyWithWhereWithoutUsuarioInput | HistorialCargaAcademicaUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
   }
 
   export type AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput = {
@@ -47978,6 +57885,41 @@ export namespace Prisma {
     deleteMany?: HorarioAsignadoScalarWhereInput | HorarioAsignadoScalarWhereInput[]
   }
 
+  export type CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput> | CargaAcademicaCreateWithoutUsuario_aprobadorInput[] | CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput | CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutUsuario_aprobadorInput | CargaAcademicaUpsertWithWhereUniqueWithoutUsuario_aprobadorInput[]
+    createMany?: CargaAcademicaCreateManyUsuario_aprobadorInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutUsuario_aprobadorInput | CargaAcademicaUpdateWithWhereUniqueWithoutUsuario_aprobadorInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutUsuario_aprobadorInput | CargaAcademicaUpdateManyWithWhereWithoutUsuario_aprobadorInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput> | HistorialCargaAcademicaCreateWithoutUsuarioInput[] | HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput | HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput[]
+    upsert?: HistorialCargaAcademicaUpsertWithWhereUniqueWithoutUsuarioInput | HistorialCargaAcademicaUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: HistorialCargaAcademicaCreateManyUsuarioInputEnvelope
+    set?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    disconnect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    delete?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    update?: HistorialCargaAcademicaUpdateWithWhereUniqueWithoutUsuarioInput | HistorialCargaAcademicaUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: HistorialCargaAcademicaUpdateManyWithWhereWithoutUsuarioInput | HistorialCargaAcademicaUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
+  }
+
+  export type CitacionDocenteCreateNestedManyWithoutPeriodoInput = {
+    create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
+    createMany?: CitacionDocenteCreateManyPeriodoInputEnvelope
+    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+  }
+
   export type ConflictoHorarioCreateNestedManyWithoutPeriodoInput = {
     create?: XOR<ConflictoHorarioCreateWithoutPeriodoInput, ConflictoHorarioUncheckedCreateWithoutPeriodoInput> | ConflictoHorarioCreateWithoutPeriodoInput[] | ConflictoHorarioUncheckedCreateWithoutPeriodoInput[]
     connectOrCreate?: ConflictoHorarioCreateOrConnectWithoutPeriodoInput | ConflictoHorarioCreateOrConnectWithoutPeriodoInput[]
@@ -47997,6 +57939,12 @@ export namespace Prisma {
     connectOrCreate?: DisponibilidadDocenteCreateOrConnectWithoutPeriodoInput | DisponibilidadDocenteCreateOrConnectWithoutPeriodoInput[]
     createMany?: DisponibilidadDocenteCreateManyPeriodoInputEnvelope
     connect?: DisponibilidadDocenteWhereUniqueInput | DisponibilidadDocenteWhereUniqueInput[]
+  }
+
+  export type FaseDisponibilidadCreateNestedOneWithoutPeriodoInput = {
+    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
+    connect?: FaseDisponibilidadWhereUniqueInput
   }
 
   export type GrupoCreateNestedManyWithoutPeriodoInput = {
@@ -48041,13 +57989,14 @@ export namespace Prisma {
     connect?: VentanaAtencionWhereUniqueInput | VentanaAtencionWhereUniqueInput[]
   }
 
-  export type FaseDisponibilidadCreateNestedOneWithoutPeriodoInput = {
-    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
-    connect?: FaseDisponibilidadWhereUniqueInput
+  export type CargaAcademicaCreateNestedManyWithoutPeriodoInput = {
+    create?: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput> | CargaAcademicaCreateWithoutPeriodoInput[] | CargaAcademicaUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutPeriodoInput | CargaAcademicaCreateOrConnectWithoutPeriodoInput[]
+    createMany?: CargaAcademicaCreateManyPeriodoInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
   }
 
-  export type CitacionDocenteCreateNestedManyWithoutPeriodoInput = {
+  export type CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput = {
     create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
     connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
     createMany?: CitacionDocenteCreateManyPeriodoInputEnvelope
@@ -48073,6 +58022,12 @@ export namespace Prisma {
     connectOrCreate?: DisponibilidadDocenteCreateOrConnectWithoutPeriodoInput | DisponibilidadDocenteCreateOrConnectWithoutPeriodoInput[]
     createMany?: DisponibilidadDocenteCreateManyPeriodoInputEnvelope
     connect?: DisponibilidadDocenteWhereUniqueInput | DisponibilidadDocenteWhereUniqueInput[]
+  }
+
+  export type FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput = {
+    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
+    connect?: FaseDisponibilidadWhereUniqueInput
   }
 
   export type GrupoUncheckedCreateNestedManyWithoutPeriodoInput = {
@@ -48117,21 +58072,29 @@ export namespace Prisma {
     connect?: VentanaAtencionWhereUniqueInput | VentanaAtencionWhereUniqueInput[]
   }
 
-  export type FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput = {
-    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
-    connect?: FaseDisponibilidadWhereUniqueInput
-  }
-
-  export type CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput = {
-    create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
-    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
-    createMany?: CitacionDocenteCreateManyPeriodoInputEnvelope
-    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+  export type CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput = {
+    create?: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput> | CargaAcademicaCreateWithoutPeriodoInput[] | CargaAcademicaUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutPeriodoInput | CargaAcademicaCreateOrConnectWithoutPeriodoInput[]
+    createMany?: CargaAcademicaCreateManyPeriodoInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
   }
 
   export type EnumEstadoPeriodoFieldUpdateOperationsInput = {
     set?: $Enums.EstadoPeriodo
+  }
+
+  export type CitacionDocenteUpdateManyWithoutPeriodoNestedInput = {
+    create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
+    upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput | CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput[]
+    createMany?: CitacionDocenteCreateManyPeriodoInputEnvelope
+    set?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    disconnect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    delete?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    update?: CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput | CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput[]
+    updateMany?: CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput | CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput[]
+    deleteMany?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
   }
 
   export type ConflictoHorarioUpdateManyWithoutPeriodoNestedInput = {
@@ -48174,6 +58137,16 @@ export namespace Prisma {
     update?: DisponibilidadDocenteUpdateWithWhereUniqueWithoutPeriodoInput | DisponibilidadDocenteUpdateWithWhereUniqueWithoutPeriodoInput[]
     updateMany?: DisponibilidadDocenteUpdateManyWithWhereWithoutPeriodoInput | DisponibilidadDocenteUpdateManyWithWhereWithoutPeriodoInput[]
     deleteMany?: DisponibilidadDocenteScalarWhereInput | DisponibilidadDocenteScalarWhereInput[]
+  }
+
+  export type FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput = {
+    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
+    upsert?: FaseDisponibilidadUpsertWithoutPeriodoInput
+    disconnect?: FaseDisponibilidadWhereInput | boolean
+    delete?: FaseDisponibilidadWhereInput | boolean
+    connect?: FaseDisponibilidadWhereUniqueInput
+    update?: XOR<XOR<FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput, FaseDisponibilidadUpdateWithoutPeriodoInput>, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
   }
 
   export type GrupoUpdateManyWithoutPeriodoNestedInput = {
@@ -48260,17 +58233,21 @@ export namespace Prisma {
     deleteMany?: VentanaAtencionScalarWhereInput | VentanaAtencionScalarWhereInput[]
   }
 
-  export type FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput = {
-    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
-    upsert?: FaseDisponibilidadUpsertWithoutPeriodoInput
-    disconnect?: FaseDisponibilidadWhereInput | boolean
-    delete?: FaseDisponibilidadWhereInput | boolean
-    connect?: FaseDisponibilidadWhereUniqueInput
-    update?: XOR<XOR<FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput, FaseDisponibilidadUpdateWithoutPeriodoInput>, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
+  export type CargaAcademicaUpdateManyWithoutPeriodoNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput> | CargaAcademicaCreateWithoutPeriodoInput[] | CargaAcademicaUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutPeriodoInput | CargaAcademicaCreateOrConnectWithoutPeriodoInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutPeriodoInput | CargaAcademicaUpsertWithWhereUniqueWithoutPeriodoInput[]
+    createMany?: CargaAcademicaCreateManyPeriodoInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutPeriodoInput | CargaAcademicaUpdateWithWhereUniqueWithoutPeriodoInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutPeriodoInput | CargaAcademicaUpdateManyWithWhereWithoutPeriodoInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
   }
 
-  export type CitacionDocenteUpdateManyWithoutPeriodoNestedInput = {
+  export type CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput = {
     create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
     connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
     upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput | CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput[]
@@ -48324,6 +58301,16 @@ export namespace Prisma {
     update?: DisponibilidadDocenteUpdateWithWhereUniqueWithoutPeriodoInput | DisponibilidadDocenteUpdateWithWhereUniqueWithoutPeriodoInput[]
     updateMany?: DisponibilidadDocenteUpdateManyWithWhereWithoutPeriodoInput | DisponibilidadDocenteUpdateManyWithWhereWithoutPeriodoInput[]
     deleteMany?: DisponibilidadDocenteScalarWhereInput | DisponibilidadDocenteScalarWhereInput[]
+  }
+
+  export type FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput = {
+    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
+    upsert?: FaseDisponibilidadUpsertWithoutPeriodoInput
+    disconnect?: FaseDisponibilidadWhereInput | boolean
+    delete?: FaseDisponibilidadWhereInput | boolean
+    connect?: FaseDisponibilidadWhereUniqueInput
+    update?: XOR<XOR<FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput, FaseDisponibilidadUpdateWithoutPeriodoInput>, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
   }
 
   export type GrupoUncheckedUpdateManyWithoutPeriodoNestedInput = {
@@ -48410,28 +58397,37 @@ export namespace Prisma {
     deleteMany?: VentanaAtencionScalarWhereInput | VentanaAtencionScalarWhereInput[]
   }
 
-  export type FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput = {
-    create?: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-    connectOrCreate?: FaseDisponibilidadCreateOrConnectWithoutPeriodoInput
-    upsert?: FaseDisponibilidadUpsertWithoutPeriodoInput
-    disconnect?: FaseDisponibilidadWhereInput | boolean
-    delete?: FaseDisponibilidadWhereInput | boolean
-    connect?: FaseDisponibilidadWhereUniqueInput
-    update?: XOR<XOR<FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput, FaseDisponibilidadUpdateWithoutPeriodoInput>, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
+  export type CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput> | CargaAcademicaCreateWithoutPeriodoInput[] | CargaAcademicaUncheckedCreateWithoutPeriodoInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutPeriodoInput | CargaAcademicaCreateOrConnectWithoutPeriodoInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutPeriodoInput | CargaAcademicaUpsertWithWhereUniqueWithoutPeriodoInput[]
+    createMany?: CargaAcademicaCreateManyPeriodoInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutPeriodoInput | CargaAcademicaUpdateWithWhereUniqueWithoutPeriodoInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutPeriodoInput | CargaAcademicaUpdateManyWithWhereWithoutPeriodoInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
   }
 
-  export type CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput = {
-    create?: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput> | CitacionDocenteCreateWithoutPeriodoInput[] | CitacionDocenteUncheckedCreateWithoutPeriodoInput[]
-    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutPeriodoInput | CitacionDocenteCreateOrConnectWithoutPeriodoInput[]
-    upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput | CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput[]
-    createMany?: CitacionDocenteCreateManyPeriodoInputEnvelope
-    set?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    disconnect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    delete?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+  export type FacultadCreateNestedOneWithoutDocentesInput = {
+    create?: XOR<FacultadCreateWithoutDocentesInput, FacultadUncheckedCreateWithoutDocentesInput>
+    connectOrCreate?: FacultadCreateOrConnectWithoutDocentesInput
+    connect?: FacultadWhereUniqueInput
+  }
+
+  export type DepartamentoAcademicoCreateNestedOneWithoutDocentesInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutDocentesInput, DepartamentoAcademicoUncheckedCreateWithoutDocentesInput>
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutDocentesInput
+    connect?: DepartamentoAcademicoWhereUniqueInput
+  }
+
+  export type CitacionDocenteCreateNestedManyWithoutDocenteInput = {
+    create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
+    createMany?: CitacionDocenteCreateManyDocenteInputEnvelope
     connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    update?: CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput | CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput[]
-    updateMany?: CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput | CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput[]
-    deleteMany?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
   }
 
   export type ColaNotificacionesCreateNestedManyWithoutDocenteInput = {
@@ -48524,7 +58520,14 @@ export namespace Prisma {
     connect?: SeleccionTemporalHorarioWhereUniqueInput | SeleccionTemporalHorarioWhereUniqueInput[]
   }
 
-  export type CitacionDocenteCreateNestedManyWithoutDocenteInput = {
+  export type CargaAcademicaCreateNestedManyWithoutDocenteInput = {
+    create?: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput> | CargaAcademicaCreateWithoutDocenteInput[] | CargaAcademicaUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutDocenteInput | CargaAcademicaCreateOrConnectWithoutDocenteInput[]
+    createMany?: CargaAcademicaCreateManyDocenteInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+  }
+
+  export type CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput = {
     create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
     connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
     createMany?: CitacionDocenteCreateManyDocenteInputEnvelope
@@ -48615,11 +58618,11 @@ export namespace Prisma {
     connect?: SeleccionTemporalHorarioWhereUniqueInput | SeleccionTemporalHorarioWhereUniqueInput[]
   }
 
-  export type CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput = {
-    create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
-    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
-    createMany?: CitacionDocenteCreateManyDocenteInputEnvelope
-    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+  export type CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput = {
+    create?: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput> | CargaAcademicaCreateWithoutDocenteInput[] | CargaAcademicaUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutDocenteInput | CargaAcademicaCreateOrConnectWithoutDocenteInput[]
+    createMany?: CargaAcademicaCreateManyDocenteInputEnvelope
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
   }
 
   export type EnumTipoModalidadFieldUpdateOperationsInput = {
@@ -48632,6 +58635,44 @@ export namespace Prisma {
 
   export type NullableEnumTipoDedicacionFieldUpdateOperationsInput = {
     set?: $Enums.TipoDedicacion | null
+  }
+
+  export type NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput = {
+    set?: $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type FacultadUpdateOneWithoutDocentesNestedInput = {
+    create?: XOR<FacultadCreateWithoutDocentesInput, FacultadUncheckedCreateWithoutDocentesInput>
+    connectOrCreate?: FacultadCreateOrConnectWithoutDocentesInput
+    upsert?: FacultadUpsertWithoutDocentesInput
+    disconnect?: FacultadWhereInput | boolean
+    delete?: FacultadWhereInput | boolean
+    connect?: FacultadWhereUniqueInput
+    update?: XOR<XOR<FacultadUpdateToOneWithWhereWithoutDocentesInput, FacultadUpdateWithoutDocentesInput>, FacultadUncheckedUpdateWithoutDocentesInput>
+  }
+
+  export type DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput = {
+    create?: XOR<DepartamentoAcademicoCreateWithoutDocentesInput, DepartamentoAcademicoUncheckedCreateWithoutDocentesInput>
+    connectOrCreate?: DepartamentoAcademicoCreateOrConnectWithoutDocentesInput
+    upsert?: DepartamentoAcademicoUpsertWithoutDocentesInput
+    disconnect?: DepartamentoAcademicoWhereInput | boolean
+    delete?: DepartamentoAcademicoWhereInput | boolean
+    connect?: DepartamentoAcademicoWhereUniqueInput
+    update?: XOR<XOR<DepartamentoAcademicoUpdateToOneWithWhereWithoutDocentesInput, DepartamentoAcademicoUpdateWithoutDocentesInput>, DepartamentoAcademicoUncheckedUpdateWithoutDocentesInput>
+  }
+
+  export type CitacionDocenteUpdateManyWithoutDocenteNestedInput = {
+    create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
+    upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput[]
+    createMany?: CitacionDocenteCreateManyDocenteInputEnvelope
+    set?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    disconnect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    delete?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
+    update?: CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput[]
+    updateMany?: CitacionDocenteUpdateManyWithWhereWithoutDocenteInput | CitacionDocenteUpdateManyWithWhereWithoutDocenteInput[]
+    deleteMany?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
   }
 
   export type ColaNotificacionesUpdateManyWithoutDocenteNestedInput = {
@@ -48812,7 +58853,29 @@ export namespace Prisma {
     deleteMany?: SeleccionTemporalHorarioScalarWhereInput | SeleccionTemporalHorarioScalarWhereInput[]
   }
 
-  export type CitacionDocenteUpdateManyWithoutDocenteNestedInput = {
+  export type CargaAcademicaUpdateManyWithoutDocenteNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput> | CargaAcademicaCreateWithoutDocenteInput[] | CargaAcademicaUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutDocenteInput | CargaAcademicaCreateOrConnectWithoutDocenteInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutDocenteInput | CargaAcademicaUpsertWithWhereUniqueWithoutDocenteInput[]
+    createMany?: CargaAcademicaCreateManyDocenteInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutDocenteInput | CargaAcademicaUpdateWithWhereUniqueWithoutDocenteInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutDocenteInput | CargaAcademicaUpdateManyWithWhereWithoutDocenteInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput = {
     create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
     connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
     upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput[]
@@ -48824,14 +58887,6 @@ export namespace Prisma {
     update?: CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput[]
     updateMany?: CitacionDocenteUpdateManyWithWhereWithoutDocenteInput | CitacionDocenteUpdateManyWithWhereWithoutDocenteInput[]
     deleteMany?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput = {
@@ -49002,18 +59057,18 @@ export namespace Prisma {
     deleteMany?: SeleccionTemporalHorarioScalarWhereInput | SeleccionTemporalHorarioScalarWhereInput[]
   }
 
-  export type CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput = {
-    create?: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput> | CitacionDocenteCreateWithoutDocenteInput[] | CitacionDocenteUncheckedCreateWithoutDocenteInput[]
-    connectOrCreate?: CitacionDocenteCreateOrConnectWithoutDocenteInput | CitacionDocenteCreateOrConnectWithoutDocenteInput[]
-    upsert?: CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput[]
-    createMany?: CitacionDocenteCreateManyDocenteInputEnvelope
-    set?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    disconnect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    delete?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    connect?: CitacionDocenteWhereUniqueInput | CitacionDocenteWhereUniqueInput[]
-    update?: CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput | CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput[]
-    updateMany?: CitacionDocenteUpdateManyWithWhereWithoutDocenteInput | CitacionDocenteUpdateManyWithWhereWithoutDocenteInput[]
-    deleteMany?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
+  export type CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput> | CargaAcademicaCreateWithoutDocenteInput[] | CargaAcademicaUncheckedCreateWithoutDocenteInput[]
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutDocenteInput | CargaAcademicaCreateOrConnectWithoutDocenteInput[]
+    upsert?: CargaAcademicaUpsertWithWhereUniqueWithoutDocenteInput | CargaAcademicaUpsertWithWhereUniqueWithoutDocenteInput[]
+    createMany?: CargaAcademicaCreateManyDocenteInputEnvelope
+    set?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    disconnect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    delete?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    connect?: CargaAcademicaWhereUniqueInput | CargaAcademicaWhereUniqueInput[]
+    update?: CargaAcademicaUpdateWithWhereUniqueWithoutDocenteInput | CargaAcademicaUpdateWithWhereUniqueWithoutDocenteInput[]
+    updateMany?: CargaAcademicaUpdateManyWithWhereWithoutDocenteInput | CargaAcademicaUpdateManyWithWhereWithoutDocenteInput[]
+    deleteMany?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
   }
 
   export type ConflictoHorarioCreateNestedManyWithoutCursoInput = {
@@ -49370,6 +59425,13 @@ export namespace Prisma {
     update?: XOR<XOR<GrupoUpdateToOneWithWhereWithoutDocentesInput, GrupoUpdateWithoutDocentesInput>, GrupoUncheckedUpdateWithoutDocentesInput>
   }
 
+  export type DocenteGrupoCreateNestedManyWithoutGrupoInput = {
+    create?: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput> | DocenteGrupoCreateWithoutGrupoInput[] | DocenteGrupoUncheckedCreateWithoutGrupoInput[]
+    connectOrCreate?: DocenteGrupoCreateOrConnectWithoutGrupoInput | DocenteGrupoCreateOrConnectWithoutGrupoInput[]
+    createMany?: DocenteGrupoCreateManyGrupoInputEnvelope
+    connect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
+  }
+
   export type CursoCreateNestedOneWithoutGruposInput = {
     create?: XOR<CursoCreateWithoutGruposInput, CursoUncheckedCreateWithoutGruposInput>
     connectOrCreate?: CursoCreateOrConnectWithoutGruposInput
@@ -49380,13 +59442,6 @@ export namespace Prisma {
     create?: XOR<PeriodoAcademicoCreateWithoutGruposInput, PeriodoAcademicoUncheckedCreateWithoutGruposInput>
     connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutGruposInput
     connect?: PeriodoAcademicoWhereUniqueInput
-  }
-
-  export type DocenteGrupoCreateNestedManyWithoutGrupoInput = {
-    create?: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput> | DocenteGrupoCreateWithoutGrupoInput[] | DocenteGrupoUncheckedCreateWithoutGrupoInput[]
-    connectOrCreate?: DocenteGrupoCreateOrConnectWithoutGrupoInput | DocenteGrupoCreateOrConnectWithoutGrupoInput[]
-    createMany?: DocenteGrupoCreateManyGrupoInputEnvelope
-    connect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
   }
 
   export type HorarioAsignadoCreateNestedManyWithoutGrupoInput = {
@@ -49438,6 +59493,20 @@ export namespace Prisma {
     connect?: SeleccionTemporalHorarioWhereUniqueInput | SeleccionTemporalHorarioWhereUniqueInput[]
   }
 
+  export type DocenteGrupoUpdateManyWithoutGrupoNestedInput = {
+    create?: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput> | DocenteGrupoCreateWithoutGrupoInput[] | DocenteGrupoUncheckedCreateWithoutGrupoInput[]
+    connectOrCreate?: DocenteGrupoCreateOrConnectWithoutGrupoInput | DocenteGrupoCreateOrConnectWithoutGrupoInput[]
+    upsert?: DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput | DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput[]
+    createMany?: DocenteGrupoCreateManyGrupoInputEnvelope
+    set?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
+    disconnect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
+    delete?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
+    connect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
+    update?: DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput | DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput[]
+    updateMany?: DocenteGrupoUpdateManyWithWhereWithoutGrupoInput | DocenteGrupoUpdateManyWithWhereWithoutGrupoInput[]
+    deleteMany?: DocenteGrupoScalarWhereInput | DocenteGrupoScalarWhereInput[]
+  }
+
   export type CursoUpdateOneRequiredWithoutGruposNestedInput = {
     create?: XOR<CursoCreateWithoutGruposInput, CursoUncheckedCreateWithoutGruposInput>
     connectOrCreate?: CursoCreateOrConnectWithoutGruposInput
@@ -49452,20 +59521,6 @@ export namespace Prisma {
     upsert?: PeriodoAcademicoUpsertWithoutGruposInput
     connect?: PeriodoAcademicoWhereUniqueInput
     update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutGruposInput, PeriodoAcademicoUpdateWithoutGruposInput>, PeriodoAcademicoUncheckedUpdateWithoutGruposInput>
-  }
-
-  export type DocenteGrupoUpdateManyWithoutGrupoNestedInput = {
-    create?: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput> | DocenteGrupoCreateWithoutGrupoInput[] | DocenteGrupoUncheckedCreateWithoutGrupoInput[]
-    connectOrCreate?: DocenteGrupoCreateOrConnectWithoutGrupoInput | DocenteGrupoCreateOrConnectWithoutGrupoInput[]
-    upsert?: DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput | DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput[]
-    createMany?: DocenteGrupoCreateManyGrupoInputEnvelope
-    set?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
-    disconnect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
-    delete?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
-    connect?: DocenteGrupoWhereUniqueInput | DocenteGrupoWhereUniqueInput[]
-    update?: DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput | DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput[]
-    updateMany?: DocenteGrupoUpdateManyWithWhereWithoutGrupoInput | DocenteGrupoUpdateManyWithWhereWithoutGrupoInput[]
-    deleteMany?: DocenteGrupoScalarWhereInput | DocenteGrupoScalarWhereInput[]
   }
 
   export type HorarioAsignadoUpdateManyWithoutGrupoNestedInput = {
@@ -49808,13 +59863,6 @@ export namespace Prisma {
     update?: XOR<XOR<CursoUpdateToOneWithWhereWithoutAmbientesInput, CursoUpdateWithoutAmbientesInput>, CursoUncheckedUpdateWithoutAmbientesInput>
   }
 
-  export type HorarioAsignadoCreateNestedManyWithoutVentanaInput = {
-    create?: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput> | HorarioAsignadoCreateWithoutVentanaInput[] | HorarioAsignadoUncheckedCreateWithoutVentanaInput[]
-    connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutVentanaInput | HorarioAsignadoCreateOrConnectWithoutVentanaInput[]
-    createMany?: HorarioAsignadoCreateManyVentanaInputEnvelope
-    connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
-  }
-
   export type CitacionDocenteCreateNestedManyWithoutVentanaInput = {
     create?: XOR<CitacionDocenteCreateWithoutVentanaInput, CitacionDocenteUncheckedCreateWithoutVentanaInput> | CitacionDocenteCreateWithoutVentanaInput[] | CitacionDocenteUncheckedCreateWithoutVentanaInput[]
     connectOrCreate?: CitacionDocenteCreateOrConnectWithoutVentanaInput | CitacionDocenteCreateOrConnectWithoutVentanaInput[]
@@ -49828,17 +59876,17 @@ export namespace Prisma {
     connect?: ConfiguracionTurnosAtencionWhereUniqueInput
   }
 
-  export type PeriodoAcademicoCreateNestedOneWithoutVentanas_atencionInput = {
-    create?: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
-    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutVentanas_atencionInput
-    connect?: PeriodoAcademicoWhereUniqueInput
-  }
-
-  export type HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput = {
+  export type HorarioAsignadoCreateNestedManyWithoutVentanaInput = {
     create?: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput> | HorarioAsignadoCreateWithoutVentanaInput[] | HorarioAsignadoUncheckedCreateWithoutVentanaInput[]
     connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutVentanaInput | HorarioAsignadoCreateOrConnectWithoutVentanaInput[]
     createMany?: HorarioAsignadoCreateManyVentanaInputEnvelope
     connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+  }
+
+  export type PeriodoAcademicoCreateNestedOneWithoutVentanas_atencionInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutVentanas_atencionInput
+    connect?: PeriodoAcademicoWhereUniqueInput
   }
 
   export type CitacionDocenteUncheckedCreateNestedManyWithoutVentanaInput = {
@@ -49854,18 +59902,11 @@ export namespace Prisma {
     connect?: ConfiguracionTurnosAtencionWhereUniqueInput
   }
 
-  export type HorarioAsignadoUpdateManyWithoutVentanaNestedInput = {
+  export type HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput = {
     create?: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput> | HorarioAsignadoCreateWithoutVentanaInput[] | HorarioAsignadoUncheckedCreateWithoutVentanaInput[]
     connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutVentanaInput | HorarioAsignadoCreateOrConnectWithoutVentanaInput[]
-    upsert?: HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput[]
     createMany?: HorarioAsignadoCreateManyVentanaInputEnvelope
-    set?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
-    disconnect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
-    delete?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
     connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
-    update?: HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput[]
-    updateMany?: HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput | HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput[]
-    deleteMany?: HorarioAsignadoScalarWhereInput | HorarioAsignadoScalarWhereInput[]
   }
 
   export type CitacionDocenteUpdateManyWithoutVentanaNestedInput = {
@@ -49892,15 +59933,7 @@ export namespace Prisma {
     update?: XOR<XOR<ConfiguracionTurnosAtencionUpdateToOneWithWhereWithoutVentanaInput, ConfiguracionTurnosAtencionUpdateWithoutVentanaInput>, ConfiguracionTurnosAtencionUncheckedUpdateWithoutVentanaInput>
   }
 
-  export type PeriodoAcademicoUpdateOneRequiredWithoutVentanas_atencionNestedInput = {
-    create?: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
-    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutVentanas_atencionInput
-    upsert?: PeriodoAcademicoUpsertWithoutVentanas_atencionInput
-    connect?: PeriodoAcademicoWhereUniqueInput
-    update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutVentanas_atencionInput, PeriodoAcademicoUpdateWithoutVentanas_atencionInput>, PeriodoAcademicoUncheckedUpdateWithoutVentanas_atencionInput>
-  }
-
-  export type HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput = {
+  export type HorarioAsignadoUpdateManyWithoutVentanaNestedInput = {
     create?: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput> | HorarioAsignadoCreateWithoutVentanaInput[] | HorarioAsignadoUncheckedCreateWithoutVentanaInput[]
     connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutVentanaInput | HorarioAsignadoCreateOrConnectWithoutVentanaInput[]
     upsert?: HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput[]
@@ -49912,6 +59945,14 @@ export namespace Prisma {
     update?: HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput[]
     updateMany?: HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput | HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput[]
     deleteMany?: HorarioAsignadoScalarWhereInput | HorarioAsignadoScalarWhereInput[]
+  }
+
+  export type PeriodoAcademicoUpdateOneRequiredWithoutVentanas_atencionNestedInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutVentanas_atencionInput
+    upsert?: PeriodoAcademicoUpsertWithoutVentanas_atencionInput
+    connect?: PeriodoAcademicoWhereUniqueInput
+    update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutVentanas_atencionInput, PeriodoAcademicoUpdateWithoutVentanas_atencionInput>, PeriodoAcademicoUncheckedUpdateWithoutVentanas_atencionInput>
   }
 
   export type CitacionDocenteUncheckedUpdateManyWithoutVentanaNestedInput = {
@@ -49936,6 +59977,20 @@ export namespace Prisma {
     delete?: ConfiguracionTurnosAtencionWhereInput | boolean
     connect?: ConfiguracionTurnosAtencionWhereUniqueInput
     update?: XOR<XOR<ConfiguracionTurnosAtencionUpdateToOneWithWhereWithoutVentanaInput, ConfiguracionTurnosAtencionUpdateWithoutVentanaInput>, ConfiguracionTurnosAtencionUncheckedUpdateWithoutVentanaInput>
+  }
+
+  export type HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput = {
+    create?: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput> | HorarioAsignadoCreateWithoutVentanaInput[] | HorarioAsignadoUncheckedCreateWithoutVentanaInput[]
+    connectOrCreate?: HorarioAsignadoCreateOrConnectWithoutVentanaInput | HorarioAsignadoCreateOrConnectWithoutVentanaInput[]
+    upsert?: HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput[]
+    createMany?: HorarioAsignadoCreateManyVentanaInputEnvelope
+    set?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+    disconnect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+    delete?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+    connect?: HorarioAsignadoWhereUniqueInput | HorarioAsignadoWhereUniqueInput[]
+    update?: HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput | HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput[]
+    updateMany?: HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput | HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput[]
+    deleteMany?: HorarioAsignadoScalarWhereInput | HorarioAsignadoScalarWhereInput[]
   }
 
   export type AuditoriaHorarioCreateNestedManyWithoutAsignacionInput = {
@@ -50482,17 +60537,17 @@ export namespace Prisma {
     update?: XOR<XOR<DocenteUpdateToOneWithWhereWithoutCola_notificacionesInput, DocenteUpdateWithoutCola_notificacionesInput>, DocenteUncheckedUpdateWithoutCola_notificacionesInput>
   }
 
-  export type PeriodoAcademicoCreateNestedOneWithoutFase_disponibilidadInput = {
-    create?: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
-    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput
-    connect?: PeriodoAcademicoWhereUniqueInput
-  }
-
   export type DisponibilidadDocenteRegistroCreateNestedManyWithoutFaseInput = {
     create?: XOR<DisponibilidadDocenteRegistroCreateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedCreateWithoutFaseInput> | DisponibilidadDocenteRegistroCreateWithoutFaseInput[] | DisponibilidadDocenteRegistroUncheckedCreateWithoutFaseInput[]
     connectOrCreate?: DisponibilidadDocenteRegistroCreateOrConnectWithoutFaseInput | DisponibilidadDocenteRegistroCreateOrConnectWithoutFaseInput[]
     createMany?: DisponibilidadDocenteRegistroCreateManyFaseInputEnvelope
     connect?: DisponibilidadDocenteRegistroWhereUniqueInput | DisponibilidadDocenteRegistroWhereUniqueInput[]
+  }
+
+  export type PeriodoAcademicoCreateNestedOneWithoutFase_disponibilidadInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput
+    connect?: PeriodoAcademicoWhereUniqueInput
   }
 
   export type DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutFaseInput = {
@@ -50504,14 +60559,6 @@ export namespace Prisma {
 
   export type EnumEstadoFaseDisponibilidadFieldUpdateOperationsInput = {
     set?: $Enums.EstadoFaseDisponibilidad
-  }
-
-  export type PeriodoAcademicoUpdateOneRequiredWithoutFase_disponibilidadNestedInput = {
-    create?: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
-    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput
-    upsert?: PeriodoAcademicoUpsertWithoutFase_disponibilidadInput
-    connect?: PeriodoAcademicoWhereUniqueInput
-    update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutFase_disponibilidadInput, PeriodoAcademicoUpdateWithoutFase_disponibilidadInput>, PeriodoAcademicoUncheckedUpdateWithoutFase_disponibilidadInput>
   }
 
   export type DisponibilidadDocenteRegistroUpdateManyWithoutFaseNestedInput = {
@@ -50526,6 +60573,14 @@ export namespace Prisma {
     update?: DisponibilidadDocenteRegistroUpdateWithWhereUniqueWithoutFaseInput | DisponibilidadDocenteRegistroUpdateWithWhereUniqueWithoutFaseInput[]
     updateMany?: DisponibilidadDocenteRegistroUpdateManyWithWhereWithoutFaseInput | DisponibilidadDocenteRegistroUpdateManyWithWhereWithoutFaseInput[]
     deleteMany?: DisponibilidadDocenteRegistroScalarWhereInput | DisponibilidadDocenteRegistroScalarWhereInput[]
+  }
+
+  export type PeriodoAcademicoUpdateOneRequiredWithoutFase_disponibilidadNestedInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput
+    upsert?: PeriodoAcademicoUpsertWithoutFase_disponibilidadInput
+    connect?: PeriodoAcademicoWhereUniqueInput
+    update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutFase_disponibilidadInput, PeriodoAcademicoUpdateWithoutFase_disponibilidadInput>, PeriodoAcademicoUncheckedUpdateWithoutFase_disponibilidadInput>
   }
 
   export type DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutFaseNestedInput = {
@@ -50634,6 +60689,188 @@ export namespace Prisma {
     set?: $Enums.EstadoCitacion | null
   }
 
+  export type DocenteCreateNestedOneWithoutCargas_academicasInput = {
+    create?: XOR<DocenteCreateWithoutCargas_academicasInput, DocenteUncheckedCreateWithoutCargas_academicasInput>
+    connectOrCreate?: DocenteCreateOrConnectWithoutCargas_academicasInput
+    connect?: DocenteWhereUniqueInput
+  }
+
+  export type PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedCreateWithoutCargas_academicasInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutCargas_academicasInput
+    connect?: PeriodoAcademicoWhereUniqueInput
+  }
+
+  export type UsuarioCreateNestedOneWithoutCargas_aprobadasInput = {
+    create?: XOR<UsuarioCreateWithoutCargas_aprobadasInput, UsuarioUncheckedCreateWithoutCargas_aprobadasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutCargas_aprobadasInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput = {
+    create?: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput> | ActividadNoLectivaCreateWithoutCarga_academicaInput[] | ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput | ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput[]
+    createMany?: ActividadNoLectivaCreateManyCarga_academicaInputEnvelope
+    connect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+  }
+
+  export type HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput> | HistorialCargaAcademicaCreateWithoutCarga_academicaInput[] | HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput | HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput[]
+    createMany?: HistorialCargaAcademicaCreateManyCarga_academicaInputEnvelope
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+  }
+
+  export type ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput = {
+    create?: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput> | ActividadNoLectivaCreateWithoutCarga_academicaInput[] | ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput | ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput[]
+    createMany?: ActividadNoLectivaCreateManyCarga_academicaInputEnvelope
+    connect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+  }
+
+  export type HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput> | HistorialCargaAcademicaCreateWithoutCarga_academicaInput[] | HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput | HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput[]
+    createMany?: HistorialCargaAcademicaCreateManyCarga_academicaInputEnvelope
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+  }
+
+  export type EnumEstadoCargaAcademicaFieldUpdateOperationsInput = {
+    set?: $Enums.EstadoCargaAcademica
+  }
+
+  export type DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput = {
+    create?: XOR<DocenteCreateWithoutCargas_academicasInput, DocenteUncheckedCreateWithoutCargas_academicasInput>
+    connectOrCreate?: DocenteCreateOrConnectWithoutCargas_academicasInput
+    upsert?: DocenteUpsertWithoutCargas_academicasInput
+    connect?: DocenteWhereUniqueInput
+    update?: XOR<XOR<DocenteUpdateToOneWithWhereWithoutCargas_academicasInput, DocenteUpdateWithoutCargas_academicasInput>, DocenteUncheckedUpdateWithoutCargas_academicasInput>
+  }
+
+  export type PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput = {
+    create?: XOR<PeriodoAcademicoCreateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedCreateWithoutCargas_academicasInput>
+    connectOrCreate?: PeriodoAcademicoCreateOrConnectWithoutCargas_academicasInput
+    upsert?: PeriodoAcademicoUpsertWithoutCargas_academicasInput
+    connect?: PeriodoAcademicoWhereUniqueInput
+    update?: XOR<XOR<PeriodoAcademicoUpdateToOneWithWhereWithoutCargas_academicasInput, PeriodoAcademicoUpdateWithoutCargas_academicasInput>, PeriodoAcademicoUncheckedUpdateWithoutCargas_academicasInput>
+  }
+
+  export type UsuarioUpdateOneWithoutCargas_aprobadasNestedInput = {
+    create?: XOR<UsuarioCreateWithoutCargas_aprobadasInput, UsuarioUncheckedCreateWithoutCargas_aprobadasInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutCargas_aprobadasInput
+    upsert?: UsuarioUpsertWithoutCargas_aprobadasInput
+    disconnect?: UsuarioWhereInput | boolean
+    delete?: UsuarioWhereInput | boolean
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutCargas_aprobadasInput, UsuarioUpdateWithoutCargas_aprobadasInput>, UsuarioUncheckedUpdateWithoutCargas_aprobadasInput>
+  }
+
+  export type ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput = {
+    create?: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput> | ActividadNoLectivaCreateWithoutCarga_academicaInput[] | ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput | ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput[]
+    upsert?: ActividadNoLectivaUpsertWithWhereUniqueWithoutCarga_academicaInput | ActividadNoLectivaUpsertWithWhereUniqueWithoutCarga_academicaInput[]
+    createMany?: ActividadNoLectivaCreateManyCarga_academicaInputEnvelope
+    set?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    disconnect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    delete?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    connect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    update?: ActividadNoLectivaUpdateWithWhereUniqueWithoutCarga_academicaInput | ActividadNoLectivaUpdateWithWhereUniqueWithoutCarga_academicaInput[]
+    updateMany?: ActividadNoLectivaUpdateManyWithWhereWithoutCarga_academicaInput | ActividadNoLectivaUpdateManyWithWhereWithoutCarga_academicaInput[]
+    deleteMany?: ActividadNoLectivaScalarWhereInput | ActividadNoLectivaScalarWhereInput[]
+  }
+
+  export type HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput> | HistorialCargaAcademicaCreateWithoutCarga_academicaInput[] | HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput | HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput[]
+    upsert?: HistorialCargaAcademicaUpsertWithWhereUniqueWithoutCarga_academicaInput | HistorialCargaAcademicaUpsertWithWhereUniqueWithoutCarga_academicaInput[]
+    createMany?: HistorialCargaAcademicaCreateManyCarga_academicaInputEnvelope
+    set?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    disconnect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    delete?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    update?: HistorialCargaAcademicaUpdateWithWhereUniqueWithoutCarga_academicaInput | HistorialCargaAcademicaUpdateWithWhereUniqueWithoutCarga_academicaInput[]
+    updateMany?: HistorialCargaAcademicaUpdateManyWithWhereWithoutCarga_academicaInput | HistorialCargaAcademicaUpdateManyWithWhereWithoutCarga_academicaInput[]
+    deleteMany?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
+  }
+
+  export type ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput = {
+    create?: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput> | ActividadNoLectivaCreateWithoutCarga_academicaInput[] | ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput | ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput[]
+    upsert?: ActividadNoLectivaUpsertWithWhereUniqueWithoutCarga_academicaInput | ActividadNoLectivaUpsertWithWhereUniqueWithoutCarga_academicaInput[]
+    createMany?: ActividadNoLectivaCreateManyCarga_academicaInputEnvelope
+    set?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    disconnect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    delete?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    connect?: ActividadNoLectivaWhereUniqueInput | ActividadNoLectivaWhereUniqueInput[]
+    update?: ActividadNoLectivaUpdateWithWhereUniqueWithoutCarga_academicaInput | ActividadNoLectivaUpdateWithWhereUniqueWithoutCarga_academicaInput[]
+    updateMany?: ActividadNoLectivaUpdateManyWithWhereWithoutCarga_academicaInput | ActividadNoLectivaUpdateManyWithWhereWithoutCarga_academicaInput[]
+    deleteMany?: ActividadNoLectivaScalarWhereInput | ActividadNoLectivaScalarWhereInput[]
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput = {
+    create?: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput> | HistorialCargaAcademicaCreateWithoutCarga_academicaInput[] | HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput[]
+    connectOrCreate?: HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput | HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput[]
+    upsert?: HistorialCargaAcademicaUpsertWithWhereUniqueWithoutCarga_academicaInput | HistorialCargaAcademicaUpsertWithWhereUniqueWithoutCarga_academicaInput[]
+    createMany?: HistorialCargaAcademicaCreateManyCarga_academicaInputEnvelope
+    set?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    disconnect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    delete?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    connect?: HistorialCargaAcademicaWhereUniqueInput | HistorialCargaAcademicaWhereUniqueInput[]
+    update?: HistorialCargaAcademicaUpdateWithWhereUniqueWithoutCarga_academicaInput | HistorialCargaAcademicaUpdateWithWhereUniqueWithoutCarga_academicaInput[]
+    updateMany?: HistorialCargaAcademicaUpdateManyWithWhereWithoutCarga_academicaInput | HistorialCargaAcademicaUpdateManyWithWhereWithoutCarga_academicaInput[]
+    deleteMany?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
+  }
+
+  export type CargaAcademicaCreateNestedOneWithoutActividades_no_lectivasInput = {
+    create?: XOR<CargaAcademicaCreateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedCreateWithoutActividades_no_lectivasInput>
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutActividades_no_lectivasInput
+    connect?: CargaAcademicaWhereUniqueInput
+  }
+
+  export type EnumTipoActividadNoLectivaFieldUpdateOperationsInput = {
+    set?: $Enums.TipoActividadNoLectiva
+  }
+
+  export type CargaAcademicaUpdateOneRequiredWithoutActividades_no_lectivasNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedCreateWithoutActividades_no_lectivasInput>
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutActividades_no_lectivasInput
+    upsert?: CargaAcademicaUpsertWithoutActividades_no_lectivasInput
+    connect?: CargaAcademicaWhereUniqueInput
+    update?: XOR<XOR<CargaAcademicaUpdateToOneWithWhereWithoutActividades_no_lectivasInput, CargaAcademicaUpdateWithoutActividades_no_lectivasInput>, CargaAcademicaUncheckedUpdateWithoutActividades_no_lectivasInput>
+  }
+
+  export type CargaAcademicaCreateNestedOneWithoutHistorialInput = {
+    create?: XOR<CargaAcademicaCreateWithoutHistorialInput, CargaAcademicaUncheckedCreateWithoutHistorialInput>
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutHistorialInput
+    connect?: CargaAcademicaWhereUniqueInput
+  }
+
+  export type UsuarioCreateNestedOneWithoutHistorial_cargaInput = {
+    create?: XOR<UsuarioCreateWithoutHistorial_cargaInput, UsuarioUncheckedCreateWithoutHistorial_cargaInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutHistorial_cargaInput
+    connect?: UsuarioWhereUniqueInput
+  }
+
+  export type NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput = {
+    set?: $Enums.EstadoCargaAcademica | null
+  }
+
+  export type CargaAcademicaUpdateOneRequiredWithoutHistorialNestedInput = {
+    create?: XOR<CargaAcademicaCreateWithoutHistorialInput, CargaAcademicaUncheckedCreateWithoutHistorialInput>
+    connectOrCreate?: CargaAcademicaCreateOrConnectWithoutHistorialInput
+    upsert?: CargaAcademicaUpsertWithoutHistorialInput
+    connect?: CargaAcademicaWhereUniqueInput
+    update?: XOR<XOR<CargaAcademicaUpdateToOneWithWhereWithoutHistorialInput, CargaAcademicaUpdateWithoutHistorialInput>, CargaAcademicaUncheckedUpdateWithoutHistorialInput>
+  }
+
+  export type UsuarioUpdateOneRequiredWithoutHistorial_cargaNestedInput = {
+    create?: XOR<UsuarioCreateWithoutHistorial_cargaInput, UsuarioUncheckedCreateWithoutHistorial_cargaInput>
+    connectOrCreate?: UsuarioCreateOrConnectWithoutHistorial_cargaInput
+    upsert?: UsuarioUpsertWithoutHistorial_cargaInput
+    connect?: UsuarioWhereUniqueInput
+    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutHistorial_cargaInput, UsuarioUpdateWithoutHistorial_cargaInput>, UsuarioUncheckedUpdateWithoutHistorial_cargaInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -50659,41 +60896,9 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumTipoRolFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoRol | EnumTipoRolFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoRol[] | ListEnumTipoRolFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoRol[] | ListEnumTipoRolFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoRolFilter<$PrismaModel> | $Enums.TipoRol
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -50751,6 +60956,60 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumTipoRolFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoRol | EnumTipoRolFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoRol[] | ListEnumTipoRolFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoRol[] | ListEnumTipoRolFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoRolFilter<$PrismaModel> | $Enums.TipoRol
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -50789,14 +61048,6 @@ export namespace Prisma {
     _max?: NestedEnumTipoRolFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -50809,20 +61060,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumEstadoPeriodoFilter<$PrismaModel = never> = {
@@ -50861,6 +61098,13 @@ export namespace Prisma {
     in?: $Enums.TipoDedicacion[] | ListEnumTipoDedicacionFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.TipoDedicacion[] | ListEnumTipoDedicacionFieldRefInput<$PrismaModel> | null
     not?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel> | $Enums.TipoDedicacion | null
+  }
+
+  export type NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoDedicacionLaboral | EnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel> | $Enums.TipoDedicacionLaboral | null
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -50918,6 +61162,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel>
     _max?: NestedEnumTipoDedicacionNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTipoDedicacionLaboralNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoDedicacionLaboral | EnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TipoDedicacionLaboral[] | ListEnumTipoDedicacionLaboralFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTipoDedicacionLaboralNullableWithAggregatesFilter<$PrismaModel> | $Enums.TipoDedicacionLaboral | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel>
+    _max?: NestedEnumTipoDedicacionLaboralNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTipoClaseFilter<$PrismaModel = never> = {
@@ -51187,6 +61441,422 @@ export namespace Prisma {
     _max?: NestedEnumEstadoCitacionNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumEstadoCargaAcademicaFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    not?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel> | $Enums.EstadoCargaAcademica
+  }
+
+  export type NestedEnumEstadoCargaAcademicaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel>
+    not?: NestedEnumEstadoCargaAcademicaWithAggregatesFilter<$PrismaModel> | $Enums.EstadoCargaAcademica
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel>
+    _max?: NestedEnumEstadoCargaAcademicaFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTipoActividadNoLectivaFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoActividadNoLectiva | EnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel> | $Enums.TipoActividadNoLectiva
+  }
+
+  export type NestedEnumTipoActividadNoLectivaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoActividadNoLectiva | EnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoActividadNoLectiva[] | ListEnumTipoActividadNoLectivaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoActividadNoLectivaWithAggregatesFilter<$PrismaModel> | $Enums.TipoActividadNoLectiva
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel>
+    _max?: NestedEnumTipoActividadNoLectivaFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel> | $Enums.EstadoCargaAcademica | null
+  }
+
+  export type NestedEnumEstadoCargaAcademicaNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EstadoCargaAcademica | EnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.EstadoCargaAcademica[] | ListEnumEstadoCargaAcademicaFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumEstadoCargaAcademicaNullableWithAggregatesFilter<$PrismaModel> | $Enums.EstadoCargaAcademica | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel>
+    _max?: NestedEnumEstadoCargaAcademicaNullableFilter<$PrismaModel>
+  }
+
+  export type DepartamentoAcademicoCreateWithoutFacultadInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    docentes?: DocenteCreateNestedManyWithoutDepartamentoInput
+  }
+
+  export type DepartamentoAcademicoUncheckedCreateWithoutFacultadInput = {
+    id_departamento?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    docentes?: DocenteUncheckedCreateNestedManyWithoutDepartamentoInput
+  }
+
+  export type DepartamentoAcademicoCreateOrConnectWithoutFacultadInput = {
+    where: DepartamentoAcademicoWhereUniqueInput
+    create: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput>
+  }
+
+  export type DepartamentoAcademicoCreateManyFacultadInputEnvelope = {
+    data: DepartamentoAcademicoCreateManyFacultadInput | DepartamentoAcademicoCreateManyFacultadInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DocenteCreateWithoutFacultadInput = {
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroCreateNestedManyWithoutDocenteInput
+    usuario?: UsuarioCreateNestedOneWithoutDocenteInput
+    cursos?: DocenteCursoCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteUncheckedCreateWithoutFacultadInput = {
+    id_docente?: number
+    id_usuario?: number | null
+    id_departamento?: number | null
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutDocenteInput
+    cursos?: DocenteCursoUncheckedCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoUncheckedCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteCreateOrConnectWithoutFacultadInput = {
+    where: DocenteWhereUniqueInput
+    create: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput>
+  }
+
+  export type DocenteCreateManyFacultadInputEnvelope = {
+    data: DocenteCreateManyFacultadInput | DocenteCreateManyFacultadInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DepartamentoAcademicoUpsertWithWhereUniqueWithoutFacultadInput = {
+    where: DepartamentoAcademicoWhereUniqueInput
+    update: XOR<DepartamentoAcademicoUpdateWithoutFacultadInput, DepartamentoAcademicoUncheckedUpdateWithoutFacultadInput>
+    create: XOR<DepartamentoAcademicoCreateWithoutFacultadInput, DepartamentoAcademicoUncheckedCreateWithoutFacultadInput>
+  }
+
+  export type DepartamentoAcademicoUpdateWithWhereUniqueWithoutFacultadInput = {
+    where: DepartamentoAcademicoWhereUniqueInput
+    data: XOR<DepartamentoAcademicoUpdateWithoutFacultadInput, DepartamentoAcademicoUncheckedUpdateWithoutFacultadInput>
+  }
+
+  export type DepartamentoAcademicoUpdateManyWithWhereWithoutFacultadInput = {
+    where: DepartamentoAcademicoScalarWhereInput
+    data: XOR<DepartamentoAcademicoUpdateManyMutationInput, DepartamentoAcademicoUncheckedUpdateManyWithoutFacultadInput>
+  }
+
+  export type DepartamentoAcademicoScalarWhereInput = {
+    AND?: DepartamentoAcademicoScalarWhereInput | DepartamentoAcademicoScalarWhereInput[]
+    OR?: DepartamentoAcademicoScalarWhereInput[]
+    NOT?: DepartamentoAcademicoScalarWhereInput | DepartamentoAcademicoScalarWhereInput[]
+    id_departamento?: IntFilter<"DepartamentoAcademico"> | number
+    id_facultad?: IntFilter<"DepartamentoAcademico"> | number
+    codigo?: StringFilter<"DepartamentoAcademico"> | string
+    nombre?: StringFilter<"DepartamentoAcademico"> | string
+    activo?: BoolFilter<"DepartamentoAcademico"> | boolean
+    fecha_creacion?: DateTimeFilter<"DepartamentoAcademico"> | Date | string
+  }
+
+  export type DocenteUpsertWithWhereUniqueWithoutFacultadInput = {
+    where: DocenteWhereUniqueInput
+    update: XOR<DocenteUpdateWithoutFacultadInput, DocenteUncheckedUpdateWithoutFacultadInput>
+    create: XOR<DocenteCreateWithoutFacultadInput, DocenteUncheckedCreateWithoutFacultadInput>
+  }
+
+  export type DocenteUpdateWithWhereUniqueWithoutFacultadInput = {
+    where: DocenteWhereUniqueInput
+    data: XOR<DocenteUpdateWithoutFacultadInput, DocenteUncheckedUpdateWithoutFacultadInput>
+  }
+
+  export type DocenteUpdateManyWithWhereWithoutFacultadInput = {
+    where: DocenteScalarWhereInput
+    data: XOR<DocenteUpdateManyMutationInput, DocenteUncheckedUpdateManyWithoutFacultadInput>
+  }
+
+  export type DocenteScalarWhereInput = {
+    AND?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+    OR?: DocenteScalarWhereInput[]
+    NOT?: DocenteScalarWhereInput | DocenteScalarWhereInput[]
+    id_docente?: IntFilter<"Docente"> | number
+    id_usuario?: IntNullableFilter<"Docente"> | number | null
+    id_facultad?: IntNullableFilter<"Docente"> | number | null
+    id_departamento?: IntNullableFilter<"Docente"> | number | null
+    codigo_docente?: StringFilter<"Docente"> | string
+    nombres?: StringFilter<"Docente"> | string
+    apellidos?: StringFilter<"Docente"> | string
+    modalidad?: EnumTipoModalidadFilter<"Docente"> | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFilter<"Docente"> | $Enums.TipoCategoria
+    dedicacion?: EnumTipoDedicacionNullableFilter<"Docente"> | $Enums.TipoDedicacion | null
+    antiguedad?: IntFilter<"Docente"> | number
+    fecha_ingreso?: DateTimeNullableFilter<"Docente"> | Date | string | null
+    correo_electronico?: StringNullableFilter<"Docente"> | string | null
+    telefono?: StringNullableFilter<"Docente"> | string | null
+    grado_academico?: StringNullableFilter<"Docente"> | string | null
+    especialidad?: StringNullableFilter<"Docente"> | string | null
+    horas_maximas_semanales?: IntFilter<"Docente"> | number
+    activo?: BoolFilter<"Docente"> | boolean
+    fecha_creacion?: DateTimeFilter<"Docente"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"Docente"> | Date | string
+    direccion?: StringNullableFilter<"Docente"> | string | null
+    disponibilidad?: StringNullableFilter<"Docente"> | string | null
+    escuela_profesional?: StringNullableFilter<"Docente"> | string | null
+    foto_perfil?: StringNullableFilter<"Docente"> | string | null
+    perfil_completo?: BoolFilter<"Docente"> | boolean
+    horas_totales_asignadas?: IntFilter<"Docente"> | number
+    dni_docente?: StringNullableFilter<"Docente"> | string | null
+    tipo_dedicacion_laboral?: EnumTipoDedicacionLaboralNullableFilter<"Docente"> | $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type FacultadCreateWithoutDepartamentosInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    docentes?: DocenteCreateNestedManyWithoutFacultadInput
+  }
+
+  export type FacultadUncheckedCreateWithoutDepartamentosInput = {
+    id_facultad?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    docentes?: DocenteUncheckedCreateNestedManyWithoutFacultadInput
+  }
+
+  export type FacultadCreateOrConnectWithoutDepartamentosInput = {
+    where: FacultadWhereUniqueInput
+    create: XOR<FacultadCreateWithoutDepartamentosInput, FacultadUncheckedCreateWithoutDepartamentosInput>
+  }
+
+  export type DocenteCreateWithoutDepartamentoInput = {
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroCreateNestedManyWithoutDocenteInput
+    usuario?: UsuarioCreateNestedOneWithoutDocenteInput
+    cursos?: DocenteCursoCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteUncheckedCreateWithoutDepartamentoInput = {
+    id_docente?: number
+    id_usuario?: number | null
+    id_facultad?: number | null
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutDocenteInput
+    cursos?: DocenteCursoUncheckedCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoUncheckedCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteCreateOrConnectWithoutDepartamentoInput = {
+    where: DocenteWhereUniqueInput
+    create: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput>
+  }
+
+  export type DocenteCreateManyDepartamentoInputEnvelope = {
+    data: DocenteCreateManyDepartamentoInput | DocenteCreateManyDepartamentoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacultadUpsertWithoutDepartamentosInput = {
+    update: XOR<FacultadUpdateWithoutDepartamentosInput, FacultadUncheckedUpdateWithoutDepartamentosInput>
+    create: XOR<FacultadCreateWithoutDepartamentosInput, FacultadUncheckedCreateWithoutDepartamentosInput>
+    where?: FacultadWhereInput
+  }
+
+  export type FacultadUpdateToOneWithWhereWithoutDepartamentosInput = {
+    where?: FacultadWhereInput
+    data: XOR<FacultadUpdateWithoutDepartamentosInput, FacultadUncheckedUpdateWithoutDepartamentosInput>
+  }
+
+  export type FacultadUpdateWithoutDepartamentosInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type FacultadUncheckedUpdateWithoutDepartamentosInput = {
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteUncheckedUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type DocenteUpsertWithWhereUniqueWithoutDepartamentoInput = {
+    where: DocenteWhereUniqueInput
+    update: XOR<DocenteUpdateWithoutDepartamentoInput, DocenteUncheckedUpdateWithoutDepartamentoInput>
+    create: XOR<DocenteCreateWithoutDepartamentoInput, DocenteUncheckedCreateWithoutDepartamentoInput>
+  }
+
+  export type DocenteUpdateWithWhereUniqueWithoutDepartamentoInput = {
+    where: DocenteWhereUniqueInput
+    data: XOR<DocenteUpdateWithoutDepartamentoInput, DocenteUncheckedUpdateWithoutDepartamentoInput>
+  }
+
+  export type DocenteUpdateManyWithWhereWithoutDepartamentoInput = {
+    where: DocenteScalarWhereInput
+    data: XOR<DocenteUpdateManyMutationInput, DocenteUncheckedUpdateManyWithoutDepartamentoInput>
+  }
+
   export type AuditoriaHorarioCreateWithoutUsuarioInput = {
     accion: $Enums.AccionAuditoria
     datos_anteriores?: NullableJsonNullValueInput | InputJsonValue
@@ -51284,6 +61954,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -51296,11 +61971,13 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutUsuarioInput = {
     id_docente?: number
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -51323,6 +62000,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -51335,7 +62015,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutUsuarioInput = {
@@ -51387,6 +62067,82 @@ export namespace Prisma {
 
   export type HorarioAsignadoCreateManyUsuario_creadorInputEnvelope = {
     data: HorarioAsignadoCreateManyUsuario_creadorInput | HorarioAsignadoCreateManyUsuario_creadorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CargaAcademicaCreateWithoutUsuario_aprobadorInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutCargas_academicasInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput
+    actividades_no_lectivas?: ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaCreateOrConnectWithoutUsuario_aprobadorInput = {
+    where: CargaAcademicaWhereUniqueInput
+    create: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput>
+  }
+
+  export type CargaAcademicaCreateManyUsuario_aprobadorInputEnvelope = {
+    data: CargaAcademicaCreateManyUsuario_aprobadorInput | CargaAcademicaCreateManyUsuario_aprobadorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HistorialCargaAcademicaCreateWithoutUsuarioInput = {
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    carga_academica: CargaAcademicaCreateNestedOneWithoutHistorialInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput = {
+    id_historial?: number
+    id_carga: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateOrConnectWithoutUsuarioInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    create: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type HistorialCargaAcademicaCreateManyUsuarioInputEnvelope = {
+    data: HistorialCargaAcademicaCreateManyUsuarioInput | HistorialCargaAcademicaCreateManyUsuarioInput[]
     skipDuplicates?: boolean
   }
 
@@ -51492,6 +62248,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -51504,11 +62265,13 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutUsuarioInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -51531,6 +62294,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -51543,7 +62309,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type HorarioAsignadoUpsertWithWhereUniqueWithoutUsuario_creadorInput = {
@@ -51582,6 +62348,120 @@ export namespace Prisma {
     creado_por?: IntNullableFilter<"HorarioAsignado"> | number | null
     fecha_creacion?: DateTimeFilter<"HorarioAsignado"> | Date | string
     fecha_actualizacion?: DateTimeFilter<"HorarioAsignado"> | Date | string
+  }
+
+  export type CargaAcademicaUpsertWithWhereUniqueWithoutUsuario_aprobadorInput = {
+    where: CargaAcademicaWhereUniqueInput
+    update: XOR<CargaAcademicaUpdateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedUpdateWithoutUsuario_aprobadorInput>
+    create: XOR<CargaAcademicaCreateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedCreateWithoutUsuario_aprobadorInput>
+  }
+
+  export type CargaAcademicaUpdateWithWhereUniqueWithoutUsuario_aprobadorInput = {
+    where: CargaAcademicaWhereUniqueInput
+    data: XOR<CargaAcademicaUpdateWithoutUsuario_aprobadorInput, CargaAcademicaUncheckedUpdateWithoutUsuario_aprobadorInput>
+  }
+
+  export type CargaAcademicaUpdateManyWithWhereWithoutUsuario_aprobadorInput = {
+    where: CargaAcademicaScalarWhereInput
+    data: XOR<CargaAcademicaUpdateManyMutationInput, CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorInput>
+  }
+
+  export type CargaAcademicaScalarWhereInput = {
+    AND?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
+    OR?: CargaAcademicaScalarWhereInput[]
+    NOT?: CargaAcademicaScalarWhereInput | CargaAcademicaScalarWhereInput[]
+    id_carga?: IntFilter<"CargaAcademica"> | number
+    id_docente?: IntFilter<"CargaAcademica"> | number
+    id_periodo?: IntFilter<"CargaAcademica"> | number
+    estado?: EnumEstadoCargaAcademicaFilter<"CargaAcademica"> | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_no_lectivas?: IntFilter<"CargaAcademica"> | number
+    horas_preparacion?: IntFilter<"CargaAcademica"> | number
+    horas_totales?: IntFilter<"CargaAcademica"> | number
+    horas_meta?: IntFilter<"CargaAcademica"> | number
+    observaciones?: StringNullableFilter<"CargaAcademica"> | string | null
+    observaciones_generales?: StringNullableFilter<"CargaAcademica"> | string | null
+    fecha_envio?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    fecha_aprobacion?: DateTimeNullableFilter<"CargaAcademica"> | Date | string | null
+    aprobado_por?: IntNullableFilter<"CargaAcademica"> | number | null
+    fecha_creacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"CargaAcademica"> | Date | string
+  }
+
+  export type HistorialCargaAcademicaUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    update: XOR<HistorialCargaAcademicaUpdateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<HistorialCargaAcademicaCreateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type HistorialCargaAcademicaUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    data: XOR<HistorialCargaAcademicaUpdateWithoutUsuarioInput, HistorialCargaAcademicaUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type HistorialCargaAcademicaUpdateManyWithWhereWithoutUsuarioInput = {
+    where: HistorialCargaAcademicaScalarWhereInput
+    data: XOR<HistorialCargaAcademicaUpdateManyMutationInput, HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type HistorialCargaAcademicaScalarWhereInput = {
+    AND?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
+    OR?: HistorialCargaAcademicaScalarWhereInput[]
+    NOT?: HistorialCargaAcademicaScalarWhereInput | HistorialCargaAcademicaScalarWhereInput[]
+    id_historial?: IntFilter<"HistorialCargaAcademica"> | number
+    id_carga?: IntFilter<"HistorialCargaAcademica"> | number
+    id_usuario?: IntFilter<"HistorialCargaAcademica"> | number
+    estado_anterior?: EnumEstadoCargaAcademicaNullableFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFilter<"HistorialCargaAcademica"> | $Enums.EstadoCargaAcademica
+    observaciones?: StringNullableFilter<"HistorialCargaAcademica"> | string | null
+    fecha_creacion?: DateTimeFilter<"HistorialCargaAcademica"> | Date | string
+  }
+
+  export type CitacionDocenteCreateWithoutPeriodoInput = {
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutCitacionesInput
+    ventana: VentanaAtencionCreateNestedOneWithoutCitacionesInput
+  }
+
+  export type CitacionDocenteUncheckedCreateWithoutPeriodoInput = {
+    id_citacion?: number
+    id_docente: number
+    id_ventana: number
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type CitacionDocenteCreateOrConnectWithoutPeriodoInput = {
+    where: CitacionDocenteWhereUniqueInput
+    create: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput>
+  }
+
+  export type CitacionDocenteCreateManyPeriodoInputEnvelope = {
+    data: CitacionDocenteCreateManyPeriodoInput | CitacionDocenteCreateManyPeriodoInput[]
+    skipDuplicates?: boolean
   }
 
   export type ConflictoHorarioCreateWithoutPeriodoInput = {
@@ -51685,6 +62565,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FaseDisponibilidadCreateWithoutPeriodoInput = {
+    estado?: $Enums.EstadoFaseDisponibilidad
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    bloques_tiempo?: string
+    instrucciones?: string | null
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    registros_disponibilidad?: DisponibilidadDocenteRegistroCreateNestedManyWithoutFaseInput
+  }
+
+  export type FaseDisponibilidadUncheckedCreateWithoutPeriodoInput = {
+    id_fase_disponibilidad?: number
+    estado?: $Enums.EstadoFaseDisponibilidad
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    bloques_tiempo?: string
+    instrucciones?: string | null
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    registros_disponibilidad?: DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutFaseInput
+  }
+
+  export type FaseDisponibilidadCreateOrConnectWithoutPeriodoInput = {
+    where: FaseDisponibilidadWhereUniqueInput
+    create: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+  }
+
   export type GrupoCreateWithoutPeriodoInput = {
     codigo_grupo: string
     capacidad_maxima?: number
@@ -51692,8 +62602,8 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
-    curso: CursoCreateNestedOneWithoutGruposInput
     docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
+    curso: CursoCreateNestedOneWithoutGruposInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutGrupoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutGrupoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutGrupoInput
@@ -51889,9 +62799,9 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
   }
 
   export type VentanaAtencionUncheckedCreateWithoutPeriodoInput = {
@@ -51908,9 +62818,9 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
   }
 
   export type VentanaAtencionCreateOrConnectWithoutPeriodoInput = {
@@ -51923,81 +62833,92 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type FaseDisponibilidadCreateWithoutPeriodoInput = {
-    estado?: $Enums.EstadoFaseDisponibilidad
-    fecha_inicio: Date | string
-    fecha_fin: Date | string
-    bloques_tiempo?: string
-    instrucciones?: string | null
-    activo?: boolean
-    fecha_creacion?: Date | string
-    fecha_actualizacion?: Date | string
-    registros_disponibilidad?: DisponibilidadDocenteRegistroCreateNestedManyWithoutFaseInput
-  }
-
-  export type FaseDisponibilidadUncheckedCreateWithoutPeriodoInput = {
-    id_fase_disponibilidad?: number
-    estado?: $Enums.EstadoFaseDisponibilidad
-    fecha_inicio: Date | string
-    fecha_fin: Date | string
-    bloques_tiempo?: string
-    instrucciones?: string | null
-    activo?: boolean
-    fecha_creacion?: Date | string
-    fecha_actualizacion?: Date | string
-    registros_disponibilidad?: DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutFaseInput
-  }
-
-  export type FaseDisponibilidadCreateOrConnectWithoutPeriodoInput = {
-    where: FaseDisponibilidadWhereUniqueInput
-    create: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-  }
-
-  export type CitacionDocenteCreateWithoutPeriodoInput = {
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+  export type CargaAcademicaCreateWithoutPeriodoInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
-    docente: DocenteCreateNestedOneWithoutCitacionesInput
-    ventana: VentanaAtencionCreateNestedOneWithoutCitacionesInput
+    docente: DocenteCreateNestedOneWithoutCargas_academicasInput
+    usuario_aprobador?: UsuarioCreateNestedOneWithoutCargas_aprobadasInput
+    actividades_no_lectivas?: ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput
   }
 
-  export type CitacionDocenteUncheckedCreateWithoutPeriodoInput = {
-    id_citacion?: number
+  export type CargaAcademicaUncheckedCreateWithoutPeriodoInput = {
+    id_carga?: number
     id_docente: number
-    id_ventana: number
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput
   }
 
-  export type CitacionDocenteCreateOrConnectWithoutPeriodoInput = {
+  export type CargaAcademicaCreateOrConnectWithoutPeriodoInput = {
+    where: CargaAcademicaWhereUniqueInput
+    create: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput>
+  }
+
+  export type CargaAcademicaCreateManyPeriodoInputEnvelope = {
+    data: CargaAcademicaCreateManyPeriodoInput | CargaAcademicaCreateManyPeriodoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput = {
     where: CitacionDocenteWhereUniqueInput
+    update: XOR<CitacionDocenteUpdateWithoutPeriodoInput, CitacionDocenteUncheckedUpdateWithoutPeriodoInput>
     create: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput>
   }
 
-  export type CitacionDocenteCreateManyPeriodoInputEnvelope = {
-    data: CitacionDocenteCreateManyPeriodoInput | CitacionDocenteCreateManyPeriodoInput[]
-    skipDuplicates?: boolean
+  export type CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput = {
+    where: CitacionDocenteWhereUniqueInput
+    data: XOR<CitacionDocenteUpdateWithoutPeriodoInput, CitacionDocenteUncheckedUpdateWithoutPeriodoInput>
+  }
+
+  export type CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput = {
+    where: CitacionDocenteScalarWhereInput
+    data: XOR<CitacionDocenteUpdateManyMutationInput, CitacionDocenteUncheckedUpdateManyWithoutPeriodoInput>
+  }
+
+  export type CitacionDocenteScalarWhereInput = {
+    AND?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
+    OR?: CitacionDocenteScalarWhereInput[]
+    NOT?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
+    id_citacion?: IntFilter<"CitacionDocente"> | number
+    id_docente?: IntFilter<"CitacionDocente"> | number
+    id_periodo?: IntFilter<"CitacionDocente"> | number
+    id_ventana?: IntFilter<"CitacionDocente"> | number
+    fecha_citacion?: DateTimeFilter<"CitacionDocente"> | Date | string
+    hora_inicio?: StringFilter<"CitacionDocente"> | string
+    hora_fin?: StringFilter<"CitacionDocente"> | string
+    numero_orden_turno?: IntFilter<"CitacionDocente"> | number
+    estado?: EnumEstadoCitacionFilter<"CitacionDocente"> | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFilter<"CitacionDocente"> | boolean
+    fecha_confirmacion?: DateTimeNullableFilter<"CitacionDocente"> | Date | string | null
+    razon_rechazo?: StringNullableFilter<"CitacionDocente"> | string | null
+    observaciones?: StringNullableFilter<"CitacionDocente"> | string | null
+    notificacion_enviada?: BoolFilter<"CitacionDocente"> | boolean
+    recordatorio_enviado?: BoolFilter<"CitacionDocente"> | boolean
+    fecha_creacion?: DateTimeFilter<"CitacionDocente"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"CitacionDocente"> | Date | string
   }
 
   export type ConflictoHorarioUpsertWithWhereUniqueWithoutPeriodoInput = {
@@ -52074,6 +62995,42 @@ export namespace Prisma {
     es_restriccion?: BoolFilter<"DisponibilidadDocente"> | boolean
     motivo_restriccion?: StringNullableFilter<"DisponibilidadDocente"> | string | null
     fecha_registro?: DateTimeFilter<"DisponibilidadDocente"> | Date | string
+  }
+
+  export type FaseDisponibilidadUpsertWithoutPeriodoInput = {
+    update: XOR<FaseDisponibilidadUpdateWithoutPeriodoInput, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
+    create: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
+    where?: FaseDisponibilidadWhereInput
+  }
+
+  export type FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput = {
+    where?: FaseDisponibilidadWhereInput
+    data: XOR<FaseDisponibilidadUpdateWithoutPeriodoInput, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
+  }
+
+  export type FaseDisponibilidadUpdateWithoutPeriodoInput = {
+    estado?: EnumEstadoFaseDisponibilidadFieldUpdateOperationsInput | $Enums.EstadoFaseDisponibilidad
+    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
+    bloques_tiempo?: StringFieldUpdateOperationsInput | string
+    instrucciones?: NullableStringFieldUpdateOperationsInput | string | null
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    registros_disponibilidad?: DisponibilidadDocenteRegistroUpdateManyWithoutFaseNestedInput
+  }
+
+  export type FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput = {
+    id_fase_disponibilidad?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoFaseDisponibilidadFieldUpdateOperationsInput | $Enums.EstadoFaseDisponibilidad
+    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
+    bloques_tiempo?: StringFieldUpdateOperationsInput | string
+    instrucciones?: NullableStringFieldUpdateOperationsInput | string | null
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    registros_disponibilidad?: DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutFaseNestedInput
   }
 
   export type GrupoUpsertWithWhereUniqueWithoutPeriodoInput = {
@@ -52258,79 +63215,111 @@ export namespace Prisma {
     fecha_creacion?: DateTimeFilter<"VentanaAtencion"> | Date | string
   }
 
-  export type FaseDisponibilidadUpsertWithoutPeriodoInput = {
-    update: XOR<FaseDisponibilidadUpdateWithoutPeriodoInput, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
-    create: XOR<FaseDisponibilidadCreateWithoutPeriodoInput, FaseDisponibilidadUncheckedCreateWithoutPeriodoInput>
-    where?: FaseDisponibilidadWhereInput
+  export type CargaAcademicaUpsertWithWhereUniqueWithoutPeriodoInput = {
+    where: CargaAcademicaWhereUniqueInput
+    update: XOR<CargaAcademicaUpdateWithoutPeriodoInput, CargaAcademicaUncheckedUpdateWithoutPeriodoInput>
+    create: XOR<CargaAcademicaCreateWithoutPeriodoInput, CargaAcademicaUncheckedCreateWithoutPeriodoInput>
   }
 
-  export type FaseDisponibilidadUpdateToOneWithWhereWithoutPeriodoInput = {
-    where?: FaseDisponibilidadWhereInput
-    data: XOR<FaseDisponibilidadUpdateWithoutPeriodoInput, FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput>
+  export type CargaAcademicaUpdateWithWhereUniqueWithoutPeriodoInput = {
+    where: CargaAcademicaWhereUniqueInput
+    data: XOR<CargaAcademicaUpdateWithoutPeriodoInput, CargaAcademicaUncheckedUpdateWithoutPeriodoInput>
   }
 
-  export type FaseDisponibilidadUpdateWithoutPeriodoInput = {
-    estado?: EnumEstadoFaseDisponibilidadFieldUpdateOperationsInput | $Enums.EstadoFaseDisponibilidad
-    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
-    bloques_tiempo?: StringFieldUpdateOperationsInput | string
-    instrucciones?: NullableStringFieldUpdateOperationsInput | string | null
-    activo?: BoolFieldUpdateOperationsInput | boolean
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    registros_disponibilidad?: DisponibilidadDocenteRegistroUpdateManyWithoutFaseNestedInput
+  export type CargaAcademicaUpdateManyWithWhereWithoutPeriodoInput = {
+    where: CargaAcademicaScalarWhereInput
+    data: XOR<CargaAcademicaUpdateManyMutationInput, CargaAcademicaUncheckedUpdateManyWithoutPeriodoInput>
   }
 
-  export type FaseDisponibilidadUncheckedUpdateWithoutPeriodoInput = {
-    id_fase_disponibilidad?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoFaseDisponibilidadFieldUpdateOperationsInput | $Enums.EstadoFaseDisponibilidad
-    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
-    bloques_tiempo?: StringFieldUpdateOperationsInput | string
-    instrucciones?: NullableStringFieldUpdateOperationsInput | string | null
-    activo?: BoolFieldUpdateOperationsInput | boolean
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    registros_disponibilidad?: DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutFaseNestedInput
+  export type FacultadCreateWithoutDocentesInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    departamentos?: DepartamentoAcademicoCreateNestedManyWithoutFacultadInput
   }
 
-  export type CitacionDocenteUpsertWithWhereUniqueWithoutPeriodoInput = {
+  export type FacultadUncheckedCreateWithoutDocentesInput = {
+    id_facultad?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    departamentos?: DepartamentoAcademicoUncheckedCreateNestedManyWithoutFacultadInput
+  }
+
+  export type FacultadCreateOrConnectWithoutDocentesInput = {
+    where: FacultadWhereUniqueInput
+    create: XOR<FacultadCreateWithoutDocentesInput, FacultadUncheckedCreateWithoutDocentesInput>
+  }
+
+  export type DepartamentoAcademicoCreateWithoutDocentesInput = {
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+    facultad: FacultadCreateNestedOneWithoutDepartamentosInput
+  }
+
+  export type DepartamentoAcademicoUncheckedCreateWithoutDocentesInput = {
+    id_departamento?: number
+    id_facultad: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+  }
+
+  export type DepartamentoAcademicoCreateOrConnectWithoutDocentesInput = {
+    where: DepartamentoAcademicoWhereUniqueInput
+    create: XOR<DepartamentoAcademicoCreateWithoutDocentesInput, DepartamentoAcademicoUncheckedCreateWithoutDocentesInput>
+  }
+
+  export type CitacionDocenteCreateWithoutDocenteInput = {
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCitaciones_docentesInput
+    ventana: VentanaAtencionCreateNestedOneWithoutCitacionesInput
+  }
+
+  export type CitacionDocenteUncheckedCreateWithoutDocenteInput = {
+    id_citacion?: number
+    id_periodo: number
+    id_ventana: number
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type CitacionDocenteCreateOrConnectWithoutDocenteInput = {
     where: CitacionDocenteWhereUniqueInput
-    update: XOR<CitacionDocenteUpdateWithoutPeriodoInput, CitacionDocenteUncheckedUpdateWithoutPeriodoInput>
-    create: XOR<CitacionDocenteCreateWithoutPeriodoInput, CitacionDocenteUncheckedCreateWithoutPeriodoInput>
+    create: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput>
   }
 
-  export type CitacionDocenteUpdateWithWhereUniqueWithoutPeriodoInput = {
-    where: CitacionDocenteWhereUniqueInput
-    data: XOR<CitacionDocenteUpdateWithoutPeriodoInput, CitacionDocenteUncheckedUpdateWithoutPeriodoInput>
-  }
-
-  export type CitacionDocenteUpdateManyWithWhereWithoutPeriodoInput = {
-    where: CitacionDocenteScalarWhereInput
-    data: XOR<CitacionDocenteUpdateManyMutationInput, CitacionDocenteUncheckedUpdateManyWithoutPeriodoInput>
-  }
-
-  export type CitacionDocenteScalarWhereInput = {
-    AND?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
-    OR?: CitacionDocenteScalarWhereInput[]
-    NOT?: CitacionDocenteScalarWhereInput | CitacionDocenteScalarWhereInput[]
-    id_citacion?: IntFilter<"CitacionDocente"> | number
-    id_docente?: IntFilter<"CitacionDocente"> | number
-    id_periodo?: IntFilter<"CitacionDocente"> | number
-    id_ventana?: IntFilter<"CitacionDocente"> | number
-    fecha_citacion?: DateTimeFilter<"CitacionDocente"> | Date | string
-    hora_inicio?: StringFilter<"CitacionDocente"> | string
-    hora_fin?: StringFilter<"CitacionDocente"> | string
-    numero_orden_turno?: IntFilter<"CitacionDocente"> | number
-    estado?: EnumEstadoCitacionFilter<"CitacionDocente"> | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFilter<"CitacionDocente"> | boolean
-    fecha_confirmacion?: DateTimeNullableFilter<"CitacionDocente"> | Date | string | null
-    razon_rechazo?: StringNullableFilter<"CitacionDocente"> | string | null
-    observaciones?: StringNullableFilter<"CitacionDocente"> | string | null
-    notificacion_enviada?: BoolFilter<"CitacionDocente"> | boolean
-    recordatorio_enviado?: BoolFilter<"CitacionDocente"> | boolean
-    fecha_creacion?: DateTimeFilter<"CitacionDocente"> | Date | string
-    fecha_actualizacion?: DateTimeFilter<"CitacionDocente"> | Date | string
+  export type CitacionDocenteCreateManyDocenteInputEnvelope = {
+    data: CitacionDocenteCreateManyDocenteInput | CitacionDocenteCreateManyDocenteInput[]
+    skipDuplicates?: boolean
   }
 
   export type ColaNotificacionesCreateWithoutDocenteInput = {
@@ -52534,6 +63523,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioCreateNestedManyWithoutUsuarioInput
     conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
     horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutDocenteInput = {
@@ -52551,6 +63542,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput
     conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
     horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutDocenteInput = {
@@ -52807,51 +63800,125 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CitacionDocenteCreateWithoutDocenteInput = {
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+  export type CargaAcademicaCreateWithoutDocenteInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
-    periodo: PeriodoAcademicoCreateNestedOneWithoutCitaciones_docentesInput
-    ventana: VentanaAtencionCreateNestedOneWithoutCitacionesInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput
+    usuario_aprobador?: UsuarioCreateNestedOneWithoutCargas_aprobadasInput
+    actividades_no_lectivas?: ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput
   }
 
-  export type CitacionDocenteUncheckedCreateWithoutDocenteInput = {
-    id_citacion?: number
+  export type CargaAcademicaUncheckedCreateWithoutDocenteInput = {
+    id_carga?: number
     id_periodo: number
-    id_ventana: number
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput
+    historial?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput
   }
 
-  export type CitacionDocenteCreateOrConnectWithoutDocenteInput = {
+  export type CargaAcademicaCreateOrConnectWithoutDocenteInput = {
+    where: CargaAcademicaWhereUniqueInput
+    create: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput>
+  }
+
+  export type CargaAcademicaCreateManyDocenteInputEnvelope = {
+    data: CargaAcademicaCreateManyDocenteInput | CargaAcademicaCreateManyDocenteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacultadUpsertWithoutDocentesInput = {
+    update: XOR<FacultadUpdateWithoutDocentesInput, FacultadUncheckedUpdateWithoutDocentesInput>
+    create: XOR<FacultadCreateWithoutDocentesInput, FacultadUncheckedCreateWithoutDocentesInput>
+    where?: FacultadWhereInput
+  }
+
+  export type FacultadUpdateToOneWithWhereWithoutDocentesInput = {
+    where?: FacultadWhereInput
+    data: XOR<FacultadUpdateWithoutDocentesInput, FacultadUncheckedUpdateWithoutDocentesInput>
+  }
+
+  export type FacultadUpdateWithoutDocentesInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    departamentos?: DepartamentoAcademicoUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type FacultadUncheckedUpdateWithoutDocentesInput = {
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    departamentos?: DepartamentoAcademicoUncheckedUpdateManyWithoutFacultadNestedInput
+  }
+
+  export type DepartamentoAcademicoUpsertWithoutDocentesInput = {
+    update: XOR<DepartamentoAcademicoUpdateWithoutDocentesInput, DepartamentoAcademicoUncheckedUpdateWithoutDocentesInput>
+    create: XOR<DepartamentoAcademicoCreateWithoutDocentesInput, DepartamentoAcademicoUncheckedCreateWithoutDocentesInput>
+    where?: DepartamentoAcademicoWhereInput
+  }
+
+  export type DepartamentoAcademicoUpdateToOneWithWhereWithoutDocentesInput = {
+    where?: DepartamentoAcademicoWhereInput
+    data: XOR<DepartamentoAcademicoUpdateWithoutDocentesInput, DepartamentoAcademicoUncheckedUpdateWithoutDocentesInput>
+  }
+
+  export type DepartamentoAcademicoUpdateWithoutDocentesInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    facultad?: FacultadUpdateOneRequiredWithoutDepartamentosNestedInput
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateWithoutDocentesInput = {
+    id_departamento?: IntFieldUpdateOperationsInput | number
+    id_facultad?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput = {
     where: CitacionDocenteWhereUniqueInput
+    update: XOR<CitacionDocenteUpdateWithoutDocenteInput, CitacionDocenteUncheckedUpdateWithoutDocenteInput>
     create: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput>
   }
 
-  export type CitacionDocenteCreateManyDocenteInputEnvelope = {
-    data: CitacionDocenteCreateManyDocenteInput | CitacionDocenteCreateManyDocenteInput[]
-    skipDuplicates?: boolean
+  export type CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput = {
+    where: CitacionDocenteWhereUniqueInput
+    data: XOR<CitacionDocenteUpdateWithoutDocenteInput, CitacionDocenteUncheckedUpdateWithoutDocenteInput>
+  }
+
+  export type CitacionDocenteUpdateManyWithWhereWithoutDocenteInput = {
+    where: CitacionDocenteScalarWhereInput
+    data: XOR<CitacionDocenteUpdateManyMutationInput, CitacionDocenteUncheckedUpdateManyWithoutDocenteInput>
   }
 
   export type ColaNotificacionesUpsertWithWhereUniqueWithoutDocenteInput = {
@@ -52992,6 +64059,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput
     conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
     horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutDocenteInput = {
@@ -53009,6 +64078,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput
     conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
     horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type DocenteCursoUpsertWithWhereUniqueWithoutDocenteInput = {
@@ -53183,20 +64254,20 @@ export namespace Prisma {
     data: XOR<SeleccionTemporalHorarioUpdateManyMutationInput, SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteInput>
   }
 
-  export type CitacionDocenteUpsertWithWhereUniqueWithoutDocenteInput = {
-    where: CitacionDocenteWhereUniqueInput
-    update: XOR<CitacionDocenteUpdateWithoutDocenteInput, CitacionDocenteUncheckedUpdateWithoutDocenteInput>
-    create: XOR<CitacionDocenteCreateWithoutDocenteInput, CitacionDocenteUncheckedCreateWithoutDocenteInput>
+  export type CargaAcademicaUpsertWithWhereUniqueWithoutDocenteInput = {
+    where: CargaAcademicaWhereUniqueInput
+    update: XOR<CargaAcademicaUpdateWithoutDocenteInput, CargaAcademicaUncheckedUpdateWithoutDocenteInput>
+    create: XOR<CargaAcademicaCreateWithoutDocenteInput, CargaAcademicaUncheckedCreateWithoutDocenteInput>
   }
 
-  export type CitacionDocenteUpdateWithWhereUniqueWithoutDocenteInput = {
-    where: CitacionDocenteWhereUniqueInput
-    data: XOR<CitacionDocenteUpdateWithoutDocenteInput, CitacionDocenteUncheckedUpdateWithoutDocenteInput>
+  export type CargaAcademicaUpdateWithWhereUniqueWithoutDocenteInput = {
+    where: CargaAcademicaWhereUniqueInput
+    data: XOR<CargaAcademicaUpdateWithoutDocenteInput, CargaAcademicaUncheckedUpdateWithoutDocenteInput>
   }
 
-  export type CitacionDocenteUpdateManyWithWhereWithoutDocenteInput = {
-    where: CitacionDocenteScalarWhereInput
-    data: XOR<CitacionDocenteUpdateManyMutationInput, CitacionDocenteUncheckedUpdateManyWithoutDocenteInput>
+  export type CargaAcademicaUpdateManyWithWhereWithoutDocenteInput = {
+    where: CargaAcademicaScalarWhereInput
+    data: XOR<CargaAcademicaUpdateManyMutationInput, CargaAcademicaUncheckedUpdateManyWithoutDocenteInput>
   }
 
   export type ConflictoHorarioCreateWithoutCursoInput = {
@@ -53301,8 +64372,8 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
-    periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
     docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutGrupoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutGrupoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutGrupoInput
@@ -53649,6 +64720,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -53661,12 +64737,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutCursosInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -53689,6 +64767,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -53700,7 +64781,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutCursosInput = {
@@ -53794,6 +64875,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -53806,12 +64892,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutCursosInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -53834,6 +64922,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -53845,7 +64936,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteCreateWithoutGruposInput = {
@@ -53871,6 +64962,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -53883,12 +64979,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutGruposInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -53911,6 +65009,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -53922,7 +65023,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutGruposInput = {
@@ -53998,6 +65099,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -54010,12 +65116,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutGruposInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -54038,6 +65146,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -54049,7 +65160,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type GrupoUpsertWithoutDocentesInput = {
@@ -54090,6 +65201,29 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutGrupoNestedInput
+  }
+
+  export type DocenteGrupoCreateWithoutGrupoInput = {
+    activo?: boolean
+    fecha_asignacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutGruposInput
+  }
+
+  export type DocenteGrupoUncheckedCreateWithoutGrupoInput = {
+    id_docente_grupo?: number
+    id_docente: number
+    activo?: boolean
+    fecha_asignacion?: Date | string
+  }
+
+  export type DocenteGrupoCreateOrConnectWithoutGrupoInput = {
+    where: DocenteGrupoWhereUniqueInput
+    create: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput>
+  }
+
+  export type DocenteGrupoCreateManyGrupoInputEnvelope = {
+    data: DocenteGrupoCreateManyGrupoInput | DocenteGrupoCreateManyGrupoInput[]
+    skipDuplicates?: boolean
   }
 
   export type CursoCreateWithoutGruposInput = {
@@ -54150,16 +65284,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutGruposInput = {
@@ -54175,44 +65310,22 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutGruposInput = {
     where: PeriodoAcademicoWhereUniqueInput
     create: XOR<PeriodoAcademicoCreateWithoutGruposInput, PeriodoAcademicoUncheckedCreateWithoutGruposInput>
-  }
-
-  export type DocenteGrupoCreateWithoutGrupoInput = {
-    activo?: boolean
-    fecha_asignacion?: Date | string
-    docente: DocenteCreateNestedOneWithoutGruposInput
-  }
-
-  export type DocenteGrupoUncheckedCreateWithoutGrupoInput = {
-    id_docente_grupo?: number
-    id_docente: number
-    activo?: boolean
-    fecha_asignacion?: Date | string
-  }
-
-  export type DocenteGrupoCreateOrConnectWithoutGrupoInput = {
-    where: DocenteGrupoWhereUniqueInput
-    create: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput>
-  }
-
-  export type DocenteGrupoCreateManyGrupoInputEnvelope = {
-    data: DocenteGrupoCreateManyGrupoInput | DocenteGrupoCreateManyGrupoInput[]
-    skipDuplicates?: boolean
   }
 
   export type HorarioAsignadoCreateWithoutGrupoInput = {
@@ -54340,6 +65453,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput = {
+    where: DocenteGrupoWhereUniqueInput
+    update: XOR<DocenteGrupoUpdateWithoutGrupoInput, DocenteGrupoUncheckedUpdateWithoutGrupoInput>
+    create: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput>
+  }
+
+  export type DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput = {
+    where: DocenteGrupoWhereUniqueInput
+    data: XOR<DocenteGrupoUpdateWithoutGrupoInput, DocenteGrupoUncheckedUpdateWithoutGrupoInput>
+  }
+
+  export type DocenteGrupoUpdateManyWithWhereWithoutGrupoInput = {
+    where: DocenteGrupoScalarWhereInput
+    data: XOR<DocenteGrupoUpdateManyMutationInput, DocenteGrupoUncheckedUpdateManyWithoutGrupoInput>
+  }
+
   export type CursoUpsertWithoutGruposInput = {
     update: XOR<CursoUpdateWithoutGruposInput, CursoUncheckedUpdateWithoutGruposInput>
     create: XOR<CursoCreateWithoutGruposInput, CursoUncheckedCreateWithoutGruposInput>
@@ -54415,16 +65544,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutGruposInput = {
@@ -54440,32 +65570,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
-  }
-
-  export type DocenteGrupoUpsertWithWhereUniqueWithoutGrupoInput = {
-    where: DocenteGrupoWhereUniqueInput
-    update: XOR<DocenteGrupoUpdateWithoutGrupoInput, DocenteGrupoUncheckedUpdateWithoutGrupoInput>
-    create: XOR<DocenteGrupoCreateWithoutGrupoInput, DocenteGrupoUncheckedCreateWithoutGrupoInput>
-  }
-
-  export type DocenteGrupoUpdateWithWhereUniqueWithoutGrupoInput = {
-    where: DocenteGrupoWhereUniqueInput
-    data: XOR<DocenteGrupoUpdateWithoutGrupoInput, DocenteGrupoUncheckedUpdateWithoutGrupoInput>
-  }
-
-  export type DocenteGrupoUpdateManyWithWhereWithoutGrupoInput = {
-    where: DocenteGrupoScalarWhereInput
-    data: XOR<DocenteGrupoUpdateManyMutationInput, DocenteGrupoUncheckedUpdateManyWithoutGrupoInput>
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type HorarioAsignadoUpsertWithWhereUniqueWithoutGrupoInput = {
@@ -54981,53 +66096,6 @@ export namespace Prisma {
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutCursoNestedInput
   }
 
-  export type HorarioAsignadoCreateWithoutVentanaInput = {
-    tipo_clase: $Enums.TipoClase
-    dia_semana: number
-    hora_inicio: string
-    hora_fin: string
-    estado?: $Enums.EstadoHorario
-    observaciones?: string | null
-    fecha_creacion?: Date | string
-    fecha_actualizacion?: Date | string
-    auditorias?: AuditoriaHorarioCreateNestedManyWithoutAsignacionInput
-    usuario_creador?: UsuarioCreateNestedOneWithoutHorarios_creadosInput
-    ambiente: AmbienteCreateNestedOneWithoutHorariosInput
-    curso: CursoCreateNestedOneWithoutHorariosInput
-    docente: DocenteCreateNestedOneWithoutHorariosInput
-    grupo: GrupoCreateNestedOneWithoutHorariosInput
-    periodo: PeriodoAcademicoCreateNestedOneWithoutHorariosInput
-  }
-
-  export type HorarioAsignadoUncheckedCreateWithoutVentanaInput = {
-    id_asignacion?: number
-    id_docente: number
-    id_curso: number
-    id_grupo: number
-    tipo_clase: $Enums.TipoClase
-    id_ambiente: number
-    dia_semana: number
-    hora_inicio: string
-    hora_fin: string
-    id_periodo: number
-    estado?: $Enums.EstadoHorario
-    observaciones?: string | null
-    creado_por?: number | null
-    fecha_creacion?: Date | string
-    fecha_actualizacion?: Date | string
-    auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutAsignacionInput
-  }
-
-  export type HorarioAsignadoCreateOrConnectWithoutVentanaInput = {
-    where: HorarioAsignadoWhereUniqueInput
-    create: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput>
-  }
-
-  export type HorarioAsignadoCreateManyVentanaInputEnvelope = {
-    data: HorarioAsignadoCreateManyVentanaInput | HorarioAsignadoCreateManyVentanaInput[]
-    skipDuplicates?: boolean
-  }
-
   export type CitacionDocenteCreateWithoutVentanaInput = {
     fecha_citacion: Date | string
     hora_inicio: string
@@ -55101,6 +66169,53 @@ export namespace Prisma {
     create: XOR<ConfiguracionTurnosAtencionCreateWithoutVentanaInput, ConfiguracionTurnosAtencionUncheckedCreateWithoutVentanaInput>
   }
 
+  export type HorarioAsignadoCreateWithoutVentanaInput = {
+    tipo_clase: $Enums.TipoClase
+    dia_semana: number
+    hora_inicio: string
+    hora_fin: string
+    estado?: $Enums.EstadoHorario
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioCreateNestedManyWithoutAsignacionInput
+    usuario_creador?: UsuarioCreateNestedOneWithoutHorarios_creadosInput
+    ambiente: AmbienteCreateNestedOneWithoutHorariosInput
+    curso: CursoCreateNestedOneWithoutHorariosInput
+    docente: DocenteCreateNestedOneWithoutHorariosInput
+    grupo: GrupoCreateNestedOneWithoutHorariosInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutHorariosInput
+  }
+
+  export type HorarioAsignadoUncheckedCreateWithoutVentanaInput = {
+    id_asignacion?: number
+    id_docente: number
+    id_curso: number
+    id_grupo: number
+    tipo_clase: $Enums.TipoClase
+    id_ambiente: number
+    dia_semana: number
+    hora_inicio: string
+    hora_fin: string
+    id_periodo: number
+    estado?: $Enums.EstadoHorario
+    observaciones?: string | null
+    creado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutAsignacionInput
+  }
+
+  export type HorarioAsignadoCreateOrConnectWithoutVentanaInput = {
+    where: HorarioAsignadoWhereUniqueInput
+    create: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput>
+  }
+
+  export type HorarioAsignadoCreateManyVentanaInputEnvelope = {
+    data: HorarioAsignadoCreateManyVentanaInput | HorarioAsignadoCreateManyVentanaInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PeriodoAcademicoCreateWithoutVentanas_atencionInput = {
     codigo: string
     nombre: string
@@ -55113,16 +66228,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput = {
@@ -55138,37 +66254,22 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutVentanas_atencionInput = {
     where: PeriodoAcademicoWhereUniqueInput
     create: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
-  }
-
-  export type HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput = {
-    where: HorarioAsignadoWhereUniqueInput
-    update: XOR<HorarioAsignadoUpdateWithoutVentanaInput, HorarioAsignadoUncheckedUpdateWithoutVentanaInput>
-    create: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput>
-  }
-
-  export type HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput = {
-    where: HorarioAsignadoWhereUniqueInput
-    data: XOR<HorarioAsignadoUpdateWithoutVentanaInput, HorarioAsignadoUncheckedUpdateWithoutVentanaInput>
-  }
-
-  export type HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput = {
-    where: HorarioAsignadoScalarWhereInput
-    data: XOR<HorarioAsignadoUpdateManyMutationInput, HorarioAsignadoUncheckedUpdateManyWithoutVentanaInput>
   }
 
   export type CitacionDocenteUpsertWithWhereUniqueWithoutVentanaInput = {
@@ -55219,6 +66320,22 @@ export namespace Prisma {
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type HorarioAsignadoUpsertWithWhereUniqueWithoutVentanaInput = {
+    where: HorarioAsignadoWhereUniqueInput
+    update: XOR<HorarioAsignadoUpdateWithoutVentanaInput, HorarioAsignadoUncheckedUpdateWithoutVentanaInput>
+    create: XOR<HorarioAsignadoCreateWithoutVentanaInput, HorarioAsignadoUncheckedCreateWithoutVentanaInput>
+  }
+
+  export type HorarioAsignadoUpdateWithWhereUniqueWithoutVentanaInput = {
+    where: HorarioAsignadoWhereUniqueInput
+    data: XOR<HorarioAsignadoUpdateWithoutVentanaInput, HorarioAsignadoUncheckedUpdateWithoutVentanaInput>
+  }
+
+  export type HorarioAsignadoUpdateManyWithWhereWithoutVentanaInput = {
+    where: HorarioAsignadoScalarWhereInput
+    data: XOR<HorarioAsignadoUpdateManyMutationInput, HorarioAsignadoUncheckedUpdateManyWithoutVentanaInput>
+  }
+
   export type PeriodoAcademicoUpsertWithoutVentanas_atencionInput = {
     update: XOR<PeriodoAcademicoUpdateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedUpdateWithoutVentanas_atencionInput>
     create: XOR<PeriodoAcademicoCreateWithoutVentanas_atencionInput, PeriodoAcademicoUncheckedCreateWithoutVentanas_atencionInput>
@@ -55242,16 +66359,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutVentanas_atencionInput = {
@@ -55267,16 +66385,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type AuditoriaHorarioCreateWithoutAsignacionInput = {
@@ -55324,6 +66443,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioCreateNestedManyWithoutUsuarioInput
     conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteCreateNestedOneWithoutUsuarioInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutHorarios_creadosInput = {
@@ -55341,6 +66462,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput
     conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutHorarios_creadosInput = {
@@ -55463,6 +66586,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -55475,12 +66603,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutHorariosInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -55503,6 +66633,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -55514,7 +66647,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutHorariosInput = {
@@ -55529,9 +66662,9 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
+    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     curso: CursoCreateNestedOneWithoutGruposInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
-    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutGrupoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutGrupoInput
   }
@@ -55568,16 +66701,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutHorariosInput = {
@@ -55593,16 +66727,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutHorariosInput = {
@@ -55693,6 +66828,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput
     conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUpdateOneWithoutUsuarioNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutHorarios_creadosInput = {
@@ -55710,6 +66847,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput
     conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type AmbienteUpsertWithoutHorariosInput = {
@@ -55850,6 +66989,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -55862,12 +67006,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutHorariosInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -55890,6 +67036,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -55901,7 +67050,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type GrupoUpsertWithoutHorariosInput = {
@@ -55922,9 +67071,9 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
-    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutGrupoNestedInput
   }
@@ -55967,16 +67116,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutHorariosInput = {
@@ -55992,16 +67142,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type VentanaAtencionUpsertWithoutHorariosInput = {
@@ -56167,6 +67318,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -56179,12 +67335,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutSelecciones_temporalesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -56207,6 +67365,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -56218,7 +67379,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutSelecciones_temporalesInput = {
@@ -56233,9 +67394,9 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
+    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     curso: CursoCreateNestedOneWithoutGruposInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
-    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutGrupoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutGrupoInput
   }
@@ -56272,16 +67433,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutSelecciones_temporalesInput = {
@@ -56297,16 +67459,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutSelecciones_temporalesInput = {
@@ -56452,6 +67615,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -56464,12 +67632,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutSelecciones_temporalesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -56492,6 +67662,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -56503,7 +67676,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type GrupoUpsertWithoutSelecciones_temporalesInput = {
@@ -56524,9 +67697,9 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
-    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutGrupoNestedInput
   }
@@ -56569,16 +67742,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutSelecciones_temporalesInput = {
@@ -56594,16 +67768,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type DocenteCreateWithoutDisponibilidadesInput = {
@@ -56629,6 +67804,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -56641,12 +67821,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutDisponibilidadesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -56669,6 +67851,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -56680,7 +67865,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutDisponibilidadesInput = {
@@ -56700,16 +67885,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutDisponibilidad_docentesInput = {
@@ -56725,16 +67911,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutDisponibilidad_docentesInput = {
@@ -56776,6 +67963,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -56788,12 +67980,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutDisponibilidadesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -56816,6 +68010,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -56827,7 +68024,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type PeriodoAcademicoUpsertWithoutDisponibilidad_docentesInput = {
@@ -56853,16 +68050,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutDisponibilidad_docentesInput = {
@@ -56878,16 +68076,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoCreateWithoutRestricciones_institucionalesInput = {
@@ -56902,16 +68101,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutRestricciones_institucionalesInput = {
@@ -56927,16 +68127,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutRestricciones_institucionalesInput = {
@@ -56967,16 +68168,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutRestricciones_institucionalesInput = {
@@ -56992,16 +68194,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoCreateWithoutDias_no_laborablesInput = {
@@ -57016,16 +68219,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutDias_no_laborablesInput = {
@@ -57041,16 +68245,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutDias_no_laborablesInput = {
@@ -57081,16 +68286,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutDias_no_laborablesInput = {
@@ -57106,16 +68312,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type AmbienteCreateWithoutPreasignacionesInput = {
@@ -57233,6 +68440,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -57245,12 +68457,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutPreasignacionesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -57273,6 +68487,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -57284,7 +68501,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutPreasignacionesInput = {
@@ -57299,9 +68516,9 @@ export namespace Prisma {
     activo?: boolean
     observaciones?: string | null
     fecha_creacion?: Date | string
+    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     curso: CursoCreateNestedOneWithoutGruposInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutGruposInput
-    docentes?: DocenteGrupoCreateNestedManyWithoutGrupoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutGrupoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutGrupoInput
   }
@@ -57338,16 +68555,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutPreasignacionesInput = {
@@ -57363,16 +68581,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutPreasignacionesInput = {
@@ -57518,6 +68737,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -57530,12 +68754,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutPreasignacionesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -57558,6 +68784,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -57569,7 +68798,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type GrupoUpsertWithoutPreasignacionesInput = {
@@ -57590,9 +68819,9 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
-    docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutGrupoNestedInput
   }
@@ -57635,16 +68864,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutPreasignacionesInput = {
@@ -57660,16 +68890,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type AmbienteCreateWithoutConflictosInput = {
@@ -57787,6 +69018,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
     disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
@@ -57799,12 +69035,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutConflictos_1Input = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -57827,6 +69065,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
     disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
@@ -57838,7 +69079,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutConflictos_1Input = {
@@ -57869,6 +69110,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
@@ -57881,12 +69127,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutConflictos_2Input = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -57909,6 +69157,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
@@ -57920,7 +69171,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutConflictos_2Input = {
@@ -57940,16 +69191,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutConflictosInput = {
@@ -57965,16 +69217,17 @@ export namespace Prisma {
     activo?: boolean
     estado?: $Enums.EstadoPeriodo
     fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutConflictosInput = {
@@ -57996,6 +69249,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioCreateNestedManyWithoutUsuarioInput
     docente?: DocenteCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutConflictos_resueltosInput = {
@@ -58013,6 +69268,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput
     docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutConflictos_resueltosInput = {
@@ -58158,6 +69415,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
     disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
@@ -58170,12 +69432,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutConflictos_1Input = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -58198,6 +69462,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
     disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
@@ -58209,7 +69476,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUpsertWithoutConflictos_2Input = {
@@ -58246,6 +69513,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
@@ -58258,12 +69530,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutConflictos_2Input = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -58286,6 +69560,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
@@ -58297,7 +69574,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type PeriodoAcademicoUpsertWithoutConflictosInput = {
@@ -58323,16 +69600,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutConflictosInput = {
@@ -58348,16 +69626,17 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type UsuarioUpsertWithoutConflictos_resueltosInput = {
@@ -58385,6 +69664,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput
     docente?: DocenteUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutConflictos_resueltosInput = {
@@ -58402,6 +69683,8 @@ export namespace Prisma {
     auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput
     docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type HorarioAsignadoCreateWithoutAuditoriasInput = {
@@ -58460,6 +69743,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioUncheckedCreateWithoutAuditoriasInput = {
@@ -58477,6 +69762,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
     docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
     horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
   export type UsuarioCreateOrConnectWithoutAuditoriasInput = {
@@ -58557,6 +69844,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
   }
 
   export type UsuarioUncheckedUpdateWithoutAuditoriasInput = {
@@ -58574,6 +69863,8 @@ export namespace Prisma {
     conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
     docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
     horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type DocenteCreateWithoutPreferencias_notificacionInput = {
@@ -58599,6 +69890,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -58611,12 +69907,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutPreferencias_notificacionInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -58639,6 +69937,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -58650,7 +69951,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutPreferencias_notificacionInput = {
@@ -58692,6 +69993,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -58704,12 +70010,14 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutPreferencias_notificacionInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -58732,6 +70040,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -58743,7 +70054,7 @@ export namespace Prisma {
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteCreateWithoutHistorial_notificacionesInput = {
@@ -58769,6 +70080,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -58781,12 +70097,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutHistorial_notificacionesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -58809,6 +70127,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -58820,7 +70141,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutHistorial_notificacionesInput = {
@@ -58862,6 +70183,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -58874,12 +70200,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutHistorial_notificacionesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -58902,6 +70230,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -58913,7 +70244,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteCreateWithoutCola_notificacionesInput = {
@@ -58939,6 +70270,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
     disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
@@ -58951,12 +70287,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutCola_notificacionesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -58979,6 +70317,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
     disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
@@ -58990,7 +70331,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutCola_notificacionesInput = {
@@ -59032,6 +70373,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
     disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
@@ -59044,12 +70390,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutCola_notificacionesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -59072,6 +70420,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
     disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
@@ -59083,61 +70434,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
-  }
-
-  export type PeriodoAcademicoCreateWithoutFase_disponibilidadInput = {
-    codigo: string
-    nombre: string
-    anio: number
-    semestre: number
-    fecha_inicio: Date | string
-    fecha_fin: Date | string
-    fecha_inicio_clases?: Date | string | null
-    fecha_fin_clases?: Date | string | null
-    activo?: boolean
-    estado?: $Enums.EstadoPeriodo
-    fecha_creacion?: Date | string
-    conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
-    dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
-    disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
-    grupos?: GrupoCreateNestedManyWithoutPeriodoInput
-    horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
-    preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
-    restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
-    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
-    ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
-  }
-
-  export type PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput = {
-    id_periodo?: number
-    codigo: string
-    nombre: string
-    anio: number
-    semestre: number
-    fecha_inicio: Date | string
-    fecha_fin: Date | string
-    fecha_inicio_clases?: Date | string | null
-    fecha_fin_clases?: Date | string | null
-    activo?: boolean
-    estado?: $Enums.EstadoPeriodo
-    fecha_creacion?: Date | string
-    conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
-    dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
-    disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
-    grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
-    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
-    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
-    restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
-    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
-    ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
-  }
-
-  export type PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput = {
-    where: PeriodoAcademicoWhereUniqueInput
-    create: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type DisponibilidadDocenteRegistroCreateWithoutFaseInput = {
@@ -59171,6 +70468,78 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PeriodoAcademicoCreateWithoutFase_disponibilidadInput = {
+    codigo: string
+    nombre: string
+    anio: number
+    semestre: number
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    fecha_inicio_clases?: Date | string | null
+    fecha_fin_clases?: Date | string | null
+    activo?: boolean
+    estado?: $Enums.EstadoPeriodo
+    fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
+    dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
+    disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    grupos?: GrupoCreateNestedManyWithoutPeriodoInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
+    preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
+    restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
+    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
+    ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
+  }
+
+  export type PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput = {
+    id_periodo?: number
+    codigo: string
+    nombre: string
+    anio: number
+    semestre: number
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    fecha_inicio_clases?: Date | string | null
+    fecha_fin_clases?: Date | string | null
+    activo?: boolean
+    estado?: $Enums.EstadoPeriodo
+    fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
+    dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
+    disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
+    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
+    restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
+    ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
+  }
+
+  export type PeriodoAcademicoCreateOrConnectWithoutFase_disponibilidadInput = {
+    where: PeriodoAcademicoWhereUniqueInput
+    create: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
+  }
+
+  export type DisponibilidadDocenteRegistroUpsertWithWhereUniqueWithoutFaseInput = {
+    where: DisponibilidadDocenteRegistroWhereUniqueInput
+    update: XOR<DisponibilidadDocenteRegistroUpdateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedUpdateWithoutFaseInput>
+    create: XOR<DisponibilidadDocenteRegistroCreateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedCreateWithoutFaseInput>
+  }
+
+  export type DisponibilidadDocenteRegistroUpdateWithWhereUniqueWithoutFaseInput = {
+    where: DisponibilidadDocenteRegistroWhereUniqueInput
+    data: XOR<DisponibilidadDocenteRegistroUpdateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedUpdateWithoutFaseInput>
+  }
+
+  export type DisponibilidadDocenteRegistroUpdateManyWithWhereWithoutFaseInput = {
+    where: DisponibilidadDocenteRegistroScalarWhereInput
+    data: XOR<DisponibilidadDocenteRegistroUpdateManyMutationInput, DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutFaseInput>
+  }
+
   export type PeriodoAcademicoUpsertWithoutFase_disponibilidadInput = {
     update: XOR<PeriodoAcademicoUpdateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedUpdateWithoutFase_disponibilidadInput>
     create: XOR<PeriodoAcademicoCreateWithoutFase_disponibilidadInput, PeriodoAcademicoUncheckedCreateWithoutFase_disponibilidadInput>
@@ -59194,6 +70563,7 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
@@ -59203,7 +70573,7 @@ export namespace Prisma {
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutFase_disponibilidadInput = {
@@ -59219,6 +70589,7 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
@@ -59228,23 +70599,7 @@ export namespace Prisma {
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
-  }
-
-  export type DisponibilidadDocenteRegistroUpsertWithWhereUniqueWithoutFaseInput = {
-    where: DisponibilidadDocenteRegistroWhereUniqueInput
-    update: XOR<DisponibilidadDocenteRegistroUpdateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedUpdateWithoutFaseInput>
-    create: XOR<DisponibilidadDocenteRegistroCreateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedCreateWithoutFaseInput>
-  }
-
-  export type DisponibilidadDocenteRegistroUpdateWithWhereUniqueWithoutFaseInput = {
-    where: DisponibilidadDocenteRegistroWhereUniqueInput
-    data: XOR<DisponibilidadDocenteRegistroUpdateWithoutFaseInput, DisponibilidadDocenteRegistroUncheckedUpdateWithoutFaseInput>
-  }
-
-  export type DisponibilidadDocenteRegistroUpdateManyWithWhereWithoutFaseInput = {
-    where: DisponibilidadDocenteRegistroScalarWhereInput
-    data: XOR<DisponibilidadDocenteRegistroUpdateManyMutationInput, DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutFaseInput>
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type DocenteCreateWithoutDisponibilidades_registroInput = {
@@ -59270,6 +70625,11 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -59282,12 +70642,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutDisponibilidades_registroInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -59310,6 +70672,9 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -59321,7 +70686,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
-    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutDisponibilidades_registroInput = {
@@ -59393,6 +70758,11 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -59405,12 +70775,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutDisponibilidades_registroInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -59433,6 +70805,9 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -59444,7 +70819,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
-    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type FaseDisponibilidadUpsertWithoutRegistros_disponibilidadInput = {
@@ -59506,6 +70881,10 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
     cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
@@ -59519,11 +70898,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteUncheckedCreateWithoutCitacionesInput = {
     id_docente?: number
     id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
     codigo_docente: string
     nombres: string
     apellidos: string
@@ -59546,6 +70928,8 @@ export namespace Prisma {
     foto_perfil?: string | null
     perfil_completo?: boolean
     horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
     cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
     conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
     conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
@@ -59558,6 +70942,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutDocenteInput
   }
 
   export type DocenteCreateOrConnectWithoutCitacionesInput = {
@@ -59580,13 +70965,14 @@ export namespace Prisma {
     conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoUncheckedCreateWithoutCitaciones_docentesInput = {
@@ -59605,13 +70991,14 @@ export namespace Prisma {
     conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
     grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
     horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
     preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
     ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
+    cargas_academicas?: CargaAcademicaUncheckedCreateNestedManyWithoutPeriodoInput
   }
 
   export type PeriodoAcademicoCreateOrConnectWithoutCitaciones_docentesInput = {
@@ -59632,8 +71019,8 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutVentanas_atencionInput
   }
 
@@ -59652,8 +71039,8 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedCreateNestedOneWithoutVentanaInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
   }
 
   export type VentanaAtencionCreateOrConnectWithoutCitacionesInput = {
@@ -59695,6 +71082,10 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
     cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
@@ -59708,11 +71099,14 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
   }
 
   export type DocenteUncheckedUpdateWithoutCitacionesInput = {
     id_docente?: IntFieldUpdateOperationsInput | number
     id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
     codigo_docente?: StringFieldUpdateOperationsInput | string
     nombres?: StringFieldUpdateOperationsInput | string
     apellidos?: StringFieldUpdateOperationsInput | string
@@ -59735,6 +71129,8 @@ export namespace Prisma {
     foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
     perfil_completo?: BoolFieldUpdateOperationsInput | boolean
     horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
     cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
     conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
     conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
@@ -59747,6 +71143,7 @@ export namespace Prisma {
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
     preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
   }
 
   export type PeriodoAcademicoUpsertWithoutCitaciones_docentesInput = {
@@ -59775,13 +71172,14 @@ export namespace Prisma {
     conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutPeriodoNestedInput
   }
 
   export type PeriodoAcademicoUncheckedUpdateWithoutCitaciones_docentesInput = {
@@ -59800,13 +71198,14 @@ export namespace Prisma {
     conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
     disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
     grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
     horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
     preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
     restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
     ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
-    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutPeriodoNestedInput
   }
 
   export type VentanaAtencionUpsertWithoutCitacionesInput = {
@@ -59833,8 +71232,8 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutVentanas_atencionNestedInput
   }
 
@@ -59853,8 +71252,8 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
   }
 
   export type VentanaAtencionCreateWithoutConfiguracion_turnosInput = {
@@ -59870,8 +71269,8 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteCreateNestedManyWithoutVentanaInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutVentanaInput
     periodo: PeriodoAcademicoCreateNestedOneWithoutVentanas_atencionInput
   }
 
@@ -59890,8 +71289,8 @@ export namespace Prisma {
     completado?: boolean
     activo?: boolean
     fecha_creacion?: Date | string
-    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
     citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutVentanaInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutVentanaInput
   }
 
   export type VentanaAtencionCreateOrConnectWithoutConfiguracion_turnosInput = {
@@ -59923,8 +71322,8 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUpdateManyWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     periodo?: PeriodoAcademicoUpdateOneRequiredWithoutVentanas_atencionNestedInput
   }
 
@@ -59943,8 +71342,1137 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUncheckedUpdateManyWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
+  }
+
+  export type DocenteCreateWithoutCargas_academicasInput = {
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadCreateNestedOneWithoutDocentesInput
+    departamento?: DepartamentoAcademicoCreateNestedOneWithoutDocentesInput
+    citaciones?: CitacionDocenteCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroCreateNestedManyWithoutDocenteInput
+    usuario?: UsuarioCreateNestedOneWithoutDocenteInput
+    cursos?: DocenteCursoCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteUncheckedCreateWithoutCargas_academicasInput = {
+    id_docente?: number
+    id_usuario?: number | null
+    id_facultad?: number | null
+    id_departamento?: number | null
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    cola_notificaciones?: ColaNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    conflictos_1?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_1Input
+    conflictos_2?: ConflictoHorarioUncheckedCreateNestedManyWithoutDocente_2Input
+    disponibilidades?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedCreateNestedManyWithoutDocenteInput
+    cursos?: DocenteCursoUncheckedCreateNestedManyWithoutDocenteInput
+    grupos?: DocenteGrupoUncheckedCreateNestedManyWithoutDocenteInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedCreateNestedManyWithoutDocenteInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutDocenteInput
+    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutDocenteInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedCreateNestedManyWithoutDocenteInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutDocenteInput
+  }
+
+  export type DocenteCreateOrConnectWithoutCargas_academicasInput = {
+    where: DocenteWhereUniqueInput
+    create: XOR<DocenteCreateWithoutCargas_academicasInput, DocenteUncheckedCreateWithoutCargas_academicasInput>
+  }
+
+  export type PeriodoAcademicoCreateWithoutCargas_academicasInput = {
+    codigo: string
+    nombre: string
+    anio: number
+    semestre: number
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    fecha_inicio_clases?: Date | string | null
+    fecha_fin_clases?: Date | string | null
+    activo?: boolean
+    estado?: $Enums.EstadoPeriodo
+    fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteCreateNestedManyWithoutPeriodoInput
+    conflictos?: ConflictoHorarioCreateNestedManyWithoutPeriodoInput
+    dias_no_laborables?: DiaNoLaborableCreateNestedManyWithoutPeriodoInput
+    disponibilidad_docentes?: DisponibilidadDocenteCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadCreateNestedOneWithoutPeriodoInput
+    grupos?: GrupoCreateNestedManyWithoutPeriodoInput
+    horarios?: HorarioAsignadoCreateNestedManyWithoutPeriodoInput
+    preasignaciones?: PreasignacionCreateNestedManyWithoutPeriodoInput
+    restricciones_institucionales?: RestriccionInstitucionalCreateNestedManyWithoutPeriodoInput
+    selecciones_temporales?: SeleccionTemporalHorarioCreateNestedManyWithoutPeriodoInput
+    ventanas_atencion?: VentanaAtencionCreateNestedManyWithoutPeriodoInput
+  }
+
+  export type PeriodoAcademicoUncheckedCreateWithoutCargas_academicasInput = {
+    id_periodo?: number
+    codigo: string
+    nombre: string
+    anio: number
+    semestre: number
+    fecha_inicio: Date | string
+    fecha_fin: Date | string
+    fecha_inicio_clases?: Date | string | null
+    fecha_fin_clases?: Date | string | null
+    activo?: boolean
+    estado?: $Enums.EstadoPeriodo
+    fecha_creacion?: Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    conflictos?: ConflictoHorarioUncheckedCreateNestedManyWithoutPeriodoInput
+    dias_no_laborables?: DiaNoLaborableUncheckedCreateNestedManyWithoutPeriodoInput
+    disponibilidad_docentes?: DisponibilidadDocenteUncheckedCreateNestedManyWithoutPeriodoInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedCreateNestedOneWithoutPeriodoInput
+    grupos?: GrupoUncheckedCreateNestedManyWithoutPeriodoInput
+    horarios?: HorarioAsignadoUncheckedCreateNestedManyWithoutPeriodoInput
+    preasignaciones?: PreasignacionUncheckedCreateNestedManyWithoutPeriodoInput
+    restricciones_institucionales?: RestriccionInstitucionalUncheckedCreateNestedManyWithoutPeriodoInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedCreateNestedManyWithoutPeriodoInput
+    ventanas_atencion?: VentanaAtencionUncheckedCreateNestedManyWithoutPeriodoInput
+  }
+
+  export type PeriodoAcademicoCreateOrConnectWithoutCargas_academicasInput = {
+    where: PeriodoAcademicoWhereUniqueInput
+    create: XOR<PeriodoAcademicoCreateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedCreateWithoutCargas_academicasInput>
+  }
+
+  export type UsuarioCreateWithoutCargas_aprobadasInput = {
+    codigo: string
+    nombres: string
+    apellidos: string
+    correo_electronico?: string | null
+    contrasena_hash: string
+    rol: $Enums.TipoRol
+    activo?: boolean
+    ultimo_acceso?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioCreateNestedManyWithoutUsuarioInput
+    conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
+    docente?: DocenteCreateNestedOneWithoutUsuarioInput
+    horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    historial_carga?: HistorialCargaAcademicaCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutCargas_aprobadasInput = {
+    id_usuario?: number
+    codigo: string
+    nombres: string
+    apellidos: string
+    correo_electronico?: string | null
+    contrasena_hash: string
+    rol: $Enums.TipoRol
+    activo?: boolean
+    ultimo_acceso?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput
+    conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
+    docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
+    horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    historial_carga?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutCargas_aprobadasInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutCargas_aprobadasInput, UsuarioUncheckedCreateWithoutCargas_aprobadasInput>
+  }
+
+  export type ActividadNoLectivaCreateWithoutCarga_academicaInput = {
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput = {
+    id_actividad?: number
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type ActividadNoLectivaCreateOrConnectWithoutCarga_academicaInput = {
+    where: ActividadNoLectivaWhereUniqueInput
+    create: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput>
+  }
+
+  export type ActividadNoLectivaCreateManyCarga_academicaInputEnvelope = {
+    data: ActividadNoLectivaCreateManyCarga_academicaInput | ActividadNoLectivaCreateManyCarga_academicaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HistorialCargaAcademicaCreateWithoutCarga_academicaInput = {
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    usuario: UsuarioCreateNestedOneWithoutHistorial_cargaInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput = {
+    id_historial?: number
+    id_usuario: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateOrConnectWithoutCarga_academicaInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    create: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput>
+  }
+
+  export type HistorialCargaAcademicaCreateManyCarga_academicaInputEnvelope = {
+    data: HistorialCargaAcademicaCreateManyCarga_academicaInput | HistorialCargaAcademicaCreateManyCarga_academicaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DocenteUpsertWithoutCargas_academicasInput = {
+    update: XOR<DocenteUpdateWithoutCargas_academicasInput, DocenteUncheckedUpdateWithoutCargas_academicasInput>
+    create: XOR<DocenteCreateWithoutCargas_academicasInput, DocenteUncheckedCreateWithoutCargas_academicasInput>
+    where?: DocenteWhereInput
+  }
+
+  export type DocenteUpdateToOneWithWhereWithoutCargas_academicasInput = {
+    where?: DocenteWhereInput
+    data: XOR<DocenteUpdateWithoutCargas_academicasInput, DocenteUncheckedUpdateWithoutCargas_academicasInput>
+  }
+
+  export type DocenteUpdateWithoutCargas_academicasInput = {
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUpdateManyWithoutDocenteNestedInput
+    usuario?: UsuarioUpdateOneWithoutDocenteNestedInput
+    cursos?: DocenteCursoUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type DocenteUncheckedUpdateWithoutCargas_academicasInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutDocenteNestedInput
+    cursos?: DocenteCursoUncheckedUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUncheckedUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type PeriodoAcademicoUpsertWithoutCargas_academicasInput = {
+    update: XOR<PeriodoAcademicoUpdateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedUpdateWithoutCargas_academicasInput>
+    create: XOR<PeriodoAcademicoCreateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedCreateWithoutCargas_academicasInput>
+    where?: PeriodoAcademicoWhereInput
+  }
+
+  export type PeriodoAcademicoUpdateToOneWithWhereWithoutCargas_academicasInput = {
+    where?: PeriodoAcademicoWhereInput
+    data: XOR<PeriodoAcademicoUpdateWithoutCargas_academicasInput, PeriodoAcademicoUncheckedUpdateWithoutCargas_academicasInput>
+  }
+
+  export type PeriodoAcademicoUpdateWithoutCargas_academicasInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    anio?: IntFieldUpdateOperationsInput | number
+    semestre?: IntFieldUpdateOperationsInput | number
+    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_inicio_clases?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin_clases?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUpdateManyWithoutPeriodoNestedInput
+    conflictos?: ConflictoHorarioUpdateManyWithoutPeriodoNestedInput
+    dias_no_laborables?: DiaNoLaborableUpdateManyWithoutPeriodoNestedInput
+    disponibilidad_docentes?: DisponibilidadDocenteUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUpdateOneWithoutPeriodoNestedInput
+    grupos?: GrupoUpdateManyWithoutPeriodoNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutPeriodoNestedInput
+    preasignaciones?: PreasignacionUpdateManyWithoutPeriodoNestedInput
+    restricciones_institucionales?: RestriccionInstitucionalUpdateManyWithoutPeriodoNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutPeriodoNestedInput
+    ventanas_atencion?: VentanaAtencionUpdateManyWithoutPeriodoNestedInput
+  }
+
+  export type PeriodoAcademicoUncheckedUpdateWithoutCargas_academicasInput = {
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    anio?: IntFieldUpdateOperationsInput | number
+    semestre?: IntFieldUpdateOperationsInput | number
+    fecha_inicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_fin?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_inicio_clases?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin_clases?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    estado?: EnumEstadoPeriodoFieldUpdateOperationsInput | $Enums.EstadoPeriodo
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    citaciones_docentes?: CitacionDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    conflictos?: ConflictoHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
+    dias_no_laborables?: DiaNoLaborableUncheckedUpdateManyWithoutPeriodoNestedInput
+    disponibilidad_docentes?: DisponibilidadDocenteUncheckedUpdateManyWithoutPeriodoNestedInput
+    fase_disponibilidad?: FaseDisponibilidadUncheckedUpdateOneWithoutPeriodoNestedInput
+    grupos?: GrupoUncheckedUpdateManyWithoutPeriodoNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutPeriodoNestedInput
+    preasignaciones?: PreasignacionUncheckedUpdateManyWithoutPeriodoNestedInput
+    restricciones_institucionales?: RestriccionInstitucionalUncheckedUpdateManyWithoutPeriodoNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutPeriodoNestedInput
+    ventanas_atencion?: VentanaAtencionUncheckedUpdateManyWithoutPeriodoNestedInput
+  }
+
+  export type UsuarioUpsertWithoutCargas_aprobadasInput = {
+    update: XOR<UsuarioUpdateWithoutCargas_aprobadasInput, UsuarioUncheckedUpdateWithoutCargas_aprobadasInput>
+    create: XOR<UsuarioCreateWithoutCargas_aprobadasInput, UsuarioUncheckedCreateWithoutCargas_aprobadasInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutCargas_aprobadasInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutCargas_aprobadasInput, UsuarioUncheckedUpdateWithoutCargas_aprobadasInput>
+  }
+
+  export type UsuarioUpdateWithoutCargas_aprobadasInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    contrasena_hash?: StringFieldUpdateOperationsInput | string
+    rol?: EnumTipoRolFieldUpdateOperationsInput | $Enums.TipoRol
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    ultimo_acceso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput
+    conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
+    docente?: DocenteUpdateOneWithoutUsuarioNestedInput
+    horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutCargas_aprobadasInput = {
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    contrasena_hash?: StringFieldUpdateOperationsInput | string
+    rol?: EnumTipoRolFieldUpdateOperationsInput | $Enums.TipoRol
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    ultimo_acceso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput
+    conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
+    docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
+    horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    historial_carga?: HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type ActividadNoLectivaUpsertWithWhereUniqueWithoutCarga_academicaInput = {
+    where: ActividadNoLectivaWhereUniqueInput
+    update: XOR<ActividadNoLectivaUpdateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedUpdateWithoutCarga_academicaInput>
+    create: XOR<ActividadNoLectivaCreateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedCreateWithoutCarga_academicaInput>
+  }
+
+  export type ActividadNoLectivaUpdateWithWhereUniqueWithoutCarga_academicaInput = {
+    where: ActividadNoLectivaWhereUniqueInput
+    data: XOR<ActividadNoLectivaUpdateWithoutCarga_academicaInput, ActividadNoLectivaUncheckedUpdateWithoutCarga_academicaInput>
+  }
+
+  export type ActividadNoLectivaUpdateManyWithWhereWithoutCarga_academicaInput = {
+    where: ActividadNoLectivaScalarWhereInput
+    data: XOR<ActividadNoLectivaUpdateManyMutationInput, ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaInput>
+  }
+
+  export type ActividadNoLectivaScalarWhereInput = {
+    AND?: ActividadNoLectivaScalarWhereInput | ActividadNoLectivaScalarWhereInput[]
+    OR?: ActividadNoLectivaScalarWhereInput[]
+    NOT?: ActividadNoLectivaScalarWhereInput | ActividadNoLectivaScalarWhereInput[]
+    id_actividad?: IntFilter<"ActividadNoLectiva"> | number
+    id_carga?: IntFilter<"ActividadNoLectiva"> | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFilter<"ActividadNoLectiva"> | $Enums.TipoActividadNoLectiva
+    nombre?: StringFilter<"ActividadNoLectiva"> | string
+    descripcion?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    horas_semanales?: IntFilter<"ActividadNoLectiva"> | number
+    horas_asignadas?: IntFilter<"ActividadNoLectiva"> | number
+    dias_semana?: JsonNullableFilter<"ActividadNoLectiva">
+    fecha_inicio?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    fecha_fin?: DateTimeNullableFilter<"ActividadNoLectiva"> | Date | string | null
+    datos_adicionales?: JsonNullableFilter<"ActividadNoLectiva">
+    datos_sustento?: JsonNullableFilter<"ActividadNoLectiva">
+    horarios_actividad?: JsonNullableFilter<"ActividadNoLectiva">
+    observaciones?: StringNullableFilter<"ActividadNoLectiva"> | string | null
+    fecha_creacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+    fecha_actualizacion?: DateTimeFilter<"ActividadNoLectiva"> | Date | string
+  }
+
+  export type HistorialCargaAcademicaUpsertWithWhereUniqueWithoutCarga_academicaInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    update: XOR<HistorialCargaAcademicaUpdateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedUpdateWithoutCarga_academicaInput>
+    create: XOR<HistorialCargaAcademicaCreateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedCreateWithoutCarga_academicaInput>
+  }
+
+  export type HistorialCargaAcademicaUpdateWithWhereUniqueWithoutCarga_academicaInput = {
+    where: HistorialCargaAcademicaWhereUniqueInput
+    data: XOR<HistorialCargaAcademicaUpdateWithoutCarga_academicaInput, HistorialCargaAcademicaUncheckedUpdateWithoutCarga_academicaInput>
+  }
+
+  export type HistorialCargaAcademicaUpdateManyWithWhereWithoutCarga_academicaInput = {
+    where: HistorialCargaAcademicaScalarWhereInput
+    data: XOR<HistorialCargaAcademicaUpdateManyMutationInput, HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaInput>
+  }
+
+  export type CargaAcademicaCreateWithoutActividades_no_lectivasInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutCargas_academicasInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput
+    usuario_aprobador?: UsuarioCreateNestedOneWithoutCargas_aprobadasInput
+    historial?: HistorialCargaAcademicaCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaUncheckedCreateWithoutActividades_no_lectivasInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    historial?: HistorialCargaAcademicaUncheckedCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaCreateOrConnectWithoutActividades_no_lectivasInput = {
+    where: CargaAcademicaWhereUniqueInput
+    create: XOR<CargaAcademicaCreateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedCreateWithoutActividades_no_lectivasInput>
+  }
+
+  export type CargaAcademicaUpsertWithoutActividades_no_lectivasInput = {
+    update: XOR<CargaAcademicaUpdateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedUpdateWithoutActividades_no_lectivasInput>
+    create: XOR<CargaAcademicaCreateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedCreateWithoutActividades_no_lectivasInput>
+    where?: CargaAcademicaWhereInput
+  }
+
+  export type CargaAcademicaUpdateToOneWithWhereWithoutActividades_no_lectivasInput = {
+    where?: CargaAcademicaWhereInput
+    data: XOR<CargaAcademicaUpdateWithoutActividades_no_lectivasInput, CargaAcademicaUncheckedUpdateWithoutActividades_no_lectivasInput>
+  }
+
+  export type CargaAcademicaUpdateWithoutActividades_no_lectivasInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docente?: DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput
+    usuario_aprobador?: UsuarioUpdateOneWithoutCargas_aprobadasNestedInput
+    historial?: HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateWithoutActividades_no_lectivasInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    historial?: HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaCreateWithoutHistorialInput = {
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    docente: DocenteCreateNestedOneWithoutCargas_academicasInput
+    periodo: PeriodoAcademicoCreateNestedOneWithoutCargas_academicasInput
+    usuario_aprobador?: UsuarioCreateNestedOneWithoutCargas_aprobadasInput
+    actividades_no_lectivas?: ActividadNoLectivaCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaUncheckedCreateWithoutHistorialInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedCreateNestedManyWithoutCarga_academicaInput
+  }
+
+  export type CargaAcademicaCreateOrConnectWithoutHistorialInput = {
+    where: CargaAcademicaWhereUniqueInput
+    create: XOR<CargaAcademicaCreateWithoutHistorialInput, CargaAcademicaUncheckedCreateWithoutHistorialInput>
+  }
+
+  export type UsuarioCreateWithoutHistorial_cargaInput = {
+    codigo: string
+    nombres: string
+    apellidos: string
+    correo_electronico?: string | null
+    contrasena_hash: string
+    rol: $Enums.TipoRol
+    activo?: boolean
+    ultimo_acceso?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioCreateNestedManyWithoutUsuarioInput
+    conflictos_resueltos?: ConflictoHorarioCreateNestedManyWithoutUsuario_resolvioInput
+    docente?: DocenteCreateNestedOneWithoutUsuarioInput
+    horarios_creados?: HorarioAsignadoCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaCreateNestedManyWithoutUsuario_aprobadorInput
+  }
+
+  export type UsuarioUncheckedCreateWithoutHistorial_cargaInput = {
+    id_usuario?: number
+    codigo: string
+    nombres: string
+    apellidos: string
+    correo_electronico?: string | null
+    contrasena_hash: string
+    rol: $Enums.TipoRol
+    activo?: boolean
+    ultimo_acceso?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    auditorias?: AuditoriaHorarioUncheckedCreateNestedManyWithoutUsuarioInput
+    conflictos_resueltos?: ConflictoHorarioUncheckedCreateNestedManyWithoutUsuario_resolvioInput
+    docente?: DocenteUncheckedCreateNestedOneWithoutUsuarioInput
+    horarios_creados?: HorarioAsignadoUncheckedCreateNestedManyWithoutUsuario_creadorInput
+    cargas_aprobadas?: CargaAcademicaUncheckedCreateNestedManyWithoutUsuario_aprobadorInput
+  }
+
+  export type UsuarioCreateOrConnectWithoutHistorial_cargaInput = {
+    where: UsuarioWhereUniqueInput
+    create: XOR<UsuarioCreateWithoutHistorial_cargaInput, UsuarioUncheckedCreateWithoutHistorial_cargaInput>
+  }
+
+  export type CargaAcademicaUpsertWithoutHistorialInput = {
+    update: XOR<CargaAcademicaUpdateWithoutHistorialInput, CargaAcademicaUncheckedUpdateWithoutHistorialInput>
+    create: XOR<CargaAcademicaCreateWithoutHistorialInput, CargaAcademicaUncheckedCreateWithoutHistorialInput>
+    where?: CargaAcademicaWhereInput
+  }
+
+  export type CargaAcademicaUpdateToOneWithWhereWithoutHistorialInput = {
+    where?: CargaAcademicaWhereInput
+    data: XOR<CargaAcademicaUpdateWithoutHistorialInput, CargaAcademicaUncheckedUpdateWithoutHistorialInput>
+  }
+
+  export type CargaAcademicaUpdateWithoutHistorialInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docente?: DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput
+    usuario_aprobador?: UsuarioUpdateOneWithoutCargas_aprobadasNestedInput
+    actividades_no_lectivas?: ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateWithoutHistorialInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type UsuarioUpsertWithoutHistorial_cargaInput = {
+    update: XOR<UsuarioUpdateWithoutHistorial_cargaInput, UsuarioUncheckedUpdateWithoutHistorial_cargaInput>
+    create: XOR<UsuarioCreateWithoutHistorial_cargaInput, UsuarioUncheckedCreateWithoutHistorial_cargaInput>
+    where?: UsuarioWhereInput
+  }
+
+  export type UsuarioUpdateToOneWithWhereWithoutHistorial_cargaInput = {
+    where?: UsuarioWhereInput
+    data: XOR<UsuarioUpdateWithoutHistorial_cargaInput, UsuarioUncheckedUpdateWithoutHistorial_cargaInput>
+  }
+
+  export type UsuarioUpdateWithoutHistorial_cargaInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    contrasena_hash?: StringFieldUpdateOperationsInput | string
+    rol?: EnumTipoRolFieldUpdateOperationsInput | $Enums.TipoRol
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    ultimo_acceso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUpdateManyWithoutUsuarioNestedInput
+    conflictos_resueltos?: ConflictoHorarioUpdateManyWithoutUsuario_resolvioNestedInput
+    docente?: DocenteUpdateOneWithoutUsuarioNestedInput
+    horarios_creados?: HorarioAsignadoUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUpdateManyWithoutUsuario_aprobadorNestedInput
+  }
+
+  export type UsuarioUncheckedUpdateWithoutHistorial_cargaInput = {
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    contrasena_hash?: StringFieldUpdateOperationsInput | string
+    rol?: EnumTipoRolFieldUpdateOperationsInput | $Enums.TipoRol
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    ultimo_acceso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutUsuarioNestedInput
+    conflictos_resueltos?: ConflictoHorarioUncheckedUpdateManyWithoutUsuario_resolvioNestedInput
+    docente?: DocenteUncheckedUpdateOneWithoutUsuarioNestedInput
+    horarios_creados?: HorarioAsignadoUncheckedUpdateManyWithoutUsuario_creadorNestedInput
+    cargas_aprobadas?: CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorNestedInput
+  }
+
+  export type DepartamentoAcademicoCreateManyFacultadInput = {
+    id_departamento?: number
+    codigo: string
+    nombre: string
+    activo?: boolean
+    fecha_creacion?: Date | string
+  }
+
+  export type DocenteCreateManyFacultadInput = {
+    id_docente?: number
+    id_usuario?: number | null
+    id_departamento?: number | null
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type DepartamentoAcademicoUpdateWithoutFacultadInput = {
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteUpdateManyWithoutDepartamentoNestedInput
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateWithoutFacultadInput = {
+    id_departamento?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docentes?: DocenteUncheckedUpdateManyWithoutDepartamentoNestedInput
+  }
+
+  export type DepartamentoAcademicoUncheckedUpdateManyWithoutFacultadInput = {
+    id_departamento?: IntFieldUpdateOperationsInput | number
+    codigo?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocenteUpdateWithoutFacultadInput = {
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    departamento?: DepartamentoAcademicoUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUpdateManyWithoutDocenteNestedInput
+    usuario?: UsuarioUpdateOneWithoutDocenteNestedInput
+    cursos?: DocenteCursoUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type DocenteUncheckedUpdateWithoutFacultadInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutDocenteNestedInput
+    cursos?: DocenteCursoUncheckedUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUncheckedUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type DocenteUncheckedUpdateManyWithoutFacultadInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_departamento?: NullableIntFieldUpdateOperationsInput | number | null
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type DocenteCreateManyDepartamentoInput = {
+    id_docente?: number
+    id_usuario?: number | null
+    id_facultad?: number | null
+    codigo_docente: string
+    nombres: string
+    apellidos: string
+    modalidad: $Enums.TipoModalidad
+    categoria: $Enums.TipoCategoria
+    dedicacion?: $Enums.TipoDedicacion | null
+    antiguedad?: number
+    fecha_ingreso?: Date | string | null
+    correo_electronico?: string | null
+    telefono?: string | null
+    grado_academico?: string | null
+    especialidad?: string | null
+    horas_maximas_semanales?: number
+    activo?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+    direccion?: string | null
+    disponibilidad?: string | null
+    escuela_profesional?: string | null
+    foto_perfil?: string | null
+    perfil_completo?: boolean
+    horas_totales_asignadas?: number
+    dni_docente?: string | null
+    tipo_dedicacion_laboral?: $Enums.TipoDedicacionLaboral | null
+  }
+
+  export type DocenteUpdateWithoutDepartamentoInput = {
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    facultad?: FacultadUpdateOneWithoutDocentesNestedInput
+    citaciones?: CitacionDocenteUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUpdateManyWithoutDocenteNestedInput
+    usuario?: UsuarioUpdateOneWithoutDocenteNestedInput
+    cursos?: DocenteCursoUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type DocenteUncheckedUpdateWithoutDepartamentoInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
+    citaciones?: CitacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    cola_notificaciones?: ColaNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    conflictos_1?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_1NestedInput
+    conflictos_2?: ConflictoHorarioUncheckedUpdateManyWithoutDocente_2NestedInput
+    disponibilidades?: DisponibilidadDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    disponibilidades_registro?: DisponibilidadDocenteRegistroUncheckedUpdateManyWithoutDocenteNestedInput
+    cursos?: DocenteCursoUncheckedUpdateManyWithoutDocenteNestedInput
+    grupos?: DocenteGrupoUncheckedUpdateManyWithoutDocenteNestedInput
+    historial_notificaciones?: HistorialNotificacionesUncheckedUpdateManyWithoutDocenteNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutDocenteNestedInput
+    preasignaciones?: PreasignacionUncheckedUpdateManyWithoutDocenteNestedInput
+    preferencias_notificacion?: PreferenciasNotificacionDocenteUncheckedUpdateManyWithoutDocenteNestedInput
+    selecciones_temporales?: SeleccionTemporalHorarioUncheckedUpdateManyWithoutDocenteNestedInput
+    cargas_academicas?: CargaAcademicaUncheckedUpdateManyWithoutDocenteNestedInput
+  }
+
+  export type DocenteUncheckedUpdateManyWithoutDepartamentoInput = {
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_usuario?: NullableIntFieldUpdateOperationsInput | number | null
+    id_facultad?: NullableIntFieldUpdateOperationsInput | number | null
+    codigo_docente?: StringFieldUpdateOperationsInput | string
+    nombres?: StringFieldUpdateOperationsInput | string
+    apellidos?: StringFieldUpdateOperationsInput | string
+    modalidad?: EnumTipoModalidadFieldUpdateOperationsInput | $Enums.TipoModalidad
+    categoria?: EnumTipoCategoriaFieldUpdateOperationsInput | $Enums.TipoCategoria
+    dedicacion?: NullableEnumTipoDedicacionFieldUpdateOperationsInput | $Enums.TipoDedicacion | null
+    antiguedad?: IntFieldUpdateOperationsInput | number
+    fecha_ingreso?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correo_electronico?: NullableStringFieldUpdateOperationsInput | string | null
+    telefono?: NullableStringFieldUpdateOperationsInput | string | null
+    grado_academico?: NullableStringFieldUpdateOperationsInput | string | null
+    especialidad?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_maximas_semanales?: IntFieldUpdateOperationsInput | number
+    activo?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    direccion?: NullableStringFieldUpdateOperationsInput | string | null
+    disponibilidad?: NullableStringFieldUpdateOperationsInput | string | null
+    escuela_profesional?: NullableStringFieldUpdateOperationsInput | string | null
+    foto_perfil?: NullableStringFieldUpdateOperationsInput | string | null
+    perfil_completo?: BoolFieldUpdateOperationsInput | boolean
+    horas_totales_asignadas?: IntFieldUpdateOperationsInput | number
+    dni_docente?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo_dedicacion_laboral?: NullableEnumTipoDedicacionLaboralFieldUpdateOperationsInput | $Enums.TipoDedicacionLaboral | null
   }
 
   export type AuditoriaHorarioCreateManyUsuarioInput = {
@@ -59991,6 +72519,33 @@ export namespace Prisma {
     observaciones?: string | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
+  }
+
+  export type CargaAcademicaCreateManyUsuario_aprobadorInput = {
+    id_carga?: number
+    id_docente: number
+    id_periodo: number
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
+    observaciones?: string | null
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateManyUsuarioInput = {
+    id_historial?: number
+    id_carga: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
   }
 
   export type AuditoriaHorarioUpdateWithoutUsuarioInput = {
@@ -60130,6 +72685,108 @@ export namespace Prisma {
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CargaAcademicaUpdateWithoutUsuario_aprobadorInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docente?: DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput
+    actividades_no_lectivas?: ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateWithoutUsuario_aprobadorInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateManyWithoutUsuario_aprobadorInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaUpdateWithoutUsuarioInput = {
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    carga_academica?: CargaAcademicaUpdateOneRequiredWithoutHistorialNestedInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateWithoutUsuarioInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateManyWithoutUsuarioInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_carga?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CitacionDocenteCreateManyPeriodoInput = {
+    id_citacion?: number
+    id_docente: number
+    id_ventana: number
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
   export type ConflictoHorarioCreateManyPeriodoInput = {
     id_conflicto?: number
     tipo_conflicto: $Enums.TipoConflicto
@@ -60251,23 +72908,78 @@ export namespace Prisma {
     fecha_creacion?: Date | string
   }
 
-  export type CitacionDocenteCreateManyPeriodoInput = {
-    id_citacion?: number
+  export type CargaAcademicaCreateManyPeriodoInput = {
+    id_carga?: number
     id_docente: number
-    id_ventana: number
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
+  }
+
+  export type CitacionDocenteUpdateWithoutPeriodoInput = {
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    docente?: DocenteUpdateOneRequiredWithoutCitacionesNestedInput
+    ventana?: VentanaAtencionUpdateOneRequiredWithoutCitacionesNestedInput
+  }
+
+  export type CitacionDocenteUncheckedUpdateWithoutPeriodoInput = {
+    id_citacion?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_ventana?: IntFieldUpdateOperationsInput | number
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CitacionDocenteUncheckedUpdateManyWithoutPeriodoInput = {
+    id_citacion?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_ventana?: IntFieldUpdateOperationsInput | number
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConflictoHorarioUpdateWithoutPeriodoInput = {
@@ -60385,8 +73097,8 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
+    curso?: CursoUpdateOneRequiredWithoutGruposNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutGrupoNestedInput
@@ -60600,9 +73312,9 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUpdateManyWithoutVentanaNestedInput
   }
 
   export type VentanaAtencionUncheckedUpdateWithoutPeriodoInput = {
@@ -60619,9 +73331,9 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     activo?: BoolFieldUpdateOperationsInput | boolean
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
     citaciones?: CitacionDocenteUncheckedUpdateManyWithoutVentanaNestedInput
     configuracion_turnos?: ConfiguracionTurnosAtencionUncheckedUpdateOneWithoutVentanaNestedInput
+    horarios?: HorarioAsignadoUncheckedUpdateManyWithoutVentanaNestedInput
   }
 
   export type VentanaAtencionUncheckedUpdateManyWithoutPeriodoInput = {
@@ -60640,60 +73352,80 @@ export namespace Prisma {
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CitacionDocenteUpdateWithoutPeriodoInput = {
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+  export type CargaAcademicaUpdateWithoutPeriodoInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    docente?: DocenteUpdateOneRequiredWithoutCitacionesNestedInput
-    ventana?: VentanaAtencionUpdateOneRequiredWithoutCitacionesNestedInput
+    docente?: DocenteUpdateOneRequiredWithoutCargas_academicasNestedInput
+    usuario_aprobador?: UsuarioUpdateOneWithoutCargas_aprobadasNestedInput
+    actividades_no_lectivas?: ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput
   }
 
-  export type CitacionDocenteUncheckedUpdateWithoutPeriodoInput = {
-    id_citacion?: IntFieldUpdateOperationsInput | number
+  export type CargaAcademicaUncheckedUpdateWithoutPeriodoInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
     id_docente?: IntFieldUpdateOperationsInput | number
-    id_ventana?: IntFieldUpdateOperationsInput | number
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+  }
+
+  export type CargaAcademicaUncheckedUpdateManyWithoutPeriodoInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CitacionDocenteUncheckedUpdateManyWithoutPeriodoInput = {
-    id_citacion?: IntFieldUpdateOperationsInput | number
-    id_docente?: IntFieldUpdateOperationsInput | number
-    id_ventana?: IntFieldUpdateOperationsInput | number
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
-    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type CitacionDocenteCreateManyDocenteInput = {
+    id_citacion?: number
+    id_periodo: number
+    id_ventana: number
+    fecha_citacion: Date | string
+    hora_inicio: string
+    hora_fin: string
+    numero_orden_turno: number
+    estado?: $Enums.EstadoCitacion
+    confirmado_docente?: boolean
+    fecha_confirmacion?: Date | string | null
+    razon_rechazo?: string | null
+    observaciones?: string | null
+    notificacion_enviada?: boolean
+    recordatorio_enviado?: boolean
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
   }
 
   export type ColaNotificacionesCreateManyDocenteInput = {
@@ -60859,23 +73591,78 @@ export namespace Prisma {
     fecha_expiracion: Date | string
   }
 
-  export type CitacionDocenteCreateManyDocenteInput = {
-    id_citacion?: number
+  export type CargaAcademicaCreateManyDocenteInput = {
+    id_carga?: number
     id_periodo: number
-    id_ventana: number
-    fecha_citacion: Date | string
-    hora_inicio: string
-    hora_fin: string
-    numero_orden_turno: number
-    estado?: $Enums.EstadoCitacion
-    confirmado_docente?: boolean
-    fecha_confirmacion?: Date | string | null
-    razon_rechazo?: string | null
+    estado?: $Enums.EstadoCargaAcademica
+    horas_lectivas?: number
+    horas_no_lectivas?: number
+    horas_preparacion?: number
+    horas_totales?: number
+    horas_meta?: number
     observaciones?: string | null
-    notificacion_enviada?: boolean
-    recordatorio_enviado?: boolean
+    observaciones_generales?: string | null
+    fecha_envio?: Date | string | null
+    fecha_aprobacion?: Date | string | null
+    aprobado_por?: number | null
     fecha_creacion?: Date | string
     fecha_actualizacion?: Date | string
+  }
+
+  export type CitacionDocenteUpdateWithoutDocenteInput = {
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCitaciones_docentesNestedInput
+    ventana?: VentanaAtencionUpdateOneRequiredWithoutCitacionesNestedInput
+  }
+
+  export type CitacionDocenteUncheckedUpdateWithoutDocenteInput = {
+    id_citacion?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    id_ventana?: IntFieldUpdateOperationsInput | number
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CitacionDocenteUncheckedUpdateManyWithoutDocenteInput = {
+    id_citacion?: IntFieldUpdateOperationsInput | number
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    id_ventana?: IntFieldUpdateOperationsInput | number
+    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    numero_orden_turno?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
+    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
+    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
+    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ColaNotificacionesUpdateWithoutDocenteInput = {
@@ -61357,58 +74144,59 @@ export namespace Prisma {
     fecha_expiracion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CitacionDocenteUpdateWithoutDocenteInput = {
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+  export type CargaAcademicaUpdateWithoutDocenteInput = {
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCitaciones_docentesNestedInput
-    ventana?: VentanaAtencionUpdateOneRequiredWithoutCitacionesNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutCargas_academicasNestedInput
+    usuario_aprobador?: UsuarioUpdateOneWithoutCargas_aprobadasNestedInput
+    actividades_no_lectivas?: ActividadNoLectivaUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUpdateManyWithoutCarga_academicaNestedInput
   }
 
-  export type CitacionDocenteUncheckedUpdateWithoutDocenteInput = {
-    id_citacion?: IntFieldUpdateOperationsInput | number
+  export type CargaAcademicaUncheckedUpdateWithoutDocenteInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
     id_periodo?: IntFieldUpdateOperationsInput | number
-    id_ventana?: IntFieldUpdateOperationsInput | number
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    actividades_no_lectivas?: ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaNestedInput
+    historial?: HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaNestedInput
   }
 
-  export type CitacionDocenteUncheckedUpdateManyWithoutDocenteInput = {
-    id_citacion?: IntFieldUpdateOperationsInput | number
+  export type CargaAcademicaUncheckedUpdateManyWithoutDocenteInput = {
+    id_carga?: IntFieldUpdateOperationsInput | number
     id_periodo?: IntFieldUpdateOperationsInput | number
-    id_ventana?: IntFieldUpdateOperationsInput | number
-    fecha_citacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    numero_orden_turno?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoCitacionFieldUpdateOperationsInput | $Enums.EstadoCitacion
-    confirmado_docente?: BoolFieldUpdateOperationsInput | boolean
-    fecha_confirmacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    razon_rechazo?: NullableStringFieldUpdateOperationsInput | string | null
+    estado?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    horas_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_no_lectivas?: IntFieldUpdateOperationsInput | number
+    horas_preparacion?: IntFieldUpdateOperationsInput | number
+    horas_totales?: IntFieldUpdateOperationsInput | number
+    horas_meta?: IntFieldUpdateOperationsInput | number
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
-    recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    observaciones_generales?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_envio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_aprobacion?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aprobado_por?: NullableIntFieldUpdateOperationsInput | number | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61612,8 +74400,8 @@ export namespace Prisma {
     activo?: BoolFieldUpdateOperationsInput | boolean
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
     docentes?: DocenteGrupoUpdateManyWithoutGrupoNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutGruposNestedInput
     horarios?: HorarioAsignadoUpdateManyWithoutGrupoNestedInput
     preasignaciones?: PreasignacionUpdateManyWithoutGrupoNestedInput
     selecciones_temporales?: SeleccionTemporalHorarioUpdateManyWithoutGrupoNestedInput
@@ -62287,24 +75075,6 @@ export namespace Prisma {
     fecha_expiracion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HorarioAsignadoCreateManyVentanaInput = {
-    id_asignacion?: number
-    id_docente: number
-    id_curso: number
-    id_grupo: number
-    tipo_clase: $Enums.TipoClase
-    id_ambiente: number
-    dia_semana: number
-    hora_inicio: string
-    hora_fin: string
-    id_periodo: number
-    estado?: $Enums.EstadoHorario
-    observaciones?: string | null
-    creado_por?: number | null
-    fecha_creacion?: Date | string
-    fecha_actualizacion?: Date | string
-  }
-
   export type CitacionDocenteCreateManyVentanaInput = {
     id_citacion?: number
     id_docente: number
@@ -62324,59 +75094,22 @@ export namespace Prisma {
     fecha_actualizacion?: Date | string
   }
 
-  export type HorarioAsignadoUpdateWithoutVentanaInput = {
-    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
-    dia_semana?: IntFieldUpdateOperationsInput | number
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
-    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    auditorias?: AuditoriaHorarioUpdateManyWithoutAsignacionNestedInput
-    usuario_creador?: UsuarioUpdateOneWithoutHorarios_creadosNestedInput
-    ambiente?: AmbienteUpdateOneRequiredWithoutHorariosNestedInput
-    curso?: CursoUpdateOneRequiredWithoutHorariosNestedInput
-    docente?: DocenteUpdateOneRequiredWithoutHorariosNestedInput
-    grupo?: GrupoUpdateOneRequiredWithoutHorariosNestedInput
-    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutHorariosNestedInput
-  }
-
-  export type HorarioAsignadoUncheckedUpdateWithoutVentanaInput = {
-    id_asignacion?: IntFieldUpdateOperationsInput | number
-    id_docente?: IntFieldUpdateOperationsInput | number
-    id_curso?: IntFieldUpdateOperationsInput | number
-    id_grupo?: IntFieldUpdateOperationsInput | number
-    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
-    id_ambiente?: IntFieldUpdateOperationsInput | number
-    dia_semana?: IntFieldUpdateOperationsInput | number
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    id_periodo?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
-    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    creado_por?: NullableIntFieldUpdateOperationsInput | number | null
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutAsignacionNestedInput
-  }
-
-  export type HorarioAsignadoUncheckedUpdateManyWithoutVentanaInput = {
-    id_asignacion?: IntFieldUpdateOperationsInput | number
-    id_docente?: IntFieldUpdateOperationsInput | number
-    id_curso?: IntFieldUpdateOperationsInput | number
-    id_grupo?: IntFieldUpdateOperationsInput | number
-    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
-    id_ambiente?: IntFieldUpdateOperationsInput | number
-    dia_semana?: IntFieldUpdateOperationsInput | number
-    hora_inicio?: StringFieldUpdateOperationsInput | string
-    hora_fin?: StringFieldUpdateOperationsInput | string
-    id_periodo?: IntFieldUpdateOperationsInput | number
-    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
-    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
-    creado_por?: NullableIntFieldUpdateOperationsInput | number | null
-    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
-    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type HorarioAsignadoCreateManyVentanaInput = {
+    id_asignacion?: number
+    id_docente: number
+    id_curso: number
+    id_grupo: number
+    tipo_clase: $Enums.TipoClase
+    id_ambiente: number
+    dia_semana: number
+    hora_inicio: string
+    hora_fin: string
+    id_periodo: number
+    estado?: $Enums.EstadoHorario
+    observaciones?: string | null
+    creado_por?: number | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
   }
 
   export type CitacionDocenteUpdateWithoutVentanaInput = {
@@ -62431,6 +75164,61 @@ export namespace Prisma {
     observaciones?: NullableStringFieldUpdateOperationsInput | string | null
     notificacion_enviada?: BoolFieldUpdateOperationsInput | boolean
     recordatorio_enviado?: BoolFieldUpdateOperationsInput | boolean
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HorarioAsignadoUpdateWithoutVentanaInput = {
+    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
+    dia_semana?: IntFieldUpdateOperationsInput | number
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUpdateManyWithoutAsignacionNestedInput
+    usuario_creador?: UsuarioUpdateOneWithoutHorarios_creadosNestedInput
+    ambiente?: AmbienteUpdateOneRequiredWithoutHorariosNestedInput
+    curso?: CursoUpdateOneRequiredWithoutHorariosNestedInput
+    docente?: DocenteUpdateOneRequiredWithoutHorariosNestedInput
+    grupo?: GrupoUpdateOneRequiredWithoutHorariosNestedInput
+    periodo?: PeriodoAcademicoUpdateOneRequiredWithoutHorariosNestedInput
+  }
+
+  export type HorarioAsignadoUncheckedUpdateWithoutVentanaInput = {
+    id_asignacion?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_curso?: IntFieldUpdateOperationsInput | number
+    id_grupo?: IntFieldUpdateOperationsInput | number
+    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
+    id_ambiente?: IntFieldUpdateOperationsInput | number
+    dia_semana?: IntFieldUpdateOperationsInput | number
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    creado_por?: NullableIntFieldUpdateOperationsInput | number | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditorias?: AuditoriaHorarioUncheckedUpdateManyWithoutAsignacionNestedInput
+  }
+
+  export type HorarioAsignadoUncheckedUpdateManyWithoutVentanaInput = {
+    id_asignacion?: IntFieldUpdateOperationsInput | number
+    id_docente?: IntFieldUpdateOperationsInput | number
+    id_curso?: IntFieldUpdateOperationsInput | number
+    id_grupo?: IntFieldUpdateOperationsInput | number
+    tipo_clase?: EnumTipoClaseFieldUpdateOperationsInput | $Enums.TipoClase
+    id_ambiente?: IntFieldUpdateOperationsInput | number
+    dia_semana?: IntFieldUpdateOperationsInput | number
+    hora_inicio?: StringFieldUpdateOperationsInput | string
+    hora_fin?: StringFieldUpdateOperationsInput | string
+    id_periodo?: IntFieldUpdateOperationsInput | number
+    estado?: EnumEstadoHorarioFieldUpdateOperationsInput | $Enums.EstadoHorario
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    creado_por?: NullableIntFieldUpdateOperationsInput | number | null
     fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62519,6 +75307,112 @@ export namespace Prisma {
     completado?: BoolFieldUpdateOperationsInput | boolean
     fecha_registro?: DateTimeFieldUpdateOperationsInput | Date | string
     fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaCreateManyCarga_academicaInput = {
+    id_actividad?: number
+    tipo_actividad: $Enums.TipoActividadNoLectiva
+    nombre: string
+    descripcion?: string | null
+    horas_semanales: number
+    horas_asignadas?: number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: Date | string | null
+    fecha_fin?: Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+    fecha_actualizacion?: Date | string
+  }
+
+  export type HistorialCargaAcademicaCreateManyCarga_academicaInput = {
+    id_historial?: number
+    id_usuario: number
+    estado_anterior?: $Enums.EstadoCargaAcademica | null
+    estado_nuevo: $Enums.EstadoCargaAcademica
+    observaciones?: string | null
+    fecha_creacion?: Date | string
+  }
+
+  export type ActividadNoLectivaUpdateWithoutCarga_academicaInput = {
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaUncheckedUpdateWithoutCarga_academicaInput = {
+    id_actividad?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ActividadNoLectivaUncheckedUpdateManyWithoutCarga_academicaInput = {
+    id_actividad?: IntFieldUpdateOperationsInput | number
+    tipo_actividad?: EnumTipoActividadNoLectivaFieldUpdateOperationsInput | $Enums.TipoActividadNoLectiva
+    nombre?: StringFieldUpdateOperationsInput | string
+    descripcion?: NullableStringFieldUpdateOperationsInput | string | null
+    horas_semanales?: IntFieldUpdateOperationsInput | number
+    horas_asignadas?: IntFieldUpdateOperationsInput | number
+    dias_semana?: NullableJsonNullValueInput | InputJsonValue
+    fecha_inicio?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fecha_fin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    datos_adicionales?: NullableJsonNullValueInput | InputJsonValue
+    datos_sustento?: NullableJsonNullValueInput | InputJsonValue
+    horarios_actividad?: NullableJsonNullValueInput | InputJsonValue
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    fecha_actualizacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaUpdateWithoutCarga_academicaInput = {
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuario?: UsuarioUpdateOneRequiredWithoutHistorial_cargaNestedInput
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateWithoutCarga_academicaInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HistorialCargaAcademicaUncheckedUpdateManyWithoutCarga_academicaInput = {
+    id_historial?: IntFieldUpdateOperationsInput | number
+    id_usuario?: IntFieldUpdateOperationsInput | number
+    estado_anterior?: NullableEnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica | null
+    estado_nuevo?: EnumEstadoCargaAcademicaFieldUpdateOperationsInput | $Enums.EstadoCargaAcademica
+    observaciones?: NullableStringFieldUpdateOperationsInput | string | null
+    fecha_creacion?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

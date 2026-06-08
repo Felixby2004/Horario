@@ -117,6 +117,16 @@ export default function DocenteHomePage() {
           </button>
 
           <button
+            onClick={() => router.push('/docente/carga-academica')}
+            className="p-6 border-2 border-gray-200 rounded-xl hover:border-green-500 hover:bg-green-50 transition-colors text-left"
+          >
+            <div className="text-3xl mb-2">📊</div>
+            <div className="font-semibold text-gray-900">Mi Carga Académica</div>
+            <div className="text-sm text-gray-600 mt-1">
+              Gestionar carga horaria y actividades no lectivas
+            </div>
+          </button>
+          <button
             onClick={() => router.push('/docente/reportes')}
             className="p-6 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
           >

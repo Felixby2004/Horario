@@ -11,6 +11,7 @@ const menuItems = [
   { titulo: 'Seleccionar Horarios', icono: '📅', ruta: '/docente/seleccionar-horarios' },
   { titulo: 'Mis Horarios', icono: '📋', ruta: '/docente/mis-horarios' },
   { titulo: 'Mis Cursos y Grupos', icono: '📚', ruta: '/docente/mis-cursos' },
+  { titulo: 'Mi Carga Académica', icono: '📊', ruta: '/docente/carga-academica' },
   { titulo: 'Reportes', icono: '📄', ruta: '/docente/reportes' },
 ];
 

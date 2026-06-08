@@ -20,6 +20,9 @@ export default function ImportarDocentesPage() {
     modalidad: 'contratado',
     categoria: 'auxiliar',
     dedicacion: 'tiempo_completo',
+    tipo_dedicacion_laboral: 'tiempo_completo',
+    dni_docente: '',
+    escuela_profesional: '',
     fecha_ingreso: '',
     telefono: '',
     grado_academico: '',
@@ -86,6 +89,9 @@ export default function ImportarDocentesPage() {
           modalidad: 'contratado',
           categoria: 'auxiliar',
           dedicacion: 'tiempo_completo',
+          tipo_dedicacion_laboral: 'tiempo_completo',
+          dni_docente: '',
+          escuela_profesional: '',
           fecha_ingreso: '',
           telefono: '',
           grado_academico: '',
@@ -292,6 +298,20 @@ export default function ImportarDocentesPage() {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
+                    DNI Docente *
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-3 py-2"
+                    value={formulario.dni_docente}
+                    onChange={(e) => setFormulario({ ...formulario, dni_docente: e.target.value })}
+                    placeholder="Ej: 12345678"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
                     Dedicación *
                   </label>
                   <select
@@ -303,6 +323,43 @@ export default function ImportarDocentesPage() {
                     <option value="tiempo_parcial">Tiempo parcial</option>
                     <option value="por_horas">Por horas</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Tipo de Dedicación Laboral *
+                  </label>
+                  <select
+                    className="w-full border rounded px-3 py-2"
+                    value={formulario.tipo_dedicacion_laboral}
+                    onChange={(e) => {
+                      setFormulario({ ...formulario, tipo_dedicacion_laboral: e.target.value });
+                      // Set hours based on selection
+                      let horas = 40;
+                      if (e.target.value === 'dedicacion_exclusiva') horas = 45;
+                      if (e.target.value === 'tiempo_parcial_20') horas = 20;
+                      setFormulario({ ...formulario, tipo_dedicacion_laboral: e.target.value, horas_maximas_semanales: horas });
+                    }}
+                    required
+                  >
+                    <option value="dedicacion_exclusiva">Dedicación Exclusiva (45 horas)</option>
+                    <option value="tiempo_completo">Tiempo Completo (40 horas)</option>
+                    <option value="tiempo_parcial_20">Tiempo Parcial 20 Horas</option>
+                    <option value="por_horas">Por horas</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Escuela Profesional
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-3 py-2"
+                    value={formulario.escuela_profesional}
+                    onChange={(e) => setFormulario({ ...formulario, escuela_profesional: e.target.value })}
+                    placeholder="Ej: Ingeniería de Sistemas"
+                  />
                 </div>
 
                 <div>

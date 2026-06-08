@@ -12,6 +12,7 @@ const menuItems = [
   { titulo: 'Cursos', icono: '📚', ruta: '/dashboard/cursos' },
   { titulo: 'Grupos', icono: '👥', ruta: '/dashboard/grupos' },
   { titulo: 'Docentes', icono: '👨‍🏫', ruta: '/dashboard/docentes' },
+  { titulo: 'Carga Académica', icono: '📋', ruta: '/dashboard/carga-academica' },
   { titulo: 'Disponibilidad', icono: '⏱️', ruta: '/dashboard/disponibilidad' },
   { titulo: 'Ventanas', icono: '🎯', ruta: '/dashboard/horarios/ventanas' },
   { titulo: 'Horarios', icono: '🕐', ruta: '/dashboard/horarios' },
