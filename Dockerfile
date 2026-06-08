@@ -16,7 +16,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN npm ci
 COPY . .
 RUN npm run prisma:generate
-RUN npm run build
+RUN NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
 # Stage 3: Runtime
 FROM node:18-slim AS runtime

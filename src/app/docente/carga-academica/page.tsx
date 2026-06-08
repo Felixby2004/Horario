@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Boton } from '@/components/ui/Boton'
 import { DocumentoCargaAcademica, DocumentoDeclaracionJurada } from '@/components/DocumentGenerator'
-import html2pdf from 'html2pdf.js';
 
 const TIPOS_ACTIVIDAD = [
   { valor: 'tutoria_consejeria', label: 'Tutoria / Consejería' },
@@ -74,15 +73,19 @@ export default function DocenteCargaAcademicaPage() {
   const [carga, setCarga] = useState<any>(null);
   const [actividades, setActividades] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [actividadSeleccionada, setActividadSeleccionada] = useState<any>(null);
   const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | null>(null)
   const [mensajeExito, setMensajeExito] = useState<string>('')
   const documentRef = useRef<HTMLDivElement>(null)
 
-  const handleDescargarPDF = () => {
+  const handleDescargarPDF = async () => {
     const element = documentRef.current
     if (!element) return
+
+    // Importar dinámicamente html2pdf.js solo en el cliente
+    const html2pdf = (await import('html2pdf.js')).default
 
     const nombreDocente = usuario
       ? `${usuario.apellidos}_${usuario.nombres}`
@@ -102,6 +105,10 @@ export default function DocenteCargaAcademicaPage() {
 
     html2pdf().set(opt).from(element).save()
   };
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -266,16 +273,14 @@ export default function DocenteCargaAcademicaPage() {
     }
   };
 
-  if (cargando) {
+  if (!isMounted) return null;
+
+  if (!usuario) {
     return (
       <div className="flex justify-center py-12">
         <div className="loader"></div>
       </div>
     );
-  }
-
-  if (!usuario) {
-    return null;
   }
 
   return (

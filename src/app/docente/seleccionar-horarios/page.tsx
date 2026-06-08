@@ -34,6 +34,11 @@ export default function SeleccionarHorariosPage() {
   const [citacionInfo, setCitacionInfo] = useState<any>(null);
   const [isSlotActive, setIsSlotActive] = useState<boolean>(false);
   const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -395,6 +400,14 @@ export default function SeleccionarHorariosPage() {
   const esCeldaSeleccionada = (diaIndex: number, horaIndex: number) => {
     return celdasSeleccionadas.has(getCeldaKey(diaIndex, horaIndex));
   };
+
+  if (!isMounted || !usuario) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

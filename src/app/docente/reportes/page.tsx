@@ -22,6 +22,11 @@ export default function ReportesPage() {
   const [generando, setGenerando] = useState(false);
   const [error, setError] = useState('');
   const [exito, setExito] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -117,7 +122,7 @@ export default function ReportesPage() {
     }
   };
 
-  if (!usuario) {
+  if (!isMounted || !usuario) {
     return (
       <div className="flex justify-center py-12">
         <div className="loader"></div>
