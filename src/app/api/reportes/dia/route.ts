@@ -23,21 +23,20 @@ export async function POST(request: NextRequest) {
     }
 
     if (formato === 'excel') {
-      const buffer = await GeneradorPDF.generarExcelDia(id_periodo, dia_semana);
-      const nombreDia = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][dia_semana - 1];
-      
-      return new NextResponse(buffer, {
+      const buffer = await GeneradorPDF.generarExcelDia(id_periodo, parseInt(dia_semana));
+
+      return new NextResponse(buffer as any, {
         headers: {
           'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          'Content-Disposition': `attachment; filename="reporte-auditoria-${nombreDia}-${new Date().toISOString().split('T')[0]}.xlsx"`
+          'Content-Disposition': `attachment; filename="reporte-dia-${dia_semana}-${new Date().toISOString().split('T')[0]}.xlsx"`
         }
       });
     }
 
-    const pdf = await GeneradorPDF.generarReporteDia(id_periodo, dia_semana);
+    const pdf = await GeneradorPDF.generarReporteDia(id_periodo, parseInt(dia_semana));
     const nombreDia = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][dia_semana - 1];
 
-    return new NextResponse(pdf, {
+    return new NextResponse(pdf as any, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="reporte-auditoria-${nombreDia}-${new Date().toISOString().split('T')[0]}.pdf"`

@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (formato === 'excel') {
       const buffer = await GeneradorPDF.generarExcelCiclo(id_periodo, ciclo);
 
-      return new NextResponse(buffer, {
+      return new NextResponse(buffer as any, {
         headers: {
           'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           'Content-Disposition': `attachment; filename="reporte-ciclo-${ciclo}-${new Date().toISOString().split('T')[0]}.xlsx"`
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const pdf = await GeneradorPDF.generarReporteCiclo(id_periodo, ciclo);
 
-    return new NextResponse(pdf, {
+    return new NextResponse(pdf as any, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="reporte-ciclo-${ciclo}-${new Date().toISOString().split('T')[0]}.pdf"`

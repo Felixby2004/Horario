@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (formato === 'excel') {
       const buffer = await GeneradorPDF.generarExcelAula(id_ambiente, id_periodo);
 
-      return new NextResponse(buffer, {
+      return new NextResponse(buffer as any, {
         headers: {
           'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           'Content-Disposition': `attachment; filename="reporte-aula-${new Date().toISOString().split('T')[0]}.xlsx"`
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const pdf = await GeneradorPDF.generarReporteAula(id_ambiente, id_periodo);
 
-    return new NextResponse(pdf, {
+    return new NextResponse(pdf as any, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="reporte-aula-${new Date().toISOString().split('T')[0]}.pdf"`

@@ -152,5 +152,3 @@ async function detectarConflictos(idPeriodo: number) {
   const { ValidadorConflictos } = await import('@/services/horarios/ServiciosAvanzados');
   return await ValidadorConflictos.detectarTodosConflictos(idPeriodo);
 }
-
-export { POST_aula, POST_gestion, POST_conflictos };

@@ -284,8 +284,7 @@ export class GeneradorPDF {
     const footerRow = worksheet.getRow(rowIndex + 2);
     footerRow.values = ['Generado:', new Date().toLocaleDateString('es-ES')];
 
-    const buffer = await workbook.xlsx.writeBuffer();
-    return buffer as Buffer;
+    return (await workbook.xlsx.writeBuffer()) as any;
   }
 
   // Generar horas estándar del día según configuración
@@ -927,25 +926,9 @@ export class GeneradorPDF {
       alignment: { vertical: 'middle', horizontal: 'center' }
     };
 
-    const subTitleStyle: Partial<ExcelJS.Style> = {
-      font: { bold: true, size: 11 },
-      alignment: { vertical: 'middle', horizontal: 'left' }
-    };
-
     const cellStyle: Partial<ExcelJS.Style> = {
       border: { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } },
       alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
-    };
-
-    const subTitleStyle: Partial<ExcelJS.Style> = {
-      font: { bold: true, size: 11 },
-      alignment: { vertical: 'middle', horizontal: 'left' }
-    };
-
-    const hourCellStyle: Partial<ExcelJS.Style> = {
-      ...cellStyle,
-      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
-      font: { bold: true, size: 9 }
     };
 
     const subTitleStyle: Partial<ExcelJS.Style> = {
@@ -957,12 +940,6 @@ export class GeneradorPDF {
       ...cellStyle,
       fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
       font: { bold: true, size: 9 }
-    };
-
-    const hourCellStyle: Partial<ExcelJS.Style> = {
-      ...cellStyle,
-      font: { bold: true, color: { argb: 'FFFFFFFF' } },
-      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF6B7280' } }
     };
 
     // Título principal
