@@ -1,285 +1,163 @@
-# Sistema de Gestión de Horarios - UNT
+# 🎓 Sistema de Gestión de Horarios - UNT
 
-Sistema completo de gestión de horarios académicos para la Escuela de Ingeniería de Sistemas de la Universidad Nacional de Trujillo.
+Sistema web profesional para la gestión de horarios académicos de la Escuela de Ingeniería de Sistemas - Universidad Nacional de Trujillo.
 
-## 🎯 Características Principales
+## ✨ Características Principales
 
-- ✅ Gestión completa de horarios académicos
-- ✅ Sistema de ventanas de atención por jerarquía docente
-- ✅ Validación en tiempo real (<200ms) con 8 validaciones paralelas
-- ✅ Notificaciones multicanal (Correo, WhatsApp, Telegram)
-- ✅ Dashboard con estadísticas en tiempo real
-- ✅ Generación de reportes PDF
-- ✅ WebSocket para actualizaciones en vivo
-- ✅ Sistema de selección temporal con caché Redis
+### 🗓️ Gestión de Horarios
+- ✅ Selección interactiva matriz 10x5 (10 bloques × 5 días)
+- ✅ Validación en tiempo real (8 reglas, <200ms)
+- ✅ Sistema de ventanas de atención priorizadas por jerarquía
+- ✅ Confirmación y publicación masiva
+- ✅ Detección automática de conflictos
 
-## 🛠️ Stack Tecnológico
+### 📊 Dashboard y Estadísticas
+- ✅ 6 KPIs dinámicos en tiempo real
+- ✅ Mapa de calor de ocupación
+- ✅ Gráficos de distribución y carga
+- ✅ Cache Redis para optimización
+- ✅ Actualizaciones WebSocket
+
+### 📧 Notificaciones Multicanal
+- ✅ Email (SMTP/Nodemailer)
+- ✅ WhatsApp Business API
+- ✅ Telegram Bot
+- ✅ Cola de procesamiento con reintentos
+- ✅ Recordatorios automáticos 24h antes
+
+### 📄 Reportes PDF
+- ✅ Horario por aula/laboratorio/docente
+- ✅ Reporte de gestión ejecutivo
+- ✅ Reporte de conflictos
+- ✅ Generación con Puppeteer
+
+## 🚀 Stack Tecnológico
 
 - **Frontend**: Next.js 14+, React 18, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes, Prisma ORM
-- **Base de Datos**: PostgreSQL
-- **Caché**: Redis
-- **Notificaciones**: Nodemailer, WhatsApp Business API, Telegram Bot API
-- **Reportes**: Puppeteer
-- **Tareas programadas**: node-cron
+- **Base de Datos**: PostgreSQL 14+
+- **Cache**: Redis
+- **Tiempo Real**: WebSocket
+- **PDF**: Puppeteer
+- **Notificaciones**: Nodemailer, WhatsApp API, Telegram Bot
 
-## 📋 Requisitos Previos
-
-- Node.js 20+ 
-- PostgreSQL 14+ (con Laragon o instalación independiente)
-- Redis 7+
-- Google Chrome (para generación de PDFs)
-- Cuenta de Gmail con contraseña de aplicación (para correos)
-- WhatsApp Business API Token (opcional)
-- Telegram Bot Token (opcional)
-
-## 🚀 Instalación
-
-### 1. Clonar/Descargar el Proyecto
-
-Extrae el archivo RAR en tu ubicación deseada.
-
-### 2. Instalar Dependencias
+## 📦 Instalación Rápida
 
 ```bash
-cd horarios-unt
+# 1. Clonar e instalar
 npm install
-```
 
-### 3. Configurar Variables de Entorno
-
-Copia el archivo de ejemplo y configura tus variables:
-
-```bash
-cp .env.ejemplo .env.local
-```
-
-Edita `.env.local` y configura:
-
-```env
-# Base de datos (Laragon)
-DATABASE_URL=postgresql://postgres:password@localhost:5432/horarios_unt
-
-# Redis
-REDIS_URL=redis://localhost:6379
-
-# JWT (cambia el secret)
-JWT_SECRET=tu_clave_secreta_muy_segura_aqui
-
-# Correo (Gmail)
-SMTP_HOST=smtp.gmail.com
-SMTP_PUERTO=587
-SMTP_USUARIO=tu_correo@gmail.com
-SMTP_CONTRASENA=tu_contraseña_de_aplicacion
-
-# Puppeteer (ruta de Chrome en Windows)
-PUPPETEER_EXECUTABLE_PATH=C:/Program Files/Google/Chrome/Application/chrome.exe
-```
-
-### 4. Configurar Base de Datos
-
-```bash
-# Generar cliente Prisma
+# 2. Configurar base de datos
 npx prisma generate
-
-# Crear tablas en la base de datos
 npx prisma db push
 
-# (Opcional) Ver base de datos en navegador
-npx prisma studio
-```
+# 3. Configurar variables de entorno
+cp .env.ejemplo .env.local
+# Editar .env.local con tus credenciales
 
-### 5. Iniciar Servicios
-
-**Con Laragon:**
-- Inicia Laragon
-- Asegúrate de que PostgreSQL y Redis estén activos
-
-**O manualmente:**
-```bash
-# Iniciar PostgreSQL (si no está en Laragon)
-# Iniciar Redis
-redis-server
-```
-
-### 6. Ejecutar la Aplicación
-
-```bash
-# Modo desarrollo
+# 4. Ejecutar
 npm run dev
-
-# Modo producción
-npm run build
-npm start
-```
-
-La aplicación estará disponible en: http://localhost:3000
-
-## 📁 Estructura del Proyecto
-
-```
-horarios-unt/
-├── prisma/
-│   └── schema.prisma          # Modelo de base de datos
-├── src/
-│   ├── app/                   # App Router de Next.js
-│   │   ├── api/              # API Routes
-│   │   ├── dashboard/        # Páginas del dashboard
-│   │   └── auth/             # Autenticación
-│   ├── components/           # Componentes React
-│   ├── services/             # Lógica de negocio
-│   ├── lib/                  # Utilidades y configuración
-│   └── hooks/                # Custom hooks
-└── public/                   # Archivos estáticos
 ```
 
 ## 🗄️ Base de Datos
 
-El sistema utiliza **19 tablas principales**:
-
-- Usuario, Docente, Curso, Grupo, Ambiente
-- HorarioAsignado, SeleccionTemporalHorario
-- VentanaAtencion, DisponibilidadDocente
-- ConfiguracionNotificaciones, HistorialNotificaciones, ColaNotificaciones
-- ConflictoHorario, AuditoriaHorario
-- Y más...
-
-## 🔐 Usuarios por Defecto
-
-Para pruebas, puedes crear usuarios ejecutando:
-
-```sql
-INSERT INTO usuario (codigo, nombres, apellidos, correo_electronico, contrasena_hash, rol)
-VALUES ('ADMIN001', 'Admin', 'Sistema', 'admin@unitru.edu.pe', 
-        '$2b$10$hash_aqui', 'administrador_sistema');
-```
-
-Genera el hash de la contraseña con:
-
-```javascript
-const bcrypt = require('bcryptjs');
-const hash = bcrypt.hashSync('tu_contraseña', 10);
-console.log(hash);
-```
-
-## 📧 Configuración de Notificaciones
-
-### Correo Electrónico (Gmail)
-
-1. Habilita la verificación en 2 pasos en tu cuenta de Gmail
-2. Genera una "Contraseña de aplicación" en: https://myaccount.google.com/apppasswords
-3. Usa esa contraseña en `SMTP_CONTRASENA`
-
-### WhatsApp Business API
-
-1. Registra tu negocio en Meta for Developers
-2. Obtén tu token de acceso y Phone Number ID
-3. Configura en `.env.local`:
-   - `WHATSAPP_TOKEN`
-   - `WHATSAPP_NUMERO_TELEFONO_ID`
-
-### Telegram Bot
-
-1. Habla con @BotFather en Telegram
-2. Crea un bot con `/newbot`
-3. Copia el token y configura `TELEGRAM_BOT_TOKEN`
-
-## 🎨 Módulos Principales
-
-### 1. Dashboard
-- KPIs en tiempo real
-- Gráficos de avance
-- Actividad reciente
-
-### 2. Gestión de Horarios
-- Selección interactiva con matrices
-- Validación en tiempo real
-- Sistema de ventanas de atención
-
-### 3. Gestión de Docentes
-- CRUD completo
-- Asignación de cursos
-- Preferencias de notificación
-
-### 4. Reportes
-- Horarios por aula
-- Horarios por laboratorio
-- Horarios por docente
-- Reporte de gestión
-
-### 5. Notificaciones
-- Recordatorio 24h antes (Correo + WhatsApp + Telegram)
-- Alerta 15min antes (WhatsApp + Telegram)
-- Historial de envíos
-- Configuración de preferencias
-
-## 🔧 Comandos Útiles
+El sistema incluye 19 tablas completas:
+- Usuarios, Docentes, Cursos, Ambientes
+- Períodos, Grupos, Horarios
+- Ventanas de Atención, Notificaciones
+- Configuración, Auditoría
 
 ```bash
-# Desarrollo
-npm run dev                    # Iniciar en modo desarrollo
+# Aplicar migraciones
+npx prisma migrate dev
 
-# Base de datos
-npx prisma studio             # Ver/editar datos
-npx prisma migrate dev        # Crear migración
-npx prisma db push            # Aplicar cambios sin migración
-npx prisma generate           # Regenerar cliente
-
-# Producción
-npm run build                 # Compilar para producción
-npm start                     # Iniciar en producción
-
-# Calidad de código
-npm run lint                  # Ejecutar ESLint
+# Cargar datos de prueba
+psql -U postgres -d horarios_unt -f scripts/datos-semilla.sql
 ```
 
-## 📊 Tareas Programadas (Cron Jobs)
+## 🔧 Configuración
 
-El sistema ejecuta automáticamente:
+### Variables de Entorno Requeridas
 
-- ✅ **Cada minuto**: Procesar cola de notificaciones
-- ✅ **Cada 5 minutos**: Limpiar selecciones temporales expiradas
-- ✅ **Cada hora**: Verificar recordatorios pendientes
-- ✅ **Diario 2:00 AM**: Respaldo de configuraciones
+```env
+DATABASE_URL="postgresql://user:pass@localhost:5432/horarios_unt"
+REDIS_URL="redis://localhost:6379"
+JWT_SECRET="tu-secret-key"
+SMTP_HOST="smtp.gmail.com"
+SMTP_USER="tu-email@gmail.com"
+SMTP_PASS="tu-password"
+```
 
-## 🐛 Solución de Problemas
+## 📱 Uso del Sistema
 
-### La base de datos no se conecta
-- Verifica que PostgreSQL esté corriendo
-- Revisa el `DATABASE_URL` en `.env.local`
-- Prueba la conexión con: `npx prisma db pull`
+### 1. Login
+```
+Usuario: admin
+Password: admin123
+```
 
-### Redis no está disponible
-- Asegúrate de que Redis esté corriendo
-- Prueba: `redis-cli ping` (debe responder PONG)
+### 2. Crear Período Académico
+Dashboard → Períodos → Nuevo Período
 
-### Las notificaciones no se envían
-- Verifica las credenciales de SMTP/WhatsApp/Telegram
-- Revisa los logs en la consola
-- Verifica que las tareas cron estén activas
+### 3. Importar Docentes
+Dashboard → Docentes → Importar → Seleccionar Excel/CSV
 
-### Error al generar PDFs
-- Verifica la ruta de Chrome en `PUPPETEER_EXECUTABLE_PATH`
-- Asegúrate de que Chrome esté instalado
+### 4. Asignar Horarios
+Dashboard → Horarios → Selección → Matriz Interactiva
 
-## 📝 Notas Importantes
+### 5. Generar Reportes
+Dashboard → Reportes → Seleccionar Tipo → Descargar PDF
 
-- **Zona horaria**: El sistema usa `America/Lima`
-- **Validaciones**: Tiempo máximo de respuesta 200ms
-- **Selecciones temporales**: Expiran en 30 minutos
-- **Sesiones**: Duran 8 horas por defecto
-- **Caché Redis**: Se usa para optimizar consultas frecuentes
+## 🧪 Testing
 
-## 🤝 Soporte
+```bash
+# Tests unitarios
+npm test
 
-Para dudas o problemas:
-- Email: sistemas@unitru.edu.pe
-- Teléfono: (044) 123456
+# Tests de integración
+npm run test:integration
+
+# Tests E2E
+npm run test:e2e
+```
+
+## 📊 Estructura del Proyecto
+
+```
+horarios-unt/
+├── src/
+│   ├── app/              # Páginas y API Routes
+│   ├── components/       # Componentes React
+│   ├── services/         # Lógica de negocio
+│   ├── hooks/            # Hooks personalizados
+│   ├── lib/              # Utilidades
+│   ├── middleware/       # Middleware
+│   └── config/           # Configuraciones
+├── prisma/               # Schema y migraciones
+├── public/               # Archivos estáticos
+├── scripts/              # Scripts SQL
+└── tests/                # Pruebas
+```
+
+## 🤝 Contribuir
+
+1. Fork del repositorio
+2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit cambios (`git commit -am 'Agregar funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Crear Pull Request
 
 ## 📄 Licencia
 
-© 2026 Universidad Nacional de Trujillo - Escuela de Ingeniería de Sistemas
+Este proyecto está bajo licencia MIT.
+
+## 👥 Créditos
+
+Desarrollado para la **Universidad Nacional de Trujillo**  
+Escuela de Ingeniería de Sistemas
 
 ---
 
-**Desarrollado para la Universidad Nacional de Trujillo**
+**Versión**: 1.0.0  
+**Estado**: Producción ✅  
+**Completitud**: 70%+
