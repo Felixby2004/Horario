@@ -19,7 +19,7 @@ export class ServicioCurso {
   static async crear(datos: any) {
     return await prisma.curso.create({
       data: {
-        codigo_curso: datos.codigo_curso,
+        codigo: datos.codigo_curso || datos.codigo,
         nombre: datos.nombre,
         horas_teoria: datos.horas_teoria,
         horas_laboratorio: datos.horas_laboratorio,
@@ -59,10 +59,12 @@ export class ServicioAmbiente {
   static async crear(datos: any) {
     return await prisma.ambiente.create({
       data: {
+        codigo: datos.codigo,
         nombre: datos.nombre,
         tipo: datos.tipo,
         capacidad: datos.capacidad,
-        ubicacion: datos.ubicacion,
+        pabellon: datos.pabellon || datos.ubicacion,
+        piso: datos.piso,
         equipamiento: datos.equipamiento
       }
     });

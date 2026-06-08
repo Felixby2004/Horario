@@ -937,6 +937,28 @@ export class GeneradorPDF {
       alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
     };
 
+    const subTitleStyle: Partial<ExcelJS.Style> = {
+      font: { bold: true, size: 11 },
+      alignment: { vertical: 'middle', horizontal: 'left' }
+    };
+
+    const hourCellStyle: Partial<ExcelJS.Style> = {
+      ...cellStyle,
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
+      font: { bold: true, size: 9 }
+    };
+
+    const subTitleStyle: Partial<ExcelJS.Style> = {
+      font: { bold: true, size: 10, color: { argb: 'FF333333' } },
+      alignment: { vertical: 'middle', horizontal: 'left' }
+    };
+
+    const hourCellStyle: Partial<ExcelJS.Style> = {
+      ...cellStyle,
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
+      font: { bold: true, size: 9 }
+    };
+
     const hourCellStyle: Partial<ExcelJS.Style> = {
       ...cellStyle,
       font: { bold: true, color: { argb: 'FFFFFFFF' } },
@@ -1124,7 +1146,7 @@ export class GeneradorPDF {
     }
     worksheetProfesores.getColumn(9).width = 20;
 
-    return await workbook.xlsx.writeBuffer();
+    return (await workbook.xlsx.writeBuffer()) as any;
   }
 
   static async generarExcelCiclo(idPeriodo: number, ciclo: number): Promise<Buffer> {
@@ -1168,6 +1190,17 @@ export class GeneradorPDF {
     const cellStyle: Partial<ExcelJS.Style> = {
       border: { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } },
       alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
+    };
+
+    const subTitleStyle: Partial<ExcelJS.Style> = {
+      font: { bold: true, size: 10, color: { argb: 'FF333333' } },
+      alignment: { vertical: 'middle', horizontal: 'left' }
+    };
+
+    const hourCellStyle: Partial<ExcelJS.Style> = {
+      ...cellStyle,
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
+      font: { bold: true, size: 9 }
     };
 
     worksheet.mergeCells('A1:H1');
@@ -1313,7 +1346,7 @@ export class GeneradorPDF {
       worksheet.getColumn(i).width = 10;
     }
 
-    return await workbook.xlsx.writeBuffer();
+    return (await workbook.xlsx.writeBuffer()) as any;
   }
 
   static async generarExcelDocente(idDocente: number, idPeriodo: number): Promise<Buffer> {
@@ -1432,7 +1465,7 @@ export class GeneradorPDF {
     worksheet.getColumn(5).width = 15;
     worksheet.getColumn(6).width = 25;
 
-    return await workbook.xlsx.writeBuffer();
+    return (await workbook.xlsx.writeBuffer()) as any;
   }
 
   // Métodos auxiliares de HTML

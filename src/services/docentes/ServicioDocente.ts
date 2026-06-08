@@ -6,7 +6,7 @@ export class ServicioDocente {
       where: { id_docente: id },
       include: {
         usuario: true,
-        horarios_asignados: {
+        horarios: {
           include: {
             curso: true,
             grupo: true,

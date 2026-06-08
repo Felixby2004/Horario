@@ -1,26 +1,27 @@
 import { prisma } from '@/lib/prisma';
+import { AccionAuditoria } from '@/lib/tipos';
 
 export class ServicioAuditoria {
   static async registrar(datos: {
     id_usuario: number;
-    accion: string;
-    tabla_afectada: string;
-    id_registro?: number;
-    valores_anteriores?: any;
-    valores_nuevos?: any;
+    accion: AccionAuditoria;
+    id_asignacion?: number;
+    datos_anteriores?: any;
+    datos_nuevos?: any;
     ip?: string;
+    motivo?: string;
   }) {
     try {
       await prisma.auditoriaHorario.create({
         data: {
-          id_usuario: datos.id_usuario,
+          usuario_id: datos.id_usuario,
           accion: datos.accion,
-          tabla_afectada: datos.tabla_afectada,
-          id_registro: datos.id_registro,
-          valores_anteriores: datos.valores_anteriores ? JSON.stringify(datos.valores_anteriores) : null,
-          valores_nuevos: datos.valores_nuevos ? JSON.stringify(datos.valores_nuevos) : null,
-          ip_address: datos.ip || null,
-          fecha_hora: new Date()
+          id_asignacion: datos.id_asignacion,
+          datos_anteriores: datos.datos_anteriores || null,
+          datos_nuevos: datos.datos_nuevos || null,
+          direccion_ip: datos.ip || null,
+          motivo: datos.motivo || null,
+          fecha_registro: new Date()
         }
       });
     } catch (error) {
@@ -30,17 +31,17 @@ export class ServicioAuditoria {
 
   static async obtenerHistorial(filtros?: {
     id_usuario?: number;
-    tabla?: string;
+    id_asignacion?: number;
     fecha_desde?: Date;
     fecha_hasta?: Date;
     limite?: number;
   }) {
     return await prisma.auditoriaHorario.findMany({
       where: {
-        ...(filtros?.id_usuario && { id_usuario: filtros.id_usuario }),
-        ...(filtros?.tabla && { tabla_afectada: filtros.tabla }),
-        ...(filtros?.fecha_desde && { fecha_hora: { gte: filtros.fecha_desde } }),
-        ...(filtros?.fecha_hasta && { fecha_hora: { lte: filtros.fecha_hasta } })
+        ...(filtros?.id_usuario && { usuario_id: filtros.id_usuario }),
+        ...(filtros?.id_asignacion && { id_asignacion: filtros.id_asignacion }),
+        ...(filtros?.fecha_desde && { fecha_registro: { gte: filtros.fecha_desde } }),
+        ...(filtros?.fecha_hasta && { fecha_registro: { lte: filtros.fecha_hasta } })
       },
       include: {
         usuario: {
@@ -49,9 +50,10 @@ export class ServicioAuditoria {
             nombres: true,
             apellidos: true
           }
-        }
+        },
+        asignacion: true
       },
-      orderBy: { fecha_hora: 'desc' },
+      orderBy: { fecha_registro: 'desc' },
       take: filtros?.limite || 100
     });
   }

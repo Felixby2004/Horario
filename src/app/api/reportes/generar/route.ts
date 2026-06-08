@@ -18,13 +18,13 @@ export async function POST(request: NextRequest) {
         pdf = await GeneradorPDF.generarReporteCiclo(id_periodo, id_entidad);
         break;
       case 'docente':
-        pdf = await GeneradorPDF.generarReporteDocente(id_entidad, id_periodo);
+        pdf = await GeneradorPDF.generarReporteDocenteHorario(id_entidad, id_periodo);
         break;
       default:
         return NextResponse.json({ error: 'Tipo de reporte inválido' }, { status: 400 });
     }
 
-    return new NextResponse(pdf, {
+    return new NextResponse(pdf as any, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename=reporte-${tipo}-${Date.now()}.pdf`

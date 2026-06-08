@@ -3,6 +3,24 @@
 // =============================================
 
 // Tipos de enumeraciones de Prisma exportados
+import {
+  TipoRol,
+  TipoModalidad,
+  TipoCategoria,
+  TipoDedicacion,
+  TipoClase,
+  TipoAmbiente,
+  EstadoPeriodo,
+  EstadoHorario,
+  EstadoPreasignacion,
+  TipoConflicto,
+  AccionAuditoria,
+  CanalNotificacion,
+  EstadoEnvio,
+  EstadoCola,
+  TipoDiaNoLaborable,
+} from '../../generated/prisma-client';
+
 export type {
   TipoRol,
   TipoModalidad,
@@ -19,7 +37,7 @@ export type {
   EstadoEnvio,
   EstadoCola,
   TipoDiaNoLaborable,
-} from '@prisma/client';
+};
 
 // =============================================
 // INTERFACES DE DATOS

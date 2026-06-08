@@ -77,6 +77,21 @@ export class ValidadorHorario {
     }
   }
 
+  static async validarHorario(datos: any): Promise<any> {
+    return this.validarAsignacion({
+      sesionId: 'manual',
+      docenteId: datos.id_docente,
+      cursoId: datos.id_curso,
+      grupoId: datos.id_grupo,
+      tipoClase: datos.tipo_clase || 'teoria',
+      ambienteId: datos.id_ambiente,
+      diaSemana: typeof datos.dia_semana === 'number' ? datos.dia_semana : 1,
+      horaInicio: datos.hora_inicio,
+      horaFin: datos.hora_fin,
+      periodoId: datos.id_periodo
+    });
+  }
+
   private static async validarFranjaHoraria(solicitud: SeleccionCelda): Promise<Conflicto[]> {
     if (solicitud.horaInicio < this.FRANJA_INICIO || solicitud.horaFin > this.FRANJA_FIN) {
       return [

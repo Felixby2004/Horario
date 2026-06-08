@@ -182,7 +182,7 @@ export class ImportadorCursos {
       try {
         await prisma.curso.create({
           data: {
-            codigo_curso: String(fila.codigo || fila.Codigo),
+            codigo: String(fila.codigo || fila.Codigo),
             nombre: String(fila.nombre || fila.Nombre),
             horas_teoria: parseInt(fila.teoria || fila.Teoria || '0'),
             horas_laboratorio: parseInt(fila.laboratorio || fila.Laboratorio || '0'),

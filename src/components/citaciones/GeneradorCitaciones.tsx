@@ -59,7 +59,7 @@ export default function GeneradorCitaciones({
     cargarDocentes();
   }, [idPeriodo]);
 
-  const docentes Filtrados = docentes.filter(d =>
+  const docentesFiltrados = docentes.filter(d =>
     d.nombres.toLowerCase().includes(busqueda.toLowerCase()) ||
     d.apellidos.toLowerCase().includes(busqueda.toLowerCase()) ||
     d.codigo_docente.toLowerCase().includes(busqueda.toLowerCase())

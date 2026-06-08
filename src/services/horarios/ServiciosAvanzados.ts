@@ -116,7 +116,7 @@ export class MotorAsignacion {
     idGrupo: number,
     idPeriodo: number
   ): Promise<any> {
-    const grupo = await prisma.grupoCurso.findUnique({
+    const grupo = await prisma.grupo.findUnique({
       where: { id_grupo: idGrupo },
       include: {
         curso: true,
