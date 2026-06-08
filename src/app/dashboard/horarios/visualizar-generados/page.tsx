@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ContenedorAlertas } from '@/components/ui/ContenedorAlertas';
 import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 interface Horario {
   id_seleccion?: number;
@@ -151,6 +149,12 @@ export default function VisualizarGeneradosPage() {
         error('Error', 'No se encontró la vista para exportar');
         return;
       }
+
+      // Importación dinámica para evitar errores de SSR/Prerendering
+      const [jsPDF, html2canvas] = await Promise.all([
+        import('jspdf').then(m => m.default),
+        import('html2canvas').then(m => m.default)
+      ]);
 
       const canvas = await html2canvas(elemento, { scale: 2 });
       const imgData = canvas.toDataURL('image/png');

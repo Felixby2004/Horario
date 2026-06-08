@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from 'react'
 import { TablaPaginada } from '@/components/ui/TablaPaginada'
 import { Boton } from '@/components/ui/Boton'
 import { DocumentoCargaAcademica, DocumentoDeclaracionJurada } from '@/components/DocumentGenerator'
-import html2pdf from 'html2pdf.js'
 
 const TIPOS_ACTIVIDAD = [
   { valor: 'tutoria_consejeria', label: 'Tutoría / Consejería' },
@@ -128,27 +127,35 @@ export default function CargaAcademicaAdminPage() {
     return estado.charAt(0).toUpperCase() + estado.slice(1).replace('_', ' ')
   }
 
-  const handleDescargarPDF = () => {
+  const handleDescargarPDF = async () => {
     const element = documentRef.current
     if (!element) return
 
-    const nombreDocente = cargaSeleccionada?.docente 
-      ? `${cargaSeleccionada.docente.apellidos}_${cargaSeleccionada.docente.nombres}`
-      : 'documento'
-    
-    const nombreArchivo = mostrarDocumento === 'carga'
-      ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
-      : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`
+    try {
+      // Importación dinámica para evitar errores de SSR/Prerendering
+      const html2pdf = (await import('html2pdf.js')).default;
 
-    const opt: any = {
-      margin: [10, 10, 10, 10],
-      filename: nombreArchivo,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      const nombreDocente = cargaSeleccionada?.docente 
+        ? `${cargaSeleccionada.docente.apellidos}_${cargaSeleccionada.docente.nombres}`
+        : 'documento'
+      
+      const nombreArchivo = mostrarDocumento === 'carga'
+        ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
+        : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`
+
+      const opt: any = {
+        margin: [10, 10, 10, 10],
+        filename: nombreArchivo,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+
+      html2pdf().set(opt).from(element).save()
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      alert('Error al generar el PDF. Por favor, intente de nuevo.');
     }
-
-    html2pdf().set(opt).from(element).save()
   }
 
   const columnas = [
