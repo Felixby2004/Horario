@@ -3,27 +3,21 @@ import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
-// Función auxiliar para calcular las horas de una carga académica
 async function calcularHorasCarga(id_docente: number, carga: any) {
-  // Calcular horas lectivas
   const docenteCursos = await prisma.docenteCurso.findMany({
     where: {
-      id_docente: id_docente,
+      id_docente,
       activo: true
     }
   });
   const horasLectivas = docenteCursos.reduce((total, dc) => total + (dc.horas_asignadas || 0), 0);
 
-  // Calcular horas no lectivas
   const horasNoLectivas = carga.actividades_no_lectivas.reduce(
     (sum: number, act: any) => sum + (act.horas_semanales || 0),
     0
   );
 
-  // Calcular horas de preparación
   const horasPreparacion = Math.ceil(horasLectivas * 0.5);
-
-  // Calcular horas totales
   const horasTotales = horasLectivas + horasPreparacion + horasNoLectivas;
 
   return {
@@ -34,7 +28,6 @@ async function calcularHorasCarga(id_docente: number, carga: any) {
   };
 }
 
-// Obtener todas las cargas académicas (o filtrar por docente/periodo)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -59,6 +52,7 @@ export async function GET(request: NextRequest) {
                     curso: true
                   }
                 },
+                curso: true,
                 ambiente: true
               }
             },
@@ -75,7 +69,6 @@ export async function GET(request: NextRequest) {
       orderBy: { fecha_creacion: 'desc' }
     });
 
-    // Actualizar las horas de cada carga y guardarlas en la BD
     for (const carga of cargas) {
       const horas = await calcularHorasCarga(carga.id_docente, carga);
       
@@ -90,7 +83,6 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Volver a obtener las cargas con las horas actualizadas
     cargas = await prisma.cargaAcademica.findMany({
       where,
       include: {
@@ -105,6 +97,7 @@ export async function GET(request: NextRequest) {
                     curso: true
                   }
                 },
+                curso: true,
                 ambiente: true
               }
             },
@@ -131,7 +124,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Crear nueva carga académica
 export async function POST(request: NextRequest) {
   try {
     const datos = await request.json();
@@ -146,7 +138,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Primero creamos la carga
     let carga = await prisma.cargaAcademica.create({
       data: {
         id_docente: parseInt(datos.id_docente),
@@ -157,10 +148,8 @@ export async function POST(request: NextRequest) {
       include: { actividades_no_lectivas: true }
     });
 
-    // Calculamos las horas
     const horas = await calcularHorasCarga(carga.id_docente, carga);
 
-    // Actualizamos la carga con las horas calculadas
     carga = await prisma.cargaAcademica.update({
       where: { id_carga: carga.id_carga },
       data: {

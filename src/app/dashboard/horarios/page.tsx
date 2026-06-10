@@ -86,6 +86,7 @@ export default function HorariosPage() {
   const [cursos, setCursos] = useState<any[]>([]);
   const [ambientes, setAmbientes] = useState<any[]>([]);
   const [grupos, setGrupos] = useState<any[]>([]);
+  const [actividadesNoLectivas, setActividadesNoLectivas] = useState<any[]>([]);
   
   // Initialize state from localStorage if available
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState(() => {
@@ -353,6 +354,19 @@ export default function HorariosPage() {
     }
   }, [periodoSeleccionado]);
 
+  const cargarActividadesNoLectivas = useCallback(async () => {
+    if (!periodoSeleccionado) return;
+    try {
+      const response = await fetch(`/api/actividad-no-lectiva?periodo=${periodoSeleccionado}`);
+      const data = await response.json();
+      if (data.exito) {
+        setActividadesNoLectivas(data.datos || []);
+      }
+    } catch (error) {
+      console.error('Error cargando actividades no lectivas:', error);
+    }
+  }, [periodoSeleccionado]);
+
   useEffect(() => {
     cargarDatosIniciales();
   }, [cargarDatosIniciales]);
@@ -375,8 +389,9 @@ export default function HorariosPage() {
     if (periodoSeleccionado) {
       determinarCiclos();
       cargarHorarios();
+      cargarActividadesNoLectivas();
     }
-  }, [periodoSeleccionado, determinarCiclos, cargarHorarios]);
+  }, [periodoSeleccionado, determinarCiclos, cargarHorarios, cargarActividadesNoLectivas]);
 
   useEffect(() => {
     if (cicloSeleccionado) {
@@ -417,6 +432,18 @@ export default function HorariosPage() {
   };
 
   const handleCeldaClick = (diaIndex: number, horaIndex: number, horariosBloque: any[]) => {
+    // Check if ambiente is occupied first
+    const ambienteOcupado = ambienteSeleccionado ? horarios.some(h => 
+      h.id_ambiente === parseInt(ambienteSeleccionado) && 
+      h.dia_semana === diaIndex && 
+      h.hora_inicio === horas[horaIndex].inicio &&
+      h.estado !== 'cancelado'
+    ) : false;
+    if (ambienteOcupado) {
+      setError('El ambiente está ocupado en este horario');
+      return;
+    }
+
     if (horariosBloque.length > 0) {
       // Verificar si se puede agregar un segundo horario
       const primerHorario = horariosBloque[0];
@@ -1047,9 +1074,19 @@ export default function HorariosPage() {
                     const bloqueSolicitado =
                       bloqueOcupado && horariosActivos.every((h) => h.estado === 'solicitado');
                     
+                    // Verificar si el ambiente seleccionado está ocupado en este bloque
+                    const ambienteOcupado = ambienteSeleccionado ? horarios.some(h => 
+                      h.id_ambiente === parseInt(ambienteSeleccionado) && 
+                      h.dia_semana === diaIndex && 
+                      h.hora_inicio === horas[horaIndex].inicio &&
+                      h.estado !== 'cancelado'
+                    ) : false;
+                    
                     // Determinar el tooltip según el estado
                     let tooltip = 'Click para seleccionar';
-                    if (bloqueOcupado) {
+                    if (ambienteOcupado) {
+                      tooltip = '⚠️ El ambiente está ocupado en este horario';
+                    } else if (bloqueOcupado) {
                       if (bloqueSolicitado) {
                         tooltip = 'SOLICITADO (bloqueado) - Click para eliminar o gestionar en Solicitudes';
                       } else {
@@ -1081,7 +1118,9 @@ export default function HorariosPage() {
                       <td
                         key={`${diaIndex}-${horaIndex}`}
                         className={`border p-0 cursor-pointer transition-colors ${
-                          bloqueOcupado
+                          ambienteOcupado
+                            ? 'bg-red-50 cursor-not-allowed'
+                            : bloqueOcupado
                             ? bloqueSolicitado
                               ? 'bg-yellow-100 hover:bg-yellow-200'
                               : 'bg-green-100 hover:bg-red-100'
@@ -1089,7 +1128,7 @@ export default function HorariosPage() {
                               ? 'bg-blue-200 hover:bg-blue-300 ring-2 ring-blue-500'
                               : 'bg-white hover:bg-blue-50'
                         }`}
-                        onClick={() => handleCeldaClick(diaIndex, horaIndex, horariosBloque)}
+                        onClick={() => !ambienteOcupado && handleCeldaClick(diaIndex, horaIndex, horariosBloque)}
                         title={tooltip}
                       >
                         {!bloqueOcupado ? (
@@ -1157,7 +1196,8 @@ export default function HorariosPage() {
           tipo={consultaTipo}
           ambientes={ambientes}
           horarios={horarios}
-          horas={horas.map(h => h.inicio)}
+          horas={horas}
+          actividadesNoLectivas={actividadesNoLectivas}
         />
       )}
     </div>

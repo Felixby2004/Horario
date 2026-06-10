@@ -874,6 +874,7 @@ enum TipoActividadNoLectiva {
   gestion_gobierno
   asesoria_tesis_jurado
   perfeccionamiento
+  preparacion_evaluacion
 
   @@map("tipo_actividad_no_lectiva")
 }

@@ -286,6 +286,18 @@ export default function SeleccionarHorariosPage() {
   };
 
   const handleCeldaClick = (diaIndex: number, horaIndex: number, horariosBloque: any[]) => {
+    // Check if ambiente is occupied first
+    const ambienteOcupado = ambienteSeleccionado ? horariosExistentes.some(h => 
+      h.id_ambiente === parseInt(ambienteSeleccionado) && 
+      h.dia_semana === diaIndex && 
+      h.hora_inicio === horas[horaIndex].inicio &&
+      h.estado !== 'cancelado'
+    ) : false;
+    if (ambienteOcupado) {
+      setError('El ambiente está ocupado en este horario');
+      return;
+    }
+
     if (horariosBloque.length > 0) {
       const tieneTeoria = horariosBloque.some(h => h.tipo_clase === 'teoria');
       const numLabPractica = horariosBloque.filter(h => 
@@ -688,14 +700,24 @@ export default function SeleccionarHorariosPage() {
                         h.tipo_clase === 'laboratorio' || h.tipo_clase === 'practica'
                       ).length;
 
+                      // Check if ambiente is occupied
+                      const ambienteOcupado = ambienteSeleccionado ? horariosExistentes.some(h => 
+                        h.id_ambiente === parseInt(ambienteSeleccionado) && 
+                        h.dia_semana === diaIndex && 
+                        h.hora_inicio === horas[horaIndex].inicio &&
+                        h.estado !== 'cancelado'
+                      ) : false;
+
                       // REGLA DE OCUPACIÓN:
                       // 1. Si hay teoría -> BLOQUEADO (Rojo)
                       // 2. Si hay 2 o más laboratorios/prácticas -> BLOQUEADO (Rojo)
                       // 3. Si hay 1 laboratorio y queremos poner teoría -> BLOQUEADO (Rojo)
-                      // 4. Si hay 1 laboratorio y queremos poner otro laboratorio -> DISPONIBLE (Azul)
+                      // 4. Si el ambiente está ocupado -> BLOQUEADO (Rojo)
+                      // 5. Si hay 1 laboratorio y queremos poner otro laboratorio -> DISPONIBLE (Azul)
                       
                       let ocupado = false;
-                      if (tieneTeoria) ocupado = true;
+                      if (ambienteOcupado) ocupado = true;
+                      else if (tieneTeoria) ocupado = true;
                       else if (numLabPractica >= 2) ocupado = true;
                       else if (numLabPractica === 1 && tipoClase === 'teoria') ocupado = true;
 

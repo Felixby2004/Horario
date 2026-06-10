@@ -198,6 +198,7 @@ export default function SeleccionHorariosPage() {
           <MatrizDisponibilidad
             idDocente={docenteSeleccionado.id_docente}
             idPeriodo={1}
+            idAmbiente={ambienteSeleccionado?.id_ambiente}
             tipoClaseSeleccionada={tipoClase}
             alSeleccionar={handleSeleccionCelda}
           />

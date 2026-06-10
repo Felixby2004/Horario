@@ -15,6 +15,7 @@ interface CeldaHorario {
 interface MatrizDisponibilidadProps {
   idDocente: number;
   idPeriodo: number;
+  idAmbiente?: number;
   tipoClaseSeleccionada?: string;
   alSeleccionar?: (celda: CeldaHorario) => void;
 }
@@ -22,6 +23,7 @@ interface MatrizDisponibilidadProps {
 export const MatrizDisponibilidad: React.FC<MatrizDisponibilidadProps> = ({
   idDocente,
   idPeriodo,
+  idAmbiente,
   tipoClaseSeleccionada = 'teoria',
   alSeleccionar
 }) => {
@@ -44,37 +46,45 @@ export const MatrizDisponibilidad: React.FC<MatrizDisponibilidadProps> = ({
 
   useEffect(() => {
     cargarDisponibilidad();
-  }, [idDocente, idPeriodo, tipoClaseSeleccionada]);
+  }, [idDocente, idPeriodo, idAmbiente, tipoClaseSeleccionada]);
 
   const cargarDisponibilidad = async () => {
     try {
-      const response = await fetch(
-        `/api/horarios/disponibilidad-matriz?docente=${idDocente}&periodo=${idPeriodo}`
-      );
+      let url = `/api/horarios/disponibilidad-matriz?docente=${idDocente}&periodo=${idPeriodo}`;
+      if (idAmbiente) url += `&ambiente=${idAmbiente}`;
+
+      const response = await fetch(url);
       const data = await response.json();
       
       if (data.exito) {
         const matrizData = dias.map(dia =>
           bloques.map(bloque => {
-            const horariosEnBloque = data.datos.filter((h: any) => 
+            const horariosDocenteEnBloque = (data.datos.docente || []).filter((h: any) => 
               h.dia === dia && h.bloque === bloque.bloque
             );
+            const horariosAmbienteEnBloque = (data.datos.ambiente || []).filter((h: any) => 
+              h.dia === dia && h.bloque === bloque.bloque
+            );
+            const todosHorarios = [...horariosDocenteEnBloque, ...horariosAmbienteEnBloque];
 
             // REGLA DE OCUPACIÓN:
-            // 1. Si hay teoría -> BLOQUEADO
-            // 2. Si hay 2 o más laboratorios/prácticas -> BLOQUEADO
-            // 3. Si hay 1 laboratorio y queremos poner teoría -> BLOQUEADO
-            // 4. Si hay 1 laboratorio y queremos poner otro laboratorio -> DISPONIBLE
+            // 1. Si el ambiente tiene ANYTHING in this slot -> BLOQUEADO!
+            // 2. Si hay teoría del docente -> BLOQUEADO
+            // 3. Si hay 2 o más laboratorios/prácticas del docente -> BLOQUEADO
+            // 4. Si hay 1 laboratorio del docente y queremos poner teoría -> BLOQUEADO
+            // 5. Si hay 1 laboratorio del docente y queremos poner otro laboratorio -> DISPONIBLE
             
-            const tieneTeoria = horariosEnBloque.some((h: any) => h.tipo_clase === 'teoria');
-            const numLabPractica = horariosEnBloque.filter((h: any) => 
+            const ambienteOcupado = horariosAmbienteEnBloque.length > 0;
+            const tieneTeoriaDocente = horariosDocenteEnBloque.some((h: any) => h.tipo_clase === 'teoria');
+            const numLabPracticaDocente = horariosDocenteEnBloque.filter((h: any) => 
               h.tipo_clase === 'laboratorio' || h.tipo_clase === 'practica'
             ).length;
 
             let ocupado = false;
-            if (tieneTeoria) ocupado = true;
-            else if (numLabPractica >= 2) ocupado = true;
-            else if (numLabPractica === 1 && tipoClaseSeleccionada === 'teoria') ocupado = true;
+            if (ambienteOcupado) ocupado = true;
+            else if (tieneTeoriaDocente) ocupado = true;
+            else if (numLabPracticaDocente >= 2) ocupado = true;
+            else if (numLabPracticaDocente === 1 && tipoClaseSeleccionada === 'teoria') ocupado = true;
 
             return {
               dia,
@@ -82,7 +92,7 @@ export const MatrizDisponibilidad: React.FC<MatrizDisponibilidadProps> = ({
               hora_inicio: bloque.hora_inicio,
               hora_fin: bloque.hora_fin,
               ocupado,
-              horarios: horariosEnBloque,
+              horarios: todosHorarios,
               temporal: false
             };
           })
@@ -153,6 +163,7 @@ export const MatrizDisponibilidad: React.FC<MatrizDisponibilidadProps> = ({
                             <div key={i} className="text-[9px] bg-white border border-blue-200 rounded p-1 leading-tight">
                               <div className="font-bold text-blue-800 uppercase">{h.tipo_clase}</div>
                               <div className="truncate">{h.curso}</div>
+                              {h.docente && <div className="text-gray-500 text-[8px]">{h.docente}</div>}
                               <div className="text-gray-500">Ciclo {h.ciclo}</div>
                             </div>
                           ))}

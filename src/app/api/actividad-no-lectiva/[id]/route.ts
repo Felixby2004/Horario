@@ -95,7 +95,9 @@ export async function PUT(
         dias_semana: datos.dias_semana !== undefined ? datos.dias_semana : undefined,
         fecha_inicio: datos.fecha_inicio !== undefined ? (datos.fecha_inicio ? new Date(datos.fecha_inicio) : null) : undefined,
         fecha_fin: datos.fecha_fin !== undefined ? (datos.fecha_fin ? new Date(datos.fecha_fin) : null) : undefined,
-        datos_adicionales: datos.datos_adicionales !== undefined ? datos.datos_adicionales : undefined
+        datos_adicionales: datos.datos_adicionales !== undefined ? datos.datos_adicionales : undefined,
+        datos_sustento: datos.datos_sustento !== undefined ? datos.datos_sustento : undefined,
+        horarios_actividad: datos.horarios_actividad !== undefined ? datos.horarios_actividad : undefined
       }
     });
 

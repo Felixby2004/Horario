@@ -152,6 +152,7 @@ export async function GET(request: NextRequest) {
         { hora_inicio: 'asc' }
       ]
     });
+    console.log('/api/horarios returned:', horarios.map((h:any)=>({ id: h.id_asignacion, curso: h.curso?.nombre, grupo: h.grupo?.codigo_grupo, estado: h.estado })));
 
     return NextResponse.json({
       exito: true,

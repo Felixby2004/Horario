@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import { useState, useEffect, useRef } from 'react'
 import { TablaPaginada } from '@/components/ui/TablaPaginada'
 import { Boton } from '@/components/ui/Boton'
-import { DocumentoCargaAcademica, DocumentoDeclaracionJurada } from '@/components/DocumentGenerator'
+import { DocumentoCargaAcademica, DocumentoDeclaracionJurada, DocumentoHorarioSemanal } from '@/components/DocumentGenerator'
 
 const TIPOS_ACTIVIDAD = [
   { valor: 'tutoria_consejeria', label: 'Tutoría / Consejería' },
@@ -13,7 +13,8 @@ const TIPOS_ACTIVIDAD = [
   { valor: 'responsabilidad_social', label: 'Responsabilidad Social' },
   { valor: 'gestion_gobierno', label: 'Gestión y Gobierno' },
   { valor: 'asesoria_tesis_jurado', label: 'Asesoría de Tesis / Jurado' },
-  { valor: 'perfeccionamiento', label: 'Perfeccionamiento' }
+  { valor: 'perfeccionamiento', label: 'Perfeccionamiento' },
+  { valor: 'preparacion_evaluacion', label: 'Preparación y Evaluación' }
 ]
 
 export default function CargaAcademicaAdminPage() {
@@ -26,7 +27,7 @@ export default function CargaAcademicaAdminPage() {
   const [cargaSeleccionada, setCargaSeleccionada] = useState<any>(null)
   const [motivoRechazo, setMotivoRechazo] = useState('')
   const [modalDetallesAbierto, setModalDetallesAbierto] = useState(false)
-  const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | null>(null)
+const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null)
   const documentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -139,9 +140,14 @@ export default function CargaAcademicaAdminPage() {
         ? `${cargaSeleccionada.docente.apellidos}_${cargaSeleccionada.docente.nombres}`
         : 'documento'
       
-      const nombreArchivo = mostrarDocumento === 'carga'
-        ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
-        : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`
+      let nombreArchivo = 'documento.pdf'
+      if (mostrarDocumento === 'carga') {
+        nombreArchivo = `Formato_1_Carga_Academica_${nombreDocente}.pdf`
+      } else if (mostrarDocumento === 'declaracion') {
+        nombreArchivo = `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`
+      } else if (mostrarDocumento === 'horario') {
+        nombreArchivo = `Formato_F03_Horario_Semanal_${nombreDocente}.pdf`
+      }
 
       const opt: any = {
         margin: [10, 10, 10, 10],
@@ -238,7 +244,7 @@ export default function CargaAcademicaAdminPage() {
             </button>
           )}
 
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 flex-wrap">
             <button
               onClick={() => {
                 setCargaSeleccionada(fila)
@@ -256,6 +262,15 @@ export default function CargaAcademicaAdminPage() {
               className="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-600 transition-colors"
             >
               Declaración
+            </button>
+            <button
+              onClick={() => {
+                setCargaSeleccionada(fila)
+                setMostrarDocumento('horario')
+              }}
+              className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+            >
+              Horario Semanal
             </button>
           </div>
         </div>
@@ -545,6 +560,8 @@ export default function CargaAcademicaAdminPage() {
               <h2 className="text-xl font-semibold">
                 {mostrarDocumento === 'carga'
                   ? 'Formato N° 1 - Declaración de Carga Horaria Asignada'
+                  : mostrarDocumento === 'horario'
+                  ? 'Formato F03-CAD - Horario Semanal de la Carga Académica Docente'
                   : 'Formato 2 - Declaración Jurada'}
               </h2>
               <div className="flex gap-2">
@@ -567,6 +584,14 @@ export default function CargaAcademicaAdminPage() {
             <div className="p-8" ref={documentRef}>
               {mostrarDocumento === 'carga' ? (
                 <DocumentoCargaAcademica
+                  carga={cargaSeleccionada}
+                  docente={cargaSeleccionada.docente}
+                  periodo={cargaSeleccionada.periodo}
+                  horarios={cargaSeleccionada.docente?.horarios || []}
+                  actividades={cargaSeleccionada.actividades_no_lectivas}
+                />
+              ) : mostrarDocumento === 'horario' ? (
+                <DocumentoHorarioSemanal
                   carga={cargaSeleccionada}
                   docente={cargaSeleccionada.docente}
                   periodo={cargaSeleccionada.periodo}

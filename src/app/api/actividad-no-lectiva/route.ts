@@ -46,14 +46,16 @@ async function actualizarHorasCargaAcademica(idCarga: number) {
   });
 }
 
-// Obtener actividades no lectivas (filtrar por carga académica)
+// Obtener actividades no lectivas (filtrar por carga académica o periodo)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const cargaId = searchParams.get('cargaId');
+    const periodoId = searchParams.get('periodo');
 
     const where: any = {};
     if (cargaId) where.id_carga = parseInt(cargaId);
+    if (periodoId) where.carga_academica = { id_periodo: parseInt(periodoId) };
 
     const actividades = await prisma.actividadNoLectiva.findMany({
       where,
@@ -96,7 +98,9 @@ export async function POST(request: NextRequest) {
         dias_semana: datos.dias_semana || null,
         fecha_inicio: datos.fecha_inicio ? new Date(datos.fecha_inicio) : null,
         fecha_fin: datos.fecha_fin ? new Date(datos.fecha_fin) : null,
-        datos_adicionales: datos.datos_adicionales || null
+        datos_adicionales: datos.datos_adicionales || null,
+        datos_sustento: datos.datos_sustento || null,
+        horarios_actividad: datos.horarios_actividad || null
       }
     });
 

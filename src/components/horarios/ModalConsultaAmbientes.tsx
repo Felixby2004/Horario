@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
+import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 interface Ambiente {
   id_ambiente: number;
@@ -15,7 +16,8 @@ interface ModalConsultaAmbientesProps {
   tipo: 'aula' | 'laboratorio';
   ambientes: Ambiente[];
   horarios: any[];
-  horas?: string[];
+  horas?: { inicio: string; fin: string }[];
+  actividadesNoLectivas?: any[];
 }
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
@@ -26,9 +28,39 @@ export const ModalConsultaAmbientes: React.FC<ModalConsultaAmbientesProps> = ({
   tipo,
   ambientes,
   horarios,
-  horas = ['07:00', '08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '19:00', '20:30']
+  horas: propsHoras,
+  actividadesNoLectivas = []
 }) => {
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState<Ambiente | null>(null);
+  const [config, setConfig] = useState<any>(null);
+  const [horas, setHoras] = useState<{ inicio: string; fin: string }[]>([]);
+
+  // Load config when modal opens
+  useEffect(() => {
+    if (abierto) {
+      fetch('/api/configuracion')
+        .then(res => res.json())
+        .then(data => {
+          if (data.exito && data.datos) {
+            setConfig(data.datos);
+            const intervalos = utilidadesFecha.generarIntervalosHorarios(
+              data.datos.hora_inicio,
+              data.datos.hora_fin,
+              data.datos.duracion_bloque
+            );
+            setHoras(intervalos);
+          }
+        })
+        .catch(err => console.error('Error loading config:', err));
+    }
+  }, [abierto]);
+
+  // If propsHoras are provided, use those
+  useEffect(() => {
+    if (propsHoras) {
+      setHoras(propsHoras);
+    }
+  }, [propsHoras]);
 
   const ambientesFiltrados = ambientes.filter(a => 
     tipo === 'aula' ? a.tipo === 'aula' : a.tipo === 'laboratorio'
@@ -36,6 +68,10 @@ export const ModalConsultaAmbientes: React.FC<ModalConsultaAmbientesProps> = ({
 
   const obtenerHorariosAmbiente = (idAmbiente: number) => {
     return horarios.filter(h => h.id_ambiente === idAmbiente);
+  };
+
+  const obtenerActividadesNoLectivasAmbiente = (idAmbiente: number) => {
+    return actividadesNoLectivas.filter(act => act.datos_sustento?.id_ambiente === idAmbiente);
   };
 
   return (
@@ -87,28 +123,48 @@ export const ModalConsultaAmbientes: React.FC<ModalConsultaAmbientesProps> = ({
                   </thead>
                   <tbody>
                     {horas.map((hora, hIdx) => (
-                      <tr key={hora}>
-                        <td className="border p-1 font-medium bg-gray-50">{hora}</td>
+                      <tr key={hIdx}>
+                        <td className="border p-1 font-medium bg-gray-50">
+                          {hora.inicio}
+                          <br />
+                          {hora.fin}
+                        </td>
                         {DIAS.map((_, dIdx) => {
                           const hAmb = obtenerHorariosAmbiente(ambienteSeleccionado.id_ambiente);
-                          const asignaciones = hAmb.filter(h => 
-                            h.dia_semana === dIdx && h.hora_inicio === hora
+                          const actividadesAmb = obtenerActividadesNoLectivasAmbiente(ambienteSeleccionado.id_ambiente);
+                          
+                          const asignacionesLectivas = hAmb.filter(h => 
+                            h.dia_semana === dIdx && h.hora_inicio === hora.inicio
                           );
+                          
+                          const asignacionesNoLectivas = actividadesAmb.filter(act =>
+                            act.horarios_actividad?.some((h: any) =>
+                              DIAS.indexOf(h.dia) === dIdx && h.inicio === hora.inicio
+                            )
+                          );
+                          
+                          const estaOcupado = asignacionesLectivas.length > 0 || asignacionesNoLectivas.length > 0;
 
                           return (
                             <td 
                               key={dIdx} 
-                              className={`border p-1 h-12 min-w-[80px] ${
-                                asignaciones.length > 0 ? 'bg-red-50' : 'bg-green-50'
+                              className={`border p-1 h-12 min-w-[80px] overflow-hidden ${
+                                estaOcupado ? 'bg-red-50' : 'bg-green-50'
                               }`}
                             >
-                              {asignaciones.length > 0 ? (
+                              {estaOcupado ? (
                                 <div className="flex flex-col gap-1">
-                                  {asignaciones.map(asig => (
+                                  {asignacionesLectivas.map(asig => (
                                     <div key={asig.id_asignacion} className="text-red-700 leading-tight">
                                       <div className="font-bold">{asig.curso?.codigo}</div>
                                       <div>{asig.docente?.apellidos}</div>
                                       <div className="text-[8px] italic">Ciclo {asig.curso?.ciclo}</div>
+                                    </div>
+                                  ))}
+                                  {asignacionesNoLectivas.map(asig => (
+                                    <div key={asig.id_actividad} className="text-orange-700 leading-tight">
+                                      <div className="font-bold">{asig.tipo_actividad?.replace(/_/g, ' ')}</div>
+                                      <div>{asig.nombre}</div>
                                     </div>
                                   ))}
                                 </div>

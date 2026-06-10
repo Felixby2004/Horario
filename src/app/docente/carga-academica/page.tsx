@@ -1,11 +1,14 @@
-'use client'
+'use client';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { Boton } from '@/components/ui/Boton'
-import { DocumentoCargaAcademica, DocumentoDeclaracionJurada } from '@/components/DocumentGenerator'
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Boton } from '@/components/ui/Boton';
+import { DocumentoCargaAcademica, DocumentoDeclaracionJurada, DocumentoHorarioSemanal } from '@/components/DocumentGenerator';
+import { utilidadesFecha } from '@/lib/utilidadesFecha';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
+import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
 
 const TIPOS_ACTIVIDAD = [
   { valor: 'tutoria_consejeria', label: 'Tutoria / Consejería' },
@@ -13,7 +16,8 @@ const TIPOS_ACTIVIDAD = [
   { valor: 'responsabilidad_social', label: 'Responsabilidad Social' },
   { valor: 'gestion_gobierno', label: 'Gestión y Gobierno' },
   { valor: 'asesoria_tesis_jurado', label: 'Asesoría de Tesis / Jurado' },
-  { valor: 'perfeccionamiento', label: 'Perfeccionamiento' }
+  { valor: 'perfeccionamiento', label: 'Perfeccionamiento' },
+  { valor: 'preparacion_evaluacion', label: 'Preparación y Evaluación' }
 ];
 
 // Configuración para cada tipo de actividad (según Reglamento Carga Académica UNT 2024)
@@ -62,6 +66,13 @@ const CONFIG_ACTIVIDAD = {
       { id: 'institucion', label: 'Institución', tipo: 'text', requerido: true },
       { id: 'numero_horas_total', label: 'Número de Horas Total', tipo: 'number', requerido: false }
     ]
+  },
+  preparacion_evaluacion: {
+    maxHoras: 20,
+    campos: [
+      { id: 'ciclo_academico', label: 'Ciclo Académico', tipo: 'text', requerido: true },
+      { id: 'cantidad_alumnos', label: 'Cantidad de Alumnos', tipo: 'number', requerido: true }
+    ]
   }
 };
 
@@ -72,28 +83,30 @@ export default function DocenteCargaAcademicaPage() {
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState<string>('');
   const [carga, setCarga] = useState<any>(null);
   const [actividades, setActividades] = useState<any[]>([]);
+  const [horariosDocente, setHorariosDocente] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [actividadSeleccionada, setActividadSeleccionada] = useState<any>(null);
-  const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | null>(null)
-  const [mensajeExito, setMensajeExito] = useState<string>('')
-  const documentRef = useRef<HTMLDivElement>(null)
+  const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null);
+  const [mensajeExito, setMensajeExito] = useState<string>('');
+  const documentRef = useRef<HTMLDivElement>(null);
 
   const handleDescargarPDF = async () => {
-    const element = documentRef.current
-    if (!element) return
+    const element = documentRef.current;
+    if (!element) return;
 
     // Importar dinámicamente html2pdf.js solo en el cliente
-    const html2pdf = (await import('html2pdf.js')).default
+    const html2pdf = (await import('html2pdf.js')).default;
 
-    const nombreDocente = usuario
-      ? `${usuario.apellidos}_${usuario.nombres}`
-      : 'documento'
+    const nombreDocente = usuario ? `${usuario.apellidos}_${usuario.nombres}` : 'documento';
 
-    const nombreArchivo = mostrarDocumento === 'carga'
-      ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
-      : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`
+    const nombreArchivo =
+      mostrarDocumento === 'carga'
+        ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
+        : mostrarDocumento === 'horario'
+        ? `Formato_F03_Horario_Semanal_${nombreDocente}.pdf`
+        : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`;
 
     const opt: any = {
       margin: [10, 10, 10, 10],
@@ -101,14 +114,14 @@ export default function DocenteCargaAcademicaPage() {
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, logging: true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }
+    };
 
-    html2pdf().set(opt).from(element).save()
+    html2pdf().set(opt).from(element).save();
   };
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -160,16 +173,30 @@ export default function DocenteCargaAcademicaPage() {
 
   const cargarCargaYActividades = async (idDocente: number, idPeriodo: number) => {
     try {
-      const resCarga = await fetch(`/api/carga-academica?docenteId=${idDocente}&periodoId=${idPeriodo}`);
+      const [resCarga, resHorarios] = await Promise.all([
+        fetch(`/api/carga-academica?docenteId=${idDocente}&periodoId=${idPeriodo}`),
+        fetch(`/api/horarios?periodo=${idPeriodo}`)
+      ]);
 
       const dataCarga = await resCarga.json();
+      const dataHorarios = await resHorarios.json();
+      
       if (dataCarga.exito && dataCarga.datos.length > 0) {
         const cargaData = dataCarga.datos[0];
+        console.log('cargarCargaYActividades - cargaData:', cargaData);
+        console.log('cargarCargaYActividades - actividades_no_lectivas:', cargaData.actividades_no_lectivas);
         setCarga(cargaData);
         setActividades(cargaData.actividades_no_lectivas || []);
       } else {
         // Si no hay carga, creamos una nueva
         await crearCargaAcademica(idDocente, idPeriodo);
+      }
+      
+      if (dataHorarios.exito) {
+        // Filter horarios to only the current docente
+        const horariosDelDocente = dataHorarios.datos.filter((h: any) => h.id_docente === idDocente);
+        console.log('Docente horarios:', horariosDelDocente);
+        setHorariosDocente(horariosDelDocente);
       }
     } catch (error) {
       console.error('Error cargando carga y actividades:', error);
@@ -217,18 +244,18 @@ export default function DocenteCargaAcademicaPage() {
     try {
       // Validar que todas las actividades estén en categorías permitidas
       const categoriasPermitidas = [
-        'tutoria_consejeria', 
-        'investigacion', 
-        'responsabilidad_social', 
-        'gestion_gobierno', 
-        'asesoria_tesis_jurado', 
+        'tutoria_consejeria',
+        'investigacion',
+        'responsabilidad_social',
+        'gestion_gobierno',
+        'asesoria_tesis_jurado',
         'perfeccionamiento'
       ];
-      
+
       const tieneActividadInvalida = actividades.some(
         (act: any) => !categoriasPermitidas.includes(act.tipo_actividad)
       );
-      
+
       if (tieneActividadInvalida) {
         alert('Error: Todas las actividades deben estar en una categoría permitida.');
         return;
@@ -365,12 +392,17 @@ export default function DocenteCargaAcademicaPage() {
             <div className="flex flex-col gap-4">
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-2">Estado de la Carga Académica</p>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium ${
-                  carga.estado === 'aprobado' || carga.estado === 'publicado' ? 'bg-green-100 text-green-800' :
-                  carga.estado === 'observado' ? 'bg-orange-100 text-orange-800' :
-                  carga.estado === 'en_revision' || carga.estado === 'validado' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-blue-100 text-blue-800'
-                }`}>
+                <span
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium ${
+                    carga.estado === 'aprobado' || carga.estado === 'publicado'
+                      ? 'bg-green-100 text-green-800'
+                      : carga.estado === 'observado'
+                      ? 'bg-orange-100 text-orange-800'
+                      : carga.estado === 'en_revision' || carga.estado === 'validado'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
                   {carga.estado.charAt(0).toUpperCase() + carga.estado.slice(1).replace('_', ' ')}
                 </span>
               </div>
@@ -387,7 +419,7 @@ export default function DocenteCargaAcademicaPage() {
               {(carga.estado === 'aprobado' || carga.estado === 'publicado') && (
                 <div className="p-4 border rounded bg-green-50">
                   <p className="text-sm font-medium text-green-900 mb-3">Documentos Generados</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <button
                       onClick={() => setMostrarDocumento('carga')}
                       className="flex items-center gap-3 p-3 border border-green-200 bg-white rounded hover:bg-green-50 transition"
@@ -406,6 +438,16 @@ export default function DocenteCargaAcademicaPage() {
                       <div className="text-left">
                         <p className="font-medium text-gray-900 text-sm">Declaración Jurada</p>
                         <p className="text-xs text-gray-600">Declaración Jurada de No Estar Incluso en Causales</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setMostrarDocumento('horario')}
+                      className="flex items-center gap-3 p-3 border border-green-200 bg-white rounded hover:bg-green-50 transition"
+                    >
+                      <div className="text-green-600 text-2xl">📅</div>
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900 text-sm">Horario Semanal</p>
+                        <p className="text-xs text-gray-600">Formato F03-CAD - Horario Semanal de la Carga Académica</p>
                       </div>
                     </button>
                   </div>
@@ -437,7 +479,8 @@ export default function DocenteCargaAcademicaPage() {
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {TIPOS_ACTIVIDAD.find(t => t.valor === actividad.tipo_actividad)?.label || actividad.tipo_actividad}
+                        {TIPOS_ACTIVIDAD.find((t) => t.valor === actividad.tipo_actividad)?.label ||
+                          actividad.tipo_actividad}
                       </h3>
                       <p className="text-gray-600 mt-1">
                         <strong>Horas Semanales:</strong> {actividad.horas_semanales} h
@@ -482,8 +525,9 @@ export default function DocenteCargaAcademicaPage() {
           alCerrar={() => setModalAbierto(false)}
           actividad={actividadSeleccionada}
           idCargaAcademica={carga?.id_carga}
-          periodo={periodos.find(p => p.id_periodo === parseInt(periodoSeleccionado))}
+          periodo={periodos.find((p) => p.id_periodo === parseInt(periodoSeleccionado))}
           periodos={periodos}
+          docente={carga?.docente || usuario}
           onActualizar={async (mensaje: string) => {
             setModalAbierto(false);
             setMensajeExito(mensaje);
@@ -523,7 +567,15 @@ export default function DocenteCargaAcademicaPage() {
                   carga={carga}
                   docente={carga.docente || usuario}
                   periodo={carga.periodo}
-                  horarios={carga.docente?.horarios || []}
+                  horarios={horariosDocente}
+                  actividades={actividades}
+                />
+              ) : mostrarDocumento === 'horario' ? (
+                <DocumentoHorarioSemanal
+                  carga={carga}
+                  docente={carga.docente || usuario}
+                  periodo={carga.periodo}
+                  horarios={horariosDocente}
                   actividades={actividades}
                 />
               ) : (
@@ -544,6 +596,7 @@ function ModalActividadNoLectiva({
   idCargaAcademica,
   periodo,
   periodos,
+  docente,
   onActualizar
 }: {
   abierto: boolean;
@@ -552,6 +605,7 @@ function ModalActividadNoLectiva({
   idCargaAcademica?: number;
   periodo?: any;
   periodos?: any[];
+  docente: any;
   onActualizar: (mensaje: string) => void;
 }) {
   const [formData, setFormData] = useState<any>({
@@ -561,21 +615,123 @@ function ModalActividadNoLectiva({
     horas_semanales: 0,
     dias_semana: [],
     datos_adicionales: {},
-    datos_sustento: {}
+    datos_sustento: {},
+    horarios_actividad: []
   });
 
+  const [celdasSeleccionadas, setCeldasSeleccionadas] = useState<Set<string>>(new Set());
+  const [ambientes, setAmbientes] = useState<any[]>([]);
+  const [horariosExistentes, setHorariosExistentes] = useState<any[]>([]);
+  const [actividadesNoLectivas, setActividadesNoLectivas] = useState<any[]>([]);
+  const [config, setConfig] = useState<any>(null);
+  const [horas, setHoras] = useState<{ inicio: string; fin: string }[]>(utilidadesFecha.intervalosPorDefecto);
+  const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
+
+  const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+
   useEffect(() => {
+    if (abierto) {
+      cargarDatos();
+    }
+  }, [abierto, periodo]);
+
+  const cargarDatos = async () => {
+    try {
+      const [resAmbientes, resHorarios, resConfig, resActividadesNoLectivas] = await Promise.all([
+        fetch('/api/ambientes'),
+        fetch(`/api/horarios?periodo=${periodo?.id_periodo}`),
+        fetch('/api/configuracion'),
+        fetch(`/api/actividad-no-lectiva?periodo=${periodo?.id_periodo}`)
+      ]);
+
+      const [dataAmbientes, dataHorarios, dataConfig, dataActividadesNoLectivas] = await Promise.all([
+        resAmbientes.json(),
+        resHorarios.json(),
+        resConfig.json(),
+        resActividadesNoLectivas.json()
+      ]);
+
+      if (dataAmbientes.exito) {
+        setAmbientes(dataAmbientes.datos || []);
+      }
+      if (dataHorarios.exito) {
+        setHorariosExistentes(dataHorarios.datos || []);
+      }
+      if (dataActividadesNoLectivas.exito) {
+        setActividadesNoLectivas(dataActividadesNoLectivas.datos || []);
+      }
+      if (dataConfig.exito && dataConfig.datos) {
+        setConfig(dataConfig.datos);
+        const nuevosIntervalos = utilidadesFecha.generarIntervalosHorarios(
+          dataConfig.datos.hora_inicio,
+          dataConfig.datos.hora_fin,
+          dataConfig.datos.duracion_bloque
+        );
+        setHoras(nuevosIntervalos);
+      }
+    } catch (error) {
+      console.error('Error cargando datos:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log('ModalActividadNoLectiva useEffect - actividad:', actividad);
+    console.log('ModalActividadNoLectiva useEffect - horas:', horas);
+    
     if (actividad) {
+      let horarios = actividad.horarios_actividad || [];
+      let diasSemana = actividad.dias_semana || [];
+      let datosAdicionales = actividad.datos_adicionales || {};
+      let datosSustento = actividad.datos_sustento || {};
+      
+      // Parse all JSON fields if they're strings
+      const parseJSON = (value: any) => {
+        if (typeof value === 'string') {
+          try {
+            return JSON.parse(value);
+          } catch (e) {
+            console.error('Error parsing JSON field:', e);
+            return value;
+          }
+        }
+        return value;
+      };
+      
+      horarios = parseJSON(horarios);
+      diasSemana = parseJSON(diasSemana);
+      datosAdicionales = parseJSON(datosAdicionales);
+      datosSustento = parseJSON(datosSustento);
+      
+      console.log('ModalActividadNoLectiva - horarios after parse:', horarios);
+      
+      const celdas = new Set<string>();
+      if (Array.isArray(horarios)) {
+        horarios.forEach((h: any) => {
+          console.log('ModalActividadNoLectiva - processing horario:', h);
+          const idxDia = DIAS.indexOf(h.dia);
+          const idxHora = horas.findIndex((hor) => hor.inicio === h.inicio);
+          console.log('ModalActividadNoLectiva - idxDia:', idxDia, 'idxHora:', idxHora);
+          
+          if (idxDia !== -1 && idxHora !== -1) {
+            celdas.add(`${idxDia}-${idxHora}`);
+          }
+        });
+      }
+      console.log('ModalActividadNoLectiva - celdasSeleccionadas:', Array.from(celdas));
+      
+      setCeldasSeleccionadas(celdas);
       setFormData({
         tipo_actividad: actividad.tipo_actividad,
         nombre: actividad.nombre,
         descripcion: actividad.descripcion || '',
         horas_semanales: actividad.horas_semanales || 0,
-        dias_semana: actividad.dias_semana || [],
-        datos_adicionales: actividad.datos_adicionales || {},
-        datos_sustento: actividad.datos_sustento || {}
+        dias_semana: diasSemana,
+        datos_adicionales: datosAdicionales,
+        datos_sustento: datosSustento,
+        horarios_actividad: horarios
       });
     } else {
+      setCeldasSeleccionadas(new Set());
       setFormData({
         tipo_actividad: 'tutoria_consejeria',
         nombre: '',
@@ -585,11 +741,45 @@ function ModalActividadNoLectiva({
         datos_adicionales: {},
         datos_sustento: {
           // Preseleccionamos el ciclo 1 por defecto
-          ciclo_academico: '1'
-        }
+          ciclo_academico: '1',
+          lugar: '',
+          aula_total: ''
+        },
+        horarios_actividad: []
       });
     }
-  }, [actividad]);
+  }, [actividad, horas]);
+
+  const handleCeldaClick = (diaIndex: number, horaIndex: number) => {
+    const key = `${diaIndex}-${horaIndex}`;
+    const nuevas = new Set(celdasSeleccionadas);
+    if (nuevas.has(key)) {
+      nuevas.delete(key);
+    } else {
+      nuevas.add(key);
+    }
+    setCeldasSeleccionadas(nuevas);
+
+    // Convertir celdas seleccionadas a horarios_actividad
+    const horarios = Array.from(nuevas).map((k) => {
+      const [d, h] = k.split('-').map(Number);
+      return {
+        dia: DIAS[d],
+        diaIndex: d,
+        inicio: horas[h].inicio,
+        fin: horas[h].fin
+      };
+    });
+
+    // Calculate horas_semanales based on config's duracion_bloque (in minutes)
+    const duracionHoras = config ? config.duracion_bloque / 60 : 1.5;
+    setFormData({
+      ...formData,
+      horarios_actividad: horarios,
+      // Calculamos horas semanales automáticamente
+      horas_semanales: horarios.length * duracionHoras
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -598,7 +788,7 @@ function ModalActividadNoLectiva({
     try {
       const url = actividad
         ? `/api/actividad-no-lectiva/${actividad.id_actividad}`
-        : `/api/actividad-no-lectiva`;
+        : '/api/actividad-no-lectiva';
       const method = actividad ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -612,7 +802,8 @@ function ModalActividadNoLectiva({
           fecha_inicio: periodo?.fecha_inicio ? new Date(periodo.fecha_inicio) : null,
           fecha_fin: periodo?.fecha_fin ? new Date(periodo.fecha_fin) : null,
           datos_adicionales: Object.keys(formData.datos_adicionales).length > 0 ? formData.datos_adicionales : null,
-          datos_sustento: Object.keys(formData.datos_sustento).length > 0 ? formData.datos_sustento : null
+          datos_sustento: Object.keys(formData.datos_sustento).length > 0 ? formData.datos_sustento : null,
+          horarios_actividad: formData.horarios_actividad.length > 0 ? formData.horarios_actividad : null
         })
       });
 
@@ -627,34 +818,130 @@ function ModalActividadNoLectiva({
 
   const currentConfig = CONFIG_ACTIVIDAD[formData.tipo_actividad as keyof typeof CONFIG_ACTIVIDAD];
 
+  const ambienteSeleccionado = ambientes.find(
+    (a) => a.id_ambiente === Number(formData.datos_sustento?.id_ambiente)
+  );
+
+  const getCeldaInfo = (diaIndex: number, horaIndex: number): { ocupado: boolean; tipo?: 'lectivo' | 'no-lectivo'; nombre?: string; actividad?: string } => {
+    const hora = horas[horaIndex];
+    
+    // 1. Check if ambiente is occupied with lectivo
+    if (ambienteSeleccionado) {
+      const horarioLectivo = horariosExistentes.find(
+        (h) =>
+          h.id_ambiente === ambienteSeleccionado.id_ambiente &&
+          h.dia_semana === diaIndex &&
+          h.hora_inicio === hora.inicio &&
+          ['confirmado', 'publicado', 'borrador'].includes(h.estado)
+      );
+      if (horarioLectivo) {
+        const nombres = horarioLectivo.docente?.nombres || '';
+        const apellidos = horarioLectivo.docente?.apellidos || '';
+        const nombreCompleto = [nombres, apellidos].filter(Boolean).join(' ') || 'Docente';
+        
+        return {
+          ocupado: true,
+          tipo: 'lectivo',
+          nombre: nombreCompleto,
+          actividad: horarioLectivo.curso?.nombre || horarioLectivo.grupo?.curso?.nombre || 'Clase'
+        };
+      }
+      
+      const actividadNoLectiva = actividadesNoLectivas.find(
+        (act) =>
+          act.datos_sustento?.id_ambiente === ambienteSeleccionado.id_ambiente &&
+          act.horarios_actividad?.some(
+            (h: any) =>
+              DIAS.indexOf(h.dia) === diaIndex &&
+              h.inicio === hora.inicio &&
+              (!actividad || act.id_actividad !== actividad.id_actividad)
+          )
+      );
+      if (actividadNoLectiva) {
+        const nombres = actividadNoLectiva.carga_academica?.docente?.nombres || '';
+        const apellidos = actividadNoLectiva.carga_academica?.docente?.apellidos || '';
+        const nombreCompleto = [nombres, apellidos].filter(Boolean).join(' ') || 'Docente';
+        
+        return {
+          ocupado: true,
+          tipo: 'no-lectivo',
+          nombre: nombreCompleto,
+          actividad: actividadNoLectiva.nombre || actividadNoLectiva.tipo_actividad
+        };
+      }
+    }
+
+    // 2. Check if DOCENTE is occupied with lectivos (for same docente)
+    const docenteHorarioLectivo = horariosExistentes.find(
+      (h) =>
+        h.id_docente === docente?.id_docente &&
+        h.dia_semana === diaIndex &&
+        h.hora_inicio === hora.inicio &&
+        ['confirmado', 'publicado', 'borrador'].includes(h.estado)
+    );
+    if (docenteHorarioLectivo) {
+      return {
+        ocupado: true,
+        tipo: 'lectivo',
+        nombre: 'Tú',
+        actividad: docenteHorarioLectivo.curso?.nombre || docenteHorarioLectivo.grupo?.curso?.nombre || 'Clase'
+      };
+    }
+
+    // 3. Check if DOCENTE is occupied with other actividades no lectivas
+    const docenteActividadNoLectiva = actividadesNoLectivas.find(
+      (act) =>
+        act.carga_academica?.id_docente === docente?.id_docente &&
+        act.horarios_actividad?.some(
+          (h: any) =>
+            DIAS.indexOf(h.dia) === diaIndex &&
+            h.inicio === hora.inicio &&
+            (!actividad || act.id_actividad !== actividad.id_actividad)
+        )
+    );
+    if (docenteActividadNoLectiva) {
+      return {
+        ocupado: true,
+        tipo: 'no-lectivo',
+        nombre: 'Tú',
+        actividad: docenteActividadNoLectiva.nombre || docenteActividadNoLectiva.tipo_actividad
+      };
+    }
+
+    return { ocupado: false };
+  };
+
   if (!abierto) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl my-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl my-4">
         <div className="p-6 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-xl font-semibold">
             {actividad ? 'Editar Actividad No Lectiva' : 'Nueva Actividad No Lectiva'}
           </h2>
-          <button
-            onClick={alCerrar}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
-          >
+          <button onClick={alCerrar} className="text-gray-500 hover:text-gray-700 text-2xl">
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[85vh] overflow-y-auto">
           {/* Tipo de Actividad */}
           <div>
             <label className="block text-sm font-medium mb-2">Tipo de Actividad</label>
             <select
               value={formData.tipo_actividad}
-              onChange={(e) => setFormData({
-                ...formData,
-                tipo_actividad: e.target.value,
-                datos_sustento: {}
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  tipo_actividad: e.target.value,
+                  datos_sustento: {
+                    ...formData.datos_sustento,
+                    lugar: formData.datos_sustento?.lugar || '',
+                    aula_total: formData.datos_sustento?.aula_total || ''
+                  }
+                })
+              }
               className="w-full border rounded px-3 py-2"
             >
               {TIPOS_ACTIVIDAD.map((tipo) => (
@@ -675,13 +962,15 @@ function ModalActividadNoLectiva({
                 // Select con los ciclos (1,3,5,7,9) del período
                 <select
                   value={formData.datos_sustento[campo.id] || ''}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    datos_sustento: {
-                      ...formData.datos_sustento,
-                      [campo.id]: e.target.value
-                    }
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      datos_sustento: {
+                        ...formData.datos_sustento,
+                        [campo.id]: e.target.value
+                      }
+                    })
+                  }
                   className="w-full border rounded px-3 py-2"
                   required={campo.requerido}
                 >
@@ -695,13 +984,15 @@ function ModalActividadNoLectiva({
               ) : campo.tipo === 'textarea' ? (
                 <textarea
                   value={formData.datos_sustento[campo.id] || ''}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    datos_sustento: {
-                      ...formData.datos_sustento,
-                      [campo.id]: e.target.value
-                    }
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      datos_sustento: {
+                        ...formData.datos_sustento,
+                        [campo.id]: e.target.value
+                      }
+                    })
+                  }
                   className="w-full border rounded px-3 py-2"
                   rows={3}
                   required={campo.requerido}
@@ -710,13 +1001,15 @@ function ModalActividadNoLectiva({
                 <input
                   type={campo.tipo}
                   value={formData.datos_sustento[campo.id] || ''}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    datos_sustento: {
-                      ...formData.datos_sustento,
-                      [campo.id]: campo.tipo === 'number' ? parseInt(e.target.value) || 0 : e.target.value
-                    }
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      datos_sustento: {
+                        ...formData.datos_sustento,
+                        [campo.id]: campo.tipo === 'number' ? parseInt(e.target.value) || 0 : e.target.value
+                      }
+                    })
+                  }
                   className="w-full border rounded px-3 py-2"
                   required={campo.requerido}
                 />
@@ -730,37 +1023,120 @@ function ModalActividadNoLectiva({
             <input
               type="text"
               value={formData.nombre}
-              onChange={(e) => setFormData({
-                ...formData,
-                nombre: e.target.value
-              })}
+              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
               className="w-full border rounded px-3 py-2"
               required
             />
           </div>
 
-          {/* Horas Semanales */}
-          <div>
+          {/* Ambiente (Combobox) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Ambiente <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <SearchableSelect
+                    placeholder="Selecciona un ambiente"
+                    value={formData.datos_sustento?.id_ambiente || ''}
+                    onChange={(valor) =>
+                      setFormData({
+                        ...formData,
+                        datos_sustento: {
+                          ...formData.datos_sustento,
+                          id_ambiente: valor,
+                          lugar: ambientes.find((a) => a.id_ambiente === Number(valor))?.pabellon || '',
+                          aula_total: ambientes.find((a) => a.id_ambiente === Number(valor))?.nombre || ''
+                        }
+                      })
+                    }
+                    opciones={ambientes.map((a: any) => ({
+                      valor: a.id_ambiente,
+                      etiqueta: `${a.codigo} - ${a.nombre} (${a.tipo})`,
+                      codigo: a.codigo,
+                      nombre: a.nombre,
+                      tipo: a.tipo
+                    }))}
+                    camposBusqueda={['codigo', 'nombre', 'tipo']}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setConsultaTipo(ambienteSeleccionado?.tipo === 'laboratorio' ? 'laboratorio' : 'aula')}
+                  className="bg-blue-100 text-blue-700 px-3 py-2 rounded hover:bg-blue-200 border border-blue-200 transition-colors text-sm font-medium"
+                  title="Consultar disponibilidad"
+                >
+                  📅
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Horarios */}
+          <div className="space-y-4">
             <label className="block text-sm font-medium mb-2">
-              Horas Semanales (Máximo: {currentConfig.maxHoras})
+              Horario <span className="text-red-500">*</span>
             </label>
-            <input
-              type="number"
-              value={formData.horas_semanales}
-              onChange={(e) => {
-                const val = parseInt(e.target.value) || 0;
-                setFormData({
-                  ...formData,
-                  horas_semanales: Math.min(val, currentConfig.maxHoras)
-                });
-              }}
-              className="w-full border rounded px-3 py-2"
-              min="0"
-              max={currentConfig.maxHoras}
-              required
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Máximo permitido: {currentConfig.maxHoras} horas por semana
+            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+            <table className="w-full border-collapse min-w-max">
+              <thead>
+                <tr>
+                  <th className="border p-2 bg-gray-100 text-sm">Hora</th>
+                  {DIAS.map((dia) => (
+                    <th key={dia} className="border p-2 bg-gray-100 text-sm min-w-[140px]">
+                      {dia}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {horas.map((hora, horaIndex) => (
+                  <tr key={horaIndex}>
+                    <td className="border p-2 text-xs font-medium bg-gray-50">
+                      {hora.inicio}
+                      <br />
+                      {hora.fin}
+                    </td>
+                    {DIAS.map((_dia, diaIndex) => {
+                      const key = `${diaIndex}-${horaIndex}`;
+                      const esSeleccionada = celdasSeleccionadas.has(key);
+                      const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
+                      const esOcupado = celdaInfo.ocupado;
+
+                      return (
+                        <td
+                          key={key}
+                          onClick={() => !esOcupado && handleCeldaClick(diaIndex, horaIndex)}
+                          className={`border p-1 cursor-pointer transition-all h-16 text-center ${
+                            esOcupado
+                              ? 'bg-red-100 cursor-not-allowed'
+                              : esSeleccionada
+                              ? 'bg-emerald-100 border-emerald-400'
+                              : 'bg-white hover:bg-emerald-50'
+                          }`}
+                        >
+                          {esOcupado ? (
+                            <div className="text-xs">
+                              <div className="font-bold text-red-800">{celdaInfo.actividad}</div>
+                              <div className="text-red-600">{celdaInfo.nombre}</div>
+                            </div>
+                          ) : esSeleccionada ? (
+                            <span className="text-emerald-700 font-bold">✓</span>
+                          ) : null}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+            <p className="text-xs text-gray-500">
+              Haz clic en las celdas para seleccionar los horarios de la actividad.
+              <br />
+              Horas semanales calculadas automáticamente:{' '}
+              <span className="font-bold">{formData.horas_semanales}</span> horas
             </p>
           </div>
 
@@ -769,10 +1145,7 @@ function ModalActividadNoLectiva({
             <label className="block text-sm font-medium mb-2">Descripción</label>
             <textarea
               value={formData.descripcion}
-              onChange={(e) => setFormData({
-                ...formData,
-                descripcion: e.target.value
-              })}
+              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
               className="w-full border rounded px-3 py-2"
               rows={3}
             />
@@ -805,6 +1178,18 @@ function ModalActividadNoLectiva({
           </div>
         </form>
       </div>
+
+      {consultaTipo && (
+        <ModalConsultaAmbientes
+          abierto={!!consultaTipo}
+          alCerrar={() => setConsultaTipo(null)}
+          tipo={consultaTipo}
+          ambientes={ambientes}
+          horarios={horariosExistentes}
+          horas={horas}
+          actividadesNoLectivas={actividadesNoLectivas}
+        />
+      )}
     </div>
   );
 }
