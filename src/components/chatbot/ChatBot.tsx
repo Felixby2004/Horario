@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Bot, User, Mic, Square } from 'lucide-react';
 import { Boton } from '@/components/ui/Boton';
 
 interface Message {
@@ -16,7 +16,9 @@ export const ChatBot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const STORAGE_KEY = 'chatbot_history';
 
@@ -46,17 +48,62 @@ export const ChatBot: React.FC = () => {
     scrollToBottom();
   }, [messages, isOpen]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'es-ES';
+
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        setInput(transcript);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Error en reconocimiento:', event.error);
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const toggleRecording = () => {
+    if (!recognitionRef.current) {
+      alert('Tu navegador no soporta reconocimiento de voz.');
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      recognitionRef.current.start();
+      setIsRecording(true);
+    }
+  };
+
+  const sendMessage = async (textToSend?: string) => {
+    const messageText = textToSend || input;
+    if (!messageText.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim(),
+      content: messageText.trim(),
       timestamp: new Date()
     };
 
@@ -74,9 +121,11 @@ export const ChatBot: React.FC = () => {
         })
       });
 
-      if (!response.ok) throw new Error('Error en la respuesta');
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error en la respuesta');
+      }
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -91,7 +140,9 @@ export const ChatBot: React.FC = () => {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Error al procesar tu consulta. Por favor, verifica la configuración del API de Gemini.',
+        content: error instanceof Error 
+          ? `Error: ${error.message}` 
+          : 'Error al procesar tu consulta. Por favor, verifica la configuración del API de Gemini.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -149,7 +200,7 @@ export const ChatBot: React.FC = () => {
                 <Bot size={48} className="mx-auto mb-4 text-gray-400" />
                 <p className="font-medium">¡Hola! ¿En qué puedo ayudarte hoy?</p>
                 <p className="text-sm mt-2">
-                  Puedes preguntar sobre disponibilidad de aulas, uso del sistema o cualquier duda.
+                  Escribe o usa el micrófono para preguntar sobre disponibilidad de aulas o uso del sistema.
                 </p>
               </div>
             )}
@@ -212,7 +263,7 @@ export const ChatBot: React.FC = () => {
           )}
 
           <div className="p-4 border-t border-gray-200 bg-white rounded-b-2xl">
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <input
                 type="text"
                 value={input}
@@ -220,16 +271,32 @@ export const ChatBot: React.FC = () => {
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                 placeholder="Escribe tu consulta..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                disabled={isLoading}
+                disabled={isLoading || isRecording}
               />
+              <button
+                onClick={toggleRecording}
+                disabled={isLoading}
+                className={`p-2 rounded-full transition-all ${
+                  isRecording
+                    ? 'bg-red-500 text-white animate-pulse'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                {isRecording ? <Square size={20} fill="currentColor" /> : <Mic size={20} />}
+              </button>
               <Boton
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={isLoading || !input.trim()}
                 className="rounded-full p-2"
               >
                 {isLoading ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
               </Boton>
             </div>
+            {isRecording && (
+              <p className="text-center text-xs text-red-500 mt-2 animate-pulse">
+                Grabando... habla ahora
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -29,88 +29,91 @@ Ahora responde la siguiente consulta del usuario:`;
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('=== Chatbot API iniciada ===');
+    
     const { message, history = [] } = await request.json();
+    console.log('Mensaje recibido:', message);
     
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
+      console.error('❌ API Key no encontrada');
       return NextResponse.json(
         { error: 'API key de Gemini no configurada' },
         { status: 500 }
       );
     }
 
+    console.log('✅ API Key encontrada');
+
     const genAI = new GoogleGenerativeAI(apiKey);
+    
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
         },
         {
           category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
         },
         {
           category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
         },
         {
           category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
         },
       ],
     });
 
-    const [ambientes, horarios, periodos] = await Promise.all([
-      prisma.ambiente.findMany({
-        take: 20,
-        orderBy: { id_ambiente: 'asc' }
-      }),
-      prisma.horarioAsignado.findMany({
-        take: 30,
-        include: { ambiente: true, docente: true, curso: true, grupo: true },
-        orderBy: { fecha_creacion: 'desc' }
-      }),
-      prisma.periodoAcademico.findMany({
-        where: { activo: true },
-        orderBy: { fecha_creacion: 'desc' }
-      })
-    ]);
+    console.log('✅ Modelo configurado');
 
-    const systemData = `
-Ambientes disponibles (ejemplos):
-${ambientes.map(a => `- ${a.nombre} (${a.codigo}) - Tipo: ${a.tipo} - Capacidad: ${a.capacidad}`).join('\n')}
+    let systemData = '';
+    try {
+      const [ambientes, horarios, periodos] = await Promise.all([
+        prisma.ambiente.findMany({ take: 15, orderBy: { id_ambiente: 'asc' } }),
+        prisma.horarioAsignado.findMany({
+          take: 20,
+          include: { ambiente: true, docente: true, curso: true, grupo: true },
+          orderBy: { fecha_creacion: 'desc' }
+        }),
+        prisma.periodoAcademico.findMany({ where: { activo: true }, take: 5 })
+      ]);
 
-Horarios recientes (ejemplos):
-${horarios.map(h => `- ${h.curso?.nombre || 'N/A'} - ${h.ambiente?.nombre || 'N/A'} - Día: ${h.dia_semana} - ${h.hora_inicio} a ${h.hora_fin}`).join('\n')}
+      systemData = `
+Ambientes disponibles:
+${ambientes.map(a => `- ${a.nombre} (${a.codigo}) - Tipo: ${a.tipo}`).join('\n')}
+
+Horarios recientes:
+${horarios.map(h => `- ${h.curso?.nombre || 'N/A'} - ${h.ambiente?.nombre || 'N/A'} - Día ${h.dia_semana} ${h.hora_inicio}-${h.hora_fin}`).join('\n')}
 
 Periodos activos:
-${periodos.map(p => `- ${p.nombre} (${p.codigo})`).join('\n')}
+${periodos.map(p => `- ${p.nombre}`).join('\n')}
 `;
+    } catch (dbError) {
+      console.error('⚠️ Error cargando datos del sistema:', dbError);
+      systemData = 'Datos del sistema no disponibles temporalmente.';
+    }
 
-    const chat = model.startChat({
-      history: history.map((msg: any) => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      })),
-      generationConfig: {
-        maxOutputTokens: 1024,
-        temperature: 0.7,
-        topP: 0.9,
-      }
-    });
+    console.log('✅ Datos del sistema cargados');
 
     const prompt = SYSTEM_PROMPT.replace('{systemData}', systemData) + '\n\n' + message;
-    const result = await chat.sendMessage(prompt);
-    const response = await result.response;
+    console.log('Enviando a Gemini...');
+
+    const result = await model.generateContent(prompt);
+    const response = result.response;
     const text = response.text();
+
+    console.log('✅ Respuesta recibida de Gemini');
 
     return NextResponse.json({ response: text });
   } catch (error) {
-    console.error('Error en chatbot:', error);
+    console.error('❌ Error en chatbot:', error);
     return NextResponse.json(
-      { error: 'Error al procesar la consulta' },
+      { error: `Error al procesar la consulta: ${error instanceof Error ? error.message : 'Error desconocido'}` },
       { status: 500 }
     );
   }
