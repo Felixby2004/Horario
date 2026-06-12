@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MenuUsuario } from '@/components/layouts/MenuUsuario';
+import { ChatBot } from '@/components/chatbot/ChatBot';
 
 const menuItems = [
   { titulo: 'Dashboard', icono: '📊', ruta: '/dashboard' },
@@ -117,6 +118,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </div>
       </main>
+      <ChatBot />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ChatBot } from '@/components/chatbot/ChatBot';
 
 const menuItems = [
   { titulo: 'Inicio', icono: '🏠', ruta: '/docente' },
@@ -211,6 +212,7 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
           {children}
         </div>
       </main>
+      <ChatBot />
     </div>
   );
 }
