@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Loader2, Mic, Square } from 'lucide-react';
 import { Boton } from '@/components/ui/Boton';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Message {
   id: string;
@@ -12,6 +13,7 @@ interface Message {
 }
 
 export const ChatBot: React.FC = () => {
+  const { usuario, cargando } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -164,14 +166,19 @@ export const ChatBot: React.FC = () => {
     });
   };
 
+  // Si está cargando o no hay usuario, no mostramos nada
+  if (cargando || !usuario) {
+    return null;
+  }
+
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50">
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="bg-primary-700 hover:bg-primary-800 text-white rounded-full shadow-lg transition-all duration-300 flex items-center overflow-hidden"
+          className="bg-primary-700 hover:bg-primary-800 text-white shadow-lg transition-all duration-300 flex items-center overflow-hidden rounded-l-xl"
           style={{ width: isHovered ? '180px' : '56px', height: '56px', padding: isHovered ? '0 20px 0 16px' : '14px' }}
         >
           <MessageCircle size={28} className="flex-shrink-0" />
@@ -184,7 +191,7 @@ export const ChatBot: React.FC = () => {
       )}
 
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl w-96 max-w-[90vw] h-[600px] max-h-[80vh] flex flex-col animate-slide-up">
+        <div className="bg-white rounded-2xl shadow-2xl w-96 max-w-[90vw] h-[600px] max-h-[80vh] flex flex-col animate-slide-up mr-3">
           <div className="bg-primary-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-lg">Asistente Virtual UNT</h3>
