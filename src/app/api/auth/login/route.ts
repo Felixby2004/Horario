@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (!passwordValido) {
       return NextResponse.json({
         exito: false,
-        mensaje: 'Contraseña incorrecta'
+        mensaje: 'Error en usuario o contraseña'
       }, { status: 401 });
     }
 
