@@ -1,0 +1,238 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
+import { Boton } from '@/components/ui/Boton';
+
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+export const ChatBot: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const STORAGE_KEY = 'chatbot_history';
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const messagesWithDates = parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(messagesWithDates);
+      } catch (e) {
+        console.error('Error cargando historial:', e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isOpen]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: input.trim(),
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage.content,
+          history: messages.map(({ role, content }) => ({ role, content }))
+        })
+      });
+
+      if (!response.ok) throw new Error('Error en la respuesta');
+
+      const data = await response.json();
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: data.response || 'Lo siento, no puedo responder en este momento.',
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Error al procesar tu consulta. Por favor, verifica la configuración del API de Gemini.',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const clearHistory = () => {
+    setMessages([]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
+  const formatTime = (date: Date) => {
+    return new Date(date).toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-primary-700 hover:bg-primary-800 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+        >
+          <MessageCircle size={28} />
+        </button>
+      )}
+
+      {isOpen && (
+        <div className="bg-white rounded-2xl shadow-2xl w-96 max-w-[90vw] h-[600px] max-h-[80vh] flex flex-col animate-slide-up">
+          <div className="bg-primary-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-full">
+                <Bot size={24} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">Asistente Virtual</h3>
+                <p className="text-sm text-white/80">Horarios UNT</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            {messages.length === 0 && (
+              <div className="text-center text-gray-500 mt-8">
+                <Bot size={48} className="mx-auto mb-4 text-gray-400" />
+                <p className="font-medium">¡Hola! ¿En qué puedo ayudarte hoy?</p>
+                <p className="text-sm mt-2">
+                  Puedes preguntar sobre disponibilidad de aulas, uso del sistema o cualquier duda.
+                </p>
+              </div>
+            )}
+
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+              >
+                <div
+                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                    message.role === 'user'
+                      ? 'bg-primary-700 text-white'
+                      : 'bg-gray-300 text-gray-700'
+                  }`}
+                >
+                  {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
+                </div>
+                <div
+                  className={`max-w-[80%] ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}
+                >
+                  <div
+                    className={`px-4 py-3 rounded-2xl ${
+                      message.role === 'user'
+                        ? 'bg-primary-700 text-white rounded-br-md'
+                        : 'bg-white text-gray-800 rounded-bl-md shadow-sm'
+                    }`}
+                  >
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  </div>
+                  <span className="text-xs text-gray-400 mt-1 px-1">
+                    {formatTime(message.timestamp)}
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center">
+                  <Bot size={16} />
+                </div>
+                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm">
+                  <Loader2 size={20} className="animate-spin text-gray-500" />
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {messages.length > 0 && (
+            <div className="px-4 py-2 border-t border-gray-200 bg-white">
+              <button
+                onClick={clearHistory}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Limpiar historial
+              </button>
+            </div>
+          )}
+
+          <div className="p-4 border-t border-gray-200 bg-white rounded-b-2xl">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                placeholder="Escribe tu consulta..."
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                disabled={isLoading}
+              />
+              <Boton
+                onClick={sendMessage}
+                disabled={isLoading || !input.trim()}
+                className="rounded-full p-2"
+              >
+                {isLoading ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
+              </Boton>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

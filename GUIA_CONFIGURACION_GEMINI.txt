@@ -1,0 +1,153 @@
+================================================================================
+                     GUIA DE CONFIGURACION DE GEMINI API
+                     Sistema de Horarios - UNT
+================================================================================
+
+CONTENIDO:
+1. OBTENCION DE LA API KEY DE GEMINI
+2. INTEGRACION EN EL PROYECTO
+3. BUENAS PRACTICAS
+4. DEPURACION DE ERRORES
+
+================================================================================
+
+1. OBTENCION DE LA API KEY DE GEMINI
+
+   PASO 1: Acceder a Google AI Studio
+   - Ve a https://aistudio.google.com/
+   - Inicia sesion con tu cuenta de Google (Gmail)
+   - Acepta los terminos y condiciones si es la primera vez
+
+   PASO 2: Crear un nuevo proyecto o usar uno existente
+   - Haz clic en "Get API key" en la barra lateral izquierda
+   - O haz clic en el boton "Create API key"
+
+   PASO 3: Generar la API key
+   - Haz clic en "Create API key"
+   - Selecciona un proyecto de Google Cloud existente o crea uno nuevo
+   - Si creas un nuevo proyecto, escribele un nombre (ej: "Horarios-UNT-Chatbot")
+   - Haz clic en "Create API key in new project" o "Create API key"
+
+   PASO 4: Copiar y guardar la API key
+   - Se mostrara una ventana con tu API key (comienza con "AIza...")
+   - COPIALA INMEDIATAMENTE y guardala en un lugar seguro
+   - IMPORTANTE: No compartas esta clave con nadie
+   - Haz clic en "Done"
+
+   PASO 5: Verificar cuotas y limites (opcional)
+   - Ve a Google Cloud Console: https://console.cloud.google.com/
+   - Busca "Google AI Studio API"
+   - Revisa los limites gratuitos y consumo
+
+================================================================================
+
+2. INTEGRACION EN EL PROYECTO
+
+   PASO 1: Instalar el SDK de Google Generative AI
+   - Abre la terminal en la carpeta del proyecto
+   - Ejecuta: npm install @google/generative-ai
+   - O con yarn: yarn add @google/generative-ai
+   - O con pnpm: pnpm add @google/generative-ai
+
+   PASO 2: Configurar la variable de entorno
+   - Localiza el archivo .env en la raiz del proyecto
+   - Si no existe, crea una copia de .env.ejemplo: copy .env.ejemplo .env
+   - Abre el archivo .env
+   - Añade la siguiente linea:
+     GEMINI_API_KEY=tu_api_key_aqui
+   - Reemplaza "tu_api_key_aqui" con la clave que copiaste de Google AI Studio
+   - EJEMPLO:
+     GEMINI_API_KEY=AIzaSyD...XyZ123
+
+   PASO 3: Verificar la estructura del proyecto
+   - API route ya creada en: src/app/api/chatbot/route.ts
+   - Componente ChatBot en: src/components/chatbot/ChatBot.tsx
+   - Integración en el layout: src/app/layout.tsx
+
+   PASO 4: Reiniciar el servidor de desarrollo
+   - Si tenias npm run dev corriendo, detenlo con Ctrl+C
+   - Vuelve a ejecutar: npm run dev
+   - Esto es necesario para que la variable de entorno se cargue
+
+================================================================================
+
+3. BUENAS PRACTICAS
+
+   SEGURIDAD DE LA API KEY:
+   - NUNCA guardes la API key en el codigo fuente
+   - NUNCA subas el archivo .env a repositorios Git
+   - Verifica que .env este en .gitignore (ya deberia estar)
+   - Usa variables de entorno en produccion (Vercel, AWS, etc.)
+   - Rota la clave si crees que se ha comprometido
+
+   GESTION DE CUOTAS:
+   - El plan gratuito tiene limites de solicitudes por minuto y dia
+   - Monitorea el consumo en Google Cloud Console
+   - Implementa rate limiting en tu API si es necesario
+   - Considera cachear respuestas frecuentes
+
+   MANEJO DE ERRORES:
+   - El chatbot ya incluye manejo de errores basico
+   - Los errores se muestran en la consola del servidor
+   - Si la API key es invalida, el chatbot mostrara un mensaje de error
+
+   OPTIMIZACION:
+   - El prompt del sistema es personalizable en route.ts
+   - Puedes ajustar maxOutputTokens y temperature segun tus necesidades
+   - Temperature: valores mas bajos (0-0.3) = respuestas mas precisas
+   - Temperature: valores mas altos (0.7-1.0) = respuestas mas creativas
+
+================================================================================
+
+4. DEPURACION DE ERRORES
+
+   ERROR: "API key de Gemini no configurada"
+   - CAUSA: Falta la variable GEMINI_API_KEY en .env
+   - SOLUCION: Asegurate de haberla agregado y reiniciado el servidor
+
+   ERROR: "API key invalid"
+   - CAUSA: La clave es incorrecta o esta vencida
+   - SOLUCION: Genera una nueva clave en Google AI Studio
+
+   ERROR: "Quota exceeded"
+   - CAUSA: Has superado el limite de solicitudes gratuitas
+   - SOLUCION: Espera a que se reinicie la cuota o actualiza tu plan
+
+   ERROR DE RED: "fetch failed" o "ECONNREFUSED"
+   - CAUSA: Problemas de conectividad o API no disponible
+   - SOLUCION: Verifica tu conexion a internet y el estado del servicio
+
+   ERROR: El componente no se ve
+   - CAUSA: El servidor no se reinicio despues de cambios
+   - SOLUCION: Deten y vuelve a ejecutar npm run dev
+
+   COMO VER LOS LOGS:
+   - En desarrollo, los errores aparecen en la terminal donde corre npm run dev
+   - Tambien puedes revisar la consola del navegador (F12 > Console)
+
+================================================================================
+
+PREGUNTAS FRECUENTES:
+
+P: ¿Puedo usar la misma API key en multiples proyectos?
+R: Si, pero se recomienda crear una clave por proyecto para mejor seguimiento
+
+P: ¿Hay costos?
+R: El plan gratuito es suficiente para desarrollo y uso moderado.
+   Consulta los precios actuales en: https://ai.google.dev/pricing
+
+P: ¿Como puedo personalizar el comportamiento del chatbot?
+R: Edita el SYSTEM_PROMPT en src/app/api/chatbot/route.ts
+
+P: ¿Se guardan las conversaciones?
+R: Si, localmente en el navegador del usuario usando localStorage
+   Las conversaciones NO se envian a servidores externos excepto a Gemini
+
+================================================================================
+
+SOPORTE:
+- Documentacion oficial de Gemini: https://ai.google.dev/docs
+- Google AI Studio: https://aistudio.google.com/
+- Google Cloud Console: https://console.cloud.google.com/
+
+================================================================================
