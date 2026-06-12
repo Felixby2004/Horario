@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import prisma from '@/lib/prisma';
 
 const SYSTEM_PROMPT = `Eres un asistente del Sistema de Horarios UNT. Responde en español conciso.`;
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const genAI = new GoogleGenerativeAI(apiKey);
     
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-1.0-pro',
     });
 
     let contextData = '';
