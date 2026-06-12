@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Loader2, Bot, User, Mic, Square } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Mic, Square } from 'lucide-react';
 import { Boton } from '@/components/ui/Boton';
 
 interface Message {
@@ -13,6 +13,7 @@ interface Message {
 
 export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -168,23 +169,25 @@ export const ChatBot: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-primary-700 hover:bg-primary-800 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="bg-primary-700 hover:bg-primary-800 text-white rounded-full shadow-lg transition-all duration-300 flex items-center overflow-hidden"
+          style={{ width: isHovered ? '180px' : '56px', height: '56px', padding: isHovered ? '0 20px 0 16px' : '14px' }}
         >
-          <MessageCircle size={28} />
+          <MessageCircle size={28} className="flex-shrink-0" />
+          {isHovered && (
+            <span className="ml-3 whitespace-nowrap font-medium animate-fade-in">
+              Asistente UNT
+            </span>
+          )}
         </button>
       )}
 
       {isOpen && (
         <div className="bg-white rounded-2xl shadow-2xl w-96 max-w-[90vw] h-[600px] max-h-[80vh] flex flex-col animate-slide-up">
           <div className="bg-primary-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-full">
-                <Bot size={24} />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg">Asistente Virtual</h3>
-                <p className="text-sm text-white/80">Horarios UNT</p>
-              </div>
+            <div>
+              <h3 className="font-semibold text-lg">Asistente Virtual UNT</h3>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -197,7 +200,6 @@ export const ChatBot: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.length === 0 && (
               <div className="text-center text-gray-500 mt-8">
-                <Bot size={48} className="mx-auto mb-4 text-gray-400" />
                 <p className="font-medium">¡Hola! ¿En qué puedo ayudarte hoy?</p>
                 <p className="text-sm mt-2">
                   Escribe o usa el micrófono para preguntar sobre disponibilidad de aulas o uso del sistema.
@@ -208,19 +210,10 @@ export const ChatBot: React.FC = () => {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.role === 'user'
-                      ? 'bg-primary-700 text-white'
-                      : 'bg-gray-300 text-gray-700'
-                  }`}
-                >
-                  {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
-                </div>
-                <div
-                  className={`max-w-[80%] ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}
+                  className={`max-w-[85%] ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}
                 >
                   <div
                     className={`px-4 py-3 rounded-2xl ${
@@ -231,7 +224,7 @@ export const ChatBot: React.FC = () => {
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   </div>
-                  <span className="text-xs text-gray-400 mt-1 px-1">
+                  <span className={`text-xs text-gray-400 mt-1 px-1 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                     {formatTime(message.timestamp)}
                   </span>
                 </div>
@@ -239,10 +232,7 @@ export const ChatBot: React.FC = () => {
             ))}
 
             {isLoading && (
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center">
-                  <Bot size={16} />
-                </div>
+              <div className="flex justify-start">
                 <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm">
                   <Loader2 size={20} className="animate-spin text-gray-500" />
                 </div>

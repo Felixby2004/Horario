@@ -347,34 +347,6 @@ export default function ConfiguracionPage() {
       <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 overflow-hidden border border-gray-100">
         <Pestanas pestanas={pestanas} />
       </div>
-
-      {/* Guía de Uso */}
-      <footer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 bg-indigo-50/30 border border-indigo-100 rounded-3xl p-8 flex items-start gap-6">
-          <div className="p-3 bg-white rounded-2xl shadow-sm border border-indigo-50">
-            <Info className="w-6 h-6 text-indigo-500" />
-          </div>
-          <div className="space-y-4">
-            <h3 className="font-black text-gray-800 uppercase tracking-widest text-xs">Centro de Ayuda Administrativa</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div className="space-y-2">
-                <p className="text-sm font-black text-indigo-600 tracking-tight">Panel General</p>
-                <p className="text-xs text-gray-500 leading-relaxed font-medium">Define la infraestructura temporal (bloques, duración, horarios base) que rige todo el semestre académico.</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-black text-indigo-600 tracking-tight">Panel de Validaciones</p>
-                <p className="text-xs text-gray-500 leading-relaxed font-medium">Establece los límites éticos y físicos para docentes y ambientes, garantizando un horario equitativo y sin cruces.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="bg-gray-900 rounded-3xl p-8 flex flex-col justify-center text-center space-y-2">
-          <p className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em]">Versión del Núcleo</p>
-          <p className="text-white text-2xl font-black tracking-tighter">v2.4.0-Stable</p>
-          <p className="text-gray-500 text-[10px] font-bold">Última actualización: Hoy</p>
-        </div>
-      </footer>
     </div>
   );
 }

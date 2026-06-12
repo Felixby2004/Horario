@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     try {
       const ambientes = await prisma.ambiente.findMany({ take: 10 });
       const horarios = await prisma.horarioAsignado.findMany({ 
-        take: 10, 
+        take: 10,
         include: { ambiente: true, curso: true } 
       });
 
