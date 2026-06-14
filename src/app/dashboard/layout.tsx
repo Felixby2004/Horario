@@ -71,7 +71,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar Collapsible */}
       <>
-        <aside className={`${collapsed ? 'w-30' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
+        <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
           <div className={`p-4 border-b border-primary-800 flex items-center gap-4 ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {collapsed ? (
               <h2 className="text-xl font-bold">UNT</h2>
