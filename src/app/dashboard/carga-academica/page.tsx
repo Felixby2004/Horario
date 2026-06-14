@@ -17,6 +17,14 @@ const TIPOS_ACTIVIDAD = [
   { valor: 'preparacion_evaluacion', label: 'Preparación y Evaluación' }
 ]
 
+// Validación checks
+interface ValidationCheck {
+  id: string;
+  name: string;
+  status: 'pending' | 'pass' | 'warning' | 'fail';
+  message: string;
+}
+
 export default function CargaAcademicaAdminPage() {
   const [cargas, setCargas] = useState<any[]>([])
   const [periodos, setPeriodos] = useState<any[]>([])
@@ -27,7 +35,9 @@ export default function CargaAcademicaAdminPage() {
   const [cargaSeleccionada, setCargaSeleccionada] = useState<any>(null)
   const [motivoRechazo, setMotivoRechazo] = useState('')
   const [modalDetallesAbierto, setModalDetallesAbierto] = useState(false)
-const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null)
+  const [modalValidacionAbierto, setModalValidacionAbierto] = useState(false)
+  const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null)
+  const [validations, setValidations] = useState<ValidationCheck[]>([])
   const documentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -110,6 +120,50 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
     setCargaSeleccionada(null)
   }
 
+  const runValidations = (carga: any) => {
+    const checks: ValidationCheck[] = [
+      {
+        id: 'horas-totales',
+        name: 'Verificación de horas totales',
+        status: carga.horas_totales >= carga.horas_meta ? 'pass' : 'warning',
+        message: carga.horas_totales >= carga.horas_meta 
+          ? `Horas totales (${carga.horas_totales}) cumplen con la meta (${carga.horas_meta})`
+          : `Horas totales (${carga.horas_totales}) no alcanzan la meta (${carga.horas_meta})`
+      },
+      {
+        id: 'horas-lectivas',
+        name: 'Verificación de horas lectivas',
+        status: carga.horas_lectivas > 0 ? 'pass' : 'fail',
+        message: carga.horas_lectivas > 0 
+          ? `Horas lectivas registradas: ${carga.horas_lectivas}`
+          : 'No hay horas lectivas registradas'
+      },
+      {
+        id: 'documentos-completos',
+        name: 'Documentos completos',
+        status: carga.estado === 'aprobado' || carga.estado === 'publicado' ? 'pass' : 'pending',
+        message: 'Documentos pendientes de validación'
+      },
+      {
+        id: 'actividades-no-lectivas',
+        name: 'Actividades no lectivas',
+        status: (carga.actividades_no_lectivas?.length || 0) > 0 ? 'pass' : 'warning',
+        message: (carga.actividades_no_lectivas?.length || 0) > 0 
+          ? `${carga.actividades_no_lectivas.length} actividades no lectivas registradas`
+          : 'No hay actividades no lectivas registradas'
+      },
+      {
+        id: 'preparacion-evaluacion',
+        name: 'Horas de preparación y evaluación',
+        status: carga.horas_preparacion > 0 ? 'pass' : 'warning',
+        message: carga.horas_preparacion > 0 
+          ? `Horas de preparación y evaluación: ${carga.horas_preparacion}`
+          : 'No hay horas de preparación y evaluación registradas'
+      }
+    ];
+    setValidations(checks);
+  };
+
   const getEstadoColor = (estado: string) => {
     const colores = {
       borrador: 'bg-gray-100 text-gray-800',
@@ -125,8 +179,26 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
   }
 
   const getEstadoTexto = (estado: string) => {
-    return estado.charAt(0).toUpperCase() + estado.slice(1).replace('_', ' ')
+    return estado.charAt(0).toUpperCase() + estado.slice(1).replace(/_/g, ' ')
   }
+
+  const getValidationIcon = (status: string) => {
+    switch (status) {
+      case 'pass': return '✅';
+      case 'warning': return '⚠️';
+      case 'fail': return '❌';
+      default: return '⏳';
+    }
+  };
+
+  const getValidationColor = (status: string) => {
+    switch (status) {
+      case 'pass': return 'border-green-200 bg-green-50';
+      case 'warning': return 'border-yellow-200 bg-yellow-50';
+      case 'fail': return 'border-red-200 bg-red-50';
+      default: return 'border-gray-200 bg-gray-50';
+    }
+  };
 
   const handleDescargarPDF = async () => {
     const element = documentRef.current
@@ -214,12 +286,14 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
           {fila.estado === 'en_revision' && (
             <>
               <button
-                onClick={() =>
-                  handleCambiarEstado(fila.id_carga, 'validado')
-                }
+                onClick={() => {
+                  setCargaSeleccionada(fila);
+                  runValidations(fila);
+                  setModalValidacionAbierto(true);
+                }}
                 className="px-2 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600 transition-colors"
               >
-                Validar
+                Validar Docs
               </button>
               <button
                 onClick={() => {
@@ -251,8 +325,9 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                 setMostrarDocumento('carga')
               }}
               className="px-2 py-1 bg-emerald-500 text-white text-xs rounded hover:bg-emerald-600 transition-colors"
+              title="Formato 1 - Carga Académica"
             >
-              Carga
+              📄 Carga
             </button>
             <button
               onClick={() => {
@@ -260,8 +335,9 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                 setMostrarDocumento('declaracion')
               }}
               className="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-600 transition-colors"
+              title="Formato 2 - Declaración Jurada"
             >
-              Declaración
+              📜 Declaración
             </button>
             <button
               onClick={() => {
@@ -269,8 +345,9 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                 setMostrarDocumento('horario')
               }}
               className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+              title="Formato F03 - Horario Semanal"
             >
-              Horario Semanal
+              📅 Horario
             </button>
           </div>
         </div>
@@ -300,7 +377,7 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Gestión de Carga Académica</h1>
-          <p className="text-gray-600 mt-1">Revisa y valida las cargas académicas de los docentes</p>
+          <p className="text-gray-600 mt-1">Revisa y valida las cargas académicas y documentos de los docentes</p>
         </div>
       </div>
 
@@ -341,6 +418,112 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
         />
       </div>
 
+      {/* Modal Validación de Documentos */}
+      {modalValidacionAbierto && cargaSeleccionada && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+              <h2 className="text-xl font-semibold text-purple-600">
+                ✅ Validación de Documentos - {cargaSeleccionada.docente?.apellidos}, {cargaSeleccionada.docente?.nombres}
+              </h2>
+              <button
+                onClick={() => {
+                  setModalValidacionAbierto(false)
+                  setCargaSeleccionada(null)
+                }}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              {/* Checklist de Validación */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Checklist de Validación</h3>
+                <div className="space-y-3">
+                  {validations.map((check) => (
+                    <div key={check.id} className={`p-4 border rounded-lg ${getValidationColor(check.status)}`}>
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">{getValidationIcon(check.status)}</span>
+                        <div className="flex-1">
+                          <h4 className="font-medium">{check.name}</h4>
+                          <p className="text-sm text-gray-600">{check.message}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Documentos para Verificar */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Documentos a Verificar</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <button
+                    onClick={() => {
+                      setModalValidacionAbierto(false)
+                      setMostrarDocumento('carga')
+                    }}
+                    className="p-6 border-2 border-dashed border-emerald-300 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
+                  >
+                    <div className="text-4xl mb-2">📄</div>
+                    <h4 className="font-semibold">Formato 1</h4>
+                    <p className="text-sm text-gray-500">Carga Horaria Asignada</p>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setModalValidacionAbierto(false)
+                      setMostrarDocumento('declaracion')
+                    }}
+                    className="p-6 border-2 border-dashed border-teal-300 rounded-lg hover:border-teal-500 hover:bg-teal-50 transition-colors text-left"
+                  >
+                    <div className="text-4xl mb-2">📜</div>
+                    <h4 className="font-semibold">Formato 2</h4>
+                    <p className="text-sm text-gray-500">Declaración Jurada</p>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setModalValidacionAbierto(false)
+                      setMostrarDocumento('horario')
+                    }}
+                    className="p-6 border-2 border-dashed border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                  >
+                    <div className="text-4xl mb-2">📅</div>
+                    <h4 className="font-semibold">Formato F03</h4>
+                    <p className="text-sm text-gray-500">Horario Semanal</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Acciones */}
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    setModalValidacionAbierto(false)
+                    setCargaSeleccionada(null)
+                  }}
+                  className="px-4 py-2 text-gray-600 border rounded hover:bg-gray-50"
+                >
+                  Cerrar
+                </button>
+                <button
+                  onClick={() => {
+                    handleCambiarEstado(cargaSeleccionada.id_carga, 'validado')
+                    setModalValidacionAbierto(false)
+                  }}
+                  className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                >
+                  ✓ Marcar como Validado
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal Rechazo */}
       {modalRechazoAbierto && cargaSeleccionada && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -372,6 +555,7 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                   className="w-full border rounded px-3 py-2"
                   rows={4}
                   required
+                  placeholder="Especifica los motivos del rechazo (ej: documentos incompletos, datos incorrectos, etc.)"
                 />
               </div>
             </div>
@@ -516,9 +700,9 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                                       {
                                         ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][
                                           h.dia_semana
-                                        ]
+                                        ] || h.dia
                                       }
-                                      : {h.hora_inicio} - {h.hora_fin}
+                                      : {h.hora_inicio || h.inicio} - {h.hora_fin || h.fin}
                                     </div>
                                   ))}
                                 </div>
@@ -569,7 +753,19 @@ const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion'
                   onClick={handleDescargarPDF}
                   className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors"
                 >
-                  Descargar PDF
+                  📥 Descargar PDF
+                </button>
+                <button
+                  onClick={() => {
+                    setMostrarDocumento(null)
+                    if (cargaSeleccionada) {
+                      setModalValidacionAbierto(true)
+                      runValidations(cargaSeleccionada)
+                    }
+                  }}
+                  className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                >
+                  ← Volver a Validación
                 </button>
                 <button
                   onClick={() => {

@@ -6,14 +6,15 @@ import Link from 'next/link';
 import { ChatBot } from '@/components/chatbot/ChatBot';
 
 const menuItems = [
-  { titulo: 'Inicio', icono: '🏠', ruta: '/docente' },
-  { titulo: 'Mi Disponibilidad', icono: '⏱️', ruta: '/docente/disponibilidad' },
-  { titulo: 'Mis Citas', icono: '🧾', ruta: '/docente/citaciones' },
-  { titulo: 'Seleccionar Horarios', icono: '📅', ruta: '/docente/seleccionar-horarios' },
-  { titulo: 'Mis Horarios', icono: '📋', ruta: '/docente/mis-horarios' },
-  { titulo: 'Mis Cursos y Grupos', icono: '📚', ruta: '/docente/mis-cursos' },
-  { titulo: 'Mi Carga Académica', icono: '📊', ruta: '/docente/carga-academica' },
-  { titulo: 'Reportes', icono: '📄', ruta: '/docente/reportes' },
+  { texto: 'Inicio', icono: '🏠', href: '/docente' },
+  { texto: 'Mi Disponibilidad', icono: '⏱️', href: '/docente/disponibilidad' },
+  { texto: 'Mis Citas', icono: '🧾', href: '/docente/citaciones' },
+  { texto: 'Seleccionar Horarios', icono: '📅', href: '/docente/seleccionar-horarios' },
+  { texto: 'Mis Horarios', icono: '📋', href: '/docente/mis-horarios' },
+  { texto: 'Mis Cursos y Grupos', icono: '📚', href: '/docente/mis-cursos' },
+  { texto: 'Mi Carga Académica', icono: '📊', href: '/docente/carga-academica' },
+  { texto: 'Plan de Estudios', icono: '📖', href: '/docente/plan-estudios' },
+  { texto: 'Reportes', icono: '📄', href: '/docente/reportes' },
 ];
 
 function MenuDocente() {
@@ -141,6 +142,7 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const router = useRouter();
   const [verificando, setVerificando] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -172,36 +174,69 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
     );
   }
 
-  const currentTitle = menuItems.find((item) => pathname === item.ruta || pathname?.startsWith(item.ruta + '/'))?.titulo || 'Docente';
+  const currentTitle = menuItems.find((item) => pathname === item.href || pathname?.startsWith(item.href + '/'))?.texto || 'Docente';
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <aside className="w-64 bg-primary-900 text-white flex flex-col">
-        <div className="p-6 border-b border-primary-800">
-          <h1 className="text-xl font-bold">Sistema de horarios</h1>
-          <p className="text-sm text-primary-300 mt-1">UNT - Docente</p>
-        </div>
+      {/* Sidebar Collapsible */}
+      <>
+        <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
+          <div className={`p-6 border-b border-primary-800 ${collapsed ? 'text-center' : ''}`}>
+            {collapsed ? (
+              <h2 className="text-xl font-bold">UNT</h2>
+            ) : (
+              <>
+                <h1 className="text-xl font-bold">Sistema de horarios</h1>
+                <p className="text-sm text-primary-300 mt-1">UNT - Docente</p>
+              </>
+            )}
+          </div>
+          
+          <nav className="flex-1 overflow-y-auto py-4">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-6 py-3 transition-all duration-200 ${
+                    isActive
+                      ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
+                      : 'hover:bg-primary-800/70 text-gray-300'
+                  } ${collapsed ? 'justify-center' : ''}`}
+                  title={collapsed ? item.texto : ''}
+                >
+                  <span className="text-2xl">{item.icono}</span>
+                  {!collapsed && <span className="font-medium">{item.texto}</span>}
+                </Link>
+              );
+            })}
+          </nav>
+          
+          <div className="p-4 border-t border-primary-800">
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-primary-800 transition-colors"
+            >
+              {collapsed ? (
+                <span className="text-xl">☰</span>
+              ) : (
+                <span className="text-xl">◀</span>
+              )}
+            </button>
+          </div>
+        </aside>
+        
+        {/* Toggle Button for Mobile */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="md:hidden fixed top-4 left-4 z-40 bg-primary-600 text-white p-3 rounded-lg shadow-lg"
+        >
+          ☰
+        </button>
+      </>
 
-        <nav className="flex-1 overflow-y-auto py-4">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.ruta || pathname?.startsWith(item.ruta + '/');
-            return (
-              <Link
-                key={item.ruta}
-                href={item.ruta}
-                className={`flex items-center gap-3 px-6 py-3 transition-colors ${
-                  isActive ? 'bg-primary-800 border-l-4 border-white' : 'hover:bg-primary-800'
-                }`}
-              >
-                <span className="text-2xl">{item.icono}</span>
-                <span className="font-medium">{item.titulo}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </aside>
-
-      <main className="flex-1 overflow-auto">
+      <main className={`flex-1 overflow-auto transition-all duration-300 ${collapsed ? 'ml-20' : 'ml-64'}`}>
         <header className="bg-white shadow-sm px-8 py-4 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-800">{currentTitle}</h2>

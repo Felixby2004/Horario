@@ -3,6 +3,72 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
+// Sidebar Collapsible
+export const SidebarCollapsible = ({ items, title, subtitle }: any) => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  return (
+    <>
+      {/* Sidebar */}
+      <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
+        <div className={`p-6 border-b border-primary-800 ${collapsed ? 'text-center' : ''}`}>
+          {collapsed ? (
+            <h2 className="text-xl font-bold">UNT</h2>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold">{title}</h2>
+              {subtitle && <p className="text-sm text-primary-300 mt-1">{subtitle}</p>}
+            </>
+          )}
+        </div>
+        <nav className="flex-1 py-4">
+          {items.map((item: any) => (
+            <ItemSidebarCollapsible key={item.href} {...item} collapsed={collapsed} />
+          ))}
+        </nav>
+        <div className="p-4 border-t border-primary-800">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-primary-800 transition-colors"
+          >
+            {collapsed ? (
+              <span className="text-xl">☰</span>
+            ) : (
+              <span className="text-xl">◀</span>
+            )}
+          </button>
+        </div>
+      </aside>
+      
+      {/* Toggle Button for Mobile */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="md:hidden fixed top-4 left-4 z-40 bg-primary-600 text-white p-3 rounded-lg shadow-lg"
+      >
+        ☰
+      </button>
+    </>
+  );
+};
+
+// Item de Sidebar Collapsible
+export const ItemSidebarCollapsible = ({ href, icono, texto, activo, collapsed }: any) => {
+  return (
+    <Link
+      href={href}
+      className={`flex items-center gap-3 px-6 py-3 transition-all duration-200 ${
+        activo
+          ? 'bg-primary-800 border-l-4 border-white text-white font-medium'
+          : 'hover:bg-primary-800/70 text-gray-300'
+      } ${collapsed ? 'justify-center' : ''}`}
+      title={collapsed ? texto : ''}
+    >
+      <span className="text-2xl">{icono}</span>
+      {!collapsed && <span>{texto}</span>}
+    </Link>
+  );
+};
+
 // Sidebar
 export const Sidebar = ({ items }: any) => {
   return (
@@ -37,9 +103,9 @@ export const ItemSidebar = ({ href, icono, texto, activo }: any) => {
 };
 
 // Barra Superior
-export const BarraSuperior = ({ usuario }: any) => {
+export const BarraSuperior = ({ usuario, collapsed = false }: any) => {
   return (
-    <header className="bg-white shadow-sm h-16 fixed top-0 right-0 left-64 z-10">
+    <header className={`bg-white shadow-sm h-16 fixed top-0 right-0 ${collapsed ? 'left-20' : 'left-64'} z-10 transition-all duration-300`}>
       <div className="h-full px-6 flex items-center justify-between">
         <div className="flex-1"></div>
         <MenuUsuario usuario={usuario} />
