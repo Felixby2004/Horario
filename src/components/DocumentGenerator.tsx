@@ -770,11 +770,7 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
         <p className="text-justify">
           Yo, <span className="font-semibold">{docente?.apellidos}, {docente?.nombres}</span>, identificado
           con D.N.I. N° <span className="font-semibold">{docente?.dni_docente || '-'}</span>, con Código N°
-          <span className="font-semibold"> {docente?.codigo_docente || '-'}</span> del Departamento Académico
-          <span className="font-semibold"> {docente?.departamento?.nombre || '[Ingrese Dpto.]'}</span> de la Facultad de <span className="font-semibold">{docente?.facultad?.nombre || '[Ingrese Facultad]'}</span>
-          de la Universidad Nacional de Trujillo, en el marco del programa de homologación de la
-          remuneración de los docentes nombrados y contrato, dispuesto por la D.S. N° 033-2006-ED y
-          D.S. N° 019-2007-ED;
+          <span className="font-semibold"> {docente?.codigo_docente || '-'}</span> del <span className="font-semibold"> {docente?.departamento?.nombre || '[Ingrese Dpto.]'}</span> de la <span className="font-semibold">{docente?.facultad?.nombre || '[Ingrese Facultad]'}</span> de la Universidad Nacional de Trujillo, en el marco del programa de homologación de la remuneración de los docentes nombrados y contrato, dispuesto por la D.S. N° 033-2006-ED y D.S. N° 019-2007-ED;
         </p>
 
         <p className="text-justify font-semibold">
@@ -825,7 +821,7 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
           <p>Trujillo, {fechaActual}</p>
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-30">
           <div className="border-t-2 border-gray-700 pt-4 mx-auto w-64">
             <p className="text-sm font-medium">FIRMA DEL DECLARANTE</p>
             <p className="text-sm text-gray-600">D.N.I.: {docente?.dni_docente || '-'}</p>

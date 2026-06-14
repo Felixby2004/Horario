@@ -172,11 +172,15 @@ export class GeneradorPDF {
         ambiente: true
       },
       orderBy: [
+        { dia_semana: 'asc' },
         { hora_inicio: 'asc' }
       ]
     });
 
-    const html = this.generarHTMLReporteDia(periodo, diaSemana, horarios, config);
+    // Agrupar horarios consecutivos
+    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
+
+    const html = this.generarHTMLReporteDia(periodo, diaSemana, horariosAgrupados, config);
     return await this.convertirAPDF(html);
   }
 
@@ -201,9 +205,13 @@ export class GeneradorPDF {
         ambiente: true
       },
       orderBy: [
+        { dia_semana: 'asc' },
         { hora_inicio: 'asc' }
       ]
     });
+
+    // Agrupar horarios consecutivos con misma info
+    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Auditoría Diaria');
@@ -263,9 +271,9 @@ export class GeneradorPDF {
     });
     headerRow.height = 20;
 
-    // Datos
+    // Datos (agrupados)
     let rowIndex = 6;
-    horarios.forEach((h: any) => {
+    horariosAgrupados.forEach((h: any) => {
       const row = worksheet.getRow(rowIndex);
       const docente = h.docente ? `${h.docente.apellidos}, ${h.docente.nombres}` : 'N/A';
       const curso = h.curso?.nombre || 'N/A';
@@ -322,7 +330,7 @@ export class GeneradorPDF {
     return horas;
   }
 
-  // Crear matriz optimizada de horarios
+  // Crear matriz optimizada de horarios (soportando bloques consecutivos agrupados)
   private static crearMatrizHorariosOptimizada(horarios: any[], diasSemana: string[], horasRango: string[]): any {
     const matriz: any = {};
 
@@ -333,29 +341,37 @@ export class GeneradorPDF {
       });
     });
 
-    // Llenar matriz
-    horarios.forEach(h => {
+    // Primero, agrupar horarios consecutivos
+    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
+
+    // Llenar matriz (ahora con bloques agrupados)
+    horariosAgrupados.forEach(h => {
       const diaNombre = this.obtenerNombreDia(h.dia_semana);
       if (diaNombre && diaNombre !== 'N/A') {
-        // Encontrar el bloque que corresponde a la hora de inicio
-        const horaKey = horasRango.find(rango => {
+        // Encontrar todos los bloques de horas cubiertos por el horario agrupado
+        const bloquesCubiertos = horasRango.filter(rango => {
           const [inicioRango, finRango] = rango.split('-');
-          // La clase cae en este bloque si su hora de inicio está dentro del rango
-          return h.hora_inicio >= inicioRango && h.hora_inicio < finRango;
+          // Verificar si el rango de hora se superpone con el horario
+          return !(h.hora_fin <= inicioRango || h.hora_inicio >= finRango);
         });
 
-        if (horaKey && matriz[diaNombre]) {
-          matriz[diaNombre][horaKey] = {
-            horaInicio: h.hora_inicio,
-            horaFin: h.hora_fin,
-            cursoNum: h.curso?.codigo || h.curso?.id_curso || '?',
-            cursoNombre: h.curso?.nombre || 'N/A',
-            idCursoRef: h.id_curso, // Para mapear color
-            ambiente: h.ambiente?.nombre || h.ambiente?.codigo || 'N/A',
-            tipo: h.tipo_clase || 'Teoría',
-            docente: h.docente ? `${h.docente.apellidos}, ${h.docente.nombres}` : 'N/A'
-          };
-        }
+        // Llenar todos los bloques cubiertos
+        bloquesCubiertos.forEach(horaKey => {
+          if (matriz[diaNombre]) {
+            matriz[diaNombre][horaKey] = {
+              horaInicio: h.hora_inicio,
+              horaFin: h.hora_fin,
+              cursoNum: h.curso?.codigo || h.curso?.id_curso || '?',
+              cursoNombre: h.curso?.nombre || 'N/A',
+              idCursoRef: h.id_curso, // Para mapear color
+              ambiente: h.ambiente?.nombre || h.ambiente?.codigo || 'N/A',
+              tipo: h.tipo_clase || 'Teoría',
+              docente: h.docente ? `${h.docente.apellidos}, ${h.docente.nombres}` : 'N/A',
+              esAgrupado: h.esAgrupado || false,
+              bloquesTotales: bloquesCubiertos.length // Info para html/excel
+            };
+          }
+        });
       }
     });
 
@@ -367,47 +383,33 @@ export class GeneradorPDF {
     const nombresDias = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     const nombreDia = nombresDias[diaSemana] || 'Día desconocido';
 
-    // Agrupar horarios por hora para visualización
-    const horariosAgrupadosPorHora = new Map<string, any[]>();
-    horarios.forEach(h => {
-      const key = h.hora_inicio;
-      if (!horariosAgrupadosPorHora.has(key)) {
-        horariosAgrupadosPorHora.set(key, []);
-      }
-      horariosAgrupadosPorHora.get(key)!.push(h);
-    });
-
-    // Crear filas de horario
-    const filasHorario = Array.from(horariosAgrupadosPorHora.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([hora, horariosHora]) => {
-        const filasClase = horariosHora.map((h: any) => `
-          <tr style="background-color: ${horariosHora.indexOf(h) % 2 === 0 ? '#ffffff' : '#f9f9f9'};">
-            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold;">${hora}</td>
-            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${h.hora_fin}</td>
-            <td style="border: 1px solid #ddd; padding: 10px;">
-              <strong>${h.docente ? h.docente.apellidos + ' ' + h.docente.nombres : 'N/A'}</strong>
-              <br><span style="font-size: 10px; color: #666;">${h.docente?.codigo_docente || ''}</span>
-            </td>
-            <td style="border: 1px solid #ddd; padding: 10px;">
-              <strong>${h.curso?.nombre || 'N/A'}</strong>
-              <br><span style="font-size: 10px; color: #666;">${h.curso?.codigo || ''}</span>
-            </td>
-            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${h.grupo?.codigo_grupo || 'N/A'}</td>
-            <td style="border: 1px solid #ddd; padding: 10px;">
-              <strong>${h.ambiente?.nombre || h.ambiente?.codigo || 'N/A'}</strong>
-              <br><span style="font-size: 10px; color: #666;">(${h.ambiente?.capacidad || 'N/A'} cap.)</span>
-            </td>
-            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-              <span style="background-color: ${h.tipo_clase === 'Laboratorio' ? '#FFE699' : h.tipo_clase === 'Práctica' ? '#C6EFCE' : '#BDD7EE'}; padding: 4px 8px; border-radius: 4px;">
-                ${h.tipo_clase || 'Teoría'}
-              </span>
-            </td>
-          </tr>
-        `).join('');
-
-        return filasClase;
-      }).join('');
+    // Crear filas de horario (usando datos agrupados directamente)
+    const filasHorario = horarios
+      .sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio))
+      .map((h: any, idx: number) => `
+        <tr style="background-color: ${idx % 2 === 0 ? '#ffffff' : '#f9f9f9'};">
+          <td style="border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold;">${h.hora_inicio}</td>
+          <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${h.hora_fin}</td>
+          <td style="border: 1px solid #ddd; padding: 10px;">
+            <strong>${h.docente ? h.docente.apellidos + ' ' + h.docente.nombres : 'N/A'}</strong>
+            <br><span style="font-size: 10px; color: #666;">${h.docente?.codigo_docente || ''}</span>
+          </td>
+          <td style="border: 1px solid #ddd; padding: 10px;">
+            <strong>${h.curso?.nombre || 'N/A'}</strong>
+            <br><span style="font-size: 10px; color: #666;">${h.curso?.codigo || ''}</span>
+          </td>
+          <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${h.grupo?.codigo_grupo || 'N/A'}</td>
+          <td style="border: 1px solid #ddd; padding: 10px;">
+            <strong>${h.ambiente?.nombre || h.ambiente?.codigo || 'N/A'}</strong>
+            <br><span style="font-size: 10px; color: #666;">(${h.ambiente?.capacidad || 'N/A'} cap.)</span>
+          </td>
+          <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+            <span style="background-color: ${h.tipo_clase === 'Laboratorio' ? '#FFE699' : h.tipo_clase === 'Práctica' ? '#C6EFCE' : '#BDD7EE'}; padding: 4px 8px; border-radius: 4px;">
+              ${h.tipo_clase || 'Teoría'}
+            </span>
+          </td>
+        </tr>
+      `).join('');
 
     const totalClases = horarios.length;
     const totalProfesores = new Set(horarios.map(h => h.id_docente)).size;
@@ -1348,6 +1350,9 @@ export class GeneradorPDF {
       ]
     });
 
+    // Agrupar horarios consecutivos
+    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Horario Docente');
 
@@ -1419,8 +1424,8 @@ export class GeneradorPDF {
       cell.style = headerStyle;
     });
 
-    // Filas de datos
-    horarios.forEach((h, idx) => {
+    // Filas de datos (agrupados)
+    horariosAgrupados.forEach((h, idx) => {
       const row = worksheet.addRow([
         this.obtenerNombreDia(h.dia_semana),
         h.hora_inicio,
