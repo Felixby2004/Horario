@@ -2159,6 +2159,79 @@ export class GeneradorPDF {
     return 'N/A';
   }
 
+  private static agruparHorariosConsecutivos(horarios: any[]): any[] {
+    if (!horarios.length) return [];
+
+    // First, group horarios by day
+    const gruposPorDia = new Map<number, any[]>();
+    horarios.forEach(h => {
+      if (!gruposPorDia.has(h.dia_semana)) {
+        gruposPorDia.set(h.dia_semana, []);
+      }
+      gruposPorDia.get(h.dia_semana)!.push(h);
+    });
+
+    // Now process each day's horarios
+    const horariosAgrupados: any[] = [];
+
+    for (const [dia, horariosDelDia] of gruposPorDia) {
+      // Sort by start time
+      horariosDelDia.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
+      
+      let grupoActual: any[] = [horariosDelDia[0]];
+      
+      for (let i = 1; i < horariosDelDia.length; i++) {
+        const actual = horariosDelDia[i];
+        const anterior = grupoActual[grupoActual.length - 1];
+        
+        // Check if they are the same in all criteria AND consecutive in time
+        const mismosCriterios =
+          actual.id_curso === anterior.id_curso &&
+          actual.id_docente === anterior.id_docente &&
+          actual.id_ambiente === anterior.id_ambiente &&
+          actual.tipo_clase === anterior.tipo_clase;
+
+        // Check if they are consecutive (anterior's end equals actual's start)
+        const consecutivos = anterior.hora_fin === actual.hora_inicio;
+        
+        if (mismosCriterios && consecutivos) {
+          grupoActual.push(actual);
+        } else {
+          // Create a merged entry
+          const primerHorario = grupoActual[0];
+          const ultimoHorario = grupoActual[grupoActual.length - 1];
+          horariosAgrupados.push({
+            ...primerHorario,
+            hora_inicio: primerHorario.hora_inicio,
+            hora_fin: ultimoHorario.hora_fin,
+            esAgrupado: grupoActual.length > 1,
+            cantidadSlots: grupoActual.length
+          });
+          grupoActual = [actual];
+        }
+      }
+      
+      // Add the last group
+      if (grupoActual.length > 0) {
+        const primerHorario = grupoActual[0];
+        const ultimoHorario = grupoActual[grupoActual.length - 1];
+        horariosAgrupados.push({
+          ...primerHorario,
+          hora_inicio: primerHorario.hora_inicio,
+          hora_fin: ultimoHorario.hora_fin,
+          esAgrupado: grupoActual.length > 1,
+          cantidadSlots: grupoActual.length
+        });
+      }
+    }
+    
+    // Sort them back properly
+    return horariosAgrupados.sort((a, b) => {
+      if (a.dia_semana !== b.dia_semana) return a.dia_semana - b.dia_semana;
+      return a.hora_inicio.localeCompare(b.hora_inicio);
+    });
+  }
+
   private static async convertirAPDF(html: string): Promise<Buffer> {
     // Obtener página del pool (optimizado)
     const page = await puppeteerPool.getPage();

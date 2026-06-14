@@ -72,39 +72,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar Collapsible */}
       <>
         <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
-          <div className={`p-6 border-b border-primary-800 ${collapsed ? 'text-center' : ''}`}>
+          <div className={`p-4 border-b border-primary-800 flex items-center gap-4 ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {collapsed ? (
               <h2 className="text-xl font-bold">UNT</h2>
             ) : (
               <>
-                <h1 className="text-xl font-bold">Sistema de horarios</h1>
-                <p className="text-sm text-primary-300 mt-1">UNT - Sistemas</p>
+                <div>
+                  <h1 className="text-xl font-bold">Sistema de horarios</h1>
+                  <p className="text-sm text-primary-300 mt-1">UNT - Sistemas</p>
+                </div>
               </>
             )}
-          </div>
-          
-          <nav className="flex-1 overflow-y-auto py-4">
-            {menuItemsWithActive.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-6 py-3 transition-all duration-200 ${
-                  item.activo
-                    ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
-                    : 'hover:bg-primary-800/70 text-gray-300'
-                } ${collapsed ? 'justify-center' : ''}`}
-                title={collapsed ? item.texto : ''}
-              >
-                <span className="text-2xl">{item.icono}</span>
-                {!collapsed && <span>{item.texto}</span>}
-              </Link>
-            ))}
-          </nav>
-          
-          <div className="p-4 border-t border-primary-800">
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-primary-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-primary-800 transition-colors flex-shrink-0"
+              title={collapsed ? 'Expandir' : 'Contraer'}
             >
               {collapsed ? (
                 <span className="text-xl">☰</span>
@@ -113,6 +95,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               )}
             </button>
           </div>
+          
+          <nav className="flex-1 overflow-y-auto py-2">
+            {menuItemsWithActive.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
+                  item.activo
+                    ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
+                    : 'hover:bg-primary-800/70 text-gray-300'
+                } ${collapsed ? 'justify-center' : ''}`}
+                title={collapsed ? item.texto : ''}
+              >
+                <span className="text-xl flex-shrink-0">{item.icono}</span>
+                {!collapsed && <span className="truncate">{item.texto}</span>}
+              </Link>
+            ))}
+          </nav>
         </aside>
         
         {/* Toggle Button for Mobile */}
