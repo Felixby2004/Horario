@@ -21,7 +21,9 @@ export async function POST(request: NextRequest) {
       telefono,
       grado_academico,
       especialidad,
-      horas_maximas_semanales
+      horas_maximas_semanales,
+      id_facultad,
+      id_departamento
     } = body;
 
     // Validar que el usuario existe y es docente
@@ -99,11 +101,9 @@ export async function POST(request: NextRequest) {
         especialidad: especialidad || null,
         horas_maximas_semanales: horas_maximas_semanales || 40,
         activo: true,
-        usuario: {
-          connect: {
-            id_usuario: id_usuario
-          }
-        }
+        id_facultad: id_facultad ? parseInt(id_facultad) : null,
+        id_departamento: id_departamento ? parseInt(id_departamento) : null,
+        id_usuario: id_usuario
       }
     });
 

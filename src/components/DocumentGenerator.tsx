@@ -306,7 +306,7 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
   const totalHoras = totalCHL + totalCHNL;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="p-8 max-w-5xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
       <div className="text-center mb-4">
         <h1 className="text-base font-bold text-gray-900 uppercase tracking-wider">HORARIO SEMANAL DE LA CARGA ACADÉMICA DOCENTE (F03-CAD)</h1>
       </div>
@@ -757,78 +757,85 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
     day: 'numeric'
   });
 
+  // Obtener condición (Nombrado / Contratado)
+  const condicion = docente?.modalidad === 'nombrado' ? 'Nombrado' : 'Contratado';
+  
+  // Obtener dedicación y texto correspondiente
+  let dedicacionTexto = '';
+  let articulosTexto = '';
+  
+  switch(docente?.tipo_dedicacion_laboral) {
+    case 'dedicacion_exclusiva':
+      dedicacionTexto = 'Dedicación Exclusiva';
+      articulosTexto = 'y me conformo con los Artículos 21° y 22° del Estatuto Institucional vigente';
+      break;
+    case 'tiempo_completo':
+      dedicacionTexto = 'Tiempo Completo 40 H';
+      articulosTexto = '(De conformidad con los artículos 270° y 277° del Estatuto Institucional vigente)';
+      break;
+    case 'tiempo_parcial_20':
+    case 'por_horas':
+      dedicacionTexto = 'Tiempo Parcial 20 H';
+      articulosTexto = '';
+      break;
+    default:
+      dedicacionTexto = docente?.dedicacion?.replace(/_/g, ' ') || 'Tiempo Completo';
+      articulosTexto = '';
+  }
+
   return (
-    <div className="p-8 max-w-5xl mx-auto bg-white">
-      <div className="text-center mb-8">
-        <h1 className="text-xl font-bold text-gray-900">
-          DECLARACIÓN JURADA DE NO ESTAR INCLUSO EN CAUSALES
+    <div className="p-10 max-w-4xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
+      {/* Encabezado oficial */}
+      <div className="text-center mb-10">
+        <h1 className="text-2xl font-bold text-gray-900 uppercase tracking-wide">
+          Universidad Nacional de Trujillo
         </h1>
+        <h2 className="text-xl font-bold text-gray-900 mt-4 uppercase">
+          DECLARACIÓN JURADA DE NO ESTAR INCLUSO EN CAUSALES DE INCOMPATIBILIDAD
+        </h2>
         <p className="text-sm text-gray-600 mt-2">(Modificado R.R. N° 643-2011-UNT)</p>
       </div>
 
-      <div className="space-y-4 leading-relaxed">
-        <p className="text-justify">
+      <div className="space-y-6 leading-relaxed text-base">
+        <p className="text-justify indent-8">
           Yo, <span className="font-semibold">{docente?.apellidos}, {docente?.nombres}</span>, identificado
-          con D.N.I. N° <span className="font-semibold">{docente?.dni_docente || '-'}</span>, con Código N°
-          <span className="font-semibold"> {docente?.codigo_docente || '-'}</span> del <span className="font-semibold"> {docente?.departamento?.nombre || '[Ingrese Dpto.]'}</span> de la <span className="font-semibold">{docente?.facultad?.nombre || '[Ingrese Facultad]'}</span> de la Universidad Nacional de Trujillo, en el marco del programa de homologación de la remuneración de los docentes nombrados y contrato, dispuesto por la D.S. N° 033-2006-ED y D.S. N° 019-2007-ED;
+          con D.N.I. N° <span className="font-semibold">{docente?.dni_docente || docente?.dni || '-'}</span>, con Código Docente N°
+          <span className="font-semibold"> {docente?.codigo_docente || '-'}</span>, del Departamento Académico de <span className="font-semibold"> {docente?.departamento?.nombre || '[Ingrese Dpto.]'}</span> de la Facultad de <span className="font-semibold">{docente?.facultad?.nombre || '[Ingrese Facultad]'}</span> de la Universidad Nacional de Trujillo, en el marco del programa de homologación de la remuneración de los docentes nombrados y contratados, dispuesto por la D.S. N° 033-2006-ED y D.S. N° 019-2007-ED;
         </p>
 
-        <p className="text-justify font-semibold">
-          DECLARO BAJO JURAMENTO EN LOS CASOS A APLICAR:
+        <p className="text-justify font-semibold uppercase">
+          DECLARO BAJO JURAMENTO:
         </p>
 
-        <div className="pl-4 space-y-3">
-          <div className="flex items-start gap-3">
-            <span className="text-lg mt-1">☐</span>
-            <p className="text-justify">
-              No estoy inscrito en universidades de la UNT, o de la provincia y no tengo impedimento para ejercer la docencia y estoy en condiciones de cumplir cabalmente con el Estatuto vigente;
-            </p>
-          </div>
+        <div className="pl-8">
+          <p className="text-justify indent-8">
+            Soy docente <span className="font-semibold">{condicion}</span>, a <span className="font-semibold">{dedicacionTexto}</span> y NO desempeño cargo público o privado, remunerado o no, en horas que coinciden con el horario establecido en la Universidad Nacional de Trujillo {articulosTexto}.
+          </p>
+        </div>
 
-          <div className="flex items-start gap-3">
-            <span className="text-lg mt-1">
-              {(docente?.tipo_dedicacion_laboral === 'dedicacion_exclusiva') ? '☑' : '☐'}
-            </span>
-            <p className="text-justify">
-              Soy docente {(docente?.modalidad === 'nombrado') ? '(☑)' : '( )'} / contratado {(docente?.modalidad === 'contratado') ? '(☑)' : '( )'}, a Dedicación Exclusiva y no desempeño otro cargo público o privado en horas que coinciden con el horario establecido en la Universidad Nacional de Trujillo y me conformo con los Artículos 21° y 22° del Estatuto vigente;
-            </p>
-          </div>
+        <p className="text-justify indent-8">
+          En caso de faltar a la verdad, me someto a las sanciones que sean aplicables de acuerdo a la normatividad vigente, asimismo, de encontrarme incurso en situación de incompatibilidad, renuncio expresa y anticipadamente la facultad para que la autoridad competente disponga el descuento por horas de funcionamiento de la unidad académica y la retención o devolución de los pagos cobrados indebidamente durante el lapso de tiempo laborado ilegalmente.
+        </p>
 
-          <div className="flex items-start gap-3">
-            <span className="text-lg mt-1">
-              {(docente?.tipo_dedicacion_laboral === 'tiempo_completo') ? '☑' : '☐'}
-            </span>
-            <p className="text-justify">
-              Soy docente {(docente?.modalidad === 'nombrado') ? '(☑)' : '( )'} / contratado {(docente?.modalidad === 'contratado') ? '(☑)' : '( )'}, a Tiempo Completo 40h, y no desempeño cargo público o privado en horas que coinciden con el horario establecido en la Universidad Nacional de Trujillo y me conformo con los Artículos 21° y 22° del Estatuto vigente;
-            </p>
-          </div>
+        <div className="text-center mt-16">
+          <p>Se expide la presente declaración en la ciudad de Trujillo, a los {new Date().getDate()} días del mes de {new Date().toLocaleDateString('es-PE', { month: 'long' })} del año {new Date().getFullYear()}.</p>
+        </div>
 
-          <div className="flex items-start gap-3">
-            <span className="text-lg mt-1">
-              {(docente?.tipo_dedicacion_laboral === 'tiempo_parcial_20' || docente?.tipo_dedicacion_laboral === 'por_horas') ? '☑' : '☐'}
-            </span>
-            <p className="text-justify">
-              Soy docente {(docente?.modalidad === 'nombrado') ? '(☑)' : '( )'} / contratado {(docente?.modalidad === 'contratado') ? '(☑)' : '( )'}, a Tiempo Parcial 27h / 20h y no desempeño cargo público o privado en horas que coinciden con el horario establecido en la Universidad Nacional de Trujillo.
-            </p>
+        {/* Espacio para firma */}
+        <div className="mt-64 flex flex-col items-center">
+          {/* Espacio para firma física/digital - 80px de alto */}
+          <div className="w-80 h-24 flex items-end justify-center">
+            <div className="w-full border-t-2 border-gray-800"></div>
+          </div>
+          {/* Etiqueta y datos del declarante */}
+          <div className="text-center mt-2">
+            <p className="text-sm font-semibold uppercase">FIRMA DEL DECLARANTE</p>
+            <p className="text-sm font-medium mt-4">{docente?.apellidos}, {docente?.nombres}</p>
+            <p className="text-sm text-gray-700 mt-1">D.N.I.: {docente?.dni_docente || docente?.dni || '-'}</p>
           </div>
         </div>
 
-        <p className="text-justify mt-6">
-          En caso de faltar a la verdad, me someto a las sanciones que sean aplicables de acuerdo a ley, asimismo, de encontrar incurso en situación de incompatibilidad, renuncio la facultad del MONTO COMPETENTE DISPONGA EL DESCUENTO POR HORAS DE FUNCIONAMIENTO DE LA UNIDAD DE LA UNIVERSIDAD LIQUIDEZ COBROS INDEBIDOS POR EL LAPSO DE TIEMPO LABORADO ILLEGALMENTE.
-        </p>
-
-        <div className="text-center mt-12">
-          <p>Trujillo, {fechaActual}</p>
-        </div>
-
-        <div className="text-center mt-30">
-          <div className="border-t-2 border-gray-700 pt-4 mx-auto w-64">
-            <p className="text-sm font-medium">FIRMA DEL DECLARANTE</p>
-            <p className="text-sm text-gray-600">D.N.I.: {docente?.dni_docente || '-'}</p>
-          </div>
-        </div>
-
-        <div className="mt-12 text-xs text-gray-500 border-t border-gray-300 pt-4">
+        <div className="mt-16 text-xs text-gray-600 border-t border-gray-400 pt-4">
           <p><strong>Nota:</strong> Los docentes deben suscribir dos copias del presente formulario en cada Semestre Académico, en el evento de la Declaración de Carga Académica.</p>
         </div>
       </div>

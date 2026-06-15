@@ -48,7 +48,9 @@ export async function GET(request: NextRequest) {
             correo_electronico: true,
             rol: true
           }
-        }
+        },
+        facultad: true,
+        departamento: true
       },
       orderBy: [
         { modalidad: 'asc' },
@@ -114,7 +116,13 @@ export async function POST(request: NextRequest) {
         fecha_ingreso: fechaIngreso,
         grado_academico: datos.grado_academico,
         especialidad: datos.especialidad,
-        dedicacion: datos.dedicacion
+        dedicacion: datos.dedicacion,
+        tipo_dedicacion_laboral: datos.tipo_dedicacion_laboral || 'tiempo_completo',
+        dni_docente: datos.dni_docente || null,
+        horas_maximas_semanales: datos.horas_maximas_semanales || 40,
+        id_facultad: datos.id_facultad ? parseInt(datos.id_facultad) : null,
+        id_departamento: datos.id_departamento ? parseInt(datos.id_departamento) : null,
+        activo: true
       }
     });
 

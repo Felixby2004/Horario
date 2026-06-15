@@ -93,30 +93,45 @@ export default function DocenteCargaAcademicaPage() {
   const documentRef = useRef<HTMLDivElement>(null);
 
   const handleDescargarPDF = async () => {
-    const element = documentRef.current;
-    if (!element) return;
+    try {
+      const element = documentRef.current;
+      if (!element) {
+        console.error('No hay elemento para generar PDF');
+        return;
+      }
 
-    // Importar dinámicamente html2pdf.js solo en el cliente
-    const html2pdf = (await import('html2pdf.js')).default;
+      // Importar dinámicamente html2pdf.js solo en el cliente
+      const html2pdfModule = await import('html2pdf.js');
+      const html2pdf = html2pdfModule.default;
 
-    const nombreDocente = usuario ? `${usuario.apellidos}_${usuario.nombres}` : 'documento';
+      const nombreDocente = usuario ? `${usuario.apellidos}_${usuario.nombres}` : 'documento';
 
-    const nombreArchivo =
-      mostrarDocumento === 'carga'
-        ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
-        : mostrarDocumento === 'horario'
-        ? `Formato_F03_Horario_Semanal_${nombreDocente}.pdf`
-        : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`;
+      const nombreArchivo =
+        mostrarDocumento === 'carga'
+          ? `Formato_1_Carga_Academica_${nombreDocente}.pdf`
+          : mostrarDocumento === 'horario'
+          ? `Formato_F03_Horario_Semanal_${nombreDocente}.pdf`
+          : `Formato_2_Declaracion_Jurada_${nombreDocente}.pdf`;
 
-    const opt: any = {
-      margin: [10, 10, 10, 10],
-      filename: nombreArchivo,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+      const opt: any = {
+        margin: [15, 10, 15, 10],
+        filename: nombreArchivo,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          logging: true,
+          allowTaint: true
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
 
-    html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt).from(element).save();
+      console.log('PDF generado exitosamente');
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      alert('Error al descargar el PDF. Por favor, intenta nuevamente.');
+    }
   };
 
   useEffect(() => {

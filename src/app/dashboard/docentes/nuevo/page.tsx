@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CampoTexto } from '@/components/ui/CampoTexto';
 import { Boton } from '@/components/ui/Boton';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 
 export default function NuevoDocentePage() {
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
+  const [facultades, setFacultades] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const [formulario, setFormulario] = useState({
     codigo_docente: '',
     nombres: '',
@@ -19,8 +22,41 @@ export default function NuevoDocentePage() {
     telefono: '',
     grado_academico: 'doctor',
     especialidad: '',
-    dedicacion: 'tiempo_completo'
+    dedicacion: 'tiempo_completo',
+    tipo_dedicacion_laboral: 'tiempo_completo',
+    dni_docente: '',
+    horas_maximas_semanales: 40,
+    id_facultad: '',
+    id_departamento: ''
   });
+
+  useEffect(() => {
+    cargarFacultades();
+  }, []);
+
+  const cargarFacultades = async () => {
+    try {
+      const response = await fetch('/api/facultades');
+      const data = await response.json();
+      if (data.exito) {
+        setFacultades(data.datos || []);
+      }
+    } catch (error) {
+      console.error('Error cargando facultades:', error);
+    }
+  };
+
+  const cargarDepartamentos = async (idFacultad: string) => {
+    try {
+      const response = await fetch(`/api/departamentos?id_facultad=${idFacultad}`);
+      const data = await response.json();
+      if (data.exito) {
+        setDepartamentos(data.datos || []);
+      }
+    } catch (error) {
+      console.error('Error cargando departamentos:', error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +116,18 @@ export default function NuevoDocentePage() {
           />
 
           <div>
+            <label className="block text-sm font-medium mb-2">DNI Docente *</label>
+            <input
+              type="text"
+              className="w-full border rounded px-3 py-2"
+              value={formulario.dni_docente}
+              onChange={(e) => handleChange('dni_docente', e.target.value)}
+              placeholder="Ej: 12345678"
+              required
+            />
+          </div>
+
+          <div>
             <label className="block text-sm font-medium mb-2">Modalidad *</label>
             <select
               className="w-full border rounded px-3 py-2"
@@ -105,6 +153,48 @@ export default function NuevoDocentePage() {
               <option value="auxiliar">Auxiliar</option>
               <option value="jefe_practica">Jefe de Práctica</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Facultad *</label>
+            <SearchableSelect
+              opciones={facultades.map((f: any) => ({
+                valor: f.id_facultad,
+                etiqueta: f.nombre
+              }))}
+              value={formulario.id_facultad}
+              onChange={(valor) => {
+                setFormulario({ 
+                  ...formulario, 
+                  id_facultad: valor as string, 
+                  id_departamento: '' 
+                });
+                if (valor) {
+                  cargarDepartamentos(valor as string);
+                } else {
+                  setDepartamentos([]);
+                }
+              }}
+              placeholder="Selecciona una facultad"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Departamento Académico *</label>
+            <SearchableSelect
+              opciones={departamentos.map((d: any) => ({
+                valor: d.id_departamento,
+                etiqueta: d.nombre
+              }))}
+              value={formulario.id_departamento}
+              onChange={(valor) => {
+                setFormulario({ ...formulario, id_departamento: valor as string });
+              }}
+              placeholder="Selecciona un departamento"
+              disabled={!formulario.id_facultad}
+              required
+            />
           </div>
 
           <CampoTexto
@@ -149,15 +239,36 @@ export default function NuevoDocentePage() {
           />
 
           <div>
-            <label className="block text-sm font-medium mb-2">Dedicación</label>
+            <label className="block text-sm font-medium mb-2">Tipo de Dedicación Laboral *</label>
             <select
               className="w-full border rounded px-3 py-2"
-              value={formulario.dedicacion}
-              onChange={(e) => handleChange('dedicacion', e.target.value)}
+              value={formulario.tipo_dedicacion_laboral}
+              onChange={(e) => {
+                handleChange('tipo_dedicacion_laboral', e.target.value);
+                let horas = 40;
+                if (e.target.value === 'dedicacion_exclusiva') horas = 45;
+                if (e.target.value === 'tiempo_parcial_20') horas = 20;
+                handleChange('horas_maximas_semanales', horas);
+              }}
+              required
             >
-              <option value="tiempo_completo">Tiempo Completo</option>
-              <option value="tiempo_parcial">Tiempo Parcial</option>
+              <option value="dedicacion_exclusiva">Dedicación Exclusiva (45h)</option>
+              <option value="tiempo_completo">Tiempo Completo (40h)</option>
+              <option value="tiempo_parcial_20">Tiempo Parcial 20h</option>
+              <option value="por_horas">Por Horas</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Horas Máximas Semanales</label>
+            <input
+              type="number"
+              className="w-full border rounded px-3 py-2"
+              value={formulario.horas_maximas_semanales}
+              onChange={(e) => handleChange('horas_maximas_semanales', parseInt(e.target.value) || 40)}
+              min="1"
+              max="60"
+            />
           </div>
         </div>
 

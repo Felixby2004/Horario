@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
 import { ContenedorAlertas } from '@/components/ui/ContenedorAlertas';
 import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 
 export default function ImportarDocentesPage() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function ImportarDocentesPage() {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<any>(null);
   const [busquedaUsuario, setBusquedaUsuario] = useState('');
   const [importando, setImportando] = useState(false);
+  const [facultades, setFacultades] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const [formulario, setFormulario] = useState({
     codigo_docente: '',
     modalidad: 'contratado',
@@ -27,11 +30,14 @@ export default function ImportarDocentesPage() {
     telefono: '',
     grado_academico: '',
     especialidad: '',
-    horas_maximas_semanales: 40
+    horas_maximas_semanales: 40,
+    id_facultad: '',
+    id_departamento: ''
   });
 
   useEffect(() => {
     cargarUsuariosPendientes();
+    cargarFacultades();
   }, []);
 
   const cargarUsuariosPendientes = async () => {
@@ -46,6 +52,30 @@ export default function ImportarDocentesPage() {
       console.error('Error cargando usuarios pendientes:', error);
     } finally {
       setCargando(false);
+    }
+  };
+
+  const cargarFacultades = async () => {
+    try {
+      const response = await fetch('/api/facultades');
+      const data = await response.json();
+      if (data.exito) {
+        setFacultades(data.datos || []);
+      }
+    } catch (error) {
+      console.error('Error cargando facultades:', error);
+    }
+  };
+
+  const cargarDepartamentos = async (idFacultad: string) => {
+    try {
+      const response = await fetch(`/api/departamentos?id_facultad=${idFacultad}`);
+      const data = await response.json();
+      if (data.exito) {
+        setDepartamentos(data.datos || []);
+      }
+    } catch (error) {
+      console.error('Error cargando departamentos:', error);
     }
   };
 
@@ -96,8 +126,11 @@ export default function ImportarDocentesPage() {
           telefono: '',
           grado_academico: '',
           especialidad: '',
-          horas_maximas_semanales: 40
+          horas_maximas_semanales: 40,
+          id_facultad: '',
+          id_departamento: ''
         });
+        setDepartamentos([]);
         cargarUsuariosPendientes();
         setTimeout(() => router.push('/dashboard/docentes'), 1500);
       } else {
@@ -306,6 +339,52 @@ export default function ImportarDocentesPage() {
                     value={formulario.dni_docente}
                     onChange={(e) => setFormulario({ ...formulario, dni_docente: e.target.value })}
                     placeholder="Ej: 12345678"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Facultad *
+                  </label>
+                  <SearchableSelect
+                    opciones={facultades.map((f: any) => ({
+                      valor: f.id_facultad,
+                      etiqueta: f.nombre
+                    }))}
+                    value={formulario.id_facultad}
+                    onChange={(valor) => {
+                      setFormulario({ 
+                        ...formulario, 
+                        id_facultad: valor as string, 
+                        id_departamento: '' 
+                      });
+                      if (valor) {
+                        cargarDepartamentos(valor as string);
+                      } else {
+                        setDepartamentos([]);
+                      }
+                    }}
+                    placeholder="Selecciona una facultad"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Departamento Académico *
+                  </label>
+                  <SearchableSelect
+                    opciones={departamentos.map((d: any) => ({
+                      valor: d.id_departamento,
+                      etiqueta: d.nombre
+                    }))}
+                    value={formulario.id_departamento}
+                    onChange={(valor) => {
+                      setFormulario({ ...formulario, id_departamento: valor as string });
+                    }}
+                    placeholder="Selecciona un departamento"
+                    disabled={!formulario.id_facultad}
                     required
                   />
                 </div>
