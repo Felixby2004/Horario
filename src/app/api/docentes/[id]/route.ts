@@ -149,12 +149,47 @@ export async function PUT(
     const docente = await prisma.docente.update({
       where: { id_docente: id },
       data: {
-        ...body,
+        codigo_docente: body.codigo_docente,
+        nombres: body.nombres,
+        apellidos: body.apellidos,
+        modalidad: body.modalidad,
+        categoria: body.categoria,
         categoria_ordinaria: body.categoria_ordinaria || null,
         tipo_contrato: body.tipo_contrato || null,
         tipo_extraordinario: body.tipo_extraordinario || null,
-        id_facultad: body.id_facultad ? parseInt(body.id_facultad) : null,
-        id_departamento: body.id_departamento ? parseInt(body.id_departamento) : null
+        dedicacion: body.dedicacion,
+        tipo_dedicacion_laboral: body.tipo_dedicacion_laboral || null,
+        fecha_ingreso: body.fecha_ingreso || null,
+        correo_electronico: body.correo_electronico || null,
+        telefono: body.telefono || null,
+        grado_academico: body.grado_academico || null,
+        especialidad: body.especialidad || null,
+        dni_docente: body.dni_docente || null,
+        horas_maximas_semanales: body.horas_maximas_semanales || 40,
+        escuela_profesional: body.escuela_profesional || null,
+        antiguedad: body.antiguedad || 0,
+        facultad: body.id_facultad
+          ? {
+              connect: {
+                id_facultad: parseInt(body.id_facultad, 10)
+              }
+            }
+          : {
+              disconnect: true
+            },
+        departamento: body.id_departamento
+          ? {
+              connect: {
+                id_departamento: parseInt(body.id_departamento, 10)
+              }
+            }
+          : {
+              disconnect: true
+            }
+      },
+      include: {
+        facultad: true,
+        departamento: true
       }
     });
 
@@ -165,9 +200,7 @@ export async function PUT(
 
     const usuarioEditor = await obtenerUsuarioAutenticadoOpcional(request);
     const cambios = obtenerCambiosDocente(docenteAnterior, {
-      ...docente,
-      facultad: docenteAnterior.facultad,
-      departamento: docenteAnterior.departamento
+      ...docente
     });
 
     await registrarHistorialEdicionDocente({

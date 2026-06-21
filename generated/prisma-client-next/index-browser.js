@@ -878,7 +878,8 @@ exports.TipoActividadNoLectiva = exports.$Enums.TipoActividadNoLectiva = {
   gestion_gobierno: 'gestion_gobierno',
   asesoria_tesis_jurado: 'asesoria_tesis_jurado',
   perfeccionamiento: 'perfeccionamiento',
-  preparacion_evaluacion: 'preparacion_evaluacion'
+  preparacion_evaluacion: 'preparacion_evaluacion',
+  autoevaluacion_acreditacion: 'autoevaluacion_acreditacion'
 };
 
 exports.Prisma.ModelName = {

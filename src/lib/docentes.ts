@@ -108,7 +108,7 @@ export const DEDICACIONES_CONTRATADO: Array<OpcionValor<DedicacionDocente>> = [
 ];
 
 const HORAS_POR_DEDICACION: Record<DedicacionDocente, number> = {
-  dedicacion_exclusiva: 45,
+  dedicacion_exclusiva: 40,
   tiempo_completo: 40,
   tiempo_parcial_20: 20,
   tiempo_parcial_12: 12,

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { obtenerHorasMetaDocente, validarEnvioCargaAcademica } from '@/lib/cargaAcademica';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,18 +66,75 @@ export async function PUT(
     const id = parseInt(params.id);
     const datos = await request.json();
 
-    // Obtener la carga anterior para el historial
     const cargaAnterior = await prisma.cargaAcademica.findUnique({
-      where: { id_carga: id }
+      where: { id_carga: id },
+      include: {
+        docente: {
+          include: {
+            departamento: true
+          }
+        },
+        actividades_no_lectivas: true
+      }
     });
+
+    if (!cargaAnterior) {
+      return NextResponse.json(
+        { exito: false, mensaje: 'Carga académica no encontrada' },
+        { status: 404 }
+      );
+    }
+
+    const horasLectivas = datos.horas_lectivas !== undefined ? Number(datos.horas_lectivas) : cargaAnterior.horas_lectivas;
+    const horasNoLectivas =
+      datos.horas_no_lectivas !== undefined ? Number(datos.horas_no_lectivas) : cargaAnterior.horas_no_lectivas;
+    const horasPreparacion =
+      datos.horas_preparacion !== undefined ? Number(datos.horas_preparacion) : cargaAnterior.horas_preparacion;
+    const horasTotales =
+      datos.horas_totales !== undefined
+        ? Number(datos.horas_totales)
+        : horasLectivas + horasPreparacion + horasNoLectivas;
+    const horasMeta =
+      datos.horas_meta !== undefined
+        ? Number(datos.horas_meta)
+        : obtenerHorasMetaDocente(cargaAnterior.docente, cargaAnterior);
+
+    if (datos.estado === 'enviado') {
+      const validacionEnvio = validarEnvioCargaAcademica({
+        docente: cargaAnterior.docente,
+        carga: {
+          horas_lectivas: horasLectivas,
+          horas_no_lectivas: horasNoLectivas,
+          horas_preparacion: horasPreparacion,
+          horas_totales: horasTotales,
+          horas_meta: horasMeta
+        },
+        actividades: cargaAnterior.actividades_no_lectivas || []
+      });
+
+      if (!validacionEnvio.valido) {
+        return NextResponse.json(
+          {
+            exito: false,
+            mensaje: validacionEnvio.mensaje,
+            modalidad: validacionEnvio.modalidad,
+            rubros_faltantes: validacionEnvio.rubrosFaltantes,
+            horas_meta: validacionEnvio.horasMeta,
+            horas_totales: validacionEnvio.horasTotales
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     const carga = await prisma.cargaAcademica.update({
       where: { id_carga: id },
       data: {
-        horas_lectivas: datos.horas_lectivas !== undefined ? datos.horas_lectivas : undefined,
-        horas_no_lectivas: datos.horas_no_lectivas !== undefined ? datos.horas_no_lectivas : undefined,
-        horas_preparacion: datos.horas_preparacion !== undefined ? datos.horas_preparacion : undefined,
-        horas_totales: datos.horas_totales !== undefined ? datos.horas_totales : undefined,
+        horas_lectivas: datos.horas_lectivas !== undefined ? horasLectivas : undefined,
+        horas_no_lectivas: datos.horas_no_lectivas !== undefined ? horasNoLectivas : undefined,
+        horas_preparacion: datos.horas_preparacion !== undefined ? horasPreparacion : undefined,
+        horas_totales: datos.horas_totales !== undefined ? horasTotales : undefined,
+        horas_meta: horasMeta,
         estado: datos.estado !== undefined ? datos.estado : undefined,
         observaciones: datos.observaciones !== undefined ? datos.observaciones : undefined,
         observaciones_generales: datos.observaciones_generales !== undefined ? datos.observaciones_generales : undefined,
@@ -87,7 +145,7 @@ export async function PUT(
     });
 
     // Registrar en historial
-    if (datos.estado && cargaAnterior && datos.usuario_id) {
+    if (datos.estado && datos.usuario_id) {
       await prisma.historialCargaAcademica.create({
         data: {
           id_carga: id,

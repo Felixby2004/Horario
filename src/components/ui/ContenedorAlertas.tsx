@@ -1,6 +1,6 @@
 'use client';
 
-import { Alerta } from '@/hooks/useAlertasTemporales';
+import type { Alerta } from '@/hooks/useAlertasTemporales';
 
 interface ContenedorAlertasProps {
   alertas: Alerta[];

@@ -1,3 +1,8 @@
+const tableBaseClass = 'w-full border-collapse border border-gray-900 table-fixed';
+const tableHeadCellClass = 'border border-gray-900 px-2 py-1.5 text-center align-middle font-semibold leading-tight';
+const tableBodyCellClass = 'border border-gray-900 px-2 py-1.5 align-top leading-snug break-normal whitespace-normal';
+const tableBodyCellCenterClass = `${tableBodyCellClass} text-center`;
+
 export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, actividades }: any) {
   console.log('DocumentoHorarioSemanal props:', { carga, docente, periodo, horarios, actividades });
   const formatDate = (dateInput: string | Date | null | undefined): string => {
@@ -306,7 +311,7 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
   const totalHoras = totalCHL + totalCHNL;
 
   return (
-    <div className="p-8 max-w-5xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="p-8 max-w-6xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
       <div className="text-center mb-4">
         <h1 className="text-base font-bold text-gray-900 uppercase tracking-wider">HORARIO SEMANAL DE LA CARGA ACADÉMICA DOCENTE (F03-CAD)</h1>
       </div>
@@ -350,20 +355,27 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
       </div>
 
       {/* CHL Table */}
-      <table className="w-full border-collapse border border-gray-900 mb-1 text-xs" style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed' }}>
+        <colgroup>
+          <col style={{ width: '23%' }} />
+          <col style={{ width: '45%' }} />
+          <col style={{ width: '12%' }} />
+          <col style={{ width: '12%' }} />
+          <col style={{ width: '8%' }} />
+        </colgroup>
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-900 p-1 text-center">HORARIO</th>
-            <th className="border border-gray-900 p-1 text-center">CARGA HORARIA LECTIVA (CHL)</th>
-            <th className="border border-gray-900 p-1 text-center">LUGAR</th>
-            <th className="border border-gray-900 p-1 text-center">AULA</th>
-            <th className="border border-gray-900 p-1 text-center">TOTAL</th>
+            <th className={tableHeadCellClass}>HORARIO</th>
+            <th className={tableHeadCellClass}>CARGA HORARIA LECTIVA (CHL)</th>
+            <th className={tableHeadCellClass}>LUGAR</th>
+            <th className={tableHeadCellClass}>AULA</th>
+            <th className={tableHeadCellClass}>TOTAL</th>
           </tr>
         </thead>
         <tbody>
           {chlRows.map((row, idx) => (
             <tr key={idx}>
-              <td className="border border-gray-900 p-1">
+              <td className={`${tableBodyCellClass} whitespace-pre-line`}>
                 {row.horario.map((h: string, i: number) => (
                   <span key={i}>
                     {h}
@@ -371,38 +383,45 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
                   </span>
                 ))}
               </td>
-              <td className="border border-gray-900 p-1">{row.curso}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.lugar}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.aula}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.horas}</td>
+              <td className={tableBodyCellClass}>{row.curso}</td>
+              <td className={tableBodyCellCenterClass}>{row.lugar}</td>
+              <td className={tableBodyCellCenterClass}>{row.aula}</td>
+              <td className={tableBodyCellCenterClass}>{row.horas}</td>
             </tr>
           ))}
           {/* Total CHL Row */}
           <tr className="bg-gray-100">
-            <td className="border border-gray-900 p-1 font-semibold">T:</td>
-            <td className="border border-gray-900 p-1"></td>
-            <td className="border border-gray-900 p-1"></td>
-            <td className="border border-gray-900 p-1"></td>
-            <td className="border border-gray-900 p-1 text-center font-semibold">{totalCHL}</td>
+            <td className={`${tableBodyCellClass} font-semibold`}>T:</td>
+            <td className={tableBodyCellClass}></td>
+            <td className={tableBodyCellClass}></td>
+            <td className={tableBodyCellClass}></td>
+            <td className={`${tableBodyCellCenterClass} font-semibold`}>{totalCHL}</td>
           </tr>
         </tbody>
       </table>
 
       {/* CHNL Table */}
-      <table className="w-full border-collapse border border-gray-900 mb-1 text-xs" style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed' }}>
+        <colgroup>
+          <col style={{ width: '23%' }} />
+          <col style={{ width: '45%' }} />
+          <col style={{ width: '12%' }} />
+          <col style={{ width: '12%' }} />
+          <col style={{ width: '8%' }} />
+        </colgroup>
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-900 p-1 text-center">HORARIO</th>
-            <th className="border border-gray-900 p-1 text-center">CARGA HORARIA NO LECTIVA (CHNL)</th>
-            <th className="border border-gray-900 p-1 text-center">LUGAR</th>
-            <th className="border border-gray-900 p-1 text-center">AULA</th>
-            <th className="border border-gray-900 p-1 text-center">TOTAL</th>
+            <th className={tableHeadCellClass}>HORARIO</th>
+            <th className={tableHeadCellClass}>CARGA HORARIA NO LECTIVA (CHNL)</th>
+            <th className={tableHeadCellClass}>LUGAR</th>
+            <th className={tableHeadCellClass}>AULA</th>
+            <th className={tableHeadCellClass}>TOTAL</th>
           </tr>
         </thead>
         <tbody>
           {chnlRows.map((row, idx) => (
             <tr key={idx}>
-              <td className="border border-gray-900 p-1">
+              <td className={`${tableBodyCellClass} whitespace-pre-line`}>
                 {row.horario.map((h: string, i: number) => (
                   <span key={i}>
                     {h}
@@ -410,21 +429,21 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
                   </span>
                 ))}
               </td>
-              <td className="border border-gray-900 p-1">{row.actividad}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.lugar}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.aula}</td>
-              <td className="border border-gray-900 p-1 text-center">{row.horas}</td>
+              <td className={tableBodyCellClass}>{row.actividad}</td>
+              <td className={tableBodyCellCenterClass}>{row.lugar}</td>
+              <td className={tableBodyCellCenterClass}>{row.aula}</td>
+              <td className={tableBodyCellCenterClass}>{row.horas}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {/* Total Row */}
-      <table className="w-full border-collapse border border-gray-900 text-xs" style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} text-[11px]`} style={{ tableLayout: 'fixed' }}>
         <tbody>
           <tr className="bg-gray-200 font-bold">
-            <td className="border border-gray-900 p-1 text-center" colSpan={4}>TOTAL HORAS CARGA ACADÉMICA</td>
-            <td className="border border-gray-900 p-1 text-center">{totalHoras}</td>
+            <td className="border border-gray-900 px-2 py-2 text-center" colSpan={4}>TOTAL HORAS CARGA ACADÉMICA</td>
+            <td className="border border-gray-900 px-2 py-2 text-center">{totalHoras}</td>
           </tr>
         </tbody>
       </table>
@@ -559,7 +578,7 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
   const uniqueCursos = getUniqueCursosFromHorarios();
 
   return (
-    <div className="p-8 max-w-5xl mx-auto bg-white">
+    <div className="p-8 max-w-6xl mx-auto bg-white">
       <div className="text-center mb-8">
         <h1 className="text-xl font-bold text-gray-900">FORMATO N° 1</h1>
         <h2 className="text-lg font-semibold mt-2 text-gray-800">
@@ -569,33 +588,33 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
 
       <div className="mb-6">
         <h3 className="font-semibold mb-2">I. DATOS SOBRE LA SITUACIÓN DEL PROFESOR:</h3>
-        <table className="w-full border-collapse border border-gray-900">
+        <table className={`${tableBaseClass} text-sm`}>
           <tbody>
             <tr>
-              <td className="border border-gray-900 p-2 w-1/5 font-medium">FACULTAD:</td>
-              <td className="border border-gray-900 p-2 w-4/5">{docente?.facultad?.nombre || '[Ingrese Nombre de Facultad]'}</td>
+              <td className="border border-gray-900 px-3 py-2 w-1/5 font-medium align-top">FACULTAD:</td>
+              <td className="border border-gray-900 px-3 py-2 w-4/5">{docente?.facultad?.nombre || '[Ingrese Nombre de Facultad]'}</td>
             </tr>
             <tr>
-              <td className="border border-gray-900 p-2 font-medium">DPTO. ACADÉMICO:</td>
-              <td className="border border-gray-900 p-2">{docente?.departamento?.nombre || '[Ingrese Departamento Académico]'}</td>
+              <td className="border border-gray-900 px-3 py-2 font-medium align-top">DPTO. ACADÉMICO:</td>
+              <td className="border border-gray-900 px-3 py-2">{docente?.departamento?.nombre || '[Ingrese Departamento Académico]'}</td>
             </tr>
           </tbody>
         </table>
-        <table className="w-full border-collapse border border-gray-900 mt-2">
+        <table className={`${tableBaseClass} mt-2 text-xs`}>
           <thead>
             <tr className="bg-gray-200">
-              <th className="border border-gray-900 p-2 text-xs">NOMBRE COMPLETO</th>
-              <th className="border border-gray-900 p-2 text-xs">CONDICIÓN</th>
-              <th className="border border-gray-900 p-2 text-xs">CATEGORÍA</th>
-              <th className="border border-gray-900 p-2 text-xs">MODALIDAD</th>
+              <th className="border border-gray-900 px-3 py-2 text-xs leading-tight">NOMBRE COMPLETO</th>
+              <th className="border border-gray-900 px-3 py-2 text-xs leading-tight">CONDICIÓN</th>
+              <th className="border border-gray-900 px-3 py-2 text-xs leading-tight">CATEGORÍA</th>
+              <th className="border border-gray-900 px-3 py-2 text-xs leading-tight">MODALIDAD</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="border border-gray-900 p-2 text-xs">{docente?.apellidos}, {docente?.nombres}</td>
-              <td className="border border-gray-900 p-2 text-xs">{docente?.modalidad || docente?.categoria || 'Nombrado'}</td>
-              <td className="border border-gray-900 p-2 text-xs">{docente?.categoria || 'Principal'}</td>
-              <td className="border border-gray-900 p-2 text-xs">
+              <td className="border border-gray-900 px-3 py-2 text-xs leading-snug">{docente?.apellidos}, {docente?.nombres}</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{docente?.modalidad || docente?.categoria || 'Nombrado'}</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{docente?.categoria || 'Principal'}</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">
                 {docente?.dedicacion?.replace(/_/g, ' ') ||
                   docente?.tipo_dedicacion_laboral?.replace(/_/g, ' ') ||
                   'Tiempo Completo'}
@@ -603,19 +622,19 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
             </tr>
           </tbody>
         </table>
-        <table className="w-full border-collapse border border-gray-900 mt-2">
+        <table className={`${tableBaseClass} mt-2 text-xs`}>
           <tbody>
             <tr>
-              <td className="border border-gray-900 p-2 w-1/4 font-medium text-xs">AÑO ACADÉMICO:</td>
-              <td className="border border-gray-900 p-2 w-1/4 text-xs">{periodo?.anio || '[Ingrese Año]'}</td>
-              <td className="border border-gray-900 p-2 w-1/4 font-medium text-xs">CICLO:</td>
-              <td className="border border-gray-900 p-2 w-1/4 text-xs">{periodo?.nombre || '[Ingrese Ciclo]'}</td>
+              <td className="border border-gray-900 px-3 py-2 w-1/4 font-medium text-xs">AÑO ACADÉMICO:</td>
+              <td className="border border-gray-900 px-3 py-2 w-1/4 text-xs">{periodo?.anio || '[Ingrese Año]'}</td>
+              <td className="border border-gray-900 px-3 py-2 w-1/4 font-medium text-xs">CICLO:</td>
+              <td className="border border-gray-900 px-3 py-2 w-1/4 text-xs">{periodo?.nombre || '[Ingrese Ciclo]'}</td>
             </tr>
             <tr>
-              <td className="border border-gray-900 p-2 font-medium text-xs">INICIO:</td>
-              <td className="border border-gray-900 p-2 text-xs">{formatDate(periodo?.fecha_inicio)}</td>
-              <td className="border border-gray-900 p-2 font-medium text-xs">FINAL:</td>
-              <td className="border border-gray-900 p-2 text-xs">{formatDate(periodo?.fecha_fin)}</td>
+              <td className="border border-gray-900 px-3 py-2 font-medium text-xs">INICIO:</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs">{formatDate(periodo?.fecha_inicio)}</td>
+              <td className="border border-gray-900 px-3 py-2 font-medium text-xs">FINAL:</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs">{formatDate(periodo?.fecha_fin)}</td>
             </tr>
           </tbody>
         </table>
@@ -623,20 +642,33 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
 
       <div className="mb-4">
         <h3 className="font-semibold mb-2 text-sm">1. TRABAJO LECTIVO. Datos completos y con claridad</h3>
-        <table className="w-full border-collapse border border-gray-900 text-xs">
+        <table className={`${tableBaseClass} text-[11px]`}>
+          <colgroup>
+            <col style={{ width: '8%' }} />
+            <col style={{ width: '24%' }} />
+            <col style={{ width: '6%' }} />
+            <col style={{ width: '14%' }} />
+            <col style={{ width: '6%' }} />
+            <col style={{ width: '6%' }} />
+            <col style={{ width: '7%' }} />
+            <col style={{ width: '5%' }} />
+            <col style={{ width: '5%' }} />
+            <col style={{ width: '5%' }} />
+            <col style={{ width: '7%' }} />
+          </colgroup>
           <thead>
             <tr className="bg-gray-200">
-              <th className="border border-gray-900 p-1">CÓDIGO</th>
-              <th className="border border-gray-900 p-1">NOMBRE DEL CURSO</th>
-              <th className="border border-gray-900 p-1">CUR.</th>
-              <th className="border border-gray-900 p-1">ESCUELA PROF.</th>
-              <th className="border border-gray-900 p-1">CIC.</th>
-              <th className="border border-gray-900 p-1">SEC.</th>
-              <th className="border border-gray-900 p-1">N° AL.</th>
-              <th className="border border-gray-900 p-1">HT</th>
-              <th className="border border-gray-900 p-1">HP</th>
-              <th className="border border-gray-900 p-1">HL</th>
-              <th className="border border-gray-900 p-1">Total</th>
+              <th className={tableHeadCellClass}>CÓDIGO</th>
+              <th className={tableHeadCellClass}>NOMBRE DEL CURSO</th>
+              <th className={tableHeadCellClass}>CUR.</th>
+              <th className={tableHeadCellClass}>ESCUELA PROF.</th>
+              <th className={tableHeadCellClass}>CIC.</th>
+              <th className={tableHeadCellClass}>SEC.</th>
+              <th className={tableHeadCellClass}>N° AL.</th>
+              <th className={tableHeadCellClass}>HT</th>
+              <th className={tableHeadCellClass}>HP</th>
+              <th className={tableHeadCellClass}>HL</th>
+              <th className={tableHeadCellClass}>TOTAL</th>
             </tr>
           </thead>
           <tbody>
@@ -645,23 +677,23 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
               const total = ht + hp + hl;
               return (
                 <tr key={idx}>
-                  <td className="border border-gray-900 p-1 text-center">{h.curso?.codigo || '-'}</td>
-                  <td className="border border-gray-900 p-1">{h.curso?.nombre || '-'}</td>
-                  <td className="border border-gray-900 p-1 text-center">-</td>
-                  <td className="border border-gray-900 p-1 text-center">{docente?.escuela_profesional || '-'}</td>
-                  <td className="border border-gray-900 p-1 text-center">{h.curso?.ciclo || '-'}</td>
-                  <td className="border border-gray-900 p-1 text-center">{h.grupo?.codigo_grupo || '-'}</td>
-                  <td className="border border-gray-900 p-1 text-center">{h.grupo?.cantidad_matriculados || '-'}</td>
-                  <td className="border border-gray-900 p-1 text-center">{ht}</td>
-                  <td className="border border-gray-900 p-1 text-center">{hp}</td>
-                  <td className="border border-gray-900 p-1 text-center">{hl}</td>
-                  <td className="border border-gray-900 p-1 text-center">{total}</td>
+                  <td className={tableBodyCellCenterClass}>{h.curso?.codigo || '-'}</td>
+                  <td className={tableBodyCellClass}>{h.curso?.nombre || '-'}</td>
+                  <td className={tableBodyCellCenterClass}>-</td>
+                  <td className={tableBodyCellCenterClass}>{docente?.escuela_profesional || '-'}</td>
+                  <td className={tableBodyCellCenterClass}>{h.curso?.ciclo || '-'}</td>
+                  <td className={tableBodyCellCenterClass}>{h.grupo?.codigo_grupo || '-'}</td>
+                  <td className={tableBodyCellCenterClass}>{h.grupo?.cantidad_matriculados || '-'}</td>
+                  <td className={tableBodyCellCenterClass}>{ht}</td>
+                  <td className={tableBodyCellCenterClass}>{hp}</td>
+                  <td className={tableBodyCellCenterClass}>{hl}</td>
+                  <td className={tableBodyCellCenterClass}>{total}</td>
                 </tr>
               );
             })}
             {(!uniqueCursos || uniqueCursos.length === 0) && (
               <tr>
-                <td colSpan={11} className="border border-gray-900 p-2 text-center text-xs">
+                <td colSpan={11} className="border border-gray-900 px-3 py-3 text-center text-xs">
                   No hay cursos registrados
                 </td>
               </tr>
@@ -670,58 +702,63 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
         </table>
       </div>
 
-      <table className="w-full border-collapse border border-gray-900 text-xs">
+      <table className={`${tableBaseClass} text-[11px]`}>
+        <colgroup>
+          <col style={{ width: '33%' }} />
+          <col style={{ width: '57%' }} />
+          <col style={{ width: '10%' }} />
+        </colgroup>
         <thead>
           <tr className="bg-gray-200">
-            <th className="border border-gray-900 p-1 w-1/3">DESCRIPCIÓN</th>
-            <th className="border border-gray-900 p-1 w-2/3">DESCRIPCIÓN</th>
-            <th className="border border-gray-900 p-1 w-16 text-center">HORAS</th>
+            <th className={tableHeadCellClass}>DETALLE</th>
+            <th className={tableHeadCellClass}>SUSTENTO / DESCRIPCIÓN</th>
+            <th className={tableHeadCellClass}>HORAS</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">2. PREPARACIÓN Y EVALUACIÓN (Max 50% del Trabajo Lectivo)</td>
-            <td className="border border-gray-900 p-1"></td>
-            <td className="border border-gray-900 p-1 text-center">{carga?.horas_preparacion || carga?.horas_preparacion_evaluacion || 0}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>2. PREPARACIÓN Y EVALUACIÓN (Max 50% del Trabajo Lectivo)</td>
+            <td className={tableBodyCellClass}></td>
+            <td className={tableBodyCellCenterClass}>{carga?.horas_preparacion || carga?.horas_preparacion_evaluacion || 0}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">3. TUTORÍA / CONSEJERÍA: Señalar número de alumnos y el ciclo académico en el que se desempeña:</td>
-            <td className="border border-gray-900 p-1">{getActividadText('tutoria_consejeria')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('tutoria_consejeria')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>3. TUTORÍA / CONSEJERÍA: Señalar número de alumnos y el ciclo académico en el que se desempeña:</td>
+            <td className={tableBodyCellClass}>{getActividadText('tutoria_consejeria')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('tutoria_consejeria')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">4. INVESTIGACIÓN: Consignar el N° de inscripción, código, nombre y duración del proyecto. (Como máximo 04 y 05 horas semanales), según modalidad de trabajo docente:</td>
-            <td className="border border-gray-900 p-1">{getActividadText('investigacion')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('investigacion')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>4. INVESTIGACIÓN: Consignar el N° de inscripción, código, nombre y duración del proyecto. (Como máximo 04 y 05 horas semanales), según modalidad de trabajo docente:</td>
+            <td className={tableBodyCellClass}>{getActividadText('investigacion')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('investigacion')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">5. CAPACITACIÓN: Señalar la referencia a este curso en el marco de los planes de cada Facultad (como máximo 05 semanas.):</td>
-            <td className="border border-gray-900 p-1">{getActividadText('perfeccionamiento')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('perfeccionamiento')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>5. CAPACITACIÓN: Señalar la referencia a este curso en el marco de los planes de cada Facultad (como máximo 05 semanas.):</td>
+            <td className={tableBodyCellClass}>{getActividadText('perfeccionamiento')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('perfeccionamiento')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">6. ACTIVIDADES DE GOBIERNO: Sí desempeña cargo indique.</td>
-            <td className="border border-gray-900 p-1">{getActividadText('gestion_gobierno')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('gestion_gobierno')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>6. ACTIVIDADES DE GOBIERNO: Sí desempeña cargo indique.</td>
+            <td className={tableBodyCellClass}>{getActividadText('gestion_gobierno')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('gestion_gobierno')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">7. ASESORÍA DE TESIS, EXÁMENES PROFESIONALES Y EXPERIENCIA DECENCIAL, profesional: Indicar el número de Resolución Decenal, proyectos y la duración de la actividad programada:</td>
-            <td className="border border-gray-900 p-1">{getActividadText('asesoria_tesis_jurado')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('asesoria_tesis_jurado')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>7. ASESORÍA DE TESIS, EXÁMENES PROFESIONALES Y EXPERIENCIA DECENCIAL, profesional: Indicar el número de Resolución Decenal, proyectos y la duración de la actividad programada:</td>
+            <td className={tableBodyCellClass}>{getActividadText('asesoria_tesis_jurado')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('asesoria_tesis_jurado')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">8. RESPONSABILIDAD SOCIAL UNIVERSITARIA: Señalar actividad, proyecto programas a ejecutarse y comunidades de las cuales se ocupa: (Como máximo 02 horas semanales)</td>
-            <td className="border border-gray-900 p-1">{getActividadText('responsabilidad_social')}</td>
-            <td className="border border-gray-900 p-1 text-center">{getActividadHoras('responsabilidad_social')}</td>
+            <td className={`${tableBodyCellClass} font-medium`}>8. RESPONSABILIDAD SOCIAL UNIVERSITARIA: Señalar actividad, proyecto programas a ejecutarse y comunidades de las cuales se ocupa: (Como máximo 02 horas semanales)</td>
+            <td className={tableBodyCellClass}>{getActividadText('responsabilidad_social')}</td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('responsabilidad_social')}</td>
           </tr>
           <tr>
-            <td className="border border-gray-900 p-1 font-medium">9. COMITÉS TÉCNICOS Y COMISIONES: Consignar el número de Resolución autorizativa indicando el cargo de vigencia.</td>
-            <td className="border border-gray-900 p-1"></td>
-            <td className="border border-gray-900 p-1 text-center">0</td>
+            <td className={`${tableBodyCellClass} font-medium`}>9. COMITÉS TÉCNICOS Y COMISIONES: Consignar el número de Resolución autorizativa indicando el cargo de vigencia.</td>
+            <td className={tableBodyCellClass}></td>
+            <td className={tableBodyCellCenterClass}>0</td>
           </tr>
           <tr className="bg-gray-200 font-bold">
-            <td className="border border-gray-900 p-1 text-right" colSpan={2}>TOTAL</td>
-            <td className="border border-gray-900 p-1 text-center">{carga?.horas_totales || 0}</td>
+            <td className="border border-gray-900 px-2 py-2 text-right" colSpan={2}>TOTAL</td>
+            <td className="border border-gray-900 px-2 py-2 text-center">{carga?.horas_totales || 0}</td>
           </tr>
         </tbody>
       </table>

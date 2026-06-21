@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { validarAsignacionActividadNoLectiva } from '@/lib/cargaNoLectiva';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,6 +85,58 @@ export async function PUT(
   try {
     const id = parseInt(params.id);
     const datos = await request.json();
+
+    const actividadActual = await prisma.actividadNoLectiva.findUnique({
+      where: { id_actividad: id },
+      include: {
+        carga_academica: {
+          include: {
+            docente: {
+              include: {
+                departamento: true
+              }
+            },
+            actividades_no_lectivas: true
+          }
+        }
+      }
+    });
+
+    if (!actividadActual) {
+      return NextResponse.json(
+        { exito: false, mensaje: 'Actividad no lectiva no encontrada' },
+        { status: 404 }
+      );
+    }
+
+    const validacion = validarAsignacionActividadNoLectiva({
+      docente: actividadActual.carga_academica?.docente,
+      actividad: {
+        id_actividad: id,
+        tipo_actividad:
+          datos.tipo_actividad !== undefined ? datos.tipo_actividad : actividadActual.tipo_actividad,
+        horas_semanales:
+          datos.horas_semanales !== undefined ? datos.horas_semanales : actividadActual.horas_semanales,
+        datos_sustento:
+          datos.datos_sustento !== undefined ? datos.datos_sustento : actividadActual.datos_sustento
+      },
+      actividadesExistentes: actividadActual.carga_academica?.actividades_no_lectivas || [],
+      horasLectivas: actividadActual.carga_academica?.horas_lectivas
+    });
+
+    if (!validacion.valido) {
+      return NextResponse.json(
+        {
+          exito: false,
+          mensaje: validacion.mensaje,
+          limite: validacion.limite,
+          horas_acumuladas: validacion.horasAcumuladas,
+          horas_disponibles: validacion.horasDisponibles,
+          modalidad: validacion.modalidad
+        },
+        { status: 400 }
+      );
+    }
 
     const actividad = await prisma.actividadNoLectiva.update({
       where: { id_actividad: id },

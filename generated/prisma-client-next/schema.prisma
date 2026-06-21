@@ -1021,6 +1021,7 @@ enum TipoActividadNoLectiva {
   asesoria_tesis_jurado
   perfeccionamiento
   preparacion_evaluacion
+  autoevaluacion_acreditacion
 
   @@map("tipo_actividad_no_lectiva")
 }

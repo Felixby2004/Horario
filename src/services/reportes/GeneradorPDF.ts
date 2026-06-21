@@ -504,6 +504,20 @@ export class GeneradorPDF {
     });
   }
 
+  private static combinarContenidoCeldaReporte(actual: string, nuevo: string): string {
+    const contenidoActual = String(actual || '').trim();
+    const contenidoNuevo = String(nuevo || '').trim();
+
+    if (!contenidoActual) return contenidoNuevo;
+    if (!contenidoNuevo) return contenidoActual;
+    if (contenidoActual.includes(contenidoNuevo)) return contenidoActual;
+
+    const esHtml = contenidoActual.includes('<') || contenidoNuevo.includes('<');
+    return esHtml
+      ? `${contenidoActual}<div style="border-top: 1px dashed #666; margin: 4px 0;"></div>${contenidoNuevo}`
+      : `${contenidoActual}\n----------------\n${contenidoNuevo}`;
+  }
+
   private static construirMapaCeldasFusionadas(
     horarios: any[],
     diasSemana: string[],
@@ -536,11 +550,20 @@ export class GeneradorPDF {
       const horaInicio = horasRango[indiceInicio];
       const celda = construirCelda(horario);
 
-      mapa[diaNombre][horaInicio] = {
-        rowspan,
-        contenido: celda.contenido,
-        colorFondo: celda.colorFondo
-      };
+      const celdaExistente = mapa[diaNombre][horaInicio];
+      if (celdaExistente && celdaExistente !== 'skip') {
+        mapa[diaNombre][horaInicio] = {
+          rowspan: Math.max(celdaExistente.rowspan, rowspan),
+          contenido: this.combinarContenidoCeldaReporte(celdaExistente.contenido, celda.contenido),
+          colorFondo: celdaExistente.colorFondo || celda.colorFondo || '#FFFFFF'
+        };
+      } else {
+        mapa[diaNombre][horaInicio] = {
+          rowspan,
+          contenido: celda.contenido,
+          colorFondo: celda.colorFondo
+        };
+      }
 
       for (let offset = 1; offset < rowspan; offset++) {
         const horaCubierta = horasRango[indiceInicio + offset];
@@ -2549,4 +2572,3 @@ export class GeneradorPDF {
     }
   }
 }
-

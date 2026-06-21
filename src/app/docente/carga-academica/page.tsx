@@ -9,6 +9,14 @@ import { DocumentoCargaAcademica, DocumentoDeclaracionJurada, DocumentoHorarioSe
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 import { SearchableSelect } from '@/components/ui/SearchableSelect';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
+import { validarEnvioCargaAcademica } from '@/lib/cargaAcademica';
+import {
+  calcularHorasAcumuladasPorTipo,
+  obtenerEtiquetaActividadNoLectiva,
+  obtenerLimitesNoLectivosPorModalidad,
+  tieneAprobacionAutoevaluacion,
+  validarAsignacionActividadNoLectiva
+} from '@/lib/cargaNoLectiva';
 
 const TIPOS_ACTIVIDAD = [
   { valor: 'tutoria_consejeria', label: 'Tutoria / Consejería' },
@@ -16,8 +24,9 @@ const TIPOS_ACTIVIDAD = [
   { valor: 'responsabilidad_social', label: 'Responsabilidad Social' },
   { valor: 'gestion_gobierno', label: 'Gestión y Gobierno' },
   { valor: 'asesoria_tesis_jurado', label: 'Asesoría de Tesis / Jurado' },
-  { valor: 'perfeccionamiento', label: 'Perfeccionamiento' },
-  { valor: 'preparacion_evaluacion', label: 'Preparación y Evaluación' }
+  { valor: 'perfeccionamiento', label: 'Formación académica y capacitación' },
+  { valor: 'preparacion_evaluacion', label: 'Preparación y Evaluación' },
+  { valor: 'autoevaluacion_acreditacion', label: 'Autoevaluación / Acreditación' }
 ];
 
 // Configuración para cada tipo de actividad (según Reglamento Carga Académica UNT 2024)
@@ -60,7 +69,6 @@ const CONFIG_ACTIVIDAD = {
     ]
   },
   perfeccionamiento: {
-    maxHoras: 2,
     campos: [
       { id: 'titulo_programa', label: 'Título del Programa', tipo: 'text', requerido: true },
       { id: 'institucion', label: 'Institución', tipo: 'text', requerido: true },
@@ -68,10 +76,21 @@ const CONFIG_ACTIVIDAD = {
     ]
   },
   preparacion_evaluacion: {
-    maxHoras: 20,
     campos: [
       { id: 'ciclo_academico', label: 'Ciclo Académico', tipo: 'text', requerido: true },
       { id: 'cantidad_alumnos', label: 'Cantidad de Alumnos', tipo: 'number', requerido: true }
+    ]
+  },
+  autoevaluacion_acreditacion: {
+    campos: [
+      {
+        id: 'autoevaluacion_acreditacion_aprobada',
+        label: 'Proceso formalmente aprobado',
+        tipo: 'checkbox',
+        requerido: true
+      },
+      { id: 'numero_resolucion', label: 'Número de Resolución', tipo: 'text', requerido: true },
+      { id: 'detalle_proceso', label: 'Detalle del Proceso', tipo: 'textarea', requerido: true }
     ]
   }
 };
@@ -90,7 +109,13 @@ export default function DocenteCargaAcademicaPage() {
   const [actividadSeleccionada, setActividadSeleccionada] = useState<any>(null);
   const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null);
   const [mensajeExito, setMensajeExito] = useState<string>('');
+  const [mensajeErrorCarga, setMensajeErrorCarga] = useState<string>('');
   const documentRef = useRef<HTMLDivElement>(null);
+
+  const obtenerIdDocenteUsuario = (user: any) => {
+    const idDocente = Number(user?.id_docente);
+    return Number.isFinite(idDocente) && idDocente > 0 ? idDocente : null;
+  };
 
   const handleDescargarPDF = async () => {
     try {
@@ -151,8 +176,15 @@ export default function DocenteCargaAcademicaPage() {
       return;
     }
 
+    const idDocente = obtenerIdDocenteUsuario(user);
+    if (!idDocente) {
+      setMensajeErrorCarga('No se encontró un docente válido en tu sesión. Vuelve a iniciar sesión.');
+      setCargando(false);
+      return;
+    }
+
     setUsuario(user);
-    cargarDatos(user.id_docente);
+    cargarDatos(idDocente);
   }, [router]);
 
   // Ocultar mensaje de éxito después de 5 segundos
@@ -168,6 +200,7 @@ export default function DocenteCargaAcademicaPage() {
   const cargarDatos = async (idDocente: number) => {
     try {
       setCargando(true);
+      setMensajeErrorCarga('');
       const resPeriodos = await fetch('/api/periodos');
       const dataPeriodos = await resPeriodos.json();
 
@@ -188,6 +221,7 @@ export default function DocenteCargaAcademicaPage() {
 
   const cargarCargaYActividades = async (idDocente: number, idPeriodo: number) => {
     try {
+      setMensajeErrorCarga('');
       const [resCarga, resHorarios] = await Promise.all([
         fetch(`/api/carga-academica?docenteId=${idDocente}&periodoId=${idPeriodo}`),
         fetch(`/api/horarios?periodo=${idPeriodo}`)
@@ -195,6 +229,16 @@ export default function DocenteCargaAcademicaPage() {
 
       const dataCarga = await resCarga.json();
       const dataHorarios = await resHorarios.json();
+
+      if (!resCarga.ok || !dataCarga.exito) {
+        setMensajeErrorCarga(dataCarga?.mensaje || dataCarga?.error || 'No se pudo cargar tu carga académica.');
+        return;
+      }
+
+      if (!resHorarios.ok || !dataHorarios.exito) {
+        setMensajeErrorCarga(dataHorarios?.mensaje || dataHorarios?.error || 'No se pudo cargar tu horario.');
+        return;
+      }
       
       if (dataCarga.exito && dataCarga.datos.length > 0) {
         const cargaData = dataCarga.datos[0];
@@ -215,6 +259,7 @@ export default function DocenteCargaAcademicaPage() {
       }
     } catch (error) {
       console.error('Error cargando carga y actividades:', error);
+      setMensajeErrorCarga('Ocurrió un error al cargar tu carga académica.');
     }
   };
 
@@ -226,53 +271,31 @@ export default function DocenteCargaAcademicaPage() {
         body: JSON.stringify({ id_docente: idDocente, id_periodo: idPeriodo })
       });
       const data = await res.json();
-      if (data.exito) {
+      if (res.ok && data.exito) {
         setCarga(data.datos);
+        setMensajeErrorCarga('');
+      } else {
+        setMensajeErrorCarga(data?.mensaje || 'No se pudo crear tu carga académica.');
       }
     } catch (error) {
       console.error('Error creando carga académica:', error);
+      setMensajeErrorCarga('Ocurrió un error al crear tu carga académica.');
     }
   };
 
-  const handleCalcular = async () => {
-    if (!usuario) return;
-    try {
-      const response = await fetch('/api/carga-academica/calcular', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_docente: usuario.id_docente,
-          id_periodo: parseInt(periodoSeleccionado)
-        })
-      });
-      const data = await response.json();
-      if (data.exito) {
-        await cargarCargaYActividades(usuario.id_docente, parseInt(periodoSeleccionado));
-      }
-    } catch (error) {
-      console.error('Error calculando carga:', error);
-    }
-  };
+  const validacionEnvio = carga
+    ? validarEnvioCargaAcademica({
+        docente: carga.docente || usuario,
+        carga,
+        actividades
+      })
+    : null;
 
   const handleEnviar = async () => {
-    if (!carga) return;
+    if (!carga || !validacionEnvio) return;
     try {
-      // Validar que todas las actividades estén en categorías permitidas
-      const categoriasPermitidas = [
-        'tutoria_consejeria',
-        'investigacion',
-        'responsabilidad_social',
-        'gestion_gobierno',
-        'asesoria_tesis_jurado',
-        'perfeccionamiento'
-      ];
-
-      const tieneActividadInvalida = actividades.some(
-        (act: any) => !categoriasPermitidas.includes(act.tipo_actividad)
-      );
-
-      if (tieneActividadInvalida) {
-        alert('Error: Todas las actividades deben estar en una categoría permitida.');
+      if (!validacionEnvio.valido) {
+        alert(validacionEnvio.mensaje);
         return;
       }
 
@@ -282,13 +305,15 @@ export default function DocenteCargaAcademicaPage() {
         body: JSON.stringify({
           estado: 'enviado',
           fecha_envio: new Date(),
-          usuario_id: usuario.id
+          usuario_id: usuario.id || usuario.id_usuario
         })
       });
       const data = await response.json();
       if (data.exito) {
         setMensajeExito('Carga académica enviada exitosamente!');
         await cargarCargaYActividades(usuario.id_docente, parseInt(periodoSeleccionado));
+      } else {
+        alert(data.mensaje || 'No se pudo enviar la carga académica.');
       }
     } catch (error) {
       console.error('Error enviando carga:', error);
@@ -365,16 +390,23 @@ export default function DocenteCargaAcademicaPage() {
               </select>
             </div>
             <div className="flex gap-3">
-              <Boton variante="secondary" onClick={handleCalcular}>
-                🧮 Recalcular
-              </Boton>
               {carga && ['borrador', 'observado'].includes(carga.estado) && (
-                <Boton onClick={handleEnviar}>
+                <Boton onClick={handleEnviar} disabled={!validacionEnvio?.valido}>
                   📤 Enviar para Revisión
                 </Boton>
               )}
             </div>
           </div>
+          {mensajeErrorCarga && (
+            <div className="mt-4 rounded-lg border border-red-300 bg-red-50 p-3">
+              <p className="text-sm font-medium text-red-900">{mensajeErrorCarga}</p>
+            </div>
+          )}
+          {carga && ['borrador', 'observado'].includes(carga.estado) && validacionEnvio && !validacionEnvio.valido && (
+            <div className="mt-4 rounded-lg border border-orange-300 bg-orange-50 p-3">
+              <p className="text-sm font-medium text-orange-900">{validacionEnvio.mensaje}</p>
+            </div>
+          )}
         </div>
 
         {/* Resumen de Carga */}
@@ -540,6 +572,7 @@ export default function DocenteCargaAcademicaPage() {
           alCerrar={() => setModalAbierto(false)}
           actividad={actividadSeleccionada}
           idCargaAcademica={carga?.id_carga}
+          horasLectivas={carga?.horas_lectivas ?? 0}
           periodo={periodos.find((p) => p.id_periodo === parseInt(periodoSeleccionado))}
           periodos={periodos}
           docente={carga?.docente || usuario}
@@ -609,6 +642,7 @@ function ModalActividadNoLectiva({
   alCerrar,
   actividad,
   idCargaAcademica,
+  horasLectivas = 0,
   periodo,
   periodos,
   docente,
@@ -618,6 +652,7 @@ function ModalActividadNoLectiva({
   alCerrar: () => void;
   actividad: any;
   idCargaAcademica?: number;
+  horasLectivas?: number;
   periodo?: any;
   periodos?: any[];
   docente: any;
@@ -641,6 +676,7 @@ function ModalActividadNoLectiva({
   const [config, setConfig] = useState<any>(null);
   const [horas, setHoras] = useState<{ inicio: string; fin: string }[]>(utilidadesFecha.intervalosPorDefecto);
   const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
+  const [errorFormulario, setErrorFormulario] = useState('');
 
   const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
@@ -649,6 +685,16 @@ function ModalActividadNoLectiva({
       cargarDatos();
     }
   }, [abierto, periodo]);
+
+  const limpiarSeleccionHoraria = () => {
+    setCeldasSeleccionadas(new Set());
+    setFormData((actual: any) => ({
+      ...actual,
+      horarios_actividad: [],
+      dias_semana: [],
+      horas_semanales: 0
+    }));
+  };
 
   const cargarDatos = async () => {
     try {
@@ -690,16 +736,14 @@ function ModalActividadNoLectiva({
   };
 
   useEffect(() => {
-    console.log('ModalActividadNoLectiva useEffect - actividad:', actividad);
-    console.log('ModalActividadNoLectiva useEffect - horas:', horas);
-    
+    if (!abierto) return;
+
     if (actividad) {
       let horarios = actividad.horarios_actividad || [];
       let diasSemana = actividad.dias_semana || [];
       let datosAdicionales = actividad.datos_adicionales || {};
       let datosSustento = actividad.datos_sustento || {};
-      
-      // Parse all JSON fields if they're strings
+
       const parseJSON = (value: any) => {
         if (typeof value === 'string') {
           try {
@@ -711,30 +755,12 @@ function ModalActividadNoLectiva({
         }
         return value;
       };
-      
+
       horarios = parseJSON(horarios);
       diasSemana = parseJSON(diasSemana);
       datosAdicionales = parseJSON(datosAdicionales);
       datosSustento = parseJSON(datosSustento);
-      
-      console.log('ModalActividadNoLectiva - horarios after parse:', horarios);
-      
-      const celdas = new Set<string>();
-      if (Array.isArray(horarios)) {
-        horarios.forEach((h: any) => {
-          console.log('ModalActividadNoLectiva - processing horario:', h);
-          const idxDia = DIAS.indexOf(h.dia);
-          const idxHora = horas.findIndex((hor) => hor.inicio === h.inicio);
-          console.log('ModalActividadNoLectiva - idxDia:', idxDia, 'idxHora:', idxHora);
-          
-          if (idxDia !== -1 && idxHora !== -1) {
-            celdas.add(`${idxDia}-${idxHora}`);
-          }
-        });
-      }
-      console.log('ModalActividadNoLectiva - celdasSeleccionadas:', Array.from(celdas));
-      
-      setCeldasSeleccionadas(celdas);
+
       setFormData({
         tipo_actividad: actividad.tipo_actividad,
         nombre: actividad.nombre,
@@ -746,7 +772,6 @@ function ModalActividadNoLectiva({
         horarios_actividad: horarios
       });
     } else {
-      setCeldasSeleccionadas(new Set());
       setFormData({
         tipo_actividad: 'tutoria_consejeria',
         nombre: '',
@@ -755,15 +780,101 @@ function ModalActividadNoLectiva({
         dias_semana: [],
         datos_adicionales: {},
         datos_sustento: {
-          // Preseleccionamos el ciclo 1 por defecto
           ciclo_academico: '1',
           lugar: '',
-          aula_total: ''
+          aula_total: '',
+          autoevaluacion_acreditacion_aprobada: false
         },
         horarios_actividad: []
       });
     }
-  }, [actividad, horas]);
+
+    setCeldasSeleccionadas(new Set());
+    setErrorFormulario('');
+  }, [abierto, actividad]);
+
+  useEffect(() => {
+    if (!abierto || !actividad) return;
+
+    let horarios = actividad.horarios_actividad || [];
+    if (typeof horarios === 'string') {
+      try {
+        horarios = JSON.parse(horarios);
+      } catch (e) {
+        console.error('Error parsing horarios_actividad:', e);
+        horarios = [];
+      }
+    }
+
+    const celdas = new Set<string>();
+    if (Array.isArray(horarios)) {
+      horarios.forEach((h: any) => {
+        const idxDia = DIAS.indexOf(h.dia);
+        const idxHora = horas.findIndex((hor) => hor.inicio === h.inicio);
+
+        if (idxDia !== -1 && idxHora !== -1) {
+          celdas.add(`${idxDia}-${idxHora}`);
+        }
+      });
+    }
+
+    setCeldasSeleccionadas(celdas);
+  }, [abierto, actividad, horas]);
+
+  const actividadesPropias = actividadesNoLectivas.filter(
+    (item) => Number(item.id_carga) === Number(idCargaAcademica)
+  );
+  const autoevaluacionAprobada = tieneAprobacionAutoevaluacion(formData.datos_sustento, docente);
+  const { limites: limitesModalidadBase } = obtenerLimitesNoLectivosPorModalidad({
+    docente,
+    autoevaluacionAprobada: true,
+    horasLectivas
+  });
+  const { modalidad, limites } = obtenerLimitesNoLectivosPorModalidad({
+    docente,
+    autoevaluacionAprobada,
+    horasLectivas
+  });
+  const limiteBaseTipo = limitesModalidadBase[formData.tipo_actividad] ?? Number.POSITIVE_INFINITY;
+  const limiteActual = limites[formData.tipo_actividad] ?? Number.POSITIVE_INFINITY;
+  const horasAcumuladasTipo = calcularHorasAcumuladasPorTipo({
+    actividades: actividadesPropias,
+    tipoActividad: formData.tipo_actividad,
+    excluirIdActividad: actividad?.id_actividad || null
+  });
+  const horasDisponiblesTipo = Number.isFinite(limiteActual)
+    ? Math.max(limiteActual - horasAcumuladasTipo, 0)
+    : Number.POSITIVE_INFINITY;
+  const tipoBloqueadoPorModalidad = Number.isFinite(limiteBaseTipo) && limiteBaseTipo <= 0;
+  const autoevaluacionPendienteAprobacion =
+    formData.tipo_actividad === 'autoevaluacion_acreditacion' && !autoevaluacionAprobada;
+  const rubroDeshabilitado = tipoBloqueadoPorModalidad || autoevaluacionPendienteAprobacion;
+  const puedeEditarHorario = !rubroDeshabilitado && horasDisponiblesTipo > 0;
+  const puedeGuardarActividad = !tipoBloqueadoPorModalidad && !autoevaluacionPendienteAprobacion;
+  const mensajeRestriccionActual = tipoBloqueadoPorModalidad
+    ? `La modalidad ${modalidad} no permite registrar ${obtenerEtiquetaActividadNoLectiva(formData.tipo_actividad).toLowerCase()}.`
+    : autoevaluacionPendienteAprobacion
+    ? 'La autoevaluación y/o acreditación solo puede habilitarse cuando la escuela profesional tiene aprobación formal del proceso.'
+    : '';
+
+  useEffect(() => {
+    if (!abierto || !rubroDeshabilitado) return;
+    if (
+      formData.horas_semanales === 0 &&
+      (!Array.isArray(formData.horarios_actividad) || formData.horarios_actividad.length === 0) &&
+      celdasSeleccionadas.size === 0
+    ) {
+      return;
+    }
+    limpiarSeleccionHoraria();
+  }, [
+    abierto,
+    rubroDeshabilitado,
+    formData.tipo_actividad,
+    formData.horas_semanales,
+    formData.horarios_actividad,
+    celdasSeleccionadas.size
+  ]);
 
   const handleCeldaClick = (diaIndex: number, horaIndex: number) => {
     const key = `${diaIndex}-${horaIndex}`;
@@ -771,9 +882,16 @@ function ModalActividadNoLectiva({
     if (nuevas.has(key)) {
       nuevas.delete(key);
     } else {
+      if (!puedeEditarHorario) {
+        setErrorFormulario(
+          rubroDeshabilitado
+            ? mensajeRestriccionActual
+            : `Ya alcanzaste el límite permitido para ${obtenerEtiquetaActividadNoLectiva(formData.tipo_actividad).toLowerCase()}.`
+        );
+        return;
+      }
       nuevas.add(key);
     }
-    setCeldasSeleccionadas(nuevas);
 
     // Convertir celdas seleccionadas a horarios_actividad
     const horarios = Array.from(nuevas).map((k) => {
@@ -788,17 +906,46 @@ function ModalActividadNoLectiva({
 
     // Calculate horas_semanales based on config's duracion_bloque (in minutes)
     const duracionHoras = config ? config.duracion_bloque / 60 : 1.5;
+    const horasCalculadas = horarios.length * duracionHoras;
+    if (Number.isFinite(limiteActual) && horasAcumuladasTipo + horasCalculadas > limiteActual) {
+      const horasDisponibles = Math.max(limiteActual - horasAcumuladasTipo, 0);
+      setErrorFormulario(
+        `No puedes agregar este bloque porque superarías el límite de ${limiteActual} hora(s) en ${obtenerEtiquetaActividadNoLectiva(formData.tipo_actividad).toLowerCase()} para la modalidad ${modalidad}. Tienes ${horasAcumuladasTipo} hora(s) registradas y solo quedan ${horasDisponibles} hora(s) disponibles.`
+      );
+      return;
+    }
+
+    setCeldasSeleccionadas(nuevas);
+    setErrorFormulario('');
     setFormData({
       ...formData,
       horarios_actividad: horarios,
+      dias_semana: Array.from(new Set(horarios.map((horario) => horario.dia))),
       // Calculamos horas semanales automáticamente
-      horas_semanales: horarios.length * duracionHoras
+      horas_semanales: horasCalculadas
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!idCargaAcademica) return;
+
+    const validacion = validarAsignacionActividadNoLectiva({
+      docente,
+      actividad: {
+        id_actividad: actividad?.id_actividad,
+        tipo_actividad: formData.tipo_actividad,
+        horas_semanales: formData.horas_semanales,
+        datos_sustento: formData.datos_sustento
+      },
+      actividadesExistentes: actividadesPropias,
+      horasLectivas
+    });
+
+    if (!validacion.valido) {
+      setErrorFormulario(validacion.mensaje);
+      return;
+    }
 
     try {
       const url = actividad
@@ -825,9 +972,12 @@ function ModalActividadNoLectiva({
       const data = await response.json();
       if (data.exito) {
         onActualizar(data.mensaje || (actividad ? 'Actividad actualizada exitosamente!' : 'Actividad creada exitosamente!'));
+      } else {
+        setErrorFormulario(data.mensaje || 'No se pudo guardar la actividad.');
       }
     } catch (error) {
       console.error('Error guardando actividad:', error);
+      setErrorFormulario('Ocurrió un error al guardar la actividad no lectiva.');
     }
   };
 
@@ -946,25 +1096,63 @@ function ModalActividadNoLectiva({
             <label className="block text-sm font-medium mb-2">Tipo de Actividad</label>
             <select
               value={formData.tipo_actividad}
-              onChange={(e) =>
+              onChange={(e) => {
+                const tipoSeleccionado = e.target.value;
+                const datosSustentoActualizados = {
+                  ...formData.datos_sustento,
+                  lugar: formData.datos_sustento?.lugar || '',
+                  aula_total: formData.datos_sustento?.aula_total || '',
+                  autoevaluacion_acreditacion_aprobada:
+                    tipoSeleccionado === 'autoevaluacion_acreditacion'
+                      ? formData.datos_sustento?.autoevaluacion_acreditacion_aprobada === true
+                      : false
+                };
+
+                if (tipoSeleccionado === 'tutoria_consejeria' && !datosSustentoActualizados.ciclo_academico) {
+                  datosSustentoActualizados.ciclo_academico = '1';
+                }
+
+                setErrorFormulario('');
+                setCeldasSeleccionadas(new Set());
                 setFormData({
                   ...formData,
-                  tipo_actividad: e.target.value,
-                  datos_sustento: {
-                    ...formData.datos_sustento,
-                    lugar: formData.datos_sustento?.lugar || '',
-                    aula_total: formData.datos_sustento?.aula_total || ''
-                  }
-                })
-              }
+                  tipo_actividad: tipoSeleccionado,
+                  horas_semanales: 0,
+                  dias_semana: [],
+                  horarios_actividad: [],
+                  datos_sustento: datosSustentoActualizados
+                });
+              }}
               className="w-full border rounded px-3 py-2"
             >
               {TIPOS_ACTIVIDAD.map((tipo) => (
-                <option key={tipo.valor} value={tipo.valor}>
+                <option
+                  key={tipo.valor}
+                  value={tipo.valor}
+                  disabled={Number.isFinite(limitesModalidadBase[tipo.valor]) && (limitesModalidadBase[tipo.valor] ?? 0) <= 0}
+                >
                   {tipo.label}
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+            <p>
+              <strong>Modalidad:</strong> {modalidad}
+            </p>
+            <p>
+              <strong>Límite permitido:</strong>{' '}
+              {Number.isFinite(limiteActual) ? `${limiteActual} hora(s)` : 'Sin límite específico'}
+            </p>
+            <p>
+              <strong>Horas registradas en el rubro:</strong> {horasAcumuladasTipo} hora(s)
+            </p>
+            <p>
+              <strong>Horas disponibles:</strong>{' '}
+              {Number.isFinite(horasDisponiblesTipo) ? `${horasDisponiblesTipo} hora(s)` : 'Sin límite específico'}
+            </p>
+            {mensajeRestriccionActual && <p className="mt-2 font-medium text-red-700">{mensajeRestriccionActual}</p>}
           </div>
 
           {/* Campos específicos del tipo de actividad */}
@@ -987,6 +1175,7 @@ function ModalActividadNoLectiva({
                     })
                   }
                   className="w-full border rounded px-3 py-2"
+                  disabled={tipoBloqueadoPorModalidad}
                   required={campo.requerido}
                 >
                   <option value="">Selecciona un ciclo</option>
@@ -996,6 +1185,28 @@ function ModalActividadNoLectiva({
                     </option>
                   ))}
                 </select>
+              ) : campo.tipo === 'checkbox' ? (
+                <label className="flex items-center gap-3 rounded border px-3 py-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.datos_sustento[campo.id] === true}
+                    onChange={(e) => {
+                      setErrorFormulario('');
+                      setFormData({
+                        ...formData,
+                        datos_sustento: {
+                          ...formData.datos_sustento,
+                          [campo.id]: e.target.checked
+                        }
+                      });
+                    }}
+                    disabled={tipoBloqueadoPorModalidad}
+                    required={campo.requerido}
+                  />
+                  <span className="text-sm text-gray-700">
+                    Confirmo que la escuela profesional cuenta con aprobación formal del proceso.
+                  </span>
+                </label>
               ) : campo.tipo === 'textarea' ? (
                 <textarea
                   value={formData.datos_sustento[campo.id] || ''}
@@ -1009,6 +1220,7 @@ function ModalActividadNoLectiva({
                     })
                   }
                   className="w-full border rounded px-3 py-2"
+                  disabled={tipoBloqueadoPorModalidad}
                   rows={3}
                   required={campo.requerido}
                 />
@@ -1026,6 +1238,7 @@ function ModalActividadNoLectiva({
                     })
                   }
                   className="w-full border rounded px-3 py-2"
+                  disabled={tipoBloqueadoPorModalidad}
                   required={campo.requerido}
                 />
               )}
@@ -1040,6 +1253,7 @@ function ModalActividadNoLectiva({
               value={formData.nombre}
               onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
               className="w-full border rounded px-3 py-2"
+              disabled={tipoBloqueadoPorModalidad}
               required
             />
           </div>
@@ -1055,6 +1269,7 @@ function ModalActividadNoLectiva({
                   <SearchableSelect
                     placeholder="Selecciona un ambiente"
                     value={formData.datos_sustento?.id_ambiente || ''}
+                    disabled={tipoBloqueadoPorModalidad}
                     onChange={(valor) =>
                       setFormData({
                         ...formData,
@@ -1078,8 +1293,9 @@ function ModalActividadNoLectiva({
                 </div>
                 <button
                   type="button"
+                  disabled={tipoBloqueadoPorModalidad}
                   onClick={() => setConsultaTipo(ambienteSeleccionado?.tipo === 'laboratorio' ? 'laboratorio' : 'aula')}
-                  className="bg-blue-100 text-blue-700 px-3 py-2 rounded hover:bg-blue-200 border border-blue-200 transition-colors text-sm font-medium"
+                  className="bg-blue-100 text-blue-700 px-3 py-2 rounded hover:bg-blue-200 border border-blue-200 transition-colors text-sm font-medium disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
                   title="Consultar disponibilidad"
                 >
                   📅
@@ -1123,12 +1339,14 @@ function ModalActividadNoLectiva({
                         <td
                           key={key}
                           onClick={() => !esOcupado && handleCeldaClick(diaIndex, horaIndex)}
-                          className={`border p-1 cursor-pointer transition-all h-16 text-center ${
+                          className={`border p-1 transition-all h-16 text-center ${
                             esOcupado
                               ? 'bg-red-100 cursor-not-allowed'
+                              : rubroDeshabilitado
+                              ? 'bg-gray-100 cursor-not-allowed text-gray-400'
                               : esSeleccionada
-                              ? 'bg-emerald-100 border-emerald-400'
-                              : 'bg-white hover:bg-emerald-50'
+                              ? 'bg-emerald-100 border-emerald-400 cursor-pointer'
+                              : 'bg-white hover:bg-emerald-50 cursor-pointer'
                           }`}
                         >
                           {esOcupado ? (
@@ -1153,6 +1371,9 @@ function ModalActividadNoLectiva({
               Horas semanales calculadas automáticamente:{' '}
               <span className="font-bold">{formData.horas_semanales}</span> horas
             </p>
+            {errorFormulario && (
+              <p className="mt-2 text-sm font-medium text-red-600">{errorFormulario}</p>
+            )}
           </div>
 
           {/* Descripción */}
@@ -1162,6 +1383,7 @@ function ModalActividadNoLectiva({
               value={formData.descripcion}
               onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
               className="w-full border rounded px-3 py-2"
+              disabled={tipoBloqueadoPorModalidad}
               rows={3}
             />
           </div>
@@ -1187,7 +1409,7 @@ function ModalActividadNoLectiva({
             >
               Cancelar
             </button>
-            <Boton type="submit">
+            <Boton type="submit" disabled={!puedeGuardarActividad}>
               {actividad ? 'Guardar Cambios' : 'Crear Actividad'}
             </Boton>
           </div>

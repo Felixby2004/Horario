@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { obtenerHorasMetaDocente } from '@/lib/cargaAcademica';
 
 export const dynamic = 'force-dynamic';
+
+function parsearEnteroSeguro(valor: unknown) {
+  const numero = Number.parseInt(String(valor), 10);
+  return Number.isFinite(numero) ? numero : null;
+}
 
 async function calcularHorasCarga(id_docente: number, carga: any) {
   const docenteCursos = await prisma.docenteCurso.findMany({
@@ -33,10 +39,26 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const docenteId = searchParams.get('docenteId');
     const periodoId = searchParams.get('periodoId');
+    const docenteIdNumero = docenteId ? parsearEnteroSeguro(docenteId) : null;
+    const periodoIdNumero = periodoId ? parsearEnteroSeguro(periodoId) : null;
+
+    if (docenteId && docenteIdNumero === null) {
+      return NextResponse.json(
+        { exito: false, mensaje: 'El id del docente no es válido' },
+        { status: 400 }
+      );
+    }
+
+    if (periodoId && periodoIdNumero === null) {
+      return NextResponse.json(
+        { exito: false, mensaje: 'El id del período no es válido' },
+        { status: 400 }
+      );
+    }
 
     const where: any = {};
-    if (docenteId) where.id_docente = parseInt(docenteId);
-    if (periodoId) where.id_periodo = parseInt(periodoId);
+    if (docenteIdNumero !== null) where.id_docente = docenteIdNumero;
+    if (periodoIdNumero !== null) where.id_periodo = periodoIdNumero;
 
     let cargas = await prisma.cargaAcademica.findMany({
       where,
@@ -78,7 +100,8 @@ export async function GET(request: NextRequest) {
           horas_lectivas: horas.horasLectivas,
           horas_no_lectivas: horas.horasNoLectivas,
           horas_preparacion: horas.horasPreparacion,
-          horas_totales: horas.horasTotales
+          horas_totales: horas.horasTotales,
+          horas_meta: obtenerHorasMetaDocente(carga.docente, carga)
         }
       });
     }
@@ -127,23 +150,78 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const datos = await request.json();
+    const idDocente = parsearEnteroSeguro(datos.id_docente);
+    const idPeriodo = parsearEnteroSeguro(datos.id_periodo);
 
-    if (!datos.id_docente || !datos.id_periodo) {
+    if (idDocente === null || idPeriodo === null) {
       return NextResponse.json(
         { 
           exito: false, 
-          mensaje: 'Faltan campos requeridos: id_docente, id_periodo' 
+          mensaje: 'Los campos id_docente e id_periodo deben ser válidos' 
         },
         { status: 400 }
       );
     }
 
+    const docente = await prisma.docente.findUnique({
+      where: { id_docente: idDocente },
+      select: {
+        id_docente: true,
+        horas_maximas_semanales: true
+      }
+    });
+
+    if (!docente) {
+      return NextResponse.json(
+        {
+          exito: false,
+          mensaje: 'Docente no encontrado'
+        },
+        { status: 404 }
+      );
+    }
+
+    let cargaExistente = await prisma.cargaAcademica.findFirst({
+      where: {
+        id_docente: idDocente,
+        id_periodo: idPeriodo
+      },
+      include: {
+        actividades_no_lectivas: true
+      },
+      orderBy: {
+        fecha_creacion: 'desc'
+      }
+    });
+
+    if (cargaExistente) {
+      const horasExistentes = await calcularHorasCarga(cargaExistente.id_docente, cargaExistente);
+      cargaExistente = await prisma.cargaAcademica.update({
+        where: { id_carga: cargaExistente.id_carga },
+        data: {
+          horas_lectivas: horasExistentes.horasLectivas,
+          horas_no_lectivas: horasExistentes.horasNoLectivas,
+          horas_preparacion: horasExistentes.horasPreparacion,
+          horas_totales: horasExistentes.horasTotales,
+          horas_meta: docente.horas_maximas_semanales || cargaExistente.horas_meta || 40
+        },
+        include: { actividades_no_lectivas: true }
+      });
+
+      return NextResponse.json({
+        exito: true,
+        datos: cargaExistente,
+        mensaje: 'La carga académica ya existía y fue actualizada.'
+      });
+    }
+
     let carga = await prisma.cargaAcademica.create({
       data: {
-        id_docente: parseInt(datos.id_docente),
-        id_periodo: parseInt(datos.id_periodo),
+        id_docente: idDocente,
+        id_periodo: idPeriodo,
         estado: datos.estado || 'borrador',
-        observaciones: datos.observaciones || null
+        observaciones: datos.observaciones || null,
+        horas_meta: docente.horas_maximas_semanales || 40
       },
       include: { actividades_no_lectivas: true }
     });
@@ -156,7 +234,8 @@ export async function POST(request: NextRequest) {
         horas_lectivas: horas.horasLectivas,
         horas_no_lectivas: horas.horasNoLectivas,
         horas_preparacion: horas.horasPreparacion,
-        horas_totales: horas.horasTotales
+        horas_totales: horas.horasTotales,
+        horas_meta: docente.horas_maximas_semanales || carga.horas_meta || 40
       },
       include: { actividades_no_lectivas: true }
     });

@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
-import { useAlertasTemporales, Alerta } from '@/hooks/useAlertasTemporales';
+import { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
+import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
 import { ContenedorAlertas } from '@/components/ui/ContenedorAlertas';
 
 interface AlertaContextType {

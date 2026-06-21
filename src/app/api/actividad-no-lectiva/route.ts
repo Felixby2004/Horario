@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { validarAsignacionActividadNoLectiva } from '@/lib/cargaNoLectiva';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,9 +89,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const idCarga = parseInt(datos.id_carga);
+    const carga = await prisma.cargaAcademica.findUnique({
+      where: { id_carga: idCarga },
+      include: {
+        docente: {
+          include: {
+            departamento: true
+          }
+        },
+        actividades_no_lectivas: true
+      }
+    });
+
+    if (!carga) {
+      return NextResponse.json(
+        { exito: false, mensaje: 'La carga académica no existe.' },
+        { status: 404 }
+      );
+    }
+
+    const validacion = validarAsignacionActividadNoLectiva({
+      docente: carga.docente,
+      actividad: {
+        tipo_actividad: datos.tipo_actividad,
+        horas_semanales: datos.horas_semanales,
+        datos_sustento: datos.datos_sustento || null
+      },
+      actividadesExistentes: carga.actividades_no_lectivas || [],
+      horasLectivas: carga.horas_lectivas
+    });
+
+    if (!validacion.valido) {
+      return NextResponse.json(
+        {
+          exito: false,
+          mensaje: validacion.mensaje,
+          limite: validacion.limite,
+          horas_acumuladas: validacion.horasAcumuladas,
+          horas_disponibles: validacion.horasDisponibles,
+          modalidad: validacion.modalidad
+        },
+        { status: 400 }
+      );
+    }
+
     const actividad = await prisma.actividadNoLectiva.create({
       data: {
-        id_carga: parseInt(datos.id_carga),
+        id_carga: idCarga,
         tipo_actividad: datos.tipo_actividad,
         nombre: datos.nombre,
         descripcion: datos.descripcion || null,

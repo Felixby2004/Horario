@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { obtenerHorasMetaDocente } from '@/lib/cargaAcademica';
 
 export const dynamic = 'force-dynamic';
 
@@ -91,7 +92,8 @@ export async function POST(request: NextRequest) {
         horas_lectivas: horas.horasLectivas,
         horas_preparacion: horas.horasPreparacion,
         horas_no_lectivas: horas.horasNoLectivas,
-        horas_totales: horas.horasTotales
+        horas_totales: horas.horasTotales,
+        horas_meta: obtenerHorasMetaDocente(docente, carga)
       },
       include: {
         docente: true,
