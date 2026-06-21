@@ -125,8 +125,8 @@ type FormularioNuevoPlan = {
 };
 
 const tabs = [
-  { id: 'cursos', name: 'Cursos por Ciclo' },
-  { id: 'malla', name: 'Malla Curricular' },
+  { id: 'cursos', name: 'Cursos por ciclo' },
+  { id: 'malla', name: 'Malla curricular' },
   { id: 'gestion', name: 'Gestión del plan' }
 ];
 
@@ -541,7 +541,7 @@ export default function PlanEstudiosPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Plan de Estudios</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Plan de estudios</h1>
           <p className="text-gray-600 mt-2">
             Gestiona la información general, los cursos, las versiones y la exportación del plan de estudios.
           </p>

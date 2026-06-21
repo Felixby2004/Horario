@@ -9,6 +9,8 @@ import { SearchableSelect } from '@/components/ui/SearchableSelect';
 import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
 import { obtenerCodigoTipoCurso, obtenerEtiquetaCarreraCurso, TIPOS_CURSO_OPTIONS } from '@/lib/cursos';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface Curso {
   id_curso: number;
@@ -228,15 +230,19 @@ export default function CursosPage() {
         <div className="flex gap-2">
           <button
             onClick={() => handleAbrirModalEditar(fila)}
-            className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+            className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 flex items-center"
+            title="Editar"
           >
-            ✏️ Editar
+            <FontAwesomeIcon icon={faEdit} className="w-4 h-4 mr-2" />
+            Editar
           </button>
           <button
             onClick={() => handleEliminarCurso(fila)}
-            className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+            className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 flex items-center"
+            title="Eliminar"
           >
-            🗑️ Eliminar
+            <FontAwesomeIcon icon={faTrash} className="w-4 h-4 mr-2" />
+            Eliminar
           </button>
         </div>
       )

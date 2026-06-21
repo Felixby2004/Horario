@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faBan } from '@fortawesome/free-solid-svg-icons';
 
 export default function GruposPage() {
   const router = useRouter();
@@ -98,11 +100,7 @@ export default function GruposPage() {
       renderizar: (periodo: any) => getStringValue(periodo?.nombre || periodo)
     },
     { campo: 'capacidad_maxima' as const, encabezado: 'Capacidad' },
-    { 
-      campo: 'cantidad_matriculados' as const, 
-      encabezado: 'Matriculados',
-      renderizar: (value: any) => value || 0
-    },
+    
     { 
       campo: 'activo' as const, 
       encabezado: 'Estado',
@@ -122,16 +120,20 @@ export default function GruposPage() {
           <Boton
             onClick={() => router.push(`/dashboard/grupos/${g.id_grupo}`)}
             tamaño="sm"
+            className="flex items-center"
           >
-            ✏️ Editar
+            <FontAwesomeIcon icon={faEdit} className="w-4 h-4 mr-2" />
+            Editar
           </Boton>
           {g.activo && (
             <Boton
               onClick={() => desactivar(g.id_grupo, g.codigo_grupo)}
               variante="error"
               tamaño="sm"
+              className="flex items-center"
             >
-              🔴 Desactivar
+              <FontAwesomeIcon icon={faBan} className="w-4 h-4 mr-2" />
+              Desactivar
             </Boton>
           )}
         </div>

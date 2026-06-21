@@ -5,6 +5,8 @@ import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { Boton } from '@/components/ui/Boton';
 import { ModalDocente } from '@/components/dashboard/ModalDocente';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEdit, faBook, faUsers } from '@fortawesome/free-solid-svg-icons';
 import {
   obtenerEtiquetaCategoria,
   obtenerEtiquetaModalidad
@@ -91,23 +93,28 @@ export default function DocentesPage() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => handleAbrirModal(fila.id_docente)}
-            className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+            className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 flex items-center"
+            title="Ver"
           >
-            👁️ Ver
+            <FontAwesomeIcon icon={faEye} className="w-4 h-4 mr-2" />
+            Ver
           </button>
           <Link href={`/dashboard/docentes/${fila.id_docente}/editar`}>
-            <button className="px-3 py-1 bg-amber-600 text-white text-sm rounded hover:bg-amber-700">
-              ✏️ Editar
+            <button className="px-3 py-1 bg-amber-600 text-white text-sm rounded hover:bg-amber-700 flex items-center" title="Editar">
+              <FontAwesomeIcon icon={faEdit} className="w-4 h-4 mr-2" />
+              Editar
             </button>
           </Link>
           <Link href={`/dashboard/docentes/asignar-cursos-nuevo?id_docente=${fila.id_docente}`}>
-            <button className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700">
-              📚 Cursos
+            <button className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 flex items-center" title="Cursos">
+              <FontAwesomeIcon icon={faBook} className="w-4 h-4 mr-2" />
+              Cursos
             </button>
           </Link>
           <Link href={`/dashboard/docentes/asignar-grupos?id_docente=${fila.id_docente}`}>
-            <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
-              👥 Grupos
+            <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 flex items-center" title="Grupos">
+              <FontAwesomeIcon icon={faUsers} className="w-4 h-4 mr-2" />
+              Grupos
             </button>
           </Link>
         </div>

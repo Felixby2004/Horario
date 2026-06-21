@@ -5,8 +5,14 @@ import { Boton } from '@/components/ui/Boton';
 import { Selector } from '@/components/ui/Selector';
 import { Alerta } from '@/components/ui/Alerta';
 
+interface Periodo {
+  id_periodo: number;
+  nombre: string;
+  activo?: boolean;
+}
+
 export default function ValidarHorariosPage() {
-  const [periodos, setPeriodos] = useState([]);
+  const [periodos, setPeriodos] = useState<Periodo[]>([]);
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState('');
   const [validando, setValidando] = useState(false);
   const [resultados, setResultados] = useState<any>(null);

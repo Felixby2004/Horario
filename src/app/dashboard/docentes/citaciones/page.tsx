@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 
 interface Citacion {
@@ -270,7 +272,7 @@ export default function GestionCitacionesPage() {
                           className="text-red-500 hover:text-red-700 p-1"
                           title="Eliminar citación"
                         >
-                          🗑️
+                          <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
                         </button>
                       </div>
                     </td>

@@ -61,13 +61,13 @@ describe('GeneradorPDF reportes con coincidencias horarias', () => {
 
     const resumenCursos = GeneradorPDF.obtenerResumenCursosReporte(horarios);
     const html = GeneradorPDF.generarHTMLReporteCiclo(periodo, 7, horarios, resumenCursos, {
-      hora_inicio: '09:00',
-      hora_fin: '14:00',
-      duracion_bloque: 60
+      hora_inicio: '07:00',
+      hora_fin: '22:00',
+      duracion_bloque: 90
     });
 
     expect(html).toContain('Ingeniería de software');
     expect(html).toContain('Redes y comunicaciones');
-    expect(html).toContain('border-top: 1px dashed #666');
+    expect(html).toContain('border: 1px solid #999');
   });
 });

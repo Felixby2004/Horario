@@ -92,7 +92,14 @@ export default function VentanasPage() {
     return Number(docente?.antiguedad ?? 0);
   };
 
-  const obtenerDocentesFiltrados = (categoria: string, tipo: string, horaInicio: string, intervalo: number, esEscalonado: boolean) => {
+  const obtenerDocentesFiltrados = (
+    categoria: string,
+    tipo: string,
+    horaInicio: string,
+    intervalo: number,
+    esEscalonado: boolean,
+    turnoOrden: number = 1
+  ) => {
     const catNorm = normalizarValor(categoria);
     const tipoNorm = normalizarValor(tipo);
 
@@ -115,9 +122,10 @@ export default function VentanasPage() {
       });
 
     if (!esEscalonado) {
+      const docenteSeleccionado = filtrados[turnoOrden - 1];
       return {
-        cantidad: filtrados.length,
-        nombres: filtrados.map(d => `${d.nombres} ${d.apellidos}`).join(', '),
+        cantidad: docenteSeleccionado ? 1 : 0,
+        nombres: docenteSeleccionado ? `${docenteSeleccionado.apellidos} ${docenteSeleccionado.nombres}` : '',
         minutosTotales: 0
       };
     }
@@ -200,23 +208,31 @@ export default function VentanasPage() {
       const dataVentanas = await resVentanas.json();
 
       if (dataVentanas.exito && dataVentanas.datos.length > 0) {
-        const ventanasPorFecha = dataVentanas.datos.reduce((acc: any, v: any) => {
+        const ventanasPorFecha: Record<string, any[]> = dataVentanas.datos.reduce((acc, v: any) => {
           if (!acc[v.fecha]) {
             acc[v.fecha] = [];
           }
           acc[v.fecha].push(v);
           return acc;
-        }, {});
+        }, {} as Record<string, any[]>);
 
-        const diasCargados = Object.entries(ventanasPorFecha).map(([fecha, ventanas]: [string, any[]], idx) => ({
+        const diasCargados: Dia[] = Object.entries(ventanasPorFecha).map(([fecha, ventanas], idx) => ({
           id: idx + 1,
           fecha: fecha.split('T')[0],
-          turnos: ventanas.sort((a, b) => a.orden_prioridad - b.orden_prioridad).map((v, i) => {
+          turnos: ventanas.sort((a, b) => a.orden_prioridad - b.orden_prioridad).map((v: any, i: number) => {
             const intMin = v.intervalo_minutos ?? 0;
             const isEscalonado = intMin > 0;
-            const { cantidad, nombres } = obtenerDocentesFiltrados(v.categoria, v.modalidad, v.hora_inicio, isEscalonado ? intMin : 15, isEscalonado);
+            const { cantidad, nombres } = obtenerDocentesFiltrados(
+              v.categoria,
+              v.modalidad,
+              v.hora_inicio,
+              isEscalonado ? intMin : 15,
+              isEscalonado,
+              i + 1
+            );
             
-            const nombresFinales = v.docentes_nombres || nombres;
+            const nombresFinales = isEscalonado ? (v.docentes_nombres || nombres) : nombres;
+            const cantidadFinal = isEscalonado ? (v.cantidad_docentes || cantidad) : cantidad;
 
             return {
               id: v.id_ventana,
@@ -227,7 +243,7 @@ export default function VentanasPage() {
               hasta: v.hora_fin,
               escalonado: isEscalonado,
               intervalo_minutos: isEscalonado ? intMin : 15,
-              cantidad_docentes: v.cantidad_docentes || cantidad,
+              cantidad_docentes: cantidadFinal,
               cantidad_atendidos: v.cantidad_atendidos || 0,
               docentes_nombres: nombresFinales
             };
@@ -243,7 +259,7 @@ export default function VentanasPage() {
         // Crear un día inicial con un único turno por defecto
         const categoriaDefecto = 'principal';
         const tipoDefecto = 'nombrado';
-        const { cantidad, nombres } = obtenerDocentesFiltrados(categoriaDefecto, tipoDefecto, '08:00', 15, false);
+        const { cantidad, nombres } = obtenerDocentesFiltrados(categoriaDefecto, tipoDefecto, '08:00', 15, false, 1);
 
         setDias([{
           id: 1,
@@ -258,6 +274,7 @@ export default function VentanasPage() {
             escalonado: false,
             intervalo_minutos: 15,
             cantidad_docentes: cantidad,
+            cantidad_atendidos: 0,
             docentes_nombres: nombres
           }]
         }]);
@@ -335,7 +352,7 @@ export default function VentanasPage() {
         const categoriaDefecto = 'principal';
         const tipoDefecto = 'nombrado';
         const isEscalonadoDefecto = false;
-        const { cantidad, nombres } = obtenerDocentesFiltrados(categoriaDefecto, tipoDefecto, desde, 15, isEscalonadoDefecto);
+        const { cantidad, nombres } = obtenerDocentesFiltrados(categoriaDefecto, tipoDefecto, desde, 15, isEscalonadoDefecto, nuevoOrden);
 
         return {
           ...dia,
@@ -372,7 +389,8 @@ export default function VentanasPage() {
                 campo === 'tipo' ? valor : turno.tipo,
                 campo === 'desde' ? valor : turno.desde,
                 intervaloActual,
-                esEscalonadoActual
+                esEscalonadoActual,
+                turno.orden
               );
 
               const nuevoTurno = { 

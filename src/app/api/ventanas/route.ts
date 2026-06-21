@@ -63,8 +63,12 @@ export async function GET(request: NextRequest) {
 
       return {
         ...v,
-        cantidad_docentes: (v.cantidad_docentes && v.cantidad_docentes > 0) ? v.cantidad_docentes : docentesFiltrados.length,
-        docentes_nombres: docentesDesdeCitacion || docentesFiltrados.map(d => `${d.nombres} ${d.apellidos}`).join(', ')
+        cantidad_docentes: (v.cantidad_docentes && v.cantidad_docentes > 0)
+          ? v.cantidad_docentes
+          : (v.intervalo_minutos && v.intervalo_minutos > 0)
+            ? docentesFiltrados.length
+            : (docentesFiltrados.length > 0 ? 1 : 0),
+        docentes_nombres: docentesDesdeCitacion || ''
       };
     });
 

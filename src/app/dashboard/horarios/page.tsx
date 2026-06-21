@@ -827,7 +827,7 @@ export default function HorariosPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">
-              Período Académico *
+              Período académico *
             </label>
             <select
               className="w-full border rounded px-3 py-2"
@@ -993,7 +993,7 @@ export default function HorariosPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              Tipo de Clase *
+              Tipo de clase *
             </label>
             <select
               className="w-full border rounded px-3 py-2"

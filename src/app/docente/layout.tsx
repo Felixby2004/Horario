@@ -3,20 +3,43 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHome,
+  faUserCircle,
+  faCalendarCheck,
+  faCalendarPlus,
+  faCalendarDays,
+  faClipboardList,
+  faBookOpen,
+  faBook,
+  faChartBar,
+  faFileLines,
+} from '@fortawesome/free-solid-svg-icons';
 import { ChatBot } from '@/components/chatbot/ChatBot';
 import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
-const menuItems = [
-  { texto: 'Inicio', icono: '🏠', href: '/docente' },
-  { texto: 'Mi Perfil', icono: '👤', href: '/docente/perfil' },
-  { texto: 'Mi Disponibilidad', icono: '⏱️', href: '/docente/disponibilidad' },
-  { texto: 'Mis Citas', icono: '🧾', href: '/docente/citaciones' },
-  { texto: 'Seleccionar Horarios', icono: '📅', href: '/docente/seleccionar-horarios' },
-  { texto: 'Mis Horarios', icono: '📋', href: '/docente/mis-horarios' },
-  { texto: 'Mis Cursos y Grupos', icono: '📚', href: '/docente/mis-cursos' },
-  { texto: 'Mi Carga Académica', icono: '📊', href: '/docente/carga-academica' },
-  { texto: 'Plan de Estudios', icono: '📖', href: '/docente/plan-estudios' },
-  { texto: 'Reportes', icono: '📄', href: '/docente/reportes' },
+const menuSections = [
+  {
+    title: 'Principal',
+    items: [
+      { texto: 'Inicio', icon: faHome, href: '/docente' },
+      { texto: 'Mi Perfil', icon: faUserCircle, href: '/docente/perfil' },
+      { texto: 'Mis Cursos y Grupos', icon: faBookOpen, href: '/docente/mis-cursos' },
+      { texto: 'Mi Carga Académica', icon: faChartBar, href: '/docente/carga-academica' },
+      { texto: 'Plan de Estudios', icon: faBook, href: '/docente/plan-estudios' },
+    ],
+  },
+  {
+    title: 'Horarios',
+    items: [
+      { texto: 'Mi Disponibilidad', icon: faCalendarCheck, href: '/docente/disponibilidad' },
+      { texto: 'Seleccionar Horarios', icon: faCalendarPlus, href: '/docente/seleccionar-horarios' },
+      { texto: 'Mis Horarios', icon: faClipboardList, href: '/docente/mis-horarios' },
+      { texto: 'Mis Citas', icon: faCalendarDays, href: '/docente/citaciones' },
+      { texto: 'Reportes', icon: faFileLines, href: '/docente/reportes' },
+    ],
+  },
 ];
 
 function MenuDocente() {
@@ -188,7 +211,10 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
     );
   }
 
-  const currentTitle = menuItems.find((item) => pathname === item.href || pathname?.startsWith(item.href + '/'))?.texto || 'Docente';
+  const currentTitle = menuSections
+    .flatMap((section) => section.items)
+    .find((item) => pathname === item.href || pathname?.startsWith(item.href + '/'))
+    ?.texto || 'Docente';
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -220,24 +246,33 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
           </div>
           
           <nav className="flex-1 overflow-y-auto py-2">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
-                    isActive
-                      ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
-                      : 'hover:bg-primary-800/70 text-gray-300'
-                  } ${collapsed ? 'justify-center' : ''}`}
-                  title={collapsed ? item.texto : ''}
-                >
-                  <span className="text-xl flex-shrink-0">{item.icono}</span>
-                  {!collapsed && <span className="truncate font-medium">{item.texto}</span>}
-                </Link>
-              );
-            })}
+            {menuSections.map((section) => (
+              <div key={section.title} className="mb-4">
+                {!collapsed && (
+                  <div className="px-5 py-2 text-xs uppercase tracking-wide text-primary-300">
+                    {section.title}
+                  </div>
+                )}
+                {section.items.map((item) => {
+                  const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
+                          : 'hover:bg-primary-800/70 text-gray-300'
+                      } ${collapsed ? 'justify-center' : ''}`}
+                      title={collapsed ? item.texto : ''}
+                    >
+                      <FontAwesomeIcon icon={item.icon} className="w-5 h-5" />
+                      {!collapsed && <span className="truncate font-medium">{item.texto}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
           </nav>
         </aside>
         

@@ -697,9 +697,12 @@ export default function VentanasPage() {
                             <td className="border-2 border-gray-400 px-2 py-1 text-center">
                               <button
                                 onClick={() => eliminarTurno(dia.id, turno.id)}
-                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-xs font-semibold border border-red-700"
+                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-xs font-semibold border border-red-700 flex items-center justify-center"
+                                title="Eliminar turno"
                               >
-                                🗑️
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M9 3v1H4v2h16V4h-5V3H9zm1 6v8h2V9H10zm4 0v8h2V9h-2z" />
+                                </svg>
                               </button>
                             </td>
                           </tr>

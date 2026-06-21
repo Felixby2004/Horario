@@ -229,7 +229,7 @@ export default function DisponibilidadAdminPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">⏱️ Fase de Disponibilidad</h1>
+          <h1 className="text-2xl font-bold text-gray-800">⏱️ Fase de disponibilidad</h1>
           <p className="text-gray-600">Configure el periodo en que los docentes registran su disponibilidad</p>
         </div>
       </div>
@@ -237,7 +237,7 @@ export default function DisponibilidadAdminPage() {
       {/* Selector de periodo */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
         <div className="w-64">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">📅 Período Académico</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">📅 Período académico</label>
           <select
             value={periodoSeleccionado || ''}
             onChange={(e) => setPeriodoSeleccionado(Number(e.target.value))}
@@ -428,7 +428,7 @@ export default function DisponibilidadAdminPage() {
       <Modal
         abierto={modalAbierto}
         alCerrar={() => setModalAbierto(false)}
-        titulo="Crear Nueva Fase de Disponibilidad"
+        titulo="Crear nuueva fase de disponibilidad"
       >
         <div className="space-y-4 p-4">
           <CampoTexto
@@ -465,7 +465,7 @@ export default function DisponibilidadAdminPage() {
             />
           </div>
           <div className="flex justify-end gap-3 pt-4">
-            <Boton variante="secundario" onClick={() => setModalAbierto(false)}>Cancelar</Boton>
+            <Boton variante="secondary" onClick={() => setModalAbierto(false)}>Cancelar</Boton>
             <Boton onClick={handleCrearFase}>Crear Fase</Boton>
           </div>
         </div>
@@ -512,8 +512,8 @@ export default function DisponibilidadAdminPage() {
             />
           </div>
           <div className="flex justify-end gap-3 pt-4">
-            <Boton variante="secundario" onClick={() => setModalEditarAbierto(false)}>Cancelar</Boton>
-            <Boton onClick={handleActualizarFase}>Guardar Cambios</Boton>
+            <Boton variante="secondary" onClick={() => setModalEditarAbierto(false)}>Cancelar</Boton>
+            <Boton onClick={handleActualizarFase}>Guardar cambios</Boton>
           </div>
         </div>
       </Modal>

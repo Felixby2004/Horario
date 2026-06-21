@@ -5,6 +5,8 @@ export const dynamic = "force-dynamic";
 import { useState, useEffect, useRef } from 'react'
 import { TablaPaginada } from '@/components/ui/TablaPaginada'
 import { Boton } from '@/components/ui/Boton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faSearch, faCheck, faTimes, faFileAlt, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { DocumentoCargaAcademica, DocumentoDeclaracionJurada, DocumentoHorarioSemanal } from '@/components/DocumentGenerator'
 
 const TIPOS_ACTIVIDAD = [
@@ -267,8 +269,10 @@ export default function CargaAcademicaAdminPage() {
               setCargaSeleccionada(fila)
               setModalDetallesAbierto(true)
             }}
-            className="px-2 py-1 bg-gray-500 text-white text-xs rounded hover:bg-gray-600 transition-colors"
+            className="px-2 py-1 bg-gray-500 text-white text-xs rounded hover:bg-gray-600 transition-colors flex items-center"
+            title="Ver"
           >
+            <FontAwesomeIcon icon={faEye} className="w-4 h-4 mr-2" />
             Ver
           </button>
 
@@ -277,8 +281,9 @@ export default function CargaAcademicaAdminPage() {
               onClick={() =>
                 handleCambiarEstado(fila.id_carga, 'en_revision')
               }
-              className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+              className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors flex items-center"
             >
+              <FontAwesomeIcon icon={faSearch} className="w-4 h-4 mr-2" />
               Revisar
             </button>
           )}
@@ -291,8 +296,10 @@ export default function CargaAcademicaAdminPage() {
                   runValidations(fila);
                   setModalValidacionAbierto(true);
                 }}
-                className="px-2 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600 transition-colors"
+                className="px-2 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600 transition-colors flex items-center"
+                title="Validar documentos"
               >
+                <FontAwesomeIcon icon={faCheck} className="w-4 h-4 mr-2" />
                 Validar Docs
               </button>
               <button
@@ -300,22 +307,25 @@ export default function CargaAcademicaAdminPage() {
                   setCargaSeleccionada(fila)
                   setModalRechazoAbierto(true)
                 }}
-                className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors"
+                className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors flex items-center"
+                title="Rechazar"
               >
+                <FontAwesomeIcon icon={faTimes} className="w-4 h-4 mr-2" />
                 Rechazar
               </button>
             </>
           )}
 
           {fila.estado === 'validado' && (
-            <button
-              onClick={() =>
-                handleCambiarEstado(fila.id_carga, 'aprobado')
-              }
-              className="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors"
-            >
-              Aprobar
-            </button>
+              <button
+                onClick={() =>
+                  handleCambiarEstado(fila.id_carga, 'aprobado')
+                }
+                className="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors flex items-center"
+              >
+                <FontAwesomeIcon icon={faCheck} className="w-4 h-4 mr-2" />
+                Aprobar
+              </button>
           )}
 
           <div className="flex gap-1.5 flex-wrap">
@@ -324,30 +334,33 @@ export default function CargaAcademicaAdminPage() {
                 setCargaSeleccionada(fila)
                 setMostrarDocumento('carga')
               }}
-              className="px-2 py-1 bg-emerald-500 text-white text-xs rounded hover:bg-emerald-600 transition-colors"
+              className="px-2 py-1 bg-emerald-500 text-white text-xs rounded hover:bg-emerald-600 transition-colors flex items-center"
               title="Formato 1 - Carga Académica"
             >
-              📄 Carga
+              <FontAwesomeIcon icon={faFileAlt} className="w-4 h-4 mr-2" />
+              Carga
             </button>
             <button
               onClick={() => {
                 setCargaSeleccionada(fila)
                 setMostrarDocumento('declaracion')
               }}
-              className="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-600 transition-colors"
+              className="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-600 transition-colors flex items-center"
               title="Formato 2 - Declaración Jurada"
             >
-              📜 Declaración
+              <FontAwesomeIcon icon={faFileAlt} className="w-4 h-4 mr-2" />
+              Declaración
             </button>
             <button
               onClick={() => {
                 setCargaSeleccionada(fila)
                 setMostrarDocumento('horario')
               }}
-              className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+              className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors flex items-center"
               title="Formato F03 - Horario Semanal"
             >
-              📅 Horario
+              <FontAwesomeIcon icon={faCalendar} className="w-4 h-4 mr-2" />
+              Horario
             </button>
           </div>
         </div>
@@ -376,7 +389,7 @@ export default function CargaAcademicaAdminPage() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Gestión de Carga Académica</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Gestión de carga académica</h1>
           <p className="text-gray-600 mt-1">Revisa y valida las cargas académicas y documentos de los docentes</p>
         </div>
       </div>

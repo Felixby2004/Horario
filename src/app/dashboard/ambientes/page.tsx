@@ -5,6 +5,8 @@ import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 interface Ambiente {
@@ -87,15 +89,18 @@ export default function AmbientesPage() {
       renderizar: (id: number, fila: Ambiente) => (
         <div className="flex gap-2">
           <Link href={`/dashboard/ambientes/${id}`}>
-            <button className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+            <button className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center" title="Editar">
+              <FontAwesomeIcon icon={faEdit} className="w-4 h-4 mr-2" />
               Editar
             </button>
           </Link>
           {fila.activo && (
             <button
               onClick={() => handleInhabilitar(id, fila.nombre)}
-              className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+              className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 flex items-center"
+              title="Eliminar"
             >
+              <FontAwesomeIcon icon={faTrash} className="w-4 h-4 mr-2" />
               Eliminar
             </button>
           )}

@@ -3,25 +3,58 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faGauge,
+  faCalendarDays,
+  faBuildingColumns,
+  faBookOpen,
+  faUsers,
+  faChalkboardTeacher,
+  faClipboardList,
+  faBook,
+  faCalendarCheck,
+  faWindowMaximize,
+  faClock,
+  faUser,
+  faInbox,
+  faFileLines,
+  faCog,
+} from '@fortawesome/free-solid-svg-icons';
 import { MenuUsuario } from '@/components/layouts/MenuUsuario';
 import { ChatBot } from '@/components/chatbot/ChatBot';
 
-const menuItems = [
-  { texto: 'Dashboard', icono: '📊', href: '/dashboard' },
-  { texto: 'Períodos', icono: '📅', href: '/dashboard/periodos' },
-  { texto: 'Ambientes', icono: '🏫', href: '/dashboard/ambientes' },
-  { texto: 'Cursos', icono: '📚', href: '/dashboard/cursos' },
-  { texto: 'Grupos', icono: '👥', href: '/dashboard/grupos' },
-  { texto: 'Docentes', icono: '👨‍🏫', href: '/dashboard/docentes' },
-  { texto: 'Carga Académica', icono: '📋', href: '/dashboard/carga-academica' },
-  { texto: 'Plan de Estudios', icono: '📖', href: '/dashboard/plan-estudios' },
-  { texto: 'Disponibilidad', icono: '⏱️', href: '/dashboard/disponibilidad' },
-  { texto: 'Ventanas', icono: '🎯', href: '/dashboard/horarios/ventanas' },
-  { texto: 'Horarios', icono: '🕐', href: '/dashboard/horarios' },
-  { texto: 'Usuarios', icono: '👤', href: '/dashboard/usuarios' },
-  { texto: 'Solicitudes', icono: '📋', href: '/dashboard/solicitudes' },
-  { texto: 'Reportes', icono: '📄', href: '/dashboard/reportes' },
-  { texto: 'Configuración', icono: '⚙️', href: '/dashboard/configuracion' },
+const menuSections = [
+  {
+    title: 'General',
+    items: [
+      { texto: 'Dashboard', icon: faGauge, href: '/dashboard' },
+      { texto: 'Períodos', icon: faCalendarDays, href: '/dashboard/periodos' },
+      { texto: 'Configuración', icon: faCog, href: '/dashboard/configuracion' },
+    ],
+  },
+  {
+    title: 'Gestión',
+    items: [
+      { texto: 'Ambientes', icon: faBuildingColumns, href: '/dashboard/ambientes' },
+      { texto: 'Cursos', icon: faBookOpen, href: '/dashboard/cursos' },
+      { texto: 'Grupos', icon: faUsers, href: '/dashboard/grupos' },
+      { texto: 'Docentes', icon: faChalkboardTeacher, href: '/dashboard/docentes' },
+      { texto: 'Usuarios', icon: faUser, href: '/dashboard/usuarios' },
+    ],
+  },
+  {
+    title: 'Académico',
+    items: [
+      { texto: 'Carga Académica', icon: faClipboardList, href: '/dashboard/carga-academica' },
+      { texto: 'Plan de Estudios', icon: faBook, href: '/dashboard/plan-estudios' },
+      { texto: 'Disponibilidad', icon: faCalendarCheck, href: '/dashboard/disponibilidad' },
+      { texto: 'Horarios', icon: faClock, href: '/dashboard/horarios' },
+      { texto: 'Ventanas', icon: faWindowMaximize, href: '/dashboard/horarios/ventanas' },
+      { texto: 'Solicitudes', icon: faInbox, href: '/dashboard/solicitudes' },
+      { texto: 'Reportes', icon: faFileLines, href: '/dashboard/reportes' },
+    ],
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -62,10 +95,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   // Preparar items con estado activo
-  const menuItemsWithActive = menuItems.map((item) => ({
-    ...item,
-    activo: pathname === item.href || pathname.startsWith(item.href + '/'),
-  }));
+  const menuItemsWithActive = menuSections.flatMap((section) =>
+    section.items.map((item) => ({
+      ...item,
+      activo: pathname === item.href || pathname.startsWith(item.href + '/'),
+    }))
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -97,20 +132,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           
           <nav className="flex-1 overflow-y-auto py-2">
-            {menuItemsWithActive.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
-                  item.activo
-                    ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
-                    : 'hover:bg-primary-800/70 text-gray-300'
-                } ${collapsed ? 'justify-center' : ''}`}
-                title={collapsed ? item.texto : ''}
-              >
-                <span className="text-xl flex-shrink-0">{item.icono}</span>
-                {!collapsed && <span className="truncate">{item.texto}</span>}
-              </Link>
+            {menuSections.map((section) => (
+              <div key={section.title} className="mb-4">
+                {!collapsed && (
+                  <div className="px-5 py-2 text-xs uppercase tracking-wide text-primary-300">
+                    {section.title}
+                  </div>
+                )}
+                {section.items.map((item) => {
+                  const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
+                          : 'hover:bg-primary-800/70 text-gray-300'
+                      } ${collapsed ? 'justify-center' : ''}`}
+                      title={collapsed ? item.texto : ''}
+                    >
+                      <FontAwesomeIcon icon={item.icon} className="w-5 h-5" />
+                      {!collapsed && <span className="truncate">{item.texto}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
             ))}
           </nav>
         </aside>
@@ -129,7 +176,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <header className="bg-white shadow-sm px-8 py-4 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-800">
-              {menuItems.find(item => pathname === item.href)?.texto || 'Dashboard'}
+              {menuItemsWithActive.find(item => item.activo)?.texto || 'Dashboard'}
             </h2>
             <MenuUsuario />
           </div>

@@ -6,6 +6,8 @@ import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPowerOff, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function UsuariosPage() {
   const router = useRouter();
@@ -159,6 +161,7 @@ export default function UsuariosPage() {
             tamaño="sm"
             variante={u.activo ? 'secondary' : 'primary'}
           >
+            <FontAwesomeIcon icon={faPowerOff} className="w-4 h-4 mr-2" />
             {u.activo ? 'Desactivar' : 'Activar'}
           </Boton>
           <Boton
@@ -166,6 +169,7 @@ export default function UsuariosPage() {
             variante="error"
             tamaño="sm"
           >
+            <FontAwesomeIcon icon={faTrash} className="w-4 h-4 mr-2" />
             Eliminar
           </Boton>
         </div>

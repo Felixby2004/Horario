@@ -512,10 +512,18 @@ export class GeneradorPDF {
     if (!contenidoNuevo) return contenidoActual;
     if (contenidoActual.includes(contenidoNuevo)) return contenidoActual;
 
-    const esHtml = contenidoActual.includes('<') || contenidoNuevo.includes('<');
-    return esHtml
-      ? `${contenidoActual}<div style="border-top: 1px dashed #666; margin: 4px 0;"></div>${contenidoNuevo}`
-      : `${contenidoActual}\n----------------\n${contenidoNuevo}`;
+    const crearBloque = (contenido: string) => `
+      <div style="border: 1px solid #999; border-radius: 6px; padding: 6px; background-color: #FFFFFF; margin-bottom: 6px;">
+        ${contenido}
+      </div>
+    `;
+
+    return `
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        ${crearBloque(contenidoActual)}
+        ${crearBloque(contenidoNuevo)}
+      </div>
+    `;
   }
 
   private static construirMapaCeldasFusionadas(
@@ -535,11 +543,42 @@ export class GeneradorPDF {
 
     const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
 
+    const gruposLabs: Record<string, any[]> = {};
+    const noLabs: any[] = [];
+
     horariosAgrupados.forEach((horario) => {
+      const tipo = this.normalizarTipoClase(horario.tipo_clase);
+      if (tipo === 'Laboratorio') {
+        const key = `${horario.dia_semana}|${horario.hora_inicio}|${horario.hora_fin}`;
+        gruposLabs[key] = gruposLabs[key] || [];
+        gruposLabs[key].push(horario);
+      } else {
+        noLabs.push(horario);
+      }
+    });
+
+    const horariosProcesar: any[] = [...noLabs];
+    Object.values(gruposLabs).forEach((grupo) => {
+      if (grupo.length === 1) {
+        horariosProcesar.push(grupo[0]);
+      } else {
+        const ejemplo = grupo[0];
+        horariosProcesar.push({
+          ...ejemplo,
+          tipo_clase: 'Laboratorio',
+          subHorarios: grupo
+        });
+      }
+    });
+
+    horariosProcesar.forEach((horario) => {
       const diaNombre = this.obtenerNombreDia(horario.dia_semana);
       if (!diasSemana.includes(diaNombre)) return;
 
-      const indiceInicio = horasRango.findIndex((rango) => rango.split('-')[0] === horario.hora_inicio);
+      const indiceInicio = horasRango.findIndex((rango) => {
+        const [inicioRango, finRango] = rango.split('-');
+        return !(horario.hora_fin <= inicioRango || horario.hora_inicio >= finRango);
+      });
       if (indiceInicio === -1) return;
 
       const rowspan = Math.max(1, horasRango.filter((rango) => {
@@ -606,7 +645,7 @@ export class GeneradorPDF {
         if (celda) {
           rowspansActivos[dia] = Math.max(0, celda.rowspan - 1);
           celdas.push(`
-            <td rowspan="${celda.rowspan}" style="border: 1px solid #000; padding: 4px 6px; background-color: ${celda.colorFondo || '#FFFFFF'}; font-size: 8px; text-align: center; vertical-align: middle; font-weight: bold; line-height: 1.35;">
+            <td rowspan="${celda.rowspan}" style="border: 1px solid #000; padding: 4px 6px; background-color: ${celda.colorFondo || '#FFFFFF'}; font-size: 8px; text-align: center; vertical-align: top; font-weight: bold; line-height: 1.35;">
               ${celda.contenido}
             </td>
           `);
@@ -986,15 +1025,41 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        // Si es un grupo de laboratorios combinados, renderizar como bloques lado a lado
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const bloques = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const profNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            const nombreCurso = sub.curso?.nombre || 'N/A';
+            const subColor = ref?.color || '#FFE699';
+
+            return `
+              <div style="border: 1px solid #999; border-radius: 4px; padding: 4px; background-color: ${subColor}; margin-right: 4px; flex: 1 1 0; min-width: 0; max-width: 140px; font-size: 8px; overflow: hidden;">
+                <div style="font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nombreCurso}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(${tipoCorto})</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Prof. ${profNum}</div>
+              </div>
+            `;
+          }).join('');
+
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: `<div style="display: flex; flex-direction: row; gap: 4px; align-items: stretch; flex-wrap: nowrap;">${bloques}</div>`
+          };
+        }
+
+        // Caso normal: un solo horario
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const profNum = referencia?.itemNum || '?';
         const bgColor = referencia?.color || '#FFFFFF';
         const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
+        const nombreCurso = horario.curso?.nombre || 'N/A';
 
         return {
           colorFondo: bgColor,
           contenido: `
-            <div>${horario.curso?.nombre || 'N/A'}</div>
+            <div style="font-weight: bold;">${nombreCurso}</div>
             <div>(${tipoCorto})</div>
             <div>Prof. ${profNum}</div>
           `
@@ -1303,6 +1368,18 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const contenidos = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const profNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            return `${sub.curso?.nombre || 'N/A'}\n(${tipoCorto})\nProf. ${profNum}`;
+          }).join(' | ');
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: contenidos
+          };
+        }
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const profNum = referencia?.itemNum || '?';
         const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
@@ -1551,6 +1628,18 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const contenidos = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const profNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            return `${sub.curso?.nombre || 'N/A'}\n(${tipoCorto})\nProf. ${profNum}`;
+          }).join(' | ');
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: contenidos
+          };
+        }
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const profNum = referencia?.itemNum || '?';
         const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
@@ -1728,6 +1817,18 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const contenidos = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const cursoNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            return `${sub.curso?.nombre || 'N/A'}\nGrupo ${sub.grupo?.codigo_grupo || '-'}\n(${tipoCorto})`;
+          }).join(' | ');
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: contenidos
+          };
+        }
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const cursoNum = referencia?.itemNum || '?';
         const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
@@ -1917,6 +2018,25 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const bloques = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const cursoNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            const subColor = ref?.color || '#FFE699';
+            return `
+              <div style="border: 1px solid #999; border-radius: 4px; padding: 3px 5px; background-color: ${subColor}; margin-right: 4px; flex: 1 1 0; min-width: 0; max-width: 130px; font-size: 8px; overflow: hidden;">
+                <div style="font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${sub.curso?.nombre || 'N/A'}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Grupo ${sub.grupo?.codigo_grupo || '-'}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(${tipoCorto})</div>
+              </div>
+            `;
+          }).join('');
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: `<div style="display: flex; flex-direction: row; gap: 4px; align-items: stretch; flex-wrap: nowrap;">${bloques}</div>`
+          };
+        }
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const cursoNum = referencia?.itemNum || '?';
         const bgColor = referencia?.color || '#FFFFFF';
@@ -2047,6 +2167,25 @@ export class GeneradorPDF {
       diasSemana,
       horasRango,
       (horario) => {
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const bloques = horario.subHorarios.map((sub: any) => {
+            const ref = referenciasReporte.get(this.obtenerClaveReferenciaReporte(sub));
+            const profNum = ref?.itemNum || '?';
+            const tipoCorto = this.obtenerEtiquetaTipoCorta(sub.tipo_clase_reporte || sub.tipo_clase);
+            const subColor = ref?.color || '#FFE699';
+            return `
+              <div style="border: 1px solid #999; border-radius: 4px; padding: 3px 5px; background-color: ${subColor}; margin-right: 4px; flex: 1 1 0; min-width: 0; max-width: 130px; font-size: 8px; overflow: hidden;">
+                <div style="font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${sub.curso?.nombre || 'N/A'}</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(${tipoCorto})</div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Prof. ${profNum}</div>
+              </div>
+            `;
+          }).join('');
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: `<div style="display: flex; flex-direction: row; gap: 4px; align-items: stretch; flex-wrap: nowrap;">${bloques}</div>`
+          };
+        }
         const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
         const profNum = referencia?.itemNum || '?';
         const bgColor = referencia?.color || '#FFFFFF';
