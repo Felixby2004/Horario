@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 export default function UsuariosPage() {
   const router = useRouter();
@@ -119,8 +120,8 @@ export default function UsuariosPage() {
       renderizar: (rol: any) => {
         const rolName = getStringValue(rol);
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
-            {rolName.replace(/_/g, ' ')}
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            {formatearTextoVisualOracion(rolName)}
           </span>
         );
       }

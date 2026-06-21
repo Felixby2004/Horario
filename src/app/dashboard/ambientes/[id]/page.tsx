@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
 import { CampoTexto } from '@/components/ui/CampoTexto';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 type TipoAmbiente = 'aula' | 'laboratorio';
 
@@ -111,7 +112,7 @@ export default function EditarAmbientePage() {
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Editar Ambiente</h1>
-        <p className="text-gray-600 mt-1">{ambiente.nombre}</p>
+        <p className="text-gray-600 mt-1">{formatearTextoVisualOracion(ambiente.nombre)}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow space-y-6">

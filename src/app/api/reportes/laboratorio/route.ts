@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (formato === 'excel') {
-      const buffer = await GeneradorPDF.generarExcelAula(id_ambiente, id_periodo);
+      const buffer = await GeneradorPDF.generarExcelLaboratorio(id_ambiente, id_periodo);
 
       return new NextResponse(buffer as any, {
         headers: {

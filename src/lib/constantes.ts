@@ -16,8 +16,9 @@ export const DIAS_SEMANA_CORTOS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
 // Modalidades
 export const MODALIDADES = {
-  nombrado: 'Nombrado',
+  nombrado: 'Ordinario',
   contratado: 'Contratado',
+  extraordinario: 'Extraordinario',
 };
 
 // Categorías
@@ -26,6 +27,16 @@ export const CATEGORIAS = {
   asociado: 'Asociado',
   auxiliar: 'Auxiliar',
   jefe_practica: 'Jefe de Práctica',
+  tipo_a1: 'Tipo A1',
+  tipo_b1: 'Tipo B1 (Tiempo Completo)',
+  tipo_a2: 'Tipo A2',
+  tipo_b2: 'Tipo B2 (TP 16 H)',
+  tipo_a3: 'Tipo A3',
+  tipo_b3: 'Tipo B3 (TP 08 H)',
+  cesante: 'Cesante',
+  experto: 'Experto',
+  emerito: 'Emérito',
+  invitado_especial: 'Invitado Especial',
 };
 
 // Tipos de clase

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
@@ -1144,8 +1145,12 @@ export default function HorariosPage() {
                             )}
                             <div className="font-semibold text-gray-900">{horariosActivos[0].curso?.codigo}</div>
                             <div className="text-gray-700">{horariosActivos[0].docente?.apellidos}</div>
-                            <div className="text-gray-500 text-[10px]">{horariosActivos[0].ambiente?.nombre}</div>
-                            <div className="text-gray-400 text-[10px] capitalize">{horariosActivos[0].tipo_clase}</div>
+                            <div className="text-gray-500 text-[10px]">
+                              {formatearTextoVisualOracion(horariosActivos[0].ambiente?.nombre)}
+                            </div>
+                            <div className="text-gray-400 text-[10px]">
+                              {formatearTextoVisualOracion(horariosActivos[0].tipo_clase)}
+                            </div>
                           </div>
                         ) : (
                           // Múltiples horarios (dividir celda)
@@ -1162,8 +1167,10 @@ export default function HorariosPage() {
                                 )}
                                 <div className="font-semibold text-gray-900 text-[10px]">{h.curso?.codigo}</div>
                                 <div className="text-gray-700 text-[10px]">{h.docente?.apellidos}</div>
-                                <div className="text-gray-500 text-[9px]">{h.ambiente?.nombre}</div>
-                                <div className="text-gray-400 text-[9px] capitalize">{h.tipo_clase}</div>
+                                <div className="text-gray-500 text-[9px]">
+                                  {formatearTextoVisualOracion(h.ambiente?.nombre)}
+                                </div>
+                                <div className="text-gray-400 text-[9px]">{formatearTextoVisualOracion(h.tipo_clase)}</div>
                               </div>
                             ))}
                           </div>

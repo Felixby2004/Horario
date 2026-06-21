@@ -8,11 +8,12 @@ import { Boton } from '@/components/ui/Boton';
 export default function NuevoAmbientePage() {
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState('');
   const [formulario, setFormulario] = useState({
     codigo: '',
     nombre: '',
     tipo: 'aula',
-    capacidad: 0,
+    capacidad: '',
     piso: '1',
     pabellon: 'A',
     equipamiento: ''
@@ -21,6 +22,7 @@ export default function NuevoAmbientePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCargando(true);
+    setError('');
 
     try {
       const response = await fetch('/api/ambientes', {
@@ -33,9 +35,12 @@ export default function NuevoAmbientePage() {
       if (data.exito) {
         alert('Ambiente creado exitosamente');
         router.push('/dashboard/ambientes');
+        return;
       }
+
+      setError(data.mensaje || 'No se pudo registrar el ambiente.');
     } catch (error) {
-      alert('Error al crear ambiente');
+      setError('Ocurrió un error al registrar el ambiente.');
     } finally {
       setCargando(false);
     }
@@ -46,6 +51,11 @@ export default function NuevoAmbientePage() {
       <h1 className="text-2xl font-bold mb-6">Registrar Nuevo Ambiente</h1>
 
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow space-y-6">
+        {error ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        ) : null}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <CampoTexto
             etiqueta="Código"
@@ -79,7 +89,7 @@ export default function NuevoAmbientePage() {
             etiqueta="Capacidad"
             type="number"
             value={formulario.capacidad}
-            onChange={(e) => setFormulario({ ...formulario, capacidad: parseInt(e.target.value) })}
+            onChange={(e) => setFormulario({ ...formulario, capacidad: e.target.value })}
             required
             ayuda="Número de estudiantes"
           />

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
 import { ContenedorAlertas } from '@/components/ui/ContenedorAlertas';
 import { useAlertasTemporales } from '@/hooks/useAlertasTemporales';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 interface Docente {
   id_docente: number;
@@ -319,7 +320,7 @@ export default function AsignarCursosPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 font-medium">TIPO CLASE</p>
-                    <p className="text-sm capitalize font-semibold">{ca.tipo_clase}</p>
+                    <p className="text-sm font-semibold">{formatearTextoVisualOracion(ca.tipo_clase)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 font-medium">HORAS A ENSEÑAR</p>

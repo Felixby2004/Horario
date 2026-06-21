@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChatBot } from '@/components/chatbot/ChatBot';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 const menuItems = [
   { texto: 'Inicio', icono: '🏠', href: '/docente' },
@@ -79,8 +80,8 @@ function MenuDocente() {
           <div className="text-sm font-medium text-gray-900">
             {usuario.nombres} {usuario.apellidos}
           </div>
-          <div className="text-xs text-gray-500 capitalize">
-            {usuario.rol?.replace(/_/g, ' ')}
+          <div className="text-xs text-gray-500">
+            {formatearTextoVisualOracion(usuario.rol)}
           </div>
         </div>
         <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,8 +101,8 @@ function MenuDocente() {
                 {usuario.correo_electronico || usuario.codigo}
               </div>
               <div className="mt-2">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
-                  {usuario.rol?.replace(/_/g, ' ')}
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  {formatearTextoVisualOracion(usuario.rol)}
                 </span>
               </div>
             </div>

@@ -5,30 +5,26 @@ import { useRouter } from 'next/navigation';
 import { CampoTexto } from '@/components/ui/CampoTexto';
 import { Boton } from '@/components/ui/Boton';
 import { SearchableSelect } from '@/components/ui/SearchableSelect';
+import {
+  CATEGORIAS_ORDINARIAS,
+  MODALIDAD_OPTIONS,
+  TIPOS_CONTRATO,
+  TIPOS_EXTRAORDINARIOS,
+  actualizarFormularioDocente,
+  crearFormularioDocenteInicial,
+  obtenerOpcionesDedicacion
+} from '@/lib/docentes';
 
 export default function NuevoDocentePage() {
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
   const [facultades, setFacultades] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
-  const [formulario, setFormulario] = useState({
-    codigo_docente: '',
-    nombres: '',
-    apellidos: '',
-    modalidad: 'nombrado',
-    categoria: 'principal',
-    fecha_ingreso: '',
-    correo_electronico: '',
-    telefono: '',
-    grado_academico: 'doctor',
-    especialidad: '',
-    dedicacion: 'tiempo_completo',
-    tipo_dedicacion_laboral: 'tiempo_completo',
-    dni_docente: '',
-    horas_maximas_semanales: 40,
-    id_facultad: '',
-    id_departamento: ''
-  });
+  const [formulario, setFormulario] = useState(
+    crearFormularioDocenteInicial({
+      grado_academico: 'doctor'
+    })
+  );
 
   useEffect(() => {
     cargarFacultades();
@@ -85,8 +81,10 @@ export default function NuevoDocentePage() {
   };
 
   const handleChange = (campo: string, valor: any) => {
-    setFormulario({ ...formulario, [campo]: valor });
+    setFormulario((previo) => actualizarFormularioDocente(previo, campo as any, valor));
   };
+
+  const opcionesDedicacion = obtenerOpcionesDedicacion(formulario.modalidad);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -135,25 +133,67 @@ export default function NuevoDocentePage() {
               onChange={(e) => handleChange('modalidad', e.target.value)}
               required
             >
-              <option value="nombrado">Nombrado</option>
-              <option value="contratado">Contratado</option>
+              {MODALIDAD_OPTIONS.map((opcion) => (
+                <option key={opcion.valor} value={opcion.valor}>
+                  {opcion.etiqueta}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Categoría *</label>
-            <select
-              className="w-full border rounded px-3 py-2"
-              value={formulario.categoria}
-              onChange={(e) => handleChange('categoria', e.target.value)}
-              required
-            >
-              <option value="principal">Principal</option>
-              <option value="asociado">Asociado</option>
-              <option value="auxiliar">Auxiliar</option>
-              <option value="jefe_practica">Jefe de Práctica</option>
-            </select>
-          </div>
+          {formulario.modalidad === 'nombrado' && (
+            <div>
+              <label className="block text-sm font-medium mb-2">Categoría *</label>
+              <select
+                className="w-full border rounded px-3 py-2"
+                value={formulario.categoria_ordinaria}
+                onChange={(e) => handleChange('categoria_ordinaria', e.target.value)}
+                required
+              >
+                {CATEGORIAS_ORDINARIAS.map((opcion) => (
+                  <option key={opcion.valor} value={opcion.valor}>
+                    {opcion.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {formulario.modalidad === 'contratado' && (
+            <div>
+              <label className="block text-sm font-medium mb-2">Tipo de Contrato *</label>
+              <select
+                className="w-full border rounded px-3 py-2"
+                value={formulario.tipo_contrato}
+                onChange={(e) => handleChange('tipo_contrato', e.target.value)}
+                required
+              >
+                {TIPOS_CONTRATO.map((opcion) => (
+                  <option key={opcion.valor} value={opcion.valor}>
+                    {opcion.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {formulario.modalidad === 'extraordinario' && (
+            <div>
+              <label className="block text-sm font-medium mb-2">Tipo de Extraordinario *</label>
+              <select
+                className="w-full border rounded px-3 py-2"
+                value={formulario.tipo_extraordinario}
+                onChange={(e) => handleChange('tipo_extraordinario', e.target.value)}
+                required
+              >
+                {TIPOS_EXTRAORDINARIOS.map((opcion) => (
+                  <option key={opcion.valor} value={opcion.valor}>
+                    {opcion.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium mb-2">Facultad *</label>
@@ -239,24 +279,25 @@ export default function NuevoDocentePage() {
           />
 
           <div>
-            <label className="block text-sm font-medium mb-2">Tipo de Dedicación Laboral *</label>
+            <label className="block text-sm font-medium mb-2">Régimen y Dedicación *</label>
             <select
               className="w-full border rounded px-3 py-2"
-              value={formulario.tipo_dedicacion_laboral}
-              onChange={(e) => {
-                handleChange('tipo_dedicacion_laboral', e.target.value);
-                let horas = 40;
-                if (e.target.value === 'dedicacion_exclusiva') horas = 45;
-                if (e.target.value === 'tiempo_parcial_20') horas = 20;
-                handleChange('horas_maximas_semanales', horas);
-              }}
+              value={formulario.dedicacion}
+              onChange={(e) => handleChange('dedicacion', e.target.value)}
               required
+              disabled={formulario.modalidad === 'contratado'}
             >
-              <option value="dedicacion_exclusiva">Dedicación Exclusiva (45h)</option>
-              <option value="tiempo_completo">Tiempo Completo (40h)</option>
-              <option value="tiempo_parcial_20">Tiempo Parcial 20h</option>
-              <option value="por_horas">Por Horas</option>
+              {opcionesDedicacion.map((opcion) => (
+                <option key={opcion.valor} value={opcion.valor}>
+                  {opcion.etiqueta}
+                </option>
+              ))}
             </select>
+            {formulario.modalidad === 'contratado' && (
+              <p className="text-xs text-gray-500 mt-1">
+                La dedicación se deriva automáticamente del tipo de contrato.
+              </p>
+            )}
           </div>
 
           <div>
@@ -265,10 +306,11 @@ export default function NuevoDocentePage() {
               type="number"
               className="w-full border rounded px-3 py-2"
               value={formulario.horas_maximas_semanales}
-              onChange={(e) => handleChange('horas_maximas_semanales', parseInt(e.target.value) || 40)}
-              min="1"
-              max="60"
+              readOnly
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Se calcula automáticamente según el régimen seleccionado.
+            </p>
           </div>
         </div>
 

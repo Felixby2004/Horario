@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../generated/prisma-client"
+  output        = "../generated/prisma-client-next"
   binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
 }
 
@@ -29,7 +29,9 @@ model DepartamentoAcademico {
   activo               Boolean           @default(true)
   fecha_creacion       DateTime         @default(now())
   facultad             Facultad          @relation(fields: [id_facultad], references: [id_facultad])
+  cursos               Curso[]
   docentes            Docente[]
+  planes_estudio      PlanEstudio[]
 
   @@map("departamento_academico")
 }
@@ -49,13 +51,61 @@ model Usuario {
   auditorias           AuditoriaHorario[]
   conflictos_resueltos ConflictoHorario[] @relation("ResueltosPor")
   docente              Docente?
+  ediciones_docente    HistorialEdicionDocente[]   @relation("UsuarioEditorDocente")
+  importaciones_docente HistorialImportacionDocente[] @relation("UsuarioImportacionDocente")
   horarios_creados     HorarioAsignado[]  @relation("CreadosPor")
   cargas_aprobadas     CargaAcademica[]   @relation("CargasAprobadas")
   historial_carga      HistorialCargaAcademica[]
+  planes_modificados   PlanEstudio[]      @relation("UsuarioModificadorPlan")
+  versiones_plan       HistorialVersionPlanEstudio[] @relation("UsuarioVersionPlan")
 
   @@index([codigo])
   @@index([correo_electronico])
   @@map("usuario")
+}
+
+model PlanEstudio {
+  id_plan                Int                           @id @default(autoincrement())
+  codigo                 String                        @unique @db.VarChar(50)
+  nombre                 String                        @db.VarChar(150)
+  anio_creacion          Int
+  anio_vigencia          Int
+  estado                 Boolean                       @default(true)
+  resolucion_aprobacion  String?                       @db.VarChar(150)
+  id_departamento        Int?
+  version_actual         Int                           @default(1)
+  descripcion_cambios    String?                       @db.VarChar(255)
+  fecha_creacion         DateTime                      @default(now())
+  fecha_actualizacion    DateTime                      @default(now()) @updatedAt
+  fecha_ultima_modificacion DateTime?
+  id_usuario_modificador Int?
+  departamento           DepartamentoAcademico?        @relation(fields: [id_departamento], references: [id_departamento])
+  usuario_modificador    Usuario?                      @relation("UsuarioModificadorPlan", fields: [id_usuario_modificador], references: [id_usuario], onDelete: SetNull)
+  versiones              HistorialVersionPlanEstudio[]
+
+  @@index([codigo])
+  @@index([id_departamento])
+  @@map("plan_estudio")
+}
+
+model HistorialVersionPlanEstudio {
+  id_version              Int         @id @default(autoincrement())
+  id_plan                 Int
+  numero_version          Int
+  fecha_modificacion      DateTime    @default(now())
+  id_usuario_responsable  Int?
+  descripcion_cambios     String?     @db.VarChar(255)
+  snapshot_antes          Json?
+  snapshot_despues        Json
+  cursos_agregados        Json?
+  cursos_eliminados       Json?
+  cursos_modificados      Json?
+  restaurada_desde_version Int?
+  plan                    PlanEstudio @relation(fields: [id_plan], references: [id_plan], onDelete: Cascade)
+  usuario_responsable     Usuario?    @relation("UsuarioVersionPlan", fields: [id_usuario_responsable], references: [id_usuario], onDelete: SetNull)
+
+  @@index([id_plan, numero_version])
+  @@map("historial_version_plan_estudio")
 }
 
 model PeriodoAcademico {
@@ -97,6 +147,9 @@ model Docente {
   apellidos                 String                            @db.VarChar(100)
   modalidad                 TipoModalidad
   categoria                 TipoCategoria
+  categoria_ordinaria       TipoCategoriaOrdinaria?
+  tipo_contrato             TipoContratoDocente?
+  tipo_extraordinario       TipoExtraordinario?
   dedicacion                TipoDedicacion?
   antiguedad                Int                               @default(0)
   fecha_ingreso             DateTime?                         @db.Date
@@ -128,6 +181,7 @@ model Docente {
   cursos                    DocenteCurso[]
   grupos                    DocenteGrupo[]
   historial_notificaciones  HistorialNotificaciones[]
+  historial_ediciones       HistorialEdicionDocente[]
   horarios                  HorarioAsignado[]
   preasignaciones           Preasignacion[]
   preferencias_notificacion PreferenciasNotificacionDocente[]
@@ -138,10 +192,49 @@ model Docente {
   @@map("docente")
 }
 
+model HistorialEdicionDocente {
+  id_historial_edicion Int      @id @default(autoincrement())
+  id_docente           Int
+  id_usuario_editor    Int?
+  datos_anteriores     Json
+  datos_nuevos         Json
+  resumen_cambios      Json?
+  motivo               String?  @db.VarChar(255)
+  fecha_edicion        DateTime @default(now())
+  docente              Docente  @relation(fields: [id_docente], references: [id_docente], onDelete: Cascade)
+  usuario_editor       Usuario? @relation("UsuarioEditorDocente", fields: [id_usuario_editor], references: [id_usuario])
+
+  @@index([id_docente, fecha_edicion(sort: Desc)])
+  @@index([id_usuario_editor])
+  @@map("historial_edicion_docente")
+}
+
+model HistorialImportacionDocente {
+  id_importacion         Int      @id @default(autoincrement())
+  id_usuario_responsable Int?
+  nombre_archivo         String   @db.VarChar(255)
+  formato_archivo        String   @db.VarChar(10)
+  total_registros        Int      @default(0)
+  registros_validos      Int      @default(0)
+  registros_importados   Int      @default(0)
+  registros_error        Int      @default(0)
+  estado                 String   @db.VarChar(30)
+  detalle_resultado      Json?
+  fecha_creacion         DateTime @default(now())
+  usuario_responsable    Usuario? @relation("UsuarioImportacionDocente", fields: [id_usuario_responsable], references: [id_usuario])
+
+  @@index([fecha_creacion(sort: Desc)])
+  @@index([id_usuario_responsable])
+  @@map("historial_importacion_docente")
+}
+
 model Curso {
   id_curso               Int                        @id @default(autoincrement())
+  id_departamento        Int?
   codigo                 String                     @unique @db.VarChar(20)
   nombre                 String                     @db.VarChar(150)
+  tipo_curso             String?                    @db.VarChar(20)
+  escuela_profesional    String?                    @db.VarChar(150)
   horas_teoria           Int                        @default(0)
   horas_laboratorio      Int                        @default(0)
   horas_practica         Int                        @default(0)
@@ -152,14 +245,29 @@ model Curso {
   activo                 Boolean                    @default(true)
   fecha_creacion         DateTime                   @default(now())
   conflictos             ConflictoHorario[]
+  departamento           DepartamentoAcademico?     @relation(fields: [id_departamento], references: [id_departamento])
   ambientes              CursoAmbiente[]
   docentes               DocenteCurso[]
+  prerequisitos_relacion CursoPrerequisito[]        @relation("CursoTienePrerequisitos")
+  es_prerrequisito_de    CursoPrerequisito[]        @relation("CursoEsPrerequisito")
   grupos                 Grupo[]
   horarios               HorarioAsignado[]
   preasignaciones        Preasignacion[]
   selecciones_temporales SeleccionTemporalHorario[]
 
   @@map("curso")
+}
+
+model CursoPrerequisito {
+  id_curso               Int
+  id_curso_prerequisito  Int
+  fecha_creacion         DateTime @default(now())
+  curso                  Curso    @relation("CursoTienePrerequisitos", fields: [id_curso], references: [id_curso], onDelete: Cascade)
+  prerequisito           Curso    @relation("CursoEsPrerequisito", fields: [id_curso_prerequisito], references: [id_curso], onDelete: Restrict)
+
+  @@id([id_curso, id_curso_prerequisito])
+  @@index([id_curso_prerequisito])
+  @@map("curso_prerequisito")
 }
 
 model DocenteCurso {
@@ -720,8 +828,38 @@ enum EstadoPeriodo {
 enum TipoModalidad {
   nombrado
   contratado
+  extraordinario
 
   @@map("tipo_modalidad")
+}
+
+enum TipoCategoriaOrdinaria {
+  principal
+  asociado
+  auxiliar
+
+  @@map("tipo_categoria_ordinaria")
+}
+
+enum TipoContratoDocente {
+  tipo_a1
+  tipo_b1
+  tipo_a2
+  tipo_b2
+  tipo_a3
+  tipo_b3
+  jefe_practica
+
+  @@map("tipo_contrato_docente")
+}
+
+enum TipoExtraordinario {
+  cesante
+  experto
+  emerito
+  invitado_especial
+
+  @@map("tipo_extraordinario")
 }
 
 enum TipoCategoria {
@@ -734,7 +872,15 @@ enum TipoCategoria {
 }
 
 enum TipoDedicacion {
+  dedicacion_exclusiva
   tiempo_completo
+  tiempo_parcial_20
+  tiempo_parcial_12
+  tiempo_parcial_10
+  tiempo_parcial_04
+  docente_investigador
+  tiempo_parcial_16
+  tiempo_parcial_08
   tiempo_parcial
   por_horas
 
@@ -866,6 +1012,7 @@ enum TipoDedicacionLaboral {
 
   @@map("tipo_dedicacion_laboral")
 }
+
 
 enum TipoActividadNoLectiva {
   tutoria_consejeria

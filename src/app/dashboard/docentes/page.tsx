@@ -5,6 +5,10 @@ import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { Boton } from '@/components/ui/Boton';
 import { ModalDocente } from '@/components/dashboard/ModalDocente';
 import Link from 'next/link';
+import {
+  obtenerEtiquetaCategoria,
+  obtenerEtiquetaModalidad
+} from '@/lib/docentes';
 
 export default function DocentesPage() {
   const [docentes, setDocentes] = useState<any[]>([]);
@@ -43,8 +47,16 @@ export default function DocentesPage() {
       encabezado: 'Docente',
       renderizar: (_: any, fila: any) => `${fila.apellidos}, ${fila.nombres}`
     },
-    { campo: 'modalidad' as const, encabezado: 'Modalidad' },
-    { campo: 'categoria' as const, encabezado: 'Categoría' },
+    {
+      campo: 'modalidad' as const,
+      encabezado: 'Modalidad',
+      renderizar: (_: any, fila: any) => obtenerEtiquetaModalidad(fila)
+    },
+    {
+      campo: 'categoria' as const,
+      encabezado: 'Categoría',
+      renderizar: (_: any, fila: any) => obtenerEtiquetaCategoria(fila)
+    },
     { 
       campo: 'antiguedad' as const, 
       encabezado: 'Antigüedad',
@@ -83,6 +95,11 @@ export default function DocentesPage() {
           >
             👁️ Ver
           </button>
+          <Link href={`/dashboard/docentes/${fila.id_docente}/editar`}>
+            <button className="px-3 py-1 bg-amber-600 text-white text-sm rounded hover:bg-amber-700">
+              ✏️ Editar
+            </button>
+          </Link>
           <Link href={`/dashboard/docentes/asignar-cursos-nuevo?id_docente=${fila.id_docente}`}>
             <button className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700">
               📚 Cursos
@@ -108,8 +125,8 @@ export default function DocentesPage() {
     const codigo = String(d.codigo_docente || '').toLowerCase();
     const nombres = String(d.nombres || '').toLowerCase();
     const apellidos = String(d.apellidos || '').toLowerCase();
-    const categoria = String(d.categoria || '').toLowerCase();
-    const modalidad = String(d.modalidad || '').toLowerCase();
+    const categoria = obtenerEtiquetaCategoria(d).toLowerCase();
+    const modalidad = obtenerEtiquetaModalidad(d).toLowerCase();
     return (
       codigo.includes(textoBusqueda) ||
       nombres.includes(textoBusqueda) ||

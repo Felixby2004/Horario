@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { Boton } from '@/components/ui/Boton';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 export default function VistaDocentePage() {
-  const [docentes, setDocentes] = useState([]);
+  const [docentes, setDocentes] = useState<any[]>([]);
   const [docenteSeleccionado, setDocenteSeleccionado] = useState<any>(null);
   const [horarios, setHorarios] = useState<any[]>([]);
   const [cargando, setCargando] = useState(false);
@@ -152,18 +153,18 @@ export default function VistaDocentePage() {
                           .map((h, idx) => (
                             <div key={idx} className="bg-white border rounded p-3 shadow-sm hover:shadow-md transition-shadow">
                               <div className="font-bold text-blue-900">{h.curso?.codigo}</div>
-                              <div className="text-sm font-semibold">{h.curso?.nombre}</div>
+                              <div className="text-sm font-semibold">{formatearTextoVisualOracion(h.curso?.nombre)}</div>
                               <div className="text-xs text-gray-600 mt-1">
                                 🕐 {h.hora_inicio} - {h.hora_fin}
                               </div>
                               <div className="text-xs text-gray-500">
-                                🏫 {h.ambiente?.nombre} | 👥 Grupo {h.grupo?.codigo_grupo}
+                                🏫 {formatearTextoVisualOracion(h.ambiente?.nombre)} | 👥 Grupo {h.grupo?.codigo_grupo}
                               </div>
                               <div className="mt-2">
-                                <span className={`text-[10px] px-2 py-0.5 rounded-full capitalize ${
+                                <span className={`text-[10px] px-2 py-0.5 rounded-full ${
                                   h.tipo_clase === 'teoria' ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800'
                                 }`}>
-                                  {h.tipo_clase}
+                                  {formatearTextoVisualOracion(h.tipo_clase)}
                                 </span>
                                 <span className="text-[10px] ml-2 text-gray-400">Ciclo {h.curso?.ciclo}</span>
                               </div>

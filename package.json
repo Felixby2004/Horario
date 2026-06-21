@@ -16,6 +16,7 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "prisma:seed": "ts-node --project tsconfig-scripts.json prisma/seed.ts",
+    "prerequisitos:migrar": "ts-node --project tsconfig-scripts.json scripts/migrar-prerequisitos-multiples.ts",
     "db:export": "ts-node --project tsconfig-scripts.json scripts/exportar-datos.ts",
     "db:import": "ts-node --project tsconfig-scripts.json scripts/importar-datos.ts",
     "ventanas:estandar": "ts-node --project tsconfig-scripts.json scripts/configuracion-ventanas-estandar.ts",

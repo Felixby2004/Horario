@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 export default function DocenteHomePage() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function DocenteHomePage() {
 
         <div className="bg-gradient-to-br from-violet-500 to-violet-600 rounded-xl shadow-lg p-6 text-white">
           <p className="text-violet-100 text-sm font-medium">Rol</p>
-          <p className="text-2xl font-bold mt-2 capitalize">{usuario?.rol}</p>
+          <p className="text-2xl font-bold mt-2">{formatearTextoVisualOracion(usuario?.rol)}</p>
         </div>
       </div>
 

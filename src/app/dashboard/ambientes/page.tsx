@@ -5,6 +5,7 @@ import { TablaPaginada } from '@/components/ui/TablaPaginada';
 import { ColumnaAntigua } from '@/components/ui/TablaDatos';
 import { Boton } from '@/components/ui/Boton';
 import Link from 'next/link';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 interface Ambiente {
   id_ambiente: number;
@@ -54,7 +55,7 @@ export default function AmbientesPage() {
         alert('Ambiente desactivado');
         cargarAmbientes();
       } else {
-        alert('Error: ' + data.mensaje);
+        alert('Error: ' + (data.mensaje || 'No se pudo desactivar el ambiente.'));
       }
     } catch (error) {
       console.error('Error:', error);
@@ -64,7 +65,11 @@ export default function AmbientesPage() {
 
   const columnas: ColumnaAntigua<Ambiente>[] = [
     { campo: 'codigo' as const, encabezado: 'Código' },
-    { campo: 'nombre' as const, encabezado: 'Ambiente' },
+    {
+      campo: 'nombre' as const,
+      encabezado: 'Ambiente',
+      renderizar: (nombre: string) => formatearTextoVisualOracion(nombre)
+    },
     { 
       campo: 'tipo' as const, 
       encabezado: 'Tipo',

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { obtenerEtiquetaCarreraCurso, obtenerCodigoTipoCurso } from '@/lib/cursos';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 export default function PlanEstudiosDocentePage() {
   const [activeTab, setActiveTab] = useState('malla');
@@ -92,7 +94,10 @@ function MallaCurricular() {
                     {plan.filter(c => c.ciclo === ciclo).map(curso => (
                       <div key={curso.id_curso} className="bg-white rounded p-3 border shadow-sm">
                         <div className="font-medium text-sm text-gray-900">{curso.codigo}</div>
-                        <div className="text-xs text-gray-600 mt-1">{curso.nombre}</div>
+                        <div className="text-xs text-gray-600 mt-1">{formatearTextoVisualOracion(curso.nombre)}</div>
+                        <div className="text-[11px] text-gray-500 mt-1">
+                          {obtenerCodigoTipoCurso(curso.tipo_curso)} • {obtenerEtiquetaCarreraCurso(curso.departamento?.nombre || curso.escuela_profesional)}
+                        </div>
                         <div className="flex justify-between mt-2 text-xs text-gray-500">
                           <span>{(curso.horas_teoria || 0) + (curso.horas_practica || 0) + (curso.horas_laboratorio || 0)}h</span>
                           <span>{curso.creditos}cr</span>
@@ -192,6 +197,8 @@ function BuscadorCursos() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Curso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Carrera</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ciclo</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">H. Teoría</th>
@@ -203,7 +210,9 @@ function BuscadorCursos() {
               {filteredCursos.map((curso) => (
                 <tr key={curso.id_curso} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{curso.codigo}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{curso.nombre}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatearTextoVisualOracion(curso.nombre)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{obtenerCodigoTipoCurso(curso.tipo_curso)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{obtenerEtiquetaCarreraCurso(curso.departamento?.nombre || curso.escuela_profesional)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{curso.ciclo}°</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{curso.creditos}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{curso.horas_teoria || 0}</td>

@@ -23,7 +23,8 @@ export class GestorVentanasAtencion {
 
   private static obtenerPrioridadModalidad(valor: unknown) {
     const modalidad = this.normalizarValor(valor);
-    if (modalidad === 'nombrado') return 2;
+    if (modalidad === 'nombrado') return 3;
+    if (modalidad === 'extraordinario') return 2;
     if (modalidad === 'contratado') return 1;
     return 0;
   }
@@ -33,8 +34,22 @@ export class GestorVentanasAtencion {
     if (categoria === 'principal') return 4;
     if (categoria === 'asociado') return 3;
     if (categoria === 'auxiliar') return 2;
-    if (categoria === 'jefepractica') return 1;
+    if (categoria === 'jefe_practica' || categoria === 'jefepractica') return 1;
     return 0;
+  }
+
+  private static obtenerCategoriaComparable(docente: any) {
+    const modalidad = this.normalizarValor(docente?.modalidad);
+
+    if (modalidad === 'nombrado') {
+      return docente?.categoria_ordinaria ?? docente?.categoria;
+    }
+
+    if (modalidad === 'contratado') {
+      return docente?.tipo_contrato ?? docente?.categoria;
+    }
+
+    return docente?.categoria;
   }
 
   private static obtenerAntiguedad(docente: any) {
@@ -46,8 +61,8 @@ export class GestorVentanasAtencion {
     const modB = this.obtenerPrioridadModalidad(b.modalidad);
     if (modA !== modB) return modB - modA;
 
-    const catA = this.obtenerPrioridadCategoria(a.categoria);
-    const catB = this.obtenerPrioridadCategoria(b.categoria);
+    const catA = this.obtenerPrioridadCategoria(this.obtenerCategoriaComparable(a));
+    const catB = this.obtenerPrioridadCategoria(this.obtenerCategoriaComparable(b));
     if (catA !== catB) return catB - catA;
 
     const antigA = this.obtenerAntiguedad(a);
@@ -58,29 +73,26 @@ export class GestorVentanasAtencion {
   }
 
   static async obtenerColaDocentes(id_ventana: number) {
-    const cola = await prisma.$queryRaw<Array<any>>`
-      SELECT 
-        d.id_docente,
-        d.codigo_docente,
-        d.nombres,
-        d.apellidos,
-        LOWER(d.modalidad::text) as modalidad,
-        LOWER(d.categoria::text) as categoria,
-        d.antiguedad,
-        CASE 
-          WHEN LOWER(d.modalidad::text) = 'nombrado' THEN 1
-          ELSE 2
-        END as prioridad_modalidad,
-        CASE 
-          WHEN LOWER(d.categoria::text) = 'principal' THEN 1
-          WHEN LOWER(d.categoria::text) = 'asociado' THEN 2
-          WHEN LOWER(d.categoria::text) = 'auxiliar' THEN 3
-          ELSE 4
-        END as prioridad_categoria
-      FROM docente d
-      WHERE d.activo = TRUE
-      ORDER BY prioridad_modalidad DESC, prioridad_categoria DESC, d.antiguedad DESC, d.codigo_docente ASC
-    `;
+    let cola: Array<any> = [];
+    try {
+      cola = await prisma.$queryRaw<Array<any>>`
+        SELECT 
+          d.id_docente,
+          d.codigo_docente,
+          d.nombres,
+          d.apellidos,
+          LOWER(d.modalidad::text) as modalidad,
+          LOWER(d.categoria::text) as categoria,
+          LOWER(COALESCE(d.categoria_ordinaria::text, '')) as categoria_ordinaria,
+          LOWER(COALESCE(d.tipo_contrato::text, '')) as tipo_contrato,
+          d.antiguedad
+        FROM docente d
+        WHERE d.activo = TRUE
+      `;
+    } catch (error) {
+      console.error('Error obteniendo cola de docentes:', error);
+      return [];
+    }
 
     cola.sort((a, b) => this.compararPrioridad(a, b));
 
@@ -89,7 +101,7 @@ export class GestorVentanasAtencion {
       await redis.set(claveRedis, JSON.stringify(cola));
       await redis.expire(claveRedis, 7200);
     } catch (error) {
-      console.log('Redis no disponible');
+      console.warn('Redis no disponible para cachear la cola de docentes');
     }
 
     return cola;
@@ -105,12 +117,16 @@ export class GestorVentanasAtencion {
       }
       
       const cola = JSON.parse(colaStr);
+      if (!Array.isArray(cola)) {
+        return await this.obtenerColaDocentes(id_ventana);
+      }
       const siguiente = cola.shift();
       
       await redis.set(claveRedis, JSON.stringify(cola));
       return siguiente;
     } catch (error) {
-      return null;
+      console.error('Error obteniendo siguiente docente desde Redis:', error);
+      return await this.obtenerColaDocentes(id_ventana);
     }
   }
 
@@ -120,7 +136,7 @@ export class GestorVentanasAtencion {
       await redis.sadd(claveRedis, id_docente.toString());
       await redis.expire(claveRedis, 7200);
     } catch (error) {
-      console.log('Redis no disponible');
+      console.warn('Redis no disponible para registrar docentes ausentes');
     }
   }
 }

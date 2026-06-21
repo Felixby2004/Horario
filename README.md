@@ -10,6 +10,7 @@ Sistema web profesional para la gestión de horarios académicos de la Escuela d
 - ✅ Sistema de ventanas de atención priorizadas por jerarquía
 - ✅ Confirmación y publicación masiva
 - ✅ Detección automática de conflictos
+- ✅ Cursos con múltiples prerrequisitos
 
 ### 📊 Dashboard y Estadísticas
 - ✅ 6 KPIs dinámicos en tiempo real
@@ -108,6 +109,9 @@ Dashboard → Horarios → Selección → Matriz Interactiva
 ### 5. Generar Reportes
 Dashboard → Reportes → Seleccionar Tipo → Descargar PDF
 
+### 6. Configurar prerrequisitos múltiples
+Dashboard → Cursos → Nuevo curso / Editar curso → Agregar uno o varios prerrequisitos
+
 ## 🧪 Testing
 
 ```bash
@@ -120,6 +124,11 @@ npm run test:integration
 # Tests E2E
 npm run test:e2e
 ```
+
+## 📘 Documentación adicional
+
+- `docs/API.md`
+- `docs/CursosPrerequisitosMultiples.md`
 
 ## 📊 Estructura del Proyecto
 

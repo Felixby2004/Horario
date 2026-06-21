@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { normalizarPayloadDocente, validarDatosDocente, normalizarTextoMayusculas } from '@/lib/docentes';
+import {
+  construirErroresFormularioDocente,
+  fusionarErroresDocente,
+  obtenerUsuarioAutenticadoOpcional,
+  registrarHistorialImportacionDocente,
+  validarUnicidadDocente
+} from '@/lib/docentesIntegridad';
 
 export const dynamic = 'force-dynamic';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
@@ -26,6 +34,12 @@ export async function POST(request: NextRequest) {
       id_departamento
     } = body;
 
+    const datosNormalizados = normalizarPayloadDocente({
+      ...body,
+      nombres: body.nombres,
+      apellidos: body.apellidos
+    });
+
     // Validar que el usuario existe y es docente
     const usuario = await prisma.usuario.findUnique({
       where: { id_usuario },
@@ -50,6 +64,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         exito: false,
         mensaje: 'Este usuario ya tiene un registro de docente'
+      }, { status: 400 });
+    }
+
+    const errores = validarDatosDocente({
+      ...datosNormalizados,
+      nombres: body.nombres || usuario.nombres,
+      apellidos: body.apellidos || usuario.apellidos
+    });
+    const erroresIntegridad = fusionarErroresDocente(
+      construirErroresFormularioDocente(datosNormalizados),
+      await validarUnicidadDocente(datosNormalizados)
+    );
+
+    if (errores.length > 0 || Object.keys(erroresIntegridad).length > 0) {
+      return NextResponse.json({
+        exito: false,
+        mensaje: errores[0] || Object.values(erroresIntegridad)[0],
+        errores,
+        errores_campo: erroresIntegridad
       }, { status: 400 });
     }
 
@@ -85,12 +118,15 @@ export async function POST(request: NextRequest) {
     const nuevoDocente = await prisma.docente.create({
       data: {
         codigo_docente,
-        nombres: usuario.nombres,
-        apellidos: usuario.apellidos,
-        modalidad,
-        categoria,
-        dedicacion: dedicacion || 'tiempo_completo',
-        tipo_dedicacion_laboral: tipo_dedicacion_laboral || 'tiempo_completo',
+        nombres: normalizarTextoMayusculas(usuario.nombres),
+        apellidos: normalizarTextoMayusculas(usuario.apellidos),
+        modalidad: datosNormalizados.modalidad,
+        categoria: datosNormalizados.categoria,
+        categoria_ordinaria: datosNormalizados.categoria_ordinaria || null,
+        tipo_contrato: datosNormalizados.tipo_contrato || null,
+        tipo_extraordinario: datosNormalizados.tipo_extraordinario || null,
+        dedicacion: datosNormalizados.dedicacion || 'tiempo_completo',
+        tipo_dedicacion_laboral: datosNormalizados.tipo_dedicacion_laboral || 'tiempo_completo',
         dni_docente: dni_docente || null,
         escuela_profesional: escuela_profesional || null,
         antiguedad: antiguedadCalculada,
@@ -99,12 +135,33 @@ export async function POST(request: NextRequest) {
         telefono: telefono || null,
         grado_academico: grado_academico || null,
         especialidad: especialidad || null,
-        horas_maximas_semanales: horas_maximas_semanales || 40,
+        horas_maximas_semanales: datosNormalizados.horas_maximas_semanales || 40,
         activo: true,
         id_facultad: id_facultad ? parseInt(id_facultad) : null,
         id_departamento: id_departamento ? parseInt(id_departamento) : null,
         id_usuario: id_usuario
       }
+    });
+
+    const usuarioResponsable = await obtenerUsuarioAutenticadoOpcional(request);
+    await registrarHistorialImportacionDocente({
+      idUsuarioResponsable: usuarioResponsable?.id_usuario || null,
+      nombreArchivo: `usuario-${usuario.codigo}`,
+      formatoArchivo: 'usuario',
+      totalRegistros: 1,
+      registrosValidos: 1,
+      registrosImportados: 1,
+      registrosError: 0,
+      estado: 'completado',
+      detalleResultado: [
+        {
+          fila: 1,
+          exito: true,
+          accion: 'crear',
+          codigo_docente,
+          id_docente: nuevoDocente.id_docente
+        }
+      ]
     });
 
     return NextResponse.json({

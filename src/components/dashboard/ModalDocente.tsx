@@ -2,6 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
+import {
+  obtenerEtiquetaCategoria,
+  obtenerEtiquetaDedicacion,
+  obtenerEtiquetaModalidad,
+} from '@/lib/docentes';
 
 interface Docente {
   id_docente: number;
@@ -136,11 +141,11 @@ export const ModalDocente: React.FC<ModalDocenteProps> = ({ abierto, alCerrar, i
               <div className="space-y-2">
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase">Modalidad</p>
-                  <p className="text-gray-900 capitalize">{docente.modalidad || '-'}</p>
+                  <p className="text-gray-900">{obtenerEtiquetaModalidad(docente)}</p>
                 </div>
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase">Categoría</p>
-                  <p className="text-gray-900 capitalize">{docente.categoria?.replace('_', ' ') || '-'}</p>
+                  <p className="text-gray-900">{obtenerEtiquetaCategoria(docente)}</p>
                 </div>
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase">Antigüedad (años)</p>
@@ -157,7 +162,7 @@ export const ModalDocente: React.FC<ModalDocenteProps> = ({ abierto, alCerrar, i
                 {docente.dedicacion && (
                   <div>
                     <p className="text-xs font-medium text-gray-500 uppercase">Dedicación</p>
-                    <p className="text-gray-900 capitalize">{docente.dedicacion?.replace('_', ' ')}</p>
+                    <p className="text-gray-900">{obtenerEtiquetaDedicacion(docente)}</p>
                   </div>
                 )}
               </div>

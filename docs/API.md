@@ -86,13 +86,31 @@ Crear nuevo curso.
 **Request:**
 ```json
 {
-  "codigo_curso": "CS101",
+  "codigo": "CS101",
   "nombre": "Programación I",
+  "tipo_curso": "EP",
+  "id_departamento": 3,
   "horas_teoria": 3,
   "horas_laboratorio": 2,
   "horas_practica": 0,
   "creditos": 4,
-  "ciclo": 1
+  "ciclo": 1,
+  "prerequisito_ids": [12, 18]
+}
+```
+
+**Notas:**
+- `prerequisito_ids` permite registrar múltiples prerrequisitos.
+- La respuesta incluye `prerequisito_ids`, `prerequisitos_detalle` y `prerequisitos`.
+
+### PUT /api/cursos/{id}
+Actualizar curso y sus prerrequisitos.
+
+**Request:**
+```json
+{
+  "nombre": "Programación avanzada",
+  "prerequisito_ids": [12, 18, 25]
 }
 ```
 

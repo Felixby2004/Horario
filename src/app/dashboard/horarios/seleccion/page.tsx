@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MatrizDisponibilidad } from '@/components/horarios/MatrizDisponibilidad';
 import { Boton } from '@/components/ui/Boton';
 import { Modal } from '@/components/ui/Modal';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 export default function SeleccionHorariosPage() {
   const [docentes, setDocentes] = useState([]);
@@ -232,16 +233,16 @@ export default function SeleccionHorariosPage() {
               <strong>Docente:</strong> {seleccionTemporal.docente.apellidos}, {seleccionTemporal.docente.nombres}
             </div>
             <div>
-              <strong>Curso:</strong> {seleccionTemporal.curso.nombre}
+              <strong>Curso:</strong> {formatearTextoVisualOracion(seleccionTemporal.curso.nombre)}
             </div>
             <div>
-              <strong>Ambiente:</strong> {seleccionTemporal.ambiente.nombre}
+              <strong>Ambiente:</strong> {formatearTextoVisualOracion(seleccionTemporal.ambiente.nombre)}
             </div>
             <div>
               <strong>Horario:</strong> {seleccionTemporal.celda.dia} {seleccionTemporal.celda.hora_inicio} - {seleccionTemporal.celda.hora_fin}
             </div>
             <div>
-              <strong>Tipo:</strong> <span className="capitalize">{tipoClase}</span>
+              <strong>Tipo:</strong> <span>{formatearTextoVisualOracion(tipoClase)}</span>
             </div>
             <div className="flex gap-3 mt-6">
               <Boton onClick={confirmarSeleccion}>Confirmar</Boton>

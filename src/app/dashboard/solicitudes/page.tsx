@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Boton } from '@/components/ui/Boton';
 import { useAlerta } from '@/contexts/AlertaContext';
 import { usePaginacion } from '@/hooks/usePaginacion';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
@@ -259,17 +260,17 @@ export default function SolicitudesPage() {
                           {sol.docente?.apellidos}, {sol.docente?.nombres}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {sol.docente?.modalidad}
+                          {formatearTextoVisualOracion(sol.docente?.modalidad)}
                         </div>
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
-                        <span className="capitalize text-xs">
-                          {sol.docente?.categoria?.replace('_', ' ')}
-                        </span>
+                        <span className="text-xs">{formatearTextoVisualOracion(sol.docente?.categoria)}</span>
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         <div className="font-medium text-xs">{sol.curso?.codigo}</div>
-                        <div className="text-xs text-gray-500 truncate max-w-[150px]">{sol.curso?.nombre}</div>
+                        <div className="text-xs text-gray-500 truncate max-w-[150px]">
+                          {formatearTextoVisualOracion(sol.curso?.nombre)}
+                        </div>
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         <div className="font-medium text-xs">{DIAS[sol.dia_semana]}</div>
@@ -278,7 +279,7 @@ export default function SolicitudesPage() {
                         </div>
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap text-xs truncate max-w-[120px]">
-                        {sol.ambiente?.nombre}
+                        {formatearTextoVisualOracion(sol.ambiente?.nombre)}
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         {getEstadoBadge(sol.estado)}

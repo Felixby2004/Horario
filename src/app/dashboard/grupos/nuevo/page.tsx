@@ -4,13 +4,27 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CampoTexto } from '@/components/ui/CampoTexto';
 import { Boton } from '@/components/ui/Boton';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
+
+interface PeriodoAcademico {
+  id_periodo: number;
+  codigo: string;
+  nombre: string;
+}
+
+interface Curso {
+  id_curso: number;
+  codigo: string;
+  nombre: string;
+  ciclo: number;
+}
 
 export default function NuevoGrupoPage() {
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
-  const [periodos, setPeriodos] = useState([]);
-  const [cursos, setCursos] = useState([]);
-  const [cursosFiltrados, setCursosFiltrados] = useState([]);
+  const [periodos, setPeriodos] = useState<PeriodoAcademico[]>([]);
+  const [cursos, setCursos] = useState<Curso[]>([]);
+  const [cursosFiltrados, setCursosFiltrados] = useState<Curso[]>([]);
   
   const [formulario, setFormulario] = useState({
     id_curso: '',
@@ -33,7 +47,7 @@ export default function NuevoGrupoPage() {
   }, [formulario.id_periodo, cursos]);
 
   const filtrarCursosPorPeriodo = () => {
-    const periodo = periodos.find((p: any) => p.id_periodo === parseInt(formulario.id_periodo));
+    const periodo = periodos.find((p) => p.id_periodo === parseInt(formulario.id_periodo));
     if (!periodo) {
       setCursosFiltrados([]);
       return;
@@ -57,12 +71,12 @@ export default function NuevoGrupoPage() {
     }
 
     // Filtrar cursos que pertenezcan a los ciclos permitidos
-    const filtrados = cursos.filter((c: any) => ciclosPermitidos.includes(c.ciclo));
+    const filtrados = cursos.filter((c) => ciclosPermitidos.includes(c.ciclo));
     setCursosFiltrados(filtrados);
     
     // Limpiar curso seleccionado si no está en la nueva lista
     if (formulario.id_curso) {
-      const cursoValido = filtrados.find((c: any) => c.id_curso === parseInt(formulario.id_curso));
+      const cursoValido = filtrados.find((c) => c.id_curso === parseInt(formulario.id_curso));
       if (!cursoValido) {
         setFormulario({ ...formulario, id_curso: '' });
       }
@@ -126,45 +140,45 @@ export default function NuevoGrupoPage() {
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium mb-2">Período Académico *</label>
-            <select
-              className="w-full border rounded px-3 py-2"
+            <SearchableSelect
+              etiqueta="Período académico"
+              opciones={periodos.map((p) => ({
+                valor: String(p.id_periodo),
+                etiqueta: p.nombre,
+                codigo: p.codigo
+              }))}
               value={formulario.id_periodo}
-              onChange={(e) => setFormulario({ ...formulario, id_periodo: e.target.value })}
+              onChange={(valor) =>
+                setFormulario({ ...formulario, id_periodo: String(valor), id_curso: '' })
+              }
+              placeholder="Seleccione un período"
+              camposBusqueda={['codigo']}
               required
-            >
-              <option value="">Seleccione un período</option>
-              {periodos.map((p: any) => (
-                <option key={p.id_periodo} value={p.id_periodo}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Curso *</label>
-            <select
-              className="w-full border rounded px-3 py-2"
+            <SearchableSelect
+              etiqueta="Curso"
+              opciones={cursosFiltrados.map((c) => ({
+                valor: String(c.id_curso),
+                etiqueta: `${c.codigo} - ${c.nombre}`,
+                codigo: c.codigo,
+                ciclo: `Ciclo ${c.ciclo}`
+              }))}
               value={formulario.id_curso}
-              onChange={(e) => setFormulario({ ...formulario, id_curso: e.target.value })}
-              required
-              disabled={!formulario.id_periodo}
-            >
-              <option value="">
-                {!formulario.id_periodo 
-                  ? 'Primero seleccione un período' 
-                  : cursosFiltrados.length === 0 
+              onChange={(valor) => setFormulario({ ...formulario, id_curso: String(valor) })}
+              placeholder={
+                !formulario.id_periodo
+                  ? 'Primero seleccione un período'
+                  : cursosFiltrados.length === 0
                     ? 'No hay cursos disponibles para este período'
                     : 'Seleccione un curso'
-                }
-              </option>
-              {cursosFiltrados.map((c: any) => (
-                <option key={c.id_curso} value={c.id_curso}>
-                  {c.codigo} - {c.nombre} (Ciclo {c.ciclo})
-                </option>
-              ))}
-            </select>
+              }
+              camposBusqueda={['codigo', 'ciclo']}
+              required
+              disabled={!formulario.id_periodo || cursosFiltrados.length === 0}
+            />
             {formulario.id_periodo && cursosFiltrados.length > 0 && (
               <p className="text-xs text-gray-500 mt-1">
                 Mostrando {cursosFiltrados.length} curso(s) del período seleccionado

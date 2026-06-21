@@ -15,6 +15,12 @@ interface DiaHorario {
   }>;
 }
 
+interface CeldaHorarioFusionada {
+  rowspan: number;
+  contenido: string;
+  colorFondo?: string;
+}
+
 // Colores por curso (para diferenciar visualmente)
 const COLORES_CURSOS: string[] = [
   '#FFE699', // Amarillo
@@ -77,27 +83,16 @@ export class GeneradorPDF {
       ]
     });
 
-    // Agrupar horarios por docente y curso para tabla de profesores
-    const horariosSet = new Map();
-    horarios.forEach(h => {
-      const key = `${h.id_docente}-${h.id_curso}`;
-      if (!horariosSet.has(key)) {
-        horariosSet.set(key, h);
-      }
-    });
-
-    const horariosUnicos = Array.from(horariosSet.values());
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
 
     // Crear matriz de horarios para grid
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const horasDisponibles = this.generarHorasStandard(config);
-    const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasDisponibles);
-
     const html = this.generarHTMLReporteAulaFormato(
       ambiente, 
       periodo, 
       horariosUnicos,
-      matrizHorarios, 
+      horarios,
       diasSemana, 
       horasDisponibles
     );
@@ -131,15 +126,13 @@ export class GeneradorPDF {
       ]
     });
 
-    const cursosUnicos = Array.from(
-      new Map(horarios.map(h => [h.id_curso, h])).values()
-    );
+    const resumenCursos = this.obtenerResumenCursosReporte(horarios);
 
     const html = this.generarHTMLReporteCiclo(
       periodo,
       ciclo,
       horarios,
-      cursosUnicos,
+      resumenCursos,
       config
     );
 
@@ -376,6 +369,301 @@ export class GeneradorPDF {
     });
 
     return matriz;
+  }
+
+  private static normalizarTipoClase(tipo?: string): string {
+    const tipoNormalizado = String(tipo || '').toLowerCase();
+
+    if (tipoNormalizado === 'teo-pra') return 'Teo-Pra';
+    if (tipoNormalizado === 'laboratorio') return 'Laboratorio';
+    if (tipoNormalizado === 'practica') return 'Práctica';
+    if (tipoNormalizado === 'teoria') return 'Teoría';
+
+    return tipo || 'Teoría';
+  }
+
+  private static obtenerEtiquetaTipoCorta(tipo?: string): string {
+    const tipoNormalizado = this.normalizarTipoClase(tipo);
+
+    if (tipoNormalizado === 'Teo-Pra') return 'teo-pra';
+    if (tipoNormalizado === 'Laboratorio') return 'lab';
+    if (tipoNormalizado === 'Práctica') return 'pra';
+    return 'teo';
+  }
+
+  private static obtenerTiposNormalizadosDeGrupo(grupo: any[]): string[] {
+    return Array.from(
+      new Set(
+        grupo.map((horario) => this.normalizarTipoClase(horario.tipo_clase)).filter(Boolean)
+      )
+    );
+  }
+
+  private static puedenFusionarseTipos(grupoActual: any[], horarioActual: any): boolean {
+    const tiposGrupo = this.obtenerTiposNormalizadosDeGrupo(grupoActual);
+    const tipoActual = this.normalizarTipoClase(horarioActual.tipo_clase);
+    const tiposCombinados = new Set([...tiposGrupo, tipoActual]);
+
+    if (tiposCombinados.size === 1) {
+      return true;
+    }
+
+    return Array.from(tiposCombinados).every(
+      (tipo) => tipo === 'Teoría' || tipo === 'Práctica'
+    );
+  }
+
+  private static obtenerTipoReporteDeGrupo(grupo: any[]): string {
+    const tipos = this.obtenerTiposNormalizadosDeGrupo(grupo);
+
+    if (tipos.includes('Teoría') && tipos.includes('Práctica')) {
+      return 'Teo-Pra';
+    }
+
+    if (tipos.includes('Laboratorio')) {
+      return 'Laboratorio';
+    }
+
+    if (tipos.includes('Práctica')) {
+      return 'Práctica';
+    }
+
+    return 'Teoría';
+  }
+
+  private static obtenerAmbientesDeGrupo(grupo: any[]): string[] {
+    return Array.from(
+      new Set(
+        grupo
+          .map((horario) => horario.ambiente?.nombre || horario.ambiente?.codigo || '')
+          .filter(Boolean)
+      )
+    );
+  }
+
+  private static obtenerTextoAmbienteReporte(horario: any): string {
+    const ambientes = Array.isArray(horario.ambientes_reporte)
+      ? horario.ambientes_reporte.filter(Boolean)
+      : [];
+
+    if (ambientes.length > 0) {
+      return ambientes.join(' / ');
+    }
+
+    return horario.ambiente?.nombre || horario.ambiente?.codigo || 'N/A';
+  }
+
+  private static obtenerClaveReferenciaReporte(horario: any): string {
+    return [
+      horario?.id_docente ?? 'sin-docente',
+      horario?.id_curso ?? 'sin-curso',
+      horario?.id_grupo ?? 'sin-grupo'
+    ].join('-');
+  }
+
+  private static obtenerHorariosUnicosParaReporte(horarios: any[]): any[] {
+    const horariosSet = new Map<string, any>();
+
+    horarios.forEach((horario) => {
+      const key = this.obtenerClaveReferenciaReporte(horario);
+      if (!horariosSet.has(key)) {
+        horariosSet.set(key, horario);
+      }
+    });
+
+    return Array.from(horariosSet.values());
+  }
+
+  private static construirReferenciasReporte(
+    horariosUnicos: any[]
+  ): Map<string, { itemNum: number; color: string }> {
+    const referencias = new Map<string, { itemNum: number; color: string }>();
+
+    horariosUnicos.forEach((horario, idx) => {
+      referencias.set(this.obtenerClaveReferenciaReporte(horario), {
+        itemNum: idx + 1,
+        color: COLORES_CURSOS[idx % COLORES_CURSOS.length]
+      });
+    });
+
+    return referencias;
+  }
+
+  private static obtenerResumenCursosReporte(
+    horarios: any[]
+  ): Array<{ horario: any; bloques: number }> {
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+
+    return horariosUnicos.map((horario) => {
+      const clave = this.obtenerClaveReferenciaReporte(horario);
+      const bloques = horarios.filter(
+        (item) => this.obtenerClaveReferenciaReporte(item) === clave
+      ).length;
+
+      return { horario, bloques };
+    });
+  }
+
+  private static construirMapaCeldasFusionadas(
+    horarios: any[],
+    diasSemana: string[],
+    horasRango: string[],
+    construirCelda: (horario: any) => { contenido: string; colorFondo?: string }
+  ): Record<string, Record<string, CeldaHorarioFusionada | 'skip' | null>> {
+    const mapa: Record<string, Record<string, CeldaHorarioFusionada | 'skip' | null>> = {};
+
+    diasSemana.forEach((dia) => {
+      mapa[dia] = {};
+      horasRango.forEach((hora) => {
+        mapa[dia][hora] = null;
+      });
+    });
+
+    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
+
+    horariosAgrupados.forEach((horario) => {
+      const diaNombre = this.obtenerNombreDia(horario.dia_semana);
+      if (!diasSemana.includes(diaNombre)) return;
+
+      const indiceInicio = horasRango.findIndex((rango) => rango.split('-')[0] === horario.hora_inicio);
+      if (indiceInicio === -1) return;
+
+      const rowspan = Math.max(1, horasRango.filter((rango) => {
+        const [inicioRango, finRango] = rango.split('-');
+        return !(horario.hora_fin <= inicioRango || horario.hora_inicio >= finRango);
+      }).length);
+
+      const horaInicio = horasRango[indiceInicio];
+      const celda = construirCelda(horario);
+
+      mapa[diaNombre][horaInicio] = {
+        rowspan,
+        contenido: celda.contenido,
+        colorFondo: celda.colorFondo
+      };
+
+      for (let offset = 1; offset < rowspan; offset++) {
+        const horaCubierta = horasRango[indiceInicio + offset];
+        if (!horaCubierta) break;
+        mapa[diaNombre][horaCubierta] = 'skip';
+      }
+    });
+
+    return mapa;
+  }
+
+  private static generarFilasHorarioFusionadas(
+    diasSemana: string[],
+    horasRango: string[],
+    mapaCeldas: Record<string, Record<string, CeldaHorarioFusionada | 'skip' | null>>
+  ): string {
+    const rowspansActivos: Record<string, number> = {};
+    diasSemana.forEach((dia) => {
+      rowspansActivos[dia] = 0;
+    });
+
+    return horasRango.map((hora) => {
+      const celdas = [
+        `<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`
+      ];
+
+      diasSemana.forEach((dia) => {
+        if (rowspansActivos[dia] > 0) {
+          rowspansActivos[dia] -= 1;
+          return;
+        }
+
+        const celda = mapaCeldas[dia]?.[hora];
+
+        if (celda === 'skip') {
+          celdas.push(`<td style="border: 1px solid #000; padding: 4px; background-color: #FFFFFF;"></td>`);
+          return;
+        }
+
+        if (celda) {
+          rowspansActivos[dia] = Math.max(0, celda.rowspan - 1);
+          celdas.push(`
+            <td rowspan="${celda.rowspan}" style="border: 1px solid #000; padding: 4px 6px; background-color: ${celda.colorFondo || '#FFFFFF'}; font-size: 8px; text-align: center; vertical-align: middle; font-weight: bold; line-height: 1.35;">
+              ${celda.contenido}
+            </td>
+          `);
+        } else {
+          celdas.push(`<td style="border: 1px solid #000; padding: 4px; background-color: #FFFFFF;"></td>`);
+        }
+      });
+
+      celdas.push(`<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`);
+
+      return `<tr>${celdas.join('')}</tr>`;
+    }).join('');
+  }
+
+  private static convertirColorHexAArgb(colorHex?: string): string {
+    return `FF${String(colorHex || '#FFFFFF').replace('#', '')}`;
+  }
+
+  private static renderizarHorarioFusionadoExcel(
+    worksheet: ExcelJS.Worksheet,
+    startRow: number,
+    diasSemana: string[],
+    horasRango: string[],
+    mapaCeldas: Record<string, Record<string, CeldaHorarioFusionada | 'skip' | null>>,
+    estilos: {
+      headerStyle: Partial<ExcelJS.Style>;
+      hourCellStyle: Partial<ExcelJS.Style>;
+      emptyCellStyle: Partial<ExcelJS.Style>;
+      occupiedCellStyle: Partial<ExcelJS.Style>;
+      rowHeight?: number;
+    }
+  ): number {
+    const endHourCol = diasSemana.length + 2;
+    const headerRow = worksheet.getRow(startRow);
+    headerRow.values = ['HORA', ...diasSemana.map((dia) => dia.toUpperCase()), 'HORA'];
+    headerRow.eachCell((cell) => {
+      cell.style = estilos.headerStyle;
+    });
+    headerRow.height = 22;
+
+    horasRango.forEach((hora, index) => {
+      const rowNumber = startRow + 1 + index;
+      const row = worksheet.getRow(rowNumber);
+      row.height = estilos.rowHeight || 34;
+
+      const hourLeftCell = row.getCell(1);
+      hourLeftCell.value = hora;
+      hourLeftCell.style = estilos.hourCellStyle;
+
+      const hourRightCell = row.getCell(endHourCol);
+      hourRightCell.value = hora;
+      hourRightCell.style = estilos.hourCellStyle;
+
+      diasSemana.forEach((dia, diaIndex) => {
+        const colNumber = diaIndex + 2;
+        const celda = mapaCeldas[dia]?.[hora];
+
+        if (celda === 'skip') {
+          return;
+        }
+
+        const cell = row.getCell(colNumber);
+
+        if (celda) {
+          cell.value = celda.contenido;
+          cell.style = {
+            ...estilos.occupiedCellStyle,
+            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: this.convertirColorHexAArgb(celda.colorFondo) } }
+          };
+
+          if (celda.rowspan > 1) {
+            worksheet.mergeCells(rowNumber, colNumber, rowNumber + celda.rowspan - 1, colNumber);
+          }
+        } else {
+          cell.style = estilos.emptyCellStyle;
+        }
+      });
+    });
+
+    return startRow + horasRango.length + 1;
   }
 
   // HTML para reporte de auditoría por día
@@ -634,28 +922,19 @@ export class GeneradorPDF {
     ambiente: any, 
     periodo: any, 
     horariosUnicos: any[],
-    matrizHorarios: any, 
+    horarios: any[],
     diasSemana: string[], 
     horasRango: string[]
   ) {
     // Obtener escuela (puede venir de ambiente o del grupo)
     const escuela = ambiente?.nombre || 'INGENIERIA DE SISTEMAS';
     
-    // Crear mapeo de cursos a números y colores
-    const cursosMap = new Map();
-    const cursosColores: { [key: number]: string } = {};
-    horariosUnicos.forEach((h, idx) => {
-      const cursoKey = h.id_curso;
-      if (!cursosMap.has(cursoKey)) {
-        const profNum = idx + 1;
-        cursosMap.set(cursoKey, { profNum, cursoNombre: h.curso?.nombre });
-        cursosColores[profNum] = COLORES_CURSOS[idx % COLORES_CURSOS.length];
-      }
-    });
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
     
     // Construir filas de la tabla de profesores
     const filasProf = horariosUnicos.map((h, idx) => {
-      const profNum = idx + 1;
+      const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(h));
+      const profNum = referencia?.itemNum || idx + 1;
       const color = '#ffffff'; // Color base
       const curso = h.curso;
       const horasT = curso?.horas_teoria || 0;
@@ -679,38 +958,28 @@ export class GeneradorPDF {
     `;
     }).join('');
 
-    // Construir filas de horario - simplificado
-    const filasHorario = horasRango.map(hora => {
-      const celdas = [
-        `<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`
-      ];
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const profNum = referencia?.itemNum || '?';
+        const bgColor = referencia?.color || '#FFFFFF';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
 
-      diasSemana.forEach(dia => {
-        const horario = matrizHorarios[dia]?.[hora];
-        
-        if (horario) {
-          // Buscar el número del profesor/curso
-          const cursoInfo = cursosMap.get(horario.idCursoRef);
-          const profNum = cursoInfo?.profNum || '?';
-          const bgColor = cursosColores[profNum] || '#FFFFFF';
-          const tipoCorto = horario.tipo === 'Laboratorio' ? 'Lab' : horario.tipo.substring(0, 3);
-          
-          celdas.push(`
-            <td style="border: 1px solid #000; padding: 4px; background-color: ${bgColor}; font-size: 8px; text-align: center; vertical-align: middle; font-weight: bold;">
-              <div>${horario.cursoNombre}</div>
-              <div>(${tipoCorto})</div>
-              <div>Prof. ${profNum}</div>
-            </td>
-          `);
-        } else {
-          celdas.push(`<td style="border: 1px solid #000; padding: 4px; background-color: #FFFFFF;"></td>`);
-        }
-      });
+        return {
+          colorFondo: bgColor,
+          contenido: `
+            <div>${horario.curso?.nombre || 'N/A'}</div>
+            <div>(${tipoCorto})</div>
+            <div>Prof. ${profNum}</div>
+          `
+        };
+      }
+    );
 
-      celdas.push(`<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`);
-
-      return `<tr>${celdas.join('')}</tr>`;
-    }).join('');
+    const filasHorario = this.generarFilasHorarioFusionadas(diasSemana, horasRango, mapaCeldas);
 
     return `
       <!DOCTYPE html>
@@ -1001,63 +1270,37 @@ export class GeneradorPDF {
 
     worksheet.addRow([]);
 
-    // Preparar datos para tabla de horarios
-    const horariosSet = new Map();
-    horarios.forEach(h => {
-      const key = `${h.id_docente}-${h.id_curso}`;
-      if (!horariosSet.has(key)) {
-        horariosSet.set(key, h);
-      }
-    });
-    const horariosUnicos = Array.from(horariosSet.values());
-    const cursosMap = new Map();
-    const cursosColores: { [key: number]: string } = {};
-    horariosUnicos.forEach((h, idx) => {
-      const cursoKey = h.id_curso;
-      if (!cursosMap.has(cursoKey)) {
-        const profNum = idx + 1;
-        cursosMap.set(cursoKey, { profNum, cursoNombre: h.curso?.nombre });
-        cursosColores[profNum] = COLORES_CURSOS[idx % COLORES_CURSOS.length];
-      }
-    });
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
 
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const horasRango = this.generarHorasStandard(config);
-    const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasRango);
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const profNum = referencia?.itemNum || '?';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
 
-    // Encabezado del horario
-    const headerRow = worksheet.addRow(['HORA', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'HORA']);
-    headerRow.eachCell((cell, colNumber) => {
-      cell.style = headerStyle;
-    });
+        return {
+          colorFondo: referencia?.color || '#FFFFFF',
+          contenido: `${horario.curso?.nombre || 'N/A'}\n(${tipoCorto})\nProf. ${profNum}`
+        };
+      }
+    );
 
-    // Filas del horario
-    horasRango.forEach((hora) => {
-      const row = worksheet.addRow([hora]);
-      row.getCell(1).style = hourCellStyle;
-
-      diasSemana.forEach((dia, idx) => {
-        const horario = matrizHorarios[dia]?.[hora];
-        if (horario) {
-          const cursoInfo = cursosMap.get(horario.idCursoRef);
-          const profNum = cursoInfo?.profNum || '?';
-          const color = cursosColores[profNum] || 'FFFFFF';
-          const tipoCorto = horario.tipo === 'Laboratorio' ? 'Lab' : horario.tipo.substring(0, 3);
-          
-          const cell = row.getCell(idx + 2);
-          cell.value = `${horario.cursoNombre}\n(${tipoCorto})\nProf. ${profNum}`;
-          cell.style = {
-            ...cellStyle,
-            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${color.replace('#', '')}` } },
-            font: { bold: true, size: 9 }
-          };
-        } else {
-          row.getCell(idx + 2).style = cellStyle;
-        }
-      });
-
-      row.getCell(8).value = hora;
-      row.getCell(8).style = hourCellStyle;
+    this.renderizarHorarioFusionadoExcel(worksheet, 9, diasSemana, horasRango, mapaCeldas, {
+      headerStyle,
+      hourCellStyle,
+      emptyCellStyle: cellStyle,
+      occupiedCellStyle: {
+        ...cellStyle,
+        font: { bold: true, size: 9 },
+        alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
+      },
+      rowHeight: 36
     });
 
     // Ajustar ancho de columnas
@@ -1088,7 +1331,9 @@ export class GeneradorPDF {
 
     // Filas de la tabla
     horariosUnicos.forEach((h, idx) => {
-      const color = cursosColores[idx + 1] || 'FFFFFF';
+      const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(h));
+      const itemNum = referencia?.itemNum || idx + 1;
+      const color = referencia?.color || 'FFFFFF';
       const curso = h.curso;
       const horasT = curso?.horas_teoria || 0;
       const horasP = curso?.horas_practica || 0;
@@ -1097,7 +1342,7 @@ export class GeneradorPDF {
       const grupo = h.grupo?.codigo_grupo || '-';
 
       const row = worksheetProfesores.addRow([
-        idx + 1,
+        itemNum,
         h.docente ? `${h.docente.apellidos} ${h.docente.nombres}` : 'N/A',
         h.curso?.nombre || 'N/A',
         horasT,
@@ -1128,7 +1373,13 @@ export class GeneradorPDF {
     return (await workbook.xlsx.writeBuffer()) as any;
   }
 
+  static async generarExcelLaboratorio(idAmbiente: number, idPeriodo: number): Promise<Buffer> {
+    return this.generarExcelAula(idAmbiente, idPeriodo);
+  }
+
   static async generarExcelCiclo(idPeriodo: number, ciclo: number): Promise<Buffer> {
+    const config = await this.obtenerConfiguracion();
+
     const periodo = await prisma.periodoAcademico.findUnique({
       where: { id_periodo: idPeriodo }
     });
@@ -1150,6 +1401,9 @@ export class GeneradorPDF {
         { hora_inicio: 'asc' }
       ]
     });
+
+    const resumenCursos = this.obtenerResumenCursosReporte(horarios);
+    const totalBloquesResumen = resumenCursos.reduce((total, item) => total + item.bloques, 0);
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Horario Semanal');
@@ -1232,29 +1486,11 @@ export class GeneradorPDF {
 
     worksheet.addRow([]);
 
-    const horariosSet = new Map();
-    horarios.forEach(h => {
-      const key = `${h.id_docente}-${h.id_curso}`;
-      if (!horariosSet.has(key)) {
-        horariosSet.set(key, h);
-      }
-    });
-
-    const horariosUnicos = Array.from(horariosSet.values());
-    const cursosMap = new Map();
-    const cursosColores: { [key: number]: string } = {};
-    horariosUnicos.forEach((h, idx) => {
-      const cursoKey = h.id_curso;
-      if (!cursosMap.has(cursoKey)) {
-        const profNum = idx + 1;
-        cursosMap.set(cursoKey, { profNum, cursoNombre: h.curso?.nombre });
-        cursosColores[profNum] = COLORES_CURSOS[idx % COLORES_CURSOS.length];
-      }
-    });
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
 
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const horasRango = this.generarHorasStandard();
-    const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasRango);
+    const horasRango = this.generarHorasStandard(config);
 
     const headerProfRow = worksheet.addRow(['Nº', 'PROFESOR', 'ASIGNATURA', 'T', 'P', 'L', 'G', 'T.HORAS', 'DEPARTAMENTO']);
     headerProfRow.eachCell((cell) => {
@@ -1262,9 +1498,11 @@ export class GeneradorPDF {
     });
 
     horariosUnicos.forEach((h, idx) => {
-      const color = cursosColores[idx + 1] || 'FFFFFF';
+      const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(h));
+      const itemNum = referencia?.itemNum || idx + 1;
+      const color = referencia?.color || 'FFFFFF';
       const row = worksheet.addRow([
-        idx + 1,
+        itemNum,
         h.docente ? `${h.docente.apellidos} ${h.docente.nombres}` : 'N/A',
         h.curso?.nombre || 'N/A',
         h.curso?.horas_teoria || 0,
@@ -1285,50 +1523,97 @@ export class GeneradorPDF {
 
     worksheet.addRow([]);
 
-    const headerHorario = worksheet.addRow(['HORA', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'HORA']);
-    headerHorario.eachCell((cell) => {
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const profNum = referencia?.itemNum || '?';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
+
+        return {
+          colorFondo: referencia?.color || '#FFFFFF',
+          contenido: `${horario.curso?.nombre || 'N/A'}\n(${tipoCorto})\nProf. ${profNum}`
+        };
+      }
+    );
+
+    this.renderizarHorarioFusionadoExcel(worksheet, worksheet.rowCount + 1, diasSemana, horasRango, mapaCeldas, {
+      headerStyle,
+      hourCellStyle,
+      emptyCellStyle: cellStyle,
+      occupiedCellStyle: {
+        ...cellStyle,
+        font: { bold: true, size: 9 },
+        alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
+      },
+      rowHeight: 36
+    });
+
+    worksheet.getColumn(1).width = 10;
+    for (let i = 2; i <= 7; i++) {
+      worksheet.getColumn(i).width = 22;
+    }
+    worksheet.getColumn(8).width = 10;
+    worksheet.getColumn(9).width = 20;
+
+    const worksheetResumen = workbook.addWorksheet('Resumen de Cursos');
+    worksheetResumen.mergeCells('A1:H1');
+    worksheetResumen.getCell('A1').value = `RESUMEN DE CURSOS - CICLO ${ciclo}`;
+    worksheetResumen.getCell('A1').style = titleStyle;
+
+    worksheetResumen.getCell('A3').value = 'Total cursos:';
+    worksheetResumen.getCell('A3').style = subTitleStyle;
+    worksheetResumen.getCell('B3').value = resumenCursos.length;
+    worksheetResumen.getCell('B3').style = cellStyle;
+
+    worksheetResumen.getCell('D3').value = 'Total bloques:';
+    worksheetResumen.getCell('D3').style = subTitleStyle;
+    worksheetResumen.getCell('E3').value = totalBloquesResumen;
+    worksheetResumen.getCell('E3').style = cellStyle;
+
+    const headerResumenRow = worksheetResumen.addRow([]);
+    headerResumenRow.commit();
+    const resumenHeader = worksheetResumen.addRow(['N°', 'Código', 'Curso', 'T', 'P', 'L', 'Docente', 'Bloques']);
+    resumenHeader.eachCell((cell) => {
       cell.style = headerStyle;
     });
 
-    horasRango.forEach((hora) => {
-      const row = worksheet.addRow([hora]);
-      row.getCell(1).style = hourCellStyle;
-
-      diasSemana.forEach((dia, idx) => {
-        const horario = matrizHorarios[dia]?.[hora];
-        if (horario) {
-          const cursoInfo = cursosMap.get(horario.idCursoRef);
-          const profNum = cursoInfo?.profNum || '?';
-          const color = cursosColores[profNum] || 'FFFFFF';
-          const tipoCorto = horario.tipo === 'Laboratorio' ? 'Lab' : horario.tipo.substring(0, 3);
-
-          const cell = row.getCell(idx + 2);
-          cell.value = `${horario.cursoNombre}\n(${tipoCorto})\nProf. ${profNum}`;
-          cell.style = {
-            ...cellStyle,
-            fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${color.replace('#', '')}` } },
-            font: { bold: true, size: 9 }
-          };
-        } else {
-          row.getCell(idx + 2).style = cellStyle;
-        }
+    resumenCursos.forEach(({ horario, bloques }, idx) => {
+      const row = worksheetResumen.addRow([
+        idx + 1,
+        horario.curso?.codigo || 'N/A',
+        horario.curso?.nombre || 'N/A',
+        horario.curso?.horas_teoria || 0,
+        horario.curso?.horas_practica || 0,
+        horario.curso?.horas_laboratorio || 0,
+        horario.docente ? `${horario.docente.apellidos}, ${horario.docente.nombres}` : 'N/A',
+        bloques
+      ]);
+      row.eachCell((cell, colNumber) => {
+        cell.style = {
+          ...cellStyle,
+          alignment: { vertical: 'middle', horizontal: colNumber === 1 || colNumber >= 4 ? 'center' : 'left', wrapText: true }
+        };
       });
-
-      row.getCell(8).value = hora;
-      row.getCell(8).style = hourCellStyle;
     });
 
-    worksheet.getColumn(1).width = 6;
-    worksheet.getColumn(2).width = 30;
-    worksheet.getColumn(3).width = 35;
-    for (let i = 4; i <= 8; i++) {
-      worksheet.getColumn(i).width = 10;
-    }
+    worksheetResumen.getColumn(1).width = 8;
+    worksheetResumen.getColumn(2).width = 16;
+    worksheetResumen.getColumn(3).width = 38;
+    worksheetResumen.getColumn(4).width = 8;
+    worksheetResumen.getColumn(5).width = 8;
+    worksheetResumen.getColumn(6).width = 8;
+    worksheetResumen.getColumn(7).width = 34;
+    worksheetResumen.getColumn(8).width = 10;
 
     return (await workbook.xlsx.writeBuffer()) as any;
   }
 
   static async generarExcelDocente(idDocente: number, idPeriodo: number): Promise<Buffer> {
+    const config = await this.obtenerConfiguracion();
+
     const docente = await prisma.docente.findUnique({
       where: { id_docente: idDocente }
     });
@@ -1349,9 +1634,6 @@ export class GeneradorPDF {
         { hora_inicio: 'asc' }
       ]
     });
-
-    // Agrupar horarios consecutivos
-    const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Horario Docente');
@@ -1374,21 +1656,16 @@ export class GeneradorPDF {
       alignment: { vertical: 'middle', horizontal: 'center' }
     };
 
-    const altCellStyle: Partial<ExcelJS.Style> = {
-      ...cellStyle,
-      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } }
-    };
-
     // Título principal
-    worksheet.mergeCells('A1:F1');
+    worksheet.mergeCells('A1:H1');
     worksheet.getCell('A1').value = 'UNIVERSIDAD NACIONAL DE TRUJILLO';
     worksheet.getCell('A1').style = titleStyle;
 
-    worksheet.mergeCells('A2:F2');
+    worksheet.mergeCells('A2:H2');
     worksheet.getCell('A2').value = 'FACULTAD DE INGENIERÍA';
     worksheet.getCell('A2').style = { ...titleStyle, font: { ...titleStyle.font, size: 12 } };
 
-    worksheet.mergeCells('A3:F3');
+    worksheet.mergeCells('A3:H3');
     worksheet.getCell('A3').value = 'HORARIO SEMANAL DEL DOCENTE';
     worksheet.getCell('A3').style = { ...titleStyle, font: { ...titleStyle.font, size: 12 } };
 
@@ -1418,34 +1695,51 @@ export class GeneradorPDF {
 
     worksheet.addRow([]);
 
-    // Encabezado de la tabla
-    const headerRow = worksheet.addRow(['DÍA', 'HORA INICIO', 'HORA FIN', 'CURSO', 'GRUPO', 'AMBIENTE']);
-    headerRow.eachCell((cell) => {
-      cell.style = headerStyle;
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
+
+    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const horasRango = this.generarHorasStandard(config);
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const cursoNum = referencia?.itemNum || '?';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
+
+        return {
+          colorFondo: referencia?.color || '#FFFFFF',
+          contenido: `${horario.curso?.nombre || 'N/A'}\nGrupo ${horario.grupo?.codigo_grupo || '-'}\n(${tipoCorto})\n${this.obtenerTextoAmbienteReporte(horario)}`
+        };
+      }
+    );
+
+    this.renderizarHorarioFusionadoExcel(worksheet, 9, diasSemana, horasRango, mapaCeldas, {
+      headerStyle,
+      hourCellStyle: {
+        ...cellStyle,
+        fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } },
+        font: { bold: true, size: 9 }
+      },
+      emptyCellStyle: {
+        ...cellStyle,
+        alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
+      },
+      occupiedCellStyle: {
+        ...cellStyle,
+        font: { bold: true, size: 9 },
+        alignment: { vertical: 'middle', horizontal: 'center', wrapText: true }
+      },
+      rowHeight: 38
     });
 
-    // Filas de datos (agrupados)
-    horariosAgrupados.forEach((h, idx) => {
-      const row = worksheet.addRow([
-        this.obtenerNombreDia(h.dia_semana),
-        h.hora_inicio,
-        h.hora_fin,
-        h.curso.nombre,
-        h.grupo?.codigo_grupo || 'N/A',
-        h.ambiente?.nombre || 'N/A'
-      ]);
-      row.eachCell((cell) => {
-        cell.style = idx % 2 === 0 ? cellStyle : altCellStyle;
-      });
-    });
-
-    // Ajustar ancho de columnas
-    worksheet.getColumn(1).width = 15;
-    worksheet.getColumn(2).width = 15;
-    worksheet.getColumn(3).width = 15;
-    worksheet.getColumn(4).width = 40;
-    worksheet.getColumn(5).width = 15;
-    worksheet.getColumn(6).width = 25;
+    worksheet.getColumn(1).width = 10;
+    for (let i = 2; i <= 7; i++) {
+      worksheet.getColumn(i).width = 22;
+    }
+    worksheet.getColumn(8).width = 10;
 
     return (await workbook.xlsx.writeBuffer()) as any;
   }
@@ -1480,17 +1774,7 @@ export class GeneradorPDF {
       ]
     });
 
-    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-    const horariosPorDia: any = {};
-
-    diasSemana.forEach(dia => {
-      horariosPorDia[dia] = horarios.filter(h => {
-        const diaNum = diasSemana.indexOf(dia) + 1;
-        return h.dia_semana === diaNum;
-      });
-    });
-
-    const html = this.generarHTMLReporteDocenteHorario(docente, periodo, horariosPorDia, diasSemana, config);
+    const html = this.generarHTMLReporteDocenteHorario(docente, periodo, horarios, config);
     return await this.convertirAPDF(html);
   }
 
@@ -1599,39 +1883,35 @@ export class GeneradorPDF {
     return await this.convertirAPDF(html);
   }
 
-  private static generarHTMLReporteDocenteHorario(docente: any, periodo: any, horariosPorDia: any, diasSemana: string[], config?: any) {
-    const tablasHorario = diasSemana.map((dia, diaIdx) => {
-      const horariosDelDia = horariosPorDia[dia];
-      if (horariosDelDia.length === 0) return '';
+  private static generarHTMLReporteDocenteHorario(docente: any, periodo: any, horarios: any[], config?: any) {
+    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const horasRango = this.generarHorasStandard(config);
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
 
-      return `
-        <h4 style="margin-top: 20px; margin-bottom: 10px; color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; font-size: 14px;">
-          ${dia}
-        </h4>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-          <thead>
-            <tr style="background-color: #1e3a8a; color: white;">
-              <th style="border: 1px solid #000; padding: 8px; text-align: left;">Hora</th>
-              <th style="border: 1px solid #000; padding: 8px; text-align: left;">Curso</th>
-              <th style="border: 1px solid #000; padding: 8px; text-align: left;">Tipo</th>
-              <th style="border: 1px solid #000; padding: 8px; text-align: left;">Grupo</th>
-              <th style="border: 1px solid #000; padding: 8px; text-align: left;">Ambiente</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${horariosDelDia.map((h: any, idx: number) => `
-              <tr style="background-color: ${idx % 2 === 0 ? '#f9f9f9' : 'white'};">
-                <td style="border: 1px solid #000; padding: 8px; font-weight: bold;">${h.hora_inicio} - ${h.hora_fin}</td>
-                <td style="border: 1px solid #000; padding: 8px;">${h.curso.nombre}</td>
-                <td style="border: 1px solid #000; padding: 8px;">${h.tipo_clase || 'Teoría'}</td>
-                <td style="border: 1px solid #000; padding: 8px;">${h.grupo?.codigo_grupo || 'N/A'}</td>
-                <td style="border: 1px solid #000; padding: 8px;">${h.ambiente?.nombre || 'N/A'}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    }).join('');
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const cursoNum = referencia?.itemNum || '?';
+        const bgColor = referencia?.color || '#FFFFFF';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
+
+        return {
+          colorFondo: bgColor,
+          contenido: `
+            <div>${horario.curso?.nombre || 'N/A'}</div>
+            <div>Grupo ${horario.grupo?.codigo_grupo || '-'}</div>
+            <div>(${tipoCorto})</div>
+            <div>${this.obtenerTextoAmbienteReporte(horario)}</div>
+          `
+        };
+      }
+    );
+
+    const filasHorario = this.generarFilasHorarioFusionadas(diasSemana, horasRango, mapaCeldas);
 
     return `
       <!DOCTYPE html>
@@ -1679,7 +1959,25 @@ export class GeneradorPDF {
           </div>
         </div>
 
-        ${tablasHorario || '<p style="text-align: center; color: #999;">No hay horarios asignados para este docente.</p>'}
+        ${horarios.length > 0 ? `
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9px;">
+            <thead>
+              <tr style="background-color: #1e3a8a; color: white;">
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">HORA</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">LUNES</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">MARTES</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">MIÉRCOLES</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">JUEVES</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">VIERNES</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">SÁBADO</th>
+                <th style="border: 1px solid #000; padding: 6px; text-align: center;">HORA</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filasHorario}
+            </tbody>
+          </table>
+        ` : '<p style="text-align: center; color: #999;">No hay horarios asignados para este docente.</p>'}
 
         <div class="footer">
           <p>Reporte generado: ${new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
@@ -1689,35 +1987,22 @@ export class GeneradorPDF {
     `;
   }
 
-  private static generarHTMLReporteCiclo(periodo: any, ciclo: number, horarios: any[], cursosUnicos: any[], config?: any) {
-    const horariosSet = new Map();
-    horarios.forEach(h => {
-      const key = `${h.id_docente}-${h.id_curso}`;
-      if (!horariosSet.has(key)) {
-        horariosSet.set(key, h);
-      }
-    });
-
-    const horariosUnicos = Array.from(horariosSet.values());
-
-    const cursosMap = new Map();
-    const cursosColores: { [key: number]: string } = {};
-    horariosUnicos.forEach((h, idx) => {
-      const cursoKey = h.id_curso;
-      if (!cursosMap.has(cursoKey)) {
-        const profNum = idx + 1;
-        cursosMap.set(cursoKey, { profNum, cursoNombre: h.curso?.nombre });
-        cursosColores[profNum] = COLORES_CURSOS[idx % COLORES_CURSOS.length];
-      }
-    });
+  private static generarHTMLReporteCiclo(
+    periodo: any,
+    ciclo: number,
+    horarios: any[],
+    resumenCursos: Array<{ horario: any; bloques: number }>,
+    config?: any
+  ) {
+    const horariosUnicos = this.obtenerHorariosUnicosParaReporte(horarios);
+    const referenciasReporte = this.construirReferenciasReporte(horariosUnicos);
 
     const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const horasRango = this.generarHorasStandard(config);
-    const matrizHorarios = this.crearMatrizHorariosOptimizada(horarios, diasSemana, horasRango);
-
     const filasProf = horariosUnicos.map((h, idx) => {
-      const profNum = idx + 1;
-      const color = cursosColores[profNum];
+      const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(h));
+      const profNum = referencia?.itemNum || idx + 1;
+      const color = referencia?.color || '#FFFFFF';
       const horasCurso = (h.curso?.horas_teoria || 0) + (h.curso?.horas_practica || 0) + (h.curso?.horas_laboratorio || 0);
       return `
       <tr>
@@ -1734,47 +2019,39 @@ export class GeneradorPDF {
     `;
     }).join('');
 
-    const filasHorario = horasRango.map(hora => {
-      const celdas = [
-        `<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`
-      ];
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario) => {
+        const referencia = referenciasReporte.get(this.obtenerClaveReferenciaReporte(horario));
+        const profNum = referencia?.itemNum || '?';
+        const bgColor = referencia?.color || '#FFFFFF';
+        const tipoCorto = this.obtenerEtiquetaTipoCorta(horario.tipo_clase_reporte || horario.tipo_clase);
 
-      diasSemana.forEach(dia => {
-        const horario = matrizHorarios[dia]?.[hora];
+        return {
+          colorFondo: bgColor,
+          contenido: `
+            <div>${horario.curso?.nombre || 'N/A'}</div>
+            <div>(${tipoCorto})</div>
+            <div>Prof. ${profNum}</div>
+          `
+        };
+      }
+    );
 
-        if (horario) {
-          const cursoInfo = cursosMap.get(horario.idCursoRef);
-          const profNum = cursoInfo?.profNum || '?';
-          const bgColor = cursosColores[profNum] || '#FFFFFF';
-          const tipoCorto = horario.tipo === 'Laboratorio' ? 'Lab' : horario.tipo.substring(0, 3);
+    const filasHorario = this.generarFilasHorarioFusionadas(diasSemana, horasRango, mapaCeldas);
 
-          celdas.push(`
-            <td style="border: 1px solid #000; padding: 4px; background-color: ${bgColor}; font-size: 8px; text-align: center; vertical-align: middle; font-weight: bold;">
-              <div>${horario.cursoNombre}</div>
-              <div>(${tipoCorto})</div>
-              <div>Prof. ${profNum}</div>
-            </td>
-          `);
-        } else {
-          celdas.push(`<td style="border: 1px solid #000; padding: 4px; background-color: #FFFFFF;"></td>`);
-        }
-      });
-
-      celdas.push(`<td style="border: 1px solid #000; padding: 6px; font-weight: bold; background-color: #e0e0e0; text-align: center; font-size: 9px;">${hora}</td>`);
-
-      return `<tr>${celdas.join('')}</tr>`;
-    }).join('');
-
-    const filasCursosResumen = cursosUnicos.map((h, idx) => `
+    const filasCursosResumen = resumenCursos.map(({ horario, bloques }, idx) => `
       <tr style="background-color: ${idx % 2 === 0 ? '#f9f9f9' : 'white'};">
         <td style="border: 1px solid #000; padding: 8px; text-align: center; font-weight: bold;">${idx + 1}</td>
-        <td style="border: 1px solid #000; padding: 8px;">${h.curso?.codigo || 'N/A'}</td>
-        <td style="border: 1px solid #000; padding: 8px;">${h.curso?.nombre || 'N/A'}</td>
-        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${h.curso?.horas_teoria || 0}</td>
-        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${h.curso?.horas_practica || 0}</td>
-        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${h.curso?.horas_laboratorio || 0}</td>
-        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${h.docente ? `${h.docente.apellidos}, ${h.docente.nombres}` : 'N/A'}</td>
-        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${horarios.filter(item => item.id_curso === h.id_curso).length}</td>
+        <td style="border: 1px solid #000; padding: 8px;">${horario.curso?.codigo || 'N/A'}</td>
+        <td style="border: 1px solid #000; padding: 8px;">${horario.curso?.nombre || 'N/A'}</td>
+        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${horario.curso?.horas_teoria || 0}</td>
+        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${horario.curso?.horas_practica || 0}</td>
+        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${horario.curso?.horas_laboratorio || 0}</td>
+        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${horario.docente ? `${horario.docente.apellidos}, ${horario.docente.nombres}` : 'N/A'}</td>
+        <td style="border: 1px solid #000; padding: 8px; text-align: center;">${bloques}</td>
       </tr>
     `).join('');
 
@@ -2192,23 +2469,25 @@ export class GeneradorPDF {
         // Check if they are the same in all criteria AND consecutive in time
         const mismosCriterios =
           actual.id_curso === anterior.id_curso &&
-          actual.id_docente === anterior.id_docente &&
-          actual.id_ambiente === anterior.id_ambiente &&
-          actual.tipo_clase === anterior.tipo_clase;
+          actual.id_grupo === anterior.id_grupo;
 
         // Check if they are consecutive (anterior's end equals actual's start)
         const consecutivos = anterior.hora_fin === actual.hora_inicio;
+        const tiposCompatibles = this.puedenFusionarseTipos(grupoActual, actual);
         
-        if (mismosCriterios && consecutivos) {
+        if (mismosCriterios && consecutivos && tiposCompatibles) {
           grupoActual.push(actual);
         } else {
           // Create a merged entry
           const primerHorario = grupoActual[0];
           const ultimoHorario = grupoActual[grupoActual.length - 1];
+          const tipoClaseReporte = this.obtenerTipoReporteDeGrupo(grupoActual);
           horariosAgrupados.push({
             ...primerHorario,
             hora_inicio: primerHorario.hora_inicio,
             hora_fin: ultimoHorario.hora_fin,
+            tipo_clase_reporte: tipoClaseReporte,
+            ambientes_reporte: this.obtenerAmbientesDeGrupo(grupoActual),
             esAgrupado: grupoActual.length > 1,
             cantidadSlots: grupoActual.length
           });
@@ -2220,10 +2499,13 @@ export class GeneradorPDF {
       if (grupoActual.length > 0) {
         const primerHorario = grupoActual[0];
         const ultimoHorario = grupoActual[grupoActual.length - 1];
+        const tipoClaseReporte = this.obtenerTipoReporteDeGrupo(grupoActual);
         horariosAgrupados.push({
           ...primerHorario,
           hora_inicio: primerHorario.hora_inicio,
           hora_fin: ultimoHorario.hora_fin,
+          tipo_clase_reporte: tipoClaseReporte,
+          ambientes_reporte: this.obtenerAmbientesDeGrupo(grupoActual),
           esAgrupado: grupoActual.length > 1,
           cantidadSlots: grupoActual.length
         });

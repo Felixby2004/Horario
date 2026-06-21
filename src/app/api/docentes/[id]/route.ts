@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { normalizarPayloadDocente, validarDatosDocente } from '@/lib/docentes';
+import {
+  construirErroresFormularioDocente,
+  fusionarErroresDocente,
+  obtenerCambiosDocente,
+  obtenerUsuarioAutenticadoOpcional,
+  registrarHistorialEdicionDocente,
+  validarUnicidadDocente
+} from '@/lib/docentesIntegridad';
 
 export const dynamic = 'force-dynamic';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
@@ -14,7 +23,48 @@ export async function GET(
     const docente = await prisma.docente.findUnique({
       where: { id_docente: id },
       include: {
-        usuario: true
+        usuario: true,
+        facultad: true,
+        departamento: true,
+        cursos: {
+          where: { activo: true },
+          include: {
+            curso: true
+          },
+          orderBy: {
+            fecha_asignacion: 'desc'
+          }
+        },
+        grupos: {
+          where: { activo: true },
+          include: {
+            grupo: {
+              include: {
+                curso: true,
+                periodo: true
+              }
+            }
+          },
+          orderBy: {
+            fecha_asignacion: 'desc'
+          }
+        },
+        historial_ediciones: {
+          include: {
+            usuario_editor: {
+              select: {
+                id_usuario: true,
+                nombres: true,
+                apellidos: true,
+                codigo: true
+              }
+            }
+          },
+          orderBy: {
+            fecha_edicion: 'desc'
+          },
+          take: 10
+        }
       }
     });
 
@@ -51,7 +101,37 @@ export async function PUT(
 ) {
   try {
     const id = parseInt(params.id);
-    const body = await request.json();
+    const payload = await request.json();
+    const body = normalizarPayloadDocente(payload);
+    const docenteAnterior = await prisma.docente.findUnique({
+      where: { id_docente: id },
+      include: {
+        facultad: true,
+        departamento: true
+      }
+    });
+
+    if (!docenteAnterior) {
+      return NextResponse.json({
+        exito: false,
+        mensaje: 'Docente no encontrado'
+      }, { status: 404 });
+    }
+
+    const errores = validarDatosDocente(body);
+    const erroresIntegridad = fusionarErroresDocente(
+      construirErroresFormularioDocente(body),
+      await validarUnicidadDocente(body, { excludeId: id })
+    );
+
+    if (errores.length > 0 || Object.keys(erroresIntegridad).length > 0) {
+      return NextResponse.json({
+        exito: false,
+        mensaje: errores[0] || Object.values(erroresIntegridad)[0],
+        errores,
+        errores_campo: erroresIntegridad
+      }, { status: 400 });
+    }
 
     // Si se actualiza la fecha de ingreso, recalculamos la antigüedad
     if (body.fecha_ingreso) {
@@ -68,7 +148,14 @@ export async function PUT(
 
     const docente = await prisma.docente.update({
       where: { id_docente: id },
-      data: body
+      data: {
+        ...body,
+        categoria_ordinaria: body.categoria_ordinaria || null,
+        tipo_contrato: body.tipo_contrato || null,
+        tipo_extraordinario: body.tipo_extraordinario || null,
+        id_facultad: body.id_facultad ? parseInt(body.id_facultad) : null,
+        id_departamento: body.id_departamento ? parseInt(body.id_departamento) : null
+      }
     });
 
     // Recalcular antigüedad en la respuesta para asegurar que sea correcta
@@ -76,9 +163,26 @@ export async function PUT(
       docente.antiguedad = utilidadesFecha.calcularAntiguedad(docente.fecha_ingreso);
     }
 
+    const usuarioEditor = await obtenerUsuarioAutenticadoOpcional(request);
+    const cambios = obtenerCambiosDocente(docenteAnterior, {
+      ...docente,
+      facultad: docenteAnterior.facultad,
+      departamento: docenteAnterior.departamento
+    });
+
+    await registrarHistorialEdicionDocente({
+      idDocente: id,
+      idUsuarioEditor: usuarioEditor?.id_usuario || null,
+      anterior: docenteAnterior,
+      nuevo: docente,
+      cambios,
+      motivo: payload.motivo_edicion || null
+    });
+
     return NextResponse.json({
       exito: true,
-      datos: docente
+      datos: docente,
+      cambios
     });
   } catch (error: any) {
     console.error('Error actualizando docente:', error);

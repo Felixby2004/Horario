@@ -596,8 +596,8 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
               <td className="border border-gray-900 p-2 text-xs">{docente?.modalidad || docente?.categoria || 'Nombrado'}</td>
               <td className="border border-gray-900 p-2 text-xs">{docente?.categoria || 'Principal'}</td>
               <td className="border border-gray-900 p-2 text-xs">
-                {docente?.tipo_dedicacion_laboral?.replace(/_/g, ' ') ||
-                  docente?.dedicacion?.replace(/_/g, ' ') ||
+                {docente?.dedicacion?.replace(/_/g, ' ') ||
+                  docente?.tipo_dedicacion_laboral?.replace(/_/g, ' ') ||
                   'Tiempo Completo'}
               </td>
             </tr>
@@ -758,13 +758,18 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
   });
 
   // Obtener condición (Nombrado / Contratado)
-  const condicion = docente?.modalidad === 'nombrado' ? 'Nombrado' : 'Contratado';
+  const condicion =
+    docente?.modalidad === 'nombrado'
+      ? 'Ordinario'
+      : docente?.modalidad === 'extraordinario'
+        ? 'Extraordinario'
+        : 'Contratado';
   
   // Obtener dedicación y texto correspondiente
   let dedicacionTexto = '';
   let articulosTexto = '';
   
-  switch(docente?.tipo_dedicacion_laboral) {
+  switch(docente?.dedicacion || docente?.tipo_dedicacion_laboral) {
     case 'dedicacion_exclusiva':
       dedicacionTexto = 'Dedicación Exclusiva';
       articulosTexto = 'y me conformo con los Artículos 21° y 22° del Estatuto Institucional vigente';
@@ -774,8 +779,35 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
       articulosTexto = '(De conformidad con los artículos 270° y 277° del Estatuto Institucional vigente)';
       break;
     case 'tiempo_parcial_20':
-    case 'por_horas':
       dedicacionTexto = 'Tiempo Parcial 20 H';
+      articulosTexto = '';
+      break;
+    case 'tiempo_parcial_16':
+      dedicacionTexto = 'Tiempo Parcial 16 H';
+      articulosTexto = '';
+      break;
+    case 'tiempo_parcial_12':
+      dedicacionTexto = 'Tiempo Parcial 12 H';
+      articulosTexto = '';
+      break;
+    case 'tiempo_parcial_10':
+      dedicacionTexto = 'Tiempo Parcial 10 H';
+      articulosTexto = '';
+      break;
+    case 'tiempo_parcial_08':
+      dedicacionTexto = 'Tiempo Parcial 08 H';
+      articulosTexto = '';
+      break;
+    case 'tiempo_parcial_04':
+      dedicacionTexto = 'Tiempo Parcial 04 H';
+      articulosTexto = '';
+      break;
+    case 'por_horas':
+      dedicacionTexto = 'Por Horas';
+      articulosTexto = '';
+      break;
+    case 'docente_investigador':
+      dedicacionTexto = 'Docente Investigador';
       articulosTexto = '';
       break;
     default:

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
 
 const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 
@@ -171,7 +172,7 @@ export default function MisHorariosPage() {
                   <tr key={h.id_asignacion} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="font-medium">{h.curso?.codigo}</div>
-                      <div className="text-sm text-gray-500">{h.curso?.nombre}</div>
+                      <div className="text-sm text-gray-500">{formatearTextoVisualOracion(h.curso?.nombre)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {h.grupo?.codigo_grupo}
@@ -183,12 +184,10 @@ export default function MisHorariosPage() {
                       {h.hora_inicio} - {h.hora_fin}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {h.ambiente?.nombre}
+                      {formatearTextoVisualOracion(h.ambiente?.nombre)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="capitalize text-sm">
-                        {h.tipo_clase}
-                      </span>
+                      <span className="text-sm">{formatearTextoVisualOracion(h.tipo_clase)}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getEstadoBadge(h.estado)}

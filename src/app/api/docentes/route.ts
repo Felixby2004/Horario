@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
+import { normalizarPayloadDocente, validarDatosDocente } from '@/lib/docentes';
+import {
+  construirErroresFormularioDocente,
+  fusionarErroresDocente,
+  validarUnicidadDocente
+} from '@/lib/docentesIntegridad';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,7 +90,25 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const datos = await request.json();
+    const payload = await request.json();
+    const datos = normalizarPayloadDocente(payload);
+    const errores = validarDatosDocente(datos);
+    const erroresIntegridad = fusionarErroresDocente(
+      construirErroresFormularioDocente(datos),
+      await validarUnicidadDocente(datos)
+    );
+
+    if (errores.length > 0 || Object.keys(erroresIntegridad).length > 0) {
+      return NextResponse.json(
+        {
+          exito: false,
+          mensaje: errores[0] || Object.values(erroresIntegridad)[0],
+          errores,
+          errores_campo: erroresIntegridad
+        },
+        { status: 400 }
+      );
+    }
 
     // Validar fecha de ingreso
     let fechaIngreso = null;
@@ -110,6 +134,9 @@ export async function POST(request: NextRequest) {
         apellidos: datos.apellidos,
         modalidad: datos.modalidad,
         categoria: datos.categoria,
+        categoria_ordinaria: datos.categoria_ordinaria || null,
+        tipo_contrato: datos.tipo_contrato || null,
+        tipo_extraordinario: datos.tipo_extraordinario || null,
         antiguedad: antiguedad,
         correo_electronico: datos.correo_electronico,
         telefono: datos.telefono,
