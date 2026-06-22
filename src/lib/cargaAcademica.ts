@@ -68,7 +68,8 @@ export function validarEnvioCargaAcademica(params: {
   const horasLectivas = normalizarNumero(carga.horas_lectivas);
   const horasNoLectivas = normalizarNumero(carga.horas_no_lectivas);
   const horasPreparacion = normalizarNumero(carga.horas_preparacion);
-  const horasTotales = normalizarNumero(carga.horas_totales) || horasLectivas + horasPreparacion + horasNoLectivas;
+  // El total semanal debe ser Horas Lectivas + Horas No Lectivas (no suma preparación)
+  const horasTotales = normalizarNumero(carga.horas_totales) || horasLectivas + horasNoLectivas;
   const horasMeta = obtenerHorasMetaDocente(docente, carga);
 
   if (rubrosFaltantes.length > 0) {
@@ -96,7 +97,7 @@ export function validarEnvioCargaAcademica(params: {
       horasNoLectivas,
       horasPreparacion,
       horasTotales,
-      mensaje: `No puedes enviar la carga porque el total semanal debe ser ${horasMeta} hora(s). Actualmente tienes ${horasLectivas} hora(s) lectivas, ${horasPreparacion} hora(s) de preparación y ${horasNoLectivas} hora(s) no lectivas, para un total de ${horasTotales} hora(s).`
+      mensaje: `No puedes enviar la carga porque el total semanal debe ser ${horasMeta} hora(s). Actualmente tienes ${horasLectivas} hora(s) lectivas, ${horasNoLectivas} hora(s) no lectivas y ${horasPreparacion} hora(s) de preparación; el total semanal considerado es ${horasTotales} hora(s).`
     };
   }
 

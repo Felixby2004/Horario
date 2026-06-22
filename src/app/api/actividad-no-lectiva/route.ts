@@ -29,11 +29,11 @@ async function actualizarHorasCargaAcademica(idCarga: number) {
     0
   );
 
-  // Calcular horas de preparación
-  const horasPreparacion = Math.ceil(horasLectivas * 0.5);
+  // Calcular horas de preparación: mitad truncada (sin aproximar)
+  const horasPreparacion = Math.floor(horasLectivas * 0.5);
 
-  // Calcular horas totales
-  const horasTotales = horasLectivas + horasPreparacion + horasNoLectivas;
+  // Calcular horas totales: sólo lectivas + no lectivas
+  const horasTotales = horasLectivas + horasNoLectivas;
 
   // Actualizar la carga
   await prisma.cargaAcademica.update({

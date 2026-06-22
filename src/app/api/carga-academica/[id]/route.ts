@@ -93,7 +93,7 @@ export async function PUT(
     const horasTotales =
       datos.horas_totales !== undefined
         ? Number(datos.horas_totales)
-        : horasLectivas + horasPreparacion + horasNoLectivas;
+        : horasLectivas + horasNoLectivas;
     const horasMeta =
       datos.horas_meta !== undefined
         ? Number(datos.horas_meta)

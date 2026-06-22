@@ -175,7 +175,8 @@ export function obtenerLimitesNoLectivosPorModalidad(params: {
     ...limitesBase
   } as Record<string, number>;
 
-  limites.preparacion_evaluacion = Math.ceil(horasLectivas * 0.5);
+  // Preparación y evaluación: mitad truncada (sin aproximar)
+  limites.preparacion_evaluacion = Math.floor(horasLectivas * 0.5);
 
   if (!autoevaluacionAprobada) {
     limites.autoevaluacion_acreditacion = 0;

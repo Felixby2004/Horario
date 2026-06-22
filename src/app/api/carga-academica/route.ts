@@ -23,8 +23,8 @@ async function calcularHorasCarga(id_docente: number, carga: any) {
     0
   );
 
-  const horasPreparacion = Math.ceil(horasLectivas * 0.5);
-  const horasTotales = horasLectivas + horasPreparacion + horasNoLectivas;
+  const horasPreparacion = Math.floor(horasLectivas * 0.5);
+  const horasTotales = horasLectivas + horasNoLectivas;
 
   return {
     horasLectivas,

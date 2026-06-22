@@ -21,11 +21,11 @@ async function calcularHorasCarga(id_docente: number, carga: any) {
     0
   );
 
-  // Calcular horas de preparación
-  const horasPreparacion = Math.ceil(horasLectivas * 0.5);
+  // Calcular horas de preparación: mitad truncada (sin aproximar)
+  const horasPreparacion = Math.floor(horasLectivas * 0.5);
 
-  // Calcular horas totales
-  const horasTotales = horasLectivas + horasPreparacion + horasNoLectivas;
+  // Calcular horas totales: sólo lectivas + no lectivas (horas_preparacion no se suma al total semanal)
+  const horasTotales = horasLectivas + horasNoLectivas;
 
   return {
     horasLectivas,
