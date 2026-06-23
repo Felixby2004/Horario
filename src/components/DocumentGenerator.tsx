@@ -557,29 +557,81 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
 
   const getActividadText = (tipo: string) => {
     const acts = actividades?.filter((a: any) => a.tipo_actividad === tipo) || [];
+    if (acts.length === 0) return '';
+
+    const formatKey = (key: string) => {
+      const keyMap: Record<string, string> = {
+        'ciclos_academicos': 'Ciclos Académicos',
+        'ciclo_academico': 'Ciclo Académico',
+        'cantidad_alumnos': 'Cantidad de Alumnos',
+        'numero_inscripcion': 'Número de Inscripción',
+        'codigo_proyecto': 'Código del Proyecto',
+        'nombre_proyecto': 'Nombre del Proyecto',
+        'duracion': 'Duración',
+        'resolucion_decenal': 'Resolución Decenal',
+        'resolucion_autorizativa': 'Resolución Autorizativa',
+        'cargo': 'Cargo',
+        'cargo_indique': 'Cargo',
+        'numero_resolucion': 'Número de Resolución',
+        'titulo': 'Título del Proyecto',
+        'titulo_tesis': 'Título de la Tesis',
+        'nombre_estudiante': 'Nombre del Estudiante',
+        'titulo_programa': 'Título del Programa',
+        'institucion': 'Institución',
+        'numero_horas_total': 'Número de Horas Total',
+        'descripcion_actividad': 'Descripción de la Actividad',
+        'detalle_proceso': 'Detalle del Proceso',
+        'autoevaluacion_acreditacion_aprobada': 'Proceso Aprobado',
+        'actividad': 'Actividad',
+        'proyecto_programa': 'Proyecto/Programa',
+        'comunidades': 'Comunidades',
+        'referencia_curso': 'Referencia del Curso',
+        'lugar': 'Lugar',
+        'aula_total': 'Aula Total'
+      };
+      return keyMap[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+    };
+
     return acts.map((a: any) => {
-      let text = a.nombre || '';
+      const parts: string[] = [];
+
+      // Add the main name of the activity
+      if (a.nombre) {
+        parts.push(`<strong>${a.nombre}</strong>`);
+      }
+
+      // Add the description if it exists
+      if (a.descripcion) {
+        parts.push(a.descripcion);
+      }
+
+      // Add all relevant datos_sustento with clear labels, except unwanted ones
+      const keysToSkip = ['id_ambiente', 'numero_horas_total'];
       if (a.datos_sustento) {
         Object.entries(a.datos_sustento).forEach(([key, value]) => {
+          if (!value || keysToSkip.includes(key)) return;
+
+          let formattedValue = '';
+          
           if (key === 'ciclos_academicos' && Array.isArray(value)) {
-            // Handle new format: array of cycles (either strings or { ciclo } objects)
-            const ciclosStr = value.map((c: any) => {
-              if (typeof c === 'string') {
-                return `Ciclo ${c}`;
-              } else {
-                return `Ciclo ${c.ciclo}`;
-              }
-            }).join(', ');
-            text += (text ? ' ' : '') + ciclosStr;
-          } else if (key === 'ciclo_academico' && value) {
-            // Backwards compatibility for old single ciclo
-            text += (text ? ' ' : '') + `Ciclo ${value}`;
-          } else if (value && !['ciclo_academico', 'cantidad_alumnos'].includes(key)) {
-            text += (text ? ' ' : '') + value;
+            formattedValue = value.map((c: any) => 
+              typeof c === 'string' ? `Ciclo ${c}` : `Ciclo ${c.ciclo}`
+            ).join(', ');
+          } else if (key === 'ciclo_academico') {
+            formattedValue = `Ciclo ${value}`;
+          } else if (typeof value === 'string' || typeof value === 'number') {
+            formattedValue = String(value);
+          } else if (typeof value === 'boolean') {
+            formattedValue = value ? 'Sí' : 'No';
+          }
+
+          if (formattedValue) {
+            parts.push(`${formatKey(key)}: ${formattedValue}`);
           }
         });
       }
-      return text;
+
+      return parts.join(' • ');
     }).join('; ');
   };
 
@@ -736,38 +788,38 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>3. TUTORÍA / CONSEJERÍA: Señalar número de alumnos y el ciclo académico en el que se desempeña:</td>
-            <td className={tableBodyCellClass}>{getActividadText('tutoria_consejeria')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('tutoria_consejeria') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('tutoria_consejeria')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>4. INVESTIGACIÓN: Consignar el N° de inscripción, código, nombre y duración del proyecto. (Como máximo 04 y 05 horas semanales), según modalidad de trabajo docente:</td>
-            <td className={tableBodyCellClass}>{getActividadText('investigacion')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('investigacion') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('investigacion')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>5. CAPACITACIÓN: Señalar la referencia a este curso en el marco de los planes de cada Facultad (como máximo 05 semanas.):</td>
-            <td className={tableBodyCellClass}>{getActividadText('perfeccionamiento')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('perfeccionamiento') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('perfeccionamiento')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>6. ACTIVIDADES DE GOBIERNO: Sí desempeña cargo indique.</td>
-            <td className={tableBodyCellClass}>{getActividadText('gestion_gobierno')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('gestion_gobierno') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('gestion_gobierno')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>7. ASESORÍA DE TESIS, EXÁMENES PROFESIONALES Y EXPERIENCIA DECENCIAL, profesional: Indicar el número de Resolución Decenal, proyectos y la duración de la actividad programada:</td>
-            <td className={tableBodyCellClass}>{getActividadText('asesoria_tesis_jurado')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('asesoria_tesis_jurado') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('asesoria_tesis_jurado')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>8. RESPONSABILIDAD SOCIAL UNIVERSITARIA: Señalar actividad, proyecto programas a ejecutarse y comunidades de las cuales se ocupa: (Como máximo 02 horas semanales)</td>
-            <td className={tableBodyCellClass}>{getActividadText('responsabilidad_social')}</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('responsabilidad_social') }}></td>
             <td className={tableBodyCellCenterClass}>{getActividadHoras('responsabilidad_social')}</td>
           </tr>
           <tr>
             <td className={`${tableBodyCellClass} font-medium`}>9. COMITÉS TÉCNICOS Y COMISIONES: Consignar el número de Resolución autorizativa indicando el cargo de vigencia.</td>
-            <td className={tableBodyCellClass}></td>
-            <td className={tableBodyCellCenterClass}>0</td>
+            <td className={tableBodyCellClass} dangerouslySetInnerHTML={{ __html: getActividadText('comites_comisiones') }}></td>
+            <td className={tableBodyCellCenterClass}>{getActividadHoras('comites_comisiones')}</td>
           </tr>
           <tr className="bg-gray-200 font-bold">
             <td className="border border-gray-900 px-2 py-2 text-right" colSpan={2}>TOTAL</td>

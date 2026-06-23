@@ -85,8 +85,9 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
     }
   }, [abierto]);
 
-  const opcionSeleccionada = opciones.find(o => o.valor === value);
-  const labelSeleccionado = opcionSeleccionada?.etiqueta || '';
+  // Compare values by converting both to string to avoid number vs string issues
+  const opcionSeleccionado = opciones.find(o => String(o.valor) === String(value));
+  const labelSeleccionado = opcionSeleccionado?.etiqueta || '';
 
   const handleSeleccionar = (valor: string | number) => {
     onChange?.(valor);
@@ -111,77 +112,85 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
       )}
 
       {/* Botón que muestra el valor seleccionado */}
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => setAbierto(!abierto)}
-          disabled={disabled}
-          className={cn(
-            'w-full px-4 py-2 border rounded-lg transition-colors text-left flex justify-between items-center',
-            'focus:ring-2 focus:ring-primary-500 focus:border-transparent',
-            'disabled:bg-gray-100 disabled:cursor-not-allowed hover:bg-gray-50',
-            error ? 'border-red-500' : 'border-gray-300',
-            className
-          )}
-        >
-          <span className={labelSeleccionado ? 'text-gray-900' : 'text-gray-500'}>
-            {labelSeleccionado || placeholder}
-          </span>
-          <svg
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setAbierto(!abierto)}
+            disabled={disabled}
             className={cn(
-              'w-5 h-5 transition-transform',
-              abierto ? 'rotate-180' : ''
+              'w-full px-4 py-2 border rounded-lg transition-all text-left flex justify-between items-center',
+              'focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
+              'disabled:bg-gray-100 disabled:cursor-not-allowed hover:bg-gray-50',
+              error ? 'border-red-500' : 'border-gray-300',
+              labelSeleccionado && !error ? 'border-primary-300 bg-primary-50' : '',
+              className
             )}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </button>
-
-        {/* Dropdown con búsqueda */}
-        {abierto && !disabled && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-            {/* Input de búsqueda */}
-            <div className="p-2 border-b border-gray-200 sticky top-0 bg-white">
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder={placeholder}
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
-
-            {/* Lista de opciones filtradas */}
-            <ul className="max-h-48 overflow-y-auto">
-              {filtrados.length > 0 ? (
-                filtrados.map((opcion) => (
-                  <li key={opcion.valor}>
-                    <button
-                      type="button"
-                      onClick={() => handleSeleccionar(opcion.valor)}
-                      className={cn(
-                        'w-full text-left px-4 py-2 hover:bg-primary-100 transition-colors',
-                        value === opcion.valor ? 'bg-primary-100 font-semibold text-primary-900' : ''
-                      )}
-                    >
-                      {opcion.etiqueta}
-                    </button>
-                  </li>
-                ))
-              ) : (
-                <li className="px-4 py-2 text-gray-500 text-center">
-                  No hay resultados
-                </li>
+            <span className={labelSeleccionado ? 'text-gray-900 font-medium' : 'text-gray-500'}>
+              {labelSeleccionado || placeholder}
+            </span>
+            <svg
+              className={cn(
+                'w-5 h-5 transition-transform text-gray-500',
+                abierto ? 'rotate-180' : ''
               )}
-            </ul>
-          </div>
-        )}
-      </div>
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
+
+          {/* Dropdown con búsqueda */}
+          {abierto && !disabled && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-xl z-50 overflow-hidden">
+              {/* Input de búsqueda */}
+              <div className="p-2 border-b border-gray-200 sticky top-0 bg-white z-10">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder={placeholder}
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              {/* Lista de opciones filtradas */}
+              <ul className="max-h-60 overflow-y-auto">
+                {filtrados.length > 0 ? (
+                  filtrados.map((opcion) => (
+                    <li key={opcion.valor}>
+                      <button
+                        type="button"
+                        onClick={() => handleSeleccionar(opcion.valor)}
+                        className={cn(
+                          'w-full text-left px-4 py-3 transition-all flex items-center justify-between',
+                          String(value) === String(opcion.valor) 
+                            ? 'bg-primary-500 text-white font-bold hover:bg-primary-600' 
+                            : 'hover:bg-primary-100 text-gray-800'
+                        )}
+                      >
+                        <span>{opcion.etiqueta}</span>
+                        {String(value) === String(opcion.valor) && (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  <li className="px-4 py-3 text-gray-500 text-center bg-gray-50">
+                    No hay resultados
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
 
       {ayuda && !error && (
         <p className="text-sm text-gray-500">{ayuda}</p>
