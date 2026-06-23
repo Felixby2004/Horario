@@ -527,6 +527,8 @@ export default function PlanEstudiosPage() {
   }));
 
   const [cursoSeleccionadoId, setCursoSeleccionadoId] = useState('');
+  const [cursoSeleccionadoIdEditar, setCursoSeleccionadoIdEditar] = useState('');
+  const [busquedaCursoEditar, setBusquedaCursoEditar] = useState('');
 
   useEffect(() => {
     if (!cursoSeleccionadoId) return;
@@ -538,6 +540,15 @@ export default function PlanEstudiosPage() {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [cursoSeleccionadoId]);
+
+  useEffect(() => {
+    if (!cursoSeleccionadoIdEditar) return;
+    const id = `curso-editar-${cursoSeleccionadoIdEditar}`;
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [cursoSeleccionadoIdEditar]);
 
   const totalCreditos = cursos.reduce((sum, curso) => sum + curso.creditos, 0);
   const totalHoras = cursos.reduce(
@@ -1054,30 +1065,47 @@ export default function PlanEstudiosPage() {
             </div>
 
             <div className="rounded-lg border border-gray-200 p-4 space-y-4">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+                  <div className="flex-1">
+                    <SearchableSelect
+                      etiqueta="Agregar curso al plan"
+                      opciones={cursosDisponibles
+                        .filter((curso) => !formulario.cursos.some((actual) => actual.id_curso === curso.id_curso))
+                        .map((curso) => ({
+                          valor: String(curso.id_curso),
+                          etiqueta: `${curso.codigo} - ${curso.nombre}`,
+                          codigo: curso.codigo
+                        }))}
+                      value={cursoAgregarId}
+                      onChange={(valor) => setCursoAgregarId(String(valor))}
+                      placeholder="Seleccione un curso"
+                      camposBusqueda={['codigo']}
+                    />
+                  </div>
+                  <Boton type="button" onClick={agregarCursoAlFormulario} disabled={!cursoAgregarId}>
+                    Agregar curso
+                  </Boton>
+                </div>
                 <div className="flex-1">
-                  <SearchableSelect
-                    etiqueta="Agregar curso al plan"
-                    opciones={cursosDisponibles
-                      .filter((curso) => !formulario.cursos.some((actual) => actual.id_curso === curso.id_curso))
-                      .map((curso) => ({
-                        valor: String(curso.id_curso),
-                        etiqueta: `${curso.codigo} - ${curso.nombre}`,
-                        codigo: curso.codigo
-                      }))}
-                    value={cursoAgregarId}
-                    onChange={(valor) => setCursoAgregarId(String(valor))}
-                    placeholder="Seleccione un curso"
-                    camposBusqueda={['codigo']}
+                  <label className="block text-sm font-medium mb-1">Buscar curso en el plan</label>
+                  <input
+                    type="text"
+                    value={busquedaCursoEditar}
+                    onChange={(e) => setBusquedaCursoEditar(e.target.value)}
+                    placeholder="Escribe para buscar..."
+                    className="w-full border rounded px-3 py-2"
+                    disabled={!formulario.cursos.length}
                   />
                 </div>
-                <Boton type="button" onClick={agregarCursoAlFormulario} disabled={!cursoAgregarId}>
-                  Agregar curso
-                </Boton>
               </div>
 
               <div className="space-y-4 max-h-[420px] overflow-y-auto pr-1">
-                {formulario.cursos.map((curso, indice) => {
+                {formulario.cursos.filter(curso => 
+                  !busquedaCursoEditar || 
+                  curso.codigo.toLowerCase().includes(busquedaCursoEditar.toLowerCase()) || 
+                  curso.nombre.toLowerCase().includes(busquedaCursoEditar.toLowerCase())
+                ).map((curso, indice) => {
                   const opcionesPrerequisito = formulario.cursos
                     .filter(
                       (item) =>
@@ -1094,7 +1122,7 @@ export default function PlanEstudiosPage() {
                   );
 
                   return (
-                    <div key={curso.id_curso} className="rounded-lg border border-gray-200 p-4 space-y-4">
+                    <div id={`curso-editar-${curso.id_curso}`} key={curso.id_curso} className={"rounded-lg border border-gray-200 p-4 space-y-4 " + (String(curso.id_curso) === cursoSeleccionadoIdEditar ? 'ring-2 ring-indigo-300' : '')}>
                       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                         <div>
                           <div className="font-semibold text-gray-900">{curso.codigo}</div>

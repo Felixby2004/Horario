@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Boton } from '@/components/ui/Boton';
+import { SearchableSelect } from '@/components/ui/SearchableSelect';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
 import { utilidadesFecha } from '@/lib/utilidadesFecha';
 import { formatearTextoVisualOracion } from '@/lib/formatoTexto';
@@ -872,53 +873,50 @@ export default function HorariosPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Docente *
-            </label>
-            <select
-              className="w-full border rounded px-3 py-2"
+            <SearchableSelect
+              etiqueta="Docente *"
+              placeholder="Seleccione docente"
               value={docenteSeleccionado}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setDocenteSeleccionado(e.target.value);
+              onChange={(valor: string | number) => {
+                setDocenteSeleccionado(String(valor));
                 setCursoSeleccionado('');
                 setGrupoSeleccionado('');
                 setCeldasSeleccionadas(new Set());
                 setModoSeleccion(false);
                 setError('');
               }}
-            >
-              <option value="">Seleccione docente</option>
-              {docentes.map((d: any) => (
-                <option key={d.id_docente} value={d.id_docente}>
-                  {d.apellidos}, {d.nombres}
-                </option>
-              ))}
-            </select>
+              disabled={!cicloSeleccionado}
+              opciones={docentes.map((d: any) => ({
+                valor: d.id_docente,
+                etiqueta: `${d.apellidos}, ${d.nombres}`,
+                nombres: d.nombres,
+                apellidos: d.apellidos
+              }))}
+              camposBusqueda={['nombres', 'apellidos']}
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Curso * (Ciclo {cicloSeleccionado || '?'})
-            </label>
-            <select
-              className="w-full border rounded px-3 py-2"
+            <SearchableSelect
+              etiqueta={`Curso * (Ciclo ${cicloSeleccionado || '?'})`}
+              placeholder="Seleccione curso"
               value={cursoSeleccionado}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setCursoSeleccionado(e.target.value);
+              onChange={(valor: string | number) => {
+                setCursoSeleccionado(String(valor));
                 setGrupoSeleccionado('');
                 setCeldasSeleccionadas(new Set());
                 setModoSeleccion(false);
                 setError('');
               }}
               disabled={!cicloSeleccionado || !docenteSeleccionado}
-            >
-              <option value="">Seleccione curso</option>
-              {cursos.map((c: any) => (
-                <option key={c.id_curso} value={c.id_curso}>
-                  {c.codigo} - {c.nombre}
-                </option>
-              ))}
-            </select>
+              opciones={cursos.map((c: any) => ({
+                valor: c.id_curso,
+                etiqueta: `${c.codigo} - ${c.nombre}`,
+                codigo: c.codigo,
+                nombre: c.nombre
+              }))}
+              camposBusqueda={['codigo', 'nombre']}
+            />
             {cicloSeleccionado && docenteSeleccionado && cursos.length === 0 && (
               <p className="text-xs text-amber-600 mt-1">
                 ⚠️ Este docente no tiene cursos asignados en el ciclo {cicloSeleccionado}
@@ -932,22 +930,19 @@ export default function HorariosPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Grupo *
-            </label>
-            <select
-              className="w-full border rounded px-3 py-2"
+            <SearchableSelect
+              etiqueta="Grupo *"
+              placeholder="Seleccione grupo"
               value={grupoSeleccionado}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setGrupoSeleccionado(e.target.value)}
+              onChange={(valor: string | number) => setGrupoSeleccionado(String(valor))}
               disabled={!cursoSeleccionado}
-            >
-              <option value="">Seleccione grupo</option>
-              {grupos.map((g: any) => (
-                <option key={g.id_grupo} value={g.id_grupo}>
-                  Grupo {g.codigo_grupo}
-                </option>
-              ))}
-            </select>
+              opciones={grupos.map((g: any) => ({
+                valor: g.id_grupo,
+                etiqueta: `Grupo ${g.codigo_grupo}`,
+                codigo_grupo: g.codigo_grupo
+              }))}
+              camposBusqueda={['codigo_grupo']}
+            />
             {cursoSeleccionado && docenteSeleccionado && grupos.length === 0 && (
               <p className="text-xs text-amber-600 mt-1">
                 ⚠️ Este docente no tiene grupos asignados para este curso y período
@@ -955,23 +950,23 @@ export default function HorariosPage() {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Ambiente *
-            </label>
-            <div className="flex gap-2">
-              <select
-                className="flex-1 border rounded px-3 py-2"
-                value={ambienteSeleccionado}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAmbienteSeleccionado(e.target.value)}
-              >
-                <option value="">Seleccione ambiente</option>
-                {ambientes.map((a: any) => (
-                  <option key={a.id_ambiente} value={a.id_ambiente}>
-                    {a.nombre} ({a.tipo})
-                  </option>
-                ))}
-              </select>
+          <div className="space-y-2">
+            <div className="flex gap-2 items-end">
+              <div className="flex-1">
+                <SearchableSelect
+                  etiqueta="Ambiente *"
+                  placeholder="Seleccione ambiente"
+                  value={ambienteSeleccionado}
+                  onChange={(valor: string | number) => setAmbienteSeleccionado(String(valor))}
+                  opciones={ambientes.map((a: any) => ({
+                    valor: a.id_ambiente,
+                    etiqueta: `${a.nombre} (${a.tipo})`,
+                    nombre: a.nombre,
+                    tipo: a.tipo
+                  }))}
+                  camposBusqueda={['nombre', 'tipo']}
+                />
+              </div>
               <button
                 type="button"
                 onClick={() => setConsultaTipo('aula')}

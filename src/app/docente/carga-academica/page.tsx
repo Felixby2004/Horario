@@ -757,6 +757,17 @@ function ModalActividadNoLectiva({
       datosAdicionales = parseJSON(datosAdicionales);
       datosSustento = parseJSON(datosSustento);
 
+      // Backwards compatibility: if there's an old ciclo_academico, convert to new format (array of strings)
+      if (datosSustento.ciclo_academico && !datosSustento.ciclos_academicos) {
+        datosSustento.ciclos_academicos = [String(datosSustento.ciclo_academico)];
+        delete datosSustento.ciclo_academico;
+      } else if (datosSustento.ciclos_academicos) {
+        // Normalize existing ciclos_academicos to array of strings
+        datosSustento.ciclos_academicos = datosSustento.ciclos_academicos.map((c: any) =>
+          typeof c === 'string' ? c : String(c.ciclo)
+        );
+      }
+
       setFormData({
         tipo_actividad: actividad.tipo_actividad,
         nombre: actividad.nombre,
@@ -776,7 +787,7 @@ function ModalActividadNoLectiva({
         dias_semana: [],
         datos_adicionales: {},
         datos_sustento: {
-          ciclo_academico: '1',
+          ciclos_academicos: [],
           lugar: '',
           aula_total: '',
           autoevaluacion_acreditacion_aprobada: false
@@ -1104,8 +1115,23 @@ function ModalActividadNoLectiva({
                       : false
                 };
 
-                if (tipoSeleccionado === 'tutoria_consejeria' && !datosSustentoActualizados.ciclo_academico) {
-                  datosSustentoActualizados.ciclo_academico = '1';
+                // For types that require ciclo_academico, ensure ciclos_academicos is initialized
+                if (
+                  (tipoSeleccionado === 'tutoria_consejeria' || tipoSeleccionado === 'preparacion_evaluacion') &&
+                  !datosSustentoActualizados.ciclos_academicos
+                ) {
+                  // Check if there's an old ciclo_academico to migrate
+                  if (datosSustentoActualizados.ciclo_academico) {
+                    datosSustentoActualizados.ciclos_academicos = [String(datosSustentoActualizados.ciclo_academico)];
+                    delete datosSustentoActualizados.ciclo_academico;
+                  } else if (datosSustentoActualizados.ciclos_academicos) {
+                    // Normalize existing ciclos_academicos to array of strings
+                    datosSustentoActualizados.ciclos_academicos = datosSustentoActualizados.ciclos_academicos.map((c: any) =>
+                      typeof c === 'string' ? c : String(c.ciclo)
+                    );
+                  } else {
+                    datosSustentoActualizados.ciclos_academicos = [];
+                  }
                 }
 
                 setErrorFormulario('');
@@ -1158,29 +1184,60 @@ function ModalActividadNoLectiva({
                 {campo.label} {campo.requerido && <span className="text-red-500">*</span>}
               </label>
               {campo.id === 'ciclo_academico' ? (
-                // Select con los ciclos (1,3,5,7,9) del período
-                <select
-                  value={formData.datos_sustento[campo.id] || ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      datos_sustento: {
-                        ...formData.datos_sustento,
-                        [campo.id]: e.target.value
-                      }
-                    })
-                  }
-                  className="w-full border rounded px-3 py-2"
-                  disabled={tipoBloqueadoPorModalidad}
-                  required={campo.requerido}
-                >
-                  <option value="">Selecciona un ciclo</option>
-                  {[1, 3, 5, 7, 9].map((ciclo) => (
-                    <option key={ciclo} value={ciclo}>
-                      Ciclo {ciclo}
-                    </option>
-                  ))}
-                </select>
+                // Multi-select para ciclos
+                <div className="flex flex-wrap gap-2">
+                  {[1, 3, 5, 7, 9].map((ciclo) => {
+                      const isSelected = (formData.datos_sustento.ciclos_academicos || []).some(
+                        (c: any) => {
+                          if (typeof c === 'string') {
+                            return c === String(ciclo);
+                          } else {
+                            return String(c.ciclo) === String(ciclo);
+                          }
+                        }
+                      );
+                    return (
+                      <label
+                        key={ciclo}
+                        className={`flex items-center gap-2 px-3 py-2 rounded border cursor-pointer transition-colors ${
+                          isSelected
+                            ? 'bg-blue-50 border-blue-500 text-blue-700'
+                            : 'bg-white border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          disabled={tipoBloqueadoPorModalidad}
+                          onChange={(e) => {
+                              let newCiclos = [...(formData.datos_sustento.ciclos_academicos || [])];
+                              // Normalize to array of strings
+                              newCiclos = newCiclos.map((c: any) => 
+                                typeof c === 'string' ? c : String(c.ciclo)
+                              );
+                              if (e.target.checked) {
+                                // Add ciclo if not present
+                                if (!newCiclos.includes(String(ciclo))) {
+                                  newCiclos.push(String(ciclo));
+                                }
+                              } else {
+                                // Remove ciclo
+                                newCiclos = newCiclos.filter((c: string) => c !== String(ciclo));
+                              }
+                              setFormData({
+                                ...formData,
+                                datos_sustento: {
+                                  ...formData.datos_sustento,
+                                  ciclos_academicos: newCiclos
+                                }
+                              });
+                            }}
+                        />
+                        <span>Ciclo {ciclo}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               ) : campo.tipo === 'checkbox' ? (
                 <label className="flex items-center gap-3 rounded border px-3 py-3">
                   <input

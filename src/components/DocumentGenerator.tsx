@@ -561,7 +561,20 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
       let text = a.nombre || '';
       if (a.datos_sustento) {
         Object.entries(a.datos_sustento).forEach(([key, value]) => {
-          if (value && !['ciclo_academico', 'cantidad_alumnos'].includes(key)) {
+          if (key === 'ciclos_academicos' && Array.isArray(value)) {
+            // Handle new format: array of cycles (either strings or { ciclo } objects)
+            const ciclosStr = value.map((c: any) => {
+              if (typeof c === 'string') {
+                return `Ciclo ${c}`;
+              } else {
+                return `Ciclo ${c.ciclo}`;
+              }
+            }).join(', ');
+            text += (text ? ' ' : '') + ciclosStr;
+          } else if (key === 'ciclo_academico' && value) {
+            // Backwards compatibility for old single ciclo
+            text += (text ? ' ' : '') + `Ciclo ${value}`;
+          } else if (value && !['ciclo_academico', 'cantidad_alumnos'].includes(key)) {
             text += (text ? ' ' : '') + value;
           }
         });
