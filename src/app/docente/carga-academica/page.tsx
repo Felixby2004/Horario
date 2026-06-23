@@ -411,14 +411,10 @@ export default function DocenteCargaAcademicaPage() {
 
         {/* Resumen de Carga */}
         {carga && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
               <p className="text-blue-600 text-sm font-medium">Horas Lectivas</p>
               <p className="text-3xl font-bold text-blue-800 mt-2">{carga.horas_lectivas} h</p>
-            </div>
-            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-              <p className="text-purple-600 text-sm font-medium">Preparación y Evaluación</p>
-              <p className="text-3xl font-bold text-purple-800 mt-2">{carga.horas_preparacion} h</p>
             </div>
             <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
               <p className="text-green-600 text-sm font-medium">Horas No Lectivas</p>

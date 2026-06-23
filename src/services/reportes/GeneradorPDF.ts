@@ -139,6 +139,91 @@ export class GeneradorPDF {
     return await this.convertirAPDF(html);
   }
 
+  // Reporte de Horario Académico Institucional (A4 landscape)
+  static async generarHorarioInstitucional(idPeriodo: number) {
+    const config = await this.obtenerConfiguracion();
+
+    const periodo = await prisma.periodoAcademico.findUnique({ where: { id_periodo: idPeriodo } });
+
+    const horarios = await prisma.horarioAsignado.findMany({
+      where: {
+        id_periodo: idPeriodo,
+        estado: { in: ['confirmado', 'publicado', 'aprobado', 'modificado', 'borrador', 'solicitado'] }
+      },
+      include: { curso: true, grupo: true, docente: true, ambiente: true },
+      orderBy: [ { dia_semana: 'asc' }, { hora_inicio: 'asc' } ]
+    });
+
+    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const horasRango = this.generarHorasStandard(config);
+
+    // Construir mapa de celdas (usa el agrupador existente)
+    const referenciasMapa = this.construirReferenciasReporte(this.obtenerHorariosUnicosParaReporte(horarios));
+
+    const mapaCeldas = this.construirMapaCeldasFusionadas(
+      horarios,
+      diasSemana,
+      horasRango,
+      (horario: any) => {
+        // Si el horario contiene subHorarios (varios cursos simultáneos), dividir en subcolumnas iguales
+        if (Array.isArray(horario.subHorarios) && horario.subHorarios.length > 0) {
+          const subs = horario.subHorarios.slice();
+          // Orden estable: por código si existe, sino por id
+          subs.sort((a: any, b: any) => {
+            const ca = String(a.curso?.codigo || a.id_curso || '').padStart(1, ' ');
+            const cb = String(b.curso?.codigo || b.id_curso || '').padStart(1, ' ');
+            return ca.localeCompare(cb);
+          });
+
+          const bloques = subs.map((sub: any, idx: number) => {
+            const codigo = sub.curso?.codigo || sub.curso?.id_curso || '-';
+            const ambiente = sub.ambiente?.nombre || sub.ambiente?.codigo || '';
+            const observ = sub.observaciones ? `(${sub.observaciones})` : '';
+            const ref = referenciasMapa.get(this.obtenerClaveReferenciaReporte(sub));
+            const bg = ref?.color || '#FFFFFF';
+
+            const borderLeft = idx === 0 ? 'none' : '1px solid #000';
+            const linea = `${codigo}${ambiente ? ' · ' + ambiente : ''}${observ ? ' · ' + observ : ''}`.trim();
+
+            return `
+              <div style="flex:1 1 0; min-width:0; box-sizing:border-box; border-left:${borderLeft}; padding:1px 2px; background:${bg}; height:100%; display:flex; align-items:center;">
+                <span style="font-size:6.8px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${linea}</span>
+              </div>
+            `;
+          }).join('');
+
+          return {
+            colorFondo: '#FFFFFF',
+            contenido: `<div style="display:flex; width:100%; height:100%; flex-wrap:nowrap;">${bloques}</div>`
+          };
+        }
+
+        // Caso simple: un solo curso en la celda
+        const codigo = horario.curso?.codigo || horario.curso?.id_curso || '-';
+        const nombre = horario.curso?.nombre || '';
+        const ambiente = horario.ambiente?.nombre || horario.ambiente?.codigo || '';
+        const observ = horario.observaciones ? `(${horario.observaciones})` : '';
+        const contenido = `${codigo} ${nombre}`.trim();
+        const detalles = `${ambiente}${observ ? ' ' + observ : ''}`.trim();
+        const color = referenciasMapa.get(this.obtenerClaveReferenciaReporte(horario))?.color;
+
+        return {
+          colorFondo: color || '#FFFFFF',
+          contenido: `<div style=\"display:flex; flex-direction:column; justify-content:center; gap:2px; height:100%; font-size:8.5px; line-height:1.1; text-align:left;\">` +
+            `<span style=\"font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;\">${contenido}</span>` +
+            `<span style=\"font-size:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;\">${detalles}</span>` +
+          `</div>`
+        };
+      }
+    );
+
+    const filasHorario = this.generarFilasHorarioFusionadas(diasSemana, horasRango, mapaCeldas);
+
+    const html = this.generarHTMLHorarioInstitucional(periodo, diasSemana, horasRango, filasHorario);
+
+    return await this.convertirAPDF(html);
+  }
+
   // Reporte por Laboratorio (similar a aula)
   static async generarReporteLaboratorio(idAmbiente: number, idPeriodo: number) {
     return this.generarReporteAula(idAmbiente, idPeriodo);
@@ -513,13 +598,13 @@ export class GeneradorPDF {
     if (contenidoActual.includes(contenidoNuevo)) return contenidoActual;
 
     const crearBloque = (contenido: string) => `
-      <div style="border: 1px solid #999; border-radius: 6px; padding: 6px; background-color: #FFFFFF; margin-bottom: 6px;">
+      <div style="flex: 1 1 0; min-width: 0; box-sizing: border-box; border: 1px solid #999; border-radius: 4px; padding: 2px 4px; background-color: #FFFFFF; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 7px; line-height: 1.1;">
         ${contenido}
       </div>
     `;
 
     return `
-      <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; flex-direction: row; gap: 2px; align-items: stretch; justify-content: flex-start; flex-wrap: nowrap; overflow: hidden; min-width: 0;">
         ${crearBloque(contenidoActual)}
         ${crearBloque(contenidoNuevo)}
       </div>
@@ -543,29 +628,22 @@ export class GeneradorPDF {
 
     const horariosAgrupados = this.agruparHorariosConsecutivos(horarios);
 
-    const gruposLabs: Record<string, any[]> = {};
-    const noLabs: any[] = [];
+    const gruposSimultaneos: Record<string, any[]> = {};
 
     horariosAgrupados.forEach((horario) => {
-      const tipo = this.normalizarTipoClase(horario.tipo_clase);
-      if (tipo === 'Laboratorio') {
-        const key = `${horario.dia_semana}|${horario.hora_inicio}|${horario.hora_fin}`;
-        gruposLabs[key] = gruposLabs[key] || [];
-        gruposLabs[key].push(horario);
-      } else {
-        noLabs.push(horario);
-      }
+      const key = `${horario.dia_semana}|${horario.hora_inicio}|${horario.hora_fin}`;
+      gruposSimultaneos[key] = gruposSimultaneos[key] || [];
+      gruposSimultaneos[key].push(horario);
     });
 
-    const horariosProcesar: any[] = [...noLabs];
-    Object.values(gruposLabs).forEach((grupo) => {
+    const horariosProcesar: any[] = [];
+    Object.values(gruposSimultaneos).forEach((grupo) => {
       if (grupo.length === 1) {
         horariosProcesar.push(grupo[0]);
       } else {
         const ejemplo = grupo[0];
         horariosProcesar.push({
           ...ejemplo,
-          tipo_clase: 'Laboratorio',
           subHorarios: grupo
         });
       }
@@ -974,6 +1052,83 @@ export class GeneradorPDF {
           <p>Generado automáticamente por el Sistema de Horarios de la UNT</p>
           <p style="margin-top: 10px; color: #999;">Reporte generado: ${new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
         </div>
+      </body>
+      </html>
+    `;
+  }
+
+  // HTML generator específico para el formato institucional solicitado
+  private static generarHTMLHorarioInstitucional(
+    periodo: any,
+    diasSemana: string[],
+    horasRango: string[],
+    filasHorarioHtml: string
+  ) {
+    return `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Horario Institucional</title>
+        <style>
+          @page { size: A4 landscape; margin: 4mm; }
+          html, body { height: 100%; }
+          body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-size: 7.2px;
+            color: #000;
+            background: #fff;
+            margin: 0; padding: 2px;
+          }
+          .header { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:2px; }
+          .header .left { font-size:9px; font-weight:600; }
+          .header .right { text-align:right; font-size:7px; }
+          h1 { font-size:11px; margin:0; font-weight:700; }
+          .meta { margin-top:1px; font-size:7px; }
+          table { width:100%; border-collapse: collapse; border-spacing:0; table-layout: fixed; }
+          th, td { border: 1px solid #000; padding: 1px 1px; vertical-align: top; overflow: hidden; }
+          th { background: #f0f0f0; font-weight:700; font-size:6.5px; text-align:center; }
+          td { font-size:6.8px; color:#000; }
+          .hora { width: 4%; text-align:center; font-weight:700; background:#f0f0f0; }
+          .dia { width: 13%; word-wrap:break-word; overflow:hidden; }
+          .bloque { display:flex; align-items:center; justify-content:center; padding:0.5px 1px; box-sizing:border-box; border:0; }
+          .bloque span { display:block; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:6.8px; }
+          .footer-note { font-size:6px; color:#444; margin-top:2px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="left">
+            <h1>UNIVERSIDAD NACIONAL DE TRUJILLO</h1>
+            <div class="meta">FACULTAD DE INGENIERÍA — Horario Académico Institucional</div>
+            <div class="meta">Período: ${periodo?.nombre || periodo?.anio || 'N/A'}</div>
+          </div>
+          <div class="right">
+            <div class="meta">Fecha: ${new Date().toLocaleDateString('es-PE')}</div>
+            <div class="meta">Formato: A4 - Horizontal</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th class="hora">HORA</th>
+              <th class="dia">LUNES</th>
+              <th class="dia">MARTES</th>
+              <th class="dia">MIÉRCOLES</th>
+              <th class="dia">JUEVES</th>
+              <th class="dia">VIERNES</th>
+              <th class="dia">SÁBADO</th>
+              <th class="hora">HORA</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filasHorarioHtml}
+          </tbody>
+        </table>
+
+        <div class="footer-note">Plantilla institucional — líneas negras delgadas, fondo blanco, encabezados gris claro, texto compacto.</div>
       </body>
       </html>
     `;

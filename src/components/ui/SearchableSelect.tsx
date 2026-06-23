@@ -63,17 +63,20 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
     setFiltrados(filtro);
   }, [busqueda, opciones, camposBusqueda]);
 
-  // Cerrar cuando se hace click fuera
+  // Cerrar cuando se hace click fuera — solo cuando está abierto
   useEffect(() => {
+    if (!abierto) return;
+
     const handleClickFuera = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        // solo cerrar si actualmente está abierto
         setAbierto(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickFuera);
     return () => document.removeEventListener('mousedown', handleClickFuera);
-  }, []);
+  }, [abierto]);
 
   // Enfocar el input cuando se abre el select
   useEffect(() => {

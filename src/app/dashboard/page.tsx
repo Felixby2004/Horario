@@ -57,8 +57,11 @@ export default function DashboardPage() {
         cantidad: docentes.filter((d: any) => d.categoria === cat).length
       }));
 
-      // Contar por ciclo
-      const ciclos = [...new Set(cursos.map((c: any) => c.ciclo))].filter(Boolean).sort();
+      // Contar por ciclo (orden numérico ascendente)
+      const ciclos = [...new Set(cursos.map((c: any) => c.ciclo))]
+        .map((v) => Number(v))
+        .filter((n) => Number.isFinite(n) && n > 0)
+        .sort((a, b) => a - b);
       const cursosPorCiclo = ciclos.map(ciclo => ({
         ciclo: ciclo as string | number,
         cantidad: cursos.filter((c: any) => c.ciclo === ciclo).length

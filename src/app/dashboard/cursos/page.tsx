@@ -47,6 +47,7 @@ interface DepartamentoAcademico {
 export default function CursosPage() {
   const [cursos, setCursos] = useState<Curso[]>([]);
   const [departamentos, setDepartamentos] = useState<DepartamentoAcademico[]>([]);
+  const [planesEstudio, setPlanesEstudio] = useState<{ id_plan: number; nombre: string; codigo: string; estado: boolean }[]>([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -70,6 +71,21 @@ export default function CursosPage() {
   useEffect(() => {
     cargarCursos();
     cargarDepartamentos();
+  }, []);
+
+  useEffect(() => {
+    // cargar planes activos para el combobox
+    const cargarPlanes = async () => {
+      try {
+        const resp = await fetch('/api/planes-estudio');
+        const data = await resp.json();
+        if (data.exito) setPlanesEstudio((data.datos || []).filter((p: any) => p.estado !== false));
+      } catch (err) {
+        console.error('Error cargando planes de estudio:', err);
+      }
+    };
+
+    cargarPlanes();
   }, []);
 
   const cargarCursos = async () => {
@@ -383,12 +399,11 @@ export default function CursosPage() {
 
                   <div>
                     <label className="block text-sm font-medium mb-1">Plan de estudios</label>
-                    <input
-                      type="text"
+                    <SearchableSelect
+                      opciones={planesEstudio.map((p) => ({ valor: p.codigo || String(p.id_plan), etiqueta: `${p.codigo} - ${p.nombre}` }))}
                       value={formData.plan_estudios}
-                      onChange={(e) => setFormData({ ...formData, plan_estudios: e.target.value })}
-                      className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ej: 2020"
+                      onChange={(valor) => setFormData({ ...formData, plan_estudios: String(valor) })}
+                      placeholder={planesEstudio.length ? 'Selecciona un plan de estudio' : 'Cargando planes...'}
                     />
                   </div>
                 </div>

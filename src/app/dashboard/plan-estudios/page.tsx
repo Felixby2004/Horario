@@ -526,6 +526,19 @@ export default function PlanEstudiosPage() {
     codigo: plan.codigo
   }));
 
+  const [cursoSeleccionadoId, setCursoSeleccionadoId] = useState('');
+
+  useEffect(() => {
+    if (!cursoSeleccionadoId) return;
+    // cambiar a la pestaña malla para ubicar el curso
+    setActiveTab('malla');
+    const id = `curso-${cursoSeleccionadoId}`;
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [cursoSeleccionadoId]);
+
   const totalCreditos = cursos.reduce((sum, curso) => sum + curso.creditos, 0);
   const totalHoras = cursos.reduce(
     (sum, curso) => sum + (curso.horas_teoria || 0) + (curso.horas_practica || 0) + (curso.horas_laboratorio || 0),
@@ -555,6 +568,21 @@ export default function PlanEstudiosPage() {
             placeholder={loadingPlanes ? 'Cargando planes...' : 'Seleccione un plan'}
             disabled={loadingPlanes || !opcionesPlanes.length}
             camposBusqueda={['codigo']}
+          />
+        </div>
+        <div className="w-full lg:w-auto lg:min-w-[420px]">
+          <SearchableSelect
+            etiqueta="Buscar curso en plan"
+            opciones={cursos.map((c) => ({
+              valor: String(c.id_curso),
+              etiqueta: `${c.codigo} - ${formatearTextoOracion(c.nombre)}`,
+              codigo: c.codigo
+            }))}
+            value={cursoSeleccionadoId}
+            onChange={(valor) => setCursoSeleccionadoId(String(valor))}
+            placeholder={cursos.length ? 'Busca por código o nombre' : 'Cargando cursos...'}
+            camposBusqueda={["codigo"]}
+            disabled={!cursos.length}
           />
         </div>
       </div>
@@ -623,7 +651,7 @@ export default function PlanEstudiosPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {cursosCiclo.map((curso) => (
-                        <div key={curso.id_curso} className="border rounded-lg p-4">
+                        <div id={`curso-${curso.id_curso}`} key={curso.id_curso} className={"border rounded-lg p-4 " + (String(curso.id_curso) === cursoSeleccionadoId ? 'ring-2 ring-indigo-300' : '')}>
                           <div className="font-medium text-gray-900">{curso.codigo} - {formatearTextoOracion(curso.nombre)}</div>
                           <div className="mt-2 text-xs text-gray-500">
                             Tipo: {obtenerCodigoTipoCurso(curso.tipo_curso)} • Escuela:{' '}
@@ -668,7 +696,7 @@ export default function PlanEstudiosPage() {
                           {cursos
                             .filter((curso) => (curso.ciclo || 0) === ciclo)
                             .map((curso) => (
-                              <div key={curso.id_curso} className="bg-white rounded p-3 border shadow-sm">
+                              <div id={`curso-${curso.id_curso}`} key={curso.id_curso} className={"bg-white rounded p-3 border shadow-sm " + (String(curso.id_curso) === cursoSeleccionadoId ? 'ring-2 ring-indigo-300' : '')}>
                                 <div className="font-medium text-sm text-gray-900">{curso.codigo}</div>
                                 <div className="text-xs text-gray-600 mt-1">{formatearTextoOracion(curso.nombre)}</div>
                                 <div className="text-[11px] text-gray-500 mt-1">

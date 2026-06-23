@@ -13,6 +13,7 @@ export default function SolicitudesPage() {
   const [solicitudes, setSolicitudes] = useState([]);
   const [filtro, setFiltro] = useState('solicitado');
   const [cargando, setCargando] = useState(true);
+  const [procesandoTodo, setProcesandoTodo] = useState(false);
 
   useEffect(() => {
     cargarSolicitudes();
@@ -136,6 +137,32 @@ export default function SolicitudesPage() {
     }
   };
 
+  const aprobarTodasSolicitudes = async () => {
+    if (!window.confirm('¿Aprobar todas las solicitudes mostradas?')) return;
+
+    setProcesandoTodo(true);
+    const pendientes = solicitudes.filter((s: any) => ['solicitado', 'borrador'].includes(s.estado));
+    let aprobadas = 0;
+    let fallos = 0;
+
+    for (const s of pendientes) {
+      try {
+        const response = await fetch(`/api/solicitudes/${s.id_asignacion}/aprobar`, {
+          method: 'POST'
+        });
+        const data = await response.json();
+        if (data.exito) aprobadas += 1; else fallos += 1;
+      } catch (err) {
+        fallos += 1;
+      }
+    }
+
+    setProcesandoTodo(false);
+    if (aprobadas > 0) exito('Solicitudes aprobadas', `${aprobadas} solicitudes aprobadas correctamente`);
+    if (fallos > 0) error('Errores', `${fallos} solicitudes no pudieron ser aprobadas`);
+    cargarSolicitudes();
+  };
+
   const getEstadoBadge = (estado: string) => {
     const colores: any = {
       borrador: 'bg-yellow-100 text-yellow-800',
@@ -216,6 +243,19 @@ export default function SolicitudesPage() {
           Todas
         </button>
       </div>
+
+      {/* Acción masiva: Aprobar todo */}
+      {filtro === 'solicitado' && solicitudes.length > 0 && (
+        <div className="flex justify-end">
+          <button
+            onClick={aprobarTodasSolicitudes}
+            disabled={procesandoTodo}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 transition-colors font-medium"
+          >
+            {procesandoTodo ? 'Procesando...' : 'Aprobar todo'}
+          </button>
+        </div>
+      )}
 
       {/* Lista de Solicitudes */}
       <div className="space-y-4">

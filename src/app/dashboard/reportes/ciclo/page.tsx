@@ -264,22 +264,7 @@ export default function ReporteCicloPage() {
               )}
             </button>
 
-            <button
-              onClick={() => generarReporte('excel')}
-              disabled={generando}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 flex items-center gap-2 font-semibold transition-colors"
-            >
-              {generando ? (
-                <>
-                  <span className="animate-spin">⏳</span>
-                  Generando...
-                </>
-              ) : (
-                <>
-                  📊 Descargar Excel
-                </>
-              )}
-            </button>
+            {/* Botón de Excel eliminado por solicitud */}
           </div>
         )}
       </div>
@@ -290,7 +275,6 @@ export default function ReporteCicloPage() {
           <li>• El reporte muestra todos los cursos y horarios asignados del ciclo seleccionado</li>
           <li>• Incluye un resumen de cursos únicos y sus bloques asignados</li>
           <li>• Se genera en PDF de alta calidad con formato institucional</li>
-          <li>• También puedes exportar a Excel para análisis adicional</li>
         </ul>
       </div>
     </div>

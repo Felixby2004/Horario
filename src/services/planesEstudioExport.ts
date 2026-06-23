@@ -3,6 +3,13 @@ import { obtenerCodigoTipoCurso, obtenerEtiquetaCarreraCurso } from '@/lib/curso
 import { obtenerPlanPorId, obtenerCursosDePlan } from '@/lib/planesEstudio';
 import { puppeteerPool } from '@/services/reportes/PuppeteerPool';
 
+function esElectivo(curso: any) {
+  const tipo = String(curso.tipo_curso || '').toUpperCase();
+  const nombre = String(curso.nombre || '').toLowerCase();
+  const tiposElectivos = ['E', 'EG-EL', 'EE'];
+  return tiposElectivos.includes(tipo) || nombre.includes('electiv');
+}
+
 function formatearFecha(fecha: Date) {
   return new Intl.DateTimeFormat('es-PE', {
     year: 'numeric',
@@ -97,8 +104,12 @@ export async function generarExcelPlanEstudio(idPlan: number) {
   let fila = 6;
   for (const ciclo of ciclos) {
     const cursos = cursosPorCiclo.get(ciclo) || [];
+    // mover cursos electivos al final del ciclo
+    const noElectivos = cursos.filter((c) => !esElectivo(c));
+    const electivos = cursos.filter((c) => esElectivo(c));
+    const ordenados = [...noElectivos, ...electivos];
 
-    cursos.forEach((curso, indice) => {
+    ordenados.forEach((curso, indice) => {
       hoja.getCell(`A${fila}`).value = curso.id_curso;
       hoja.getCell(`B${fila}`).value = etiquetaCiclo(ciclo);
       hoja.getCell(`C${fila}`).value = obtenerCodigoTipoCurso(curso.tipo_curso);
@@ -141,7 +152,10 @@ export async function generarExcelPlanEstudio(idPlan: number) {
     hoja.getCell(`B${fila}`).value = 'Suma de creditos:';
     hoja.getCell(`B${fila}`).font = { bold: true };
     hoja.getCell(`B${fila}`).alignment = { horizontal: 'right' };
-    hoja.getCell(`H${fila}`).value = cursos.reduce((total, curso) => total + curso.creditos, 0);
+    // Sumar créditos: contar todos los no-electivos + solo 1 electivo (si existe)
+    const sumaCreditos = noElectivos.reduce((total, curso) => total + (curso.creditos || 0), 0)
+      + (electivos.length ? (electivos[0].creditos || 0) : 0);
+    hoja.getCell(`H${fila}`).value = sumaCreditos;
     hoja.getCell(`H${fila}`).font = { bold: true };
     hoja.getCell(`H${fila}`).alignment = { horizontal: 'center' };
     hoja.getCell(`I${fila}`).value = '';
@@ -166,7 +180,10 @@ function construirHtmlPlan(datos: Awaited<ReturnType<typeof obtenerDatosExportac
   const filas = datos.ciclos
     .map((ciclo) => {
       const cursos = datos.cursosPorCiclo.get(ciclo) || [];
-      const filasCurso = cursos
+      const noElectivos = cursos.filter((c) => !esElectivo(c));
+      const electivos = cursos.filter((c) => esElectivo(c));
+      const ordenados = [...noElectivos, ...electivos];
+      const filasCurso = ordenados
         .map((curso, indice) => {
           const prerequisitos = curso.prerequisitos
             ? `<tr class="prereq"><td colspan="9">* ${curso.id_curso} ${escaparHtml(curso.prerequisitos)}</td></tr>`
@@ -189,12 +206,15 @@ function construirHtmlPlan(datos: Awaited<ReturnType<typeof obtenerDatosExportac
         })
         .join('');
 
+      const sumaCreditos = noElectivos.reduce((total, curso) => total + (curso.creditos || 0), 0)
+        + (electivos.length ? (electivos[0].creditos || 0) : 0);
+
       return `
         ${filasCurso}
         <tr class="sum-row">
           <td></td>
           <td colspan="6">Suma de creditos:</td>
-          <td>${cursos.reduce((total, curso) => total + curso.creditos, 0)}</td>
+          <td>${sumaCreditos}</td>
           <td></td>
         </tr>
       `;

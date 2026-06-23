@@ -22,6 +22,7 @@ export default function NuevoCursoPage() {
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
   const [departamentos, setDepartamentos] = useState<DepartamentoAcademico[]>([]);
+  const [planesEstudio, setPlanesEstudio] = useState<{ id_plan: number; nombre: string; codigo: string; estado: boolean }[]>([]);
   const [cursos, setCursos] = useState<CursoBase[]>([]);
   const [formulario, setFormulario] = useState({
     codigo: '',
@@ -33,13 +34,14 @@ export default function NuevoCursoPage() {
     horas_practica: 0,
     creditos: 0,
     ciclo: 1,
-    plan_estudios: '2020',
+    plan_estudios: '',
     prerequisito_ids: [] as string[]
   });
 
   useEffect(() => {
     cargarDepartamentos();
     cargarCursos();
+    cargarPlanesEstudio();
   }, []);
 
   const cargarDepartamentos = async () => {
@@ -63,6 +65,19 @@ export default function NuevoCursoPage() {
       }
     } catch (error) {
       console.error('Error al cargar cursos:', error);
+    }
+  };
+
+  const cargarPlanesEstudio = async () => {
+    try {
+      const response = await fetch('/api/planes-estudio');
+      const data = await response.json();
+      if (data.exito) {
+        // mantener solo planes activos
+        setPlanesEstudio((data.datos || []).filter((p: any) => p.estado !== false));
+      }
+    } catch (error) {
+      console.error('Error al cargar planes de estudio:', error);
     }
   };
 
@@ -182,12 +197,13 @@ export default function NuevoCursoPage() {
             ayuda="Ciclo académico (1-10)"
           />
 
-          <CampoTexto
+          <SearchableSelect
             etiqueta="Plan de Estudios"
+            opciones={planesEstudio.map((p) => ({ valor: p.codigo || String(p.id_plan), etiqueta: `${p.codigo} - ${p.nombre}` }))}
             value={formulario.plan_estudios}
-            onChange={(e) => setFormulario({ ...formulario, plan_estudios: e.target.value })}
+            onChange={(valor) => setFormulario({ ...formulario, plan_estudios: String(valor) })}
+            placeholder={planesEstudio.length ? 'Selecciona un plan de estudio' : 'Cargando planes...'}
             required
-            ayuda="Ej: 2020, 2023"
           />
         </div>
 
