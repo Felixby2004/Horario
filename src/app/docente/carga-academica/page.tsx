@@ -10,6 +10,7 @@ import { utilidadesFecha } from '@/lib/utilidadesFecha';
 import { SearchableSelect } from '@/components/ui/SearchableSelect';
 import { ModalConsultaAmbientes } from '@/components/horarios/ModalConsultaAmbientes';
 import { validarEnvioCargaAcademica } from '@/lib/cargaAcademica';
+import { Download } from 'lucide-react';
 import {
   calcularHorasAcumuladasPorTipo,
   obtenerEtiquetaActividadNoLectiva,
@@ -224,7 +225,7 @@ export default function DocenteCargaAcademicaPage() {
       setMensajeErrorCarga('');
       const [resCarga, resHorarios] = await Promise.all([
         fetch(`/api/carga-academica?docenteId=${idDocente}&periodoId=${idPeriodo}`),
-        fetch(`/api/horarios?periodo=${idPeriodo}`)
+        fetch(`/api/horarios?periodo=${idPeriodo}&docenteId=${idDocente}`)
       ]);
 
       const dataCarga = await resCarga.json();
@@ -252,10 +253,8 @@ export default function DocenteCargaAcademicaPage() {
       }
       
       if (dataHorarios.exito) {
-        // Filter horarios to only the current docente
-        const horariosDelDocente = dataHorarios.datos.filter((h: any) => h.id_docente === idDocente);
-        console.log('Docente horarios:', horariosDelDocente);
-        setHorariosDocente(horariosDelDocente);
+        console.log('Docente horarios:', dataHorarios.datos);
+        setHorariosDocente(dataHorarios.datos);
       }
     } catch (error) {
       console.error('Error cargando carga y actividades:', error);
@@ -351,11 +350,11 @@ export default function DocenteCargaAcademicaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6">
+      <div className="max-w-full xl:max-w-[1800px] mx-auto space-y-4 md:space-y-6">
         {/* Mensaje de éxito */}
         {mensajeExito && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded shadow">
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow">
             <div className="flex items-center">
               <span className="text-green-500 mr-2">✅</span>
               <p className="text-green-800 font-medium">{mensajeExito}</p>
@@ -364,23 +363,23 @@ export default function DocenteCargaAcademicaPage() {
         )}
 
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Mi Carga Académica</h1>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Mi Carga Académica</h1>
           <p className="text-gray-600 mt-1">Gestiona tus horas lectivas y no lectivas</p>
         </div>
 
         {/* Selector de Periodo */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
             <div>
-              <label className="block text-sm font-medium mb-2">Periodo</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">Periodo</label>
               <select
                 value={periodoSeleccionado}
                 onChange={(e) => {
                   setPeriodoSeleccionado(e.target.value);
                   cargarCargaYActividades(usuario.id_docente, parseInt(e.target.value));
                 }}
-                className="border rounded px-3 py-2 min-w-[200px]"
+                className="border border-gray-300 rounded-lg px-3 py-2 min-w-[200px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 {periodos.map((p: any) => (
                   <option key={p.id_periodo} value={p.id_periodo}>
@@ -398,12 +397,12 @@ export default function DocenteCargaAcademicaPage() {
             </div>
           </div>
           {mensajeErrorCarga && (
-            <div className="mt-4 rounded-lg border border-red-300 bg-red-50 p-3">
+            <div className="mt-4 rounded-lg border border-red-300 bg-red-50 p-4">
               <p className="text-sm font-medium text-red-900">{mensajeErrorCarga}</p>
             </div>
           )}
           {carga && ['borrador', 'observado'].includes(carga.estado) && validacionEnvio && !validacionEnvio.valido && (
-            <div className="mt-4 rounded-lg border border-orange-300 bg-orange-50 p-3">
+            <div className="mt-4 rounded-lg border border-orange-300 bg-orange-50 p-4">
               <p className="text-sm font-medium text-orange-900">{validacionEnvio.mensaje}</p>
             </div>
           )}
@@ -412,36 +411,36 @@ export default function DocenteCargaAcademicaPage() {
         {/* Resumen de Carga */}
         {carga && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500 hover:shadow-md transition-shadow">
               <p className="text-blue-600 text-sm font-medium">Horas Lectivas</p>
-              <p className="text-3xl font-bold text-blue-800 mt-2">{carga.horas_lectivas} h</p>
+              <p className="text-4xl font-bold text-blue-800 mt-2">{carga.horas_lectivas} h</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500 hover:shadow-md transition-shadow">
               <p className="text-green-600 text-sm font-medium">Horas No Lectivas</p>
-              <p className="text-3xl font-bold text-green-800 mt-2">{carga.horas_no_lectivas} h</p>
+              <p className="text-4xl font-bold text-green-800 mt-2">{carga.horas_no_lectivas} h</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-              <p className="text-gray-600 text-sm font-medium">Total</p>
-              <p className="text-3xl font-bold text-blue-800 mt-2">
+            <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500 hover:shadow-md transition-shadow">
+              <p className="text-purple-600 text-sm font-medium">Total</p>
+              <p className="text-4xl font-bold text-purple-800 mt-2">
                 {carga.horas_totales} h
               </p>
             </div>
           </div>
         )}
 
-        {/* Estado de la Carga */}
+        {/* Estado de la Carga y Documentos */}
         {carga && (
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-4 md:p-6">
             <div className="flex flex-col gap-4">
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-2">Estado de la Carga Académica</p>
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium ${
+                  className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold ${
                     carga.estado === 'aprobado' || carga.estado === 'publicado'
                       ? 'bg-green-100 text-green-800'
                       : carga.estado === 'observado'
                       ? 'bg-orange-100 text-orange-800'
-                      : carga.estado === 'en_revision' || carga.estado === 'validado'
+                      : carga.estado === 'en_revision' || carga.estado === 'validado' || carga.estado === 'enviado'
                       ? 'bg-yellow-100 text-yellow-800'
                       : 'bg-blue-100 text-blue-800'
                   }`}
@@ -458,107 +457,171 @@ export default function DocenteCargaAcademicaPage() {
                 </div>
               )}
 
-              {/* Sección de Documentos Generados */}
-              {(carga.estado === 'aprobado' || carga.estado === 'publicado') && (
-                <div className="p-4 border rounded bg-green-50">
-                  <p className="text-sm font-medium text-green-900 mb-3">Documentos Generados</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <button
-                      onClick={() => setMostrarDocumento('carga')}
-                      className="flex items-center gap-3 p-3 border border-green-200 bg-white rounded hover:bg-green-50 transition"
-                    >
-                      <div className="text-green-600 text-2xl">📄</div>
-                      <div className="text-left">
-                        <p className="font-medium text-gray-900 text-sm">Formato N°1</p>
-                        <p className="text-xs text-gray-600">Declaración de Carga Horaria Asignada</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setMostrarDocumento('declaracion')}
-                      className="flex items-center gap-3 p-3 border border-green-200 bg-white rounded hover:bg-green-50 transition"
-                    >
-                      <div className="text-green-600 text-2xl">📜</div>
-                      <div className="text-left">
-                        <p className="font-medium text-gray-900 text-sm">Declaración Jurada</p>
-                        <p className="text-xs text-gray-600">Declaración Jurada de No Estar Incluso en Causales</p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setMostrarDocumento('horario')}
-                      className="flex items-center gap-3 p-3 border border-green-200 bg-white rounded hover:bg-green-50 transition"
-                    >
-                      <div className="text-green-600 text-2xl">📅</div>
-                      <div className="text-left">
-                        <p className="font-medium text-gray-900 text-sm">Horario Semanal</p>
-                        <p className="text-xs text-gray-600">Formato F03-CAD - Horario Semanal de la Carga Académica</p>
-                      </div>
-                    </button>
-                  </div>
+              {/* Sección de Documentos - Disponible para todos los estados */}
+              <div className={`p-4 border rounded-lg ${
+                (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                  ? 'bg-green-50 border-green-200' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <p className={`text-sm font-medium mb-3 ${
+                  (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                    ? 'text-green-900' 
+                    : 'text-gray-700'
+                }`}>
+                  {carga.estado === 'aprobado' || carga.estado === 'publicado' 
+                    ? 'Documentos Generados y Aprobados' 
+                    : 'Vista Previa de Documentos'}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <button
+                    onClick={() => setMostrarDocumento('carga')}
+                    className={`flex items-center gap-3 p-4 border rounded-lg bg-white hover:shadow-md transition-all ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'border-green-200 hover:bg-green-50' 
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className={`text-3xl ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'text-green-600' 
+                        : 'text-blue-600'
+                    }`}>📄</div>
+                    <div className="text-left">
+                      <p className="font-semibold text-gray-900 text-sm">Formato N°1</p>
+                      <p className="text-xs text-gray-600 mt-1">Declaración de Carga Horaria Asignada</p>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setMostrarDocumento('declaracion')}
+                    className={`flex items-center gap-3 p-4 border rounded-lg bg-white hover:shadow-md transition-all ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'border-green-200 hover:bg-green-50' 
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className={`text-3xl ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'text-green-600' 
+                        : 'text-blue-600'
+                    }`}>📜</div>
+                    <div className="text-left">
+                      <p className="font-semibold text-gray-900 text-sm">Declaración Jurada</p>
+                      <p className="text-xs text-gray-600 mt-1">Declaración Jurada de No Estar Incluso en Causales</p>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setMostrarDocumento('horario')}
+                    className={`flex items-center gap-3 p-4 border rounded-lg bg-white hover:shadow-md transition-all ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'border-green-200 hover:bg-green-50' 
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className={`text-3xl ${
+                      (carga.estado === 'aprobado' || carga.estado === 'publicado') 
+                        ? 'text-green-600' 
+                        : 'text-blue-600'
+                    }`}>📅</div>
+                    <div className="text-left">
+                      <p className="font-semibold text-gray-900 text-sm">Horario Semanal</p>
+                      <p className="text-xs text-gray-600 mt-1">Formato F03-CAD - Horario Semanal de la Carga Académica</p>
+                    </div>
+                  </button>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* Actividades No Lectivas */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Actividades No Lectivas</h2>
-            {carga && ['borrador', 'observado'].includes(carga.estado) && (
-              <Boton onClick={handleNuevaActividad}>➕ Nueva Actividad</Boton>
-            )}
-          </div>
+        {/* Main Layout: Actividades + Formato F03-CAD */}
+        {carga && (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+            {/* Actividades No Lectivas */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h2 className="text-lg md:text-xl font-semibold text-gray-800">Actividades No Lectivas</h2>
+                {carga && ['borrador', 'observado'].includes(carga.estado) && (
+                  <Boton onClick={handleNuevaActividad}>➕ Nueva Actividad</Boton>
+                )}
+              </div>
 
-          {actividades.length === 0 ? (
-            <div className="p-12 text-center">
-              <p className="text-gray-500 text-lg mb-4">
-                No hay actividades no lectivas registradas.
-              </p>
-            </div>
-          ) : (
-            <div className="divide-y">
-              {actividades.map((actividad: any) => (
-                <div key={actividad.id_actividad} className="p-6 hover:bg-gray-50 transition">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {TIPOS_ACTIVIDAD.find((t) => t.valor === actividad.tipo_actividad)?.label ||
-                          actividad.tipo_actividad}
-                      </h3>
-                      <p className="text-gray-600 mt-1">
-                        <strong>Horas Semanales:</strong> {actividad.horas_semanales} h
-                      </p>
-                      {actividad.nombre && (
-                        <p className="text-gray-600 mt-1">
-                          <strong>Nombre:</strong> {actividad.nombre}
-                        </p>
-                      )}
-                      {actividad.descripcion && (
-                        <p className="text-sm text-gray-500 mt-2">{actividad.descripcion}</p>
-                      )}
-                    </div>
-                    {carga && ['borrador', 'observado'].includes(carga.estado) && (
-                      <div className="flex gap-2 ml-4">
-                        <button
-                          onClick={() => handleEditarActividad(actividad)}
-                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleEliminarActividad(actividad.id_actividad)}
-                          className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    )}
-                  </div>
+              {actividades.length === 0 ? (
+                <div className="p-12 text-center">
+                  <div className="text-gray-400 text-6xl mb-4">📋</div>
+                  <p className="text-gray-500 text-lg mb-2">
+                    No hay actividades no lectivas registradas.
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    Agrega tus actividades para visualizarlas en el horario
+                  </p>
                 </div>
-              ))}
+              ) : (
+                <div className="divide-y divide-gray-100 max-h-[600px] md:max-h-[700px] overflow-y-auto">
+                  {actividades.map((actividad: any) => (
+                    <div key={actividad.id_actividad} className="p-4 md:p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="text-base md:text-lg font-semibold text-gray-900">
+                            {TIPOS_ACTIVIDAD.find((t) => t.valor === actividad.tipo_actividad)?.label ||
+                              actividad.tipo_actividad}
+                          </h3>
+                          <p className="text-gray-600 mt-1 text-sm md:text-base">
+                            <strong>Horas Semanales:</strong> {actividad.horas_semanales} h
+                          </p>
+                          {actividad.nombre && (
+                            <p className="text-gray-600 mt-1 text-sm md:text-base">
+                              <strong>Nombre:</strong> {actividad.nombre}
+                            </p>
+                          )}
+                          {actividad.descripcion && (
+                            <p className="text-sm text-gray-500 mt-2">{actividad.descripcion}</p>
+                          )}
+                        </div>
+                        {carga && ['borrador', 'observado'].includes(carga.estado) && (
+                          <div className="flex gap-2 ml-4">
+                            <button
+                              onClick={() => handleEditarActividad(actividad)}
+                              className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                            >
+                              ✏️ Editar
+                            </button>
+                            <button
+                              onClick={() => handleEliminarActividad(actividad.id_actividad)}
+                              className="px-3 py-1.5 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                            >
+                              🗑️ Eliminar
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+
+            {/* Formato F03-CAD - Horario Semanal */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-blue-50">
+                <h2 className="text-lg md:text-xl font-semibold text-blue-900">Formato F03-CAD - Horario Semanal</h2>
+                <div className="text-xs md:text-sm text-blue-700 bg-blue-100 px-3 py-1 rounded-full font-medium">
+                  ⚡ Actualización en tiempo real
+                </div>
+              </div>
+              <div className="p-3 md:p-4 bg-white max-h-[600px] md:max-h-[700px] overflow-auto">
+                <div className="bg-white p-2 md:p-4 rounded-lg border border-gray-200">
+                  <DocumentoHorarioSemanal
+                    carga={carga}
+                    docente={carga.docente || usuario}
+                    periodo={carga.periodo}
+                    horarios={horariosDocente}
+                    actividades={actividades}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modal para Nueva/Editar Actividad */}
@@ -588,18 +651,21 @@ export default function DocenteCargaAcademicaPage() {
               <h2 className="text-xl font-semibold">
                 {mostrarDocumento === 'carga'
                   ? 'Formato N° 1 - Declaración de Carga Horaria Asignada'
+                  : mostrarDocumento === 'horario'
+                  ? 'Formato F03-CAD - Horario Semanal de la Carga Académica'
                   : 'Declaración Jurada'}
               </h2>
               <div className="flex gap-2">
                 <button
                   onClick={handleDescargarPDF}
-                  className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors shadow-sm"
                 >
-                  <i className="fas fa-download"></i>
+                  <Download className="w-5 h-5" />
+                  <span>Descargar PDF</span>
                 </button>
                 <button
                   onClick={() => setMostrarDocumento(null)}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  className="text-gray-500 hover:text-gray-700 text-2xl p-2 rounded-full hover:bg-gray-100 transition-colors"
                 >
                   ×
                 </button>

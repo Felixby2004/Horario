@@ -129,10 +129,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const periodo = searchParams.get('periodo');
     const ambiente = searchParams.get('ambiente');
+    const docenteId = searchParams.get('docenteId');
 
     const where: any = {};
     if (periodo) where.id_periodo = parseInt(periodo);
     if (ambiente) where.id_ambiente = parseInt(ambiente);
+    if (docenteId) where.id_docente = parseInt(docenteId);
     where.estado = { not: 'cancelado' };
 
     const horarios = await prisma.horarioAsignado.findMany({

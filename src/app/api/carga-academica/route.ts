@@ -60,70 +60,50 @@ export async function GET(request: NextRequest) {
     if (docenteIdNumero !== null) where.id_docente = docenteIdNumero;
     if (periodoIdNumero !== null) where.id_periodo = periodoIdNumero;
 
-    let cargas = await prisma.cargaAcademica.findMany({
-      where,
-      include: {
-        docente: {
-          include: {
-            facultad: true,
-            departamento: true,
-            horarios: {
-              include: {
-                grupo: {
-                  include: {
-                    curso: true
-                  }
-                },
-                curso: true,
-                ambiente: true
+    // First, check if we need to update the horas (only for single docente + periodo)
+    if (docenteIdNumero && periodoIdNumero) {
+      let carga = await prisma.cargaAcademica.findFirst({
+        where,
+        include: {
+          docente: {
+            include: {
+              facultad: { select: { id_facultad: true, nombre: true } },
+              departamento: { select: { id_departamento: true, nombre: true } },
+              cursos: {
+                where: { activo: true },
+                include: { curso: true }
               }
-            },
-            cursos: {
-              where: { activo: true },
-              include: { curso: true }
             }
-          }
-        },
-        periodo: true,
-        actividades_no_lectivas: true,
-        historial: true
-      },
-      orderBy: { fecha_creacion: 'desc' }
-    });
-
-    for (const carga of cargas) {
-      const horas = await calcularHorasCarga(carga.id_docente, carga);
-      
-      await prisma.cargaAcademica.update({
-        where: { id_carga: carga.id_carga },
-        data: {
-          horas_lectivas: horas.horasLectivas,
-          horas_no_lectivas: horas.horasNoLectivas,
-          horas_preparacion: horas.horasPreparacion,
-          horas_totales: horas.horasTotales,
-          horas_meta: obtenerHorasMetaDocente(carga.docente, carga)
+          },
+          periodo: true,
+          actividades_no_lectivas: true
         }
       });
+
+      if (carga) {
+        const horas = await calcularHorasCarga(carga.id_docente, carga);
+        
+        await prisma.cargaAcademica.update({
+          where: { id_carga: carga.id_carga },
+          data: {
+            horas_lectivas: horas.horasLectivas,
+            horas_no_lectivas: horas.horasNoLectivas,
+            horas_preparacion: horas.horasPreparacion,
+            horas_totales: horas.horasTotales,
+            horas_meta: obtenerHorasMetaDocente(carga.docente, carga)
+          }
+        });
+      }
     }
 
-    cargas = await prisma.cargaAcademica.findMany({
+    // Fetch final data with only necessary fields
+    const cargas = await prisma.cargaAcademica.findMany({
       where,
       include: {
         docente: {
           include: {
-            facultad: true,
-            departamento: true,
-            horarios: {
-              include: {
-                grupo: {
-                  include: {
-                    curso: true
-                  }
-                },
-                curso: true,
-                ambiente: true
-              }
-            },
+            facultad: { select: { id_facultad: true, nombre: true } },
+            departamento: { select: { id_departamento: true, nombre: true } },
             cursos: {
               where: { activo: true },
               include: { curso: true }
@@ -131,8 +111,7 @@ export async function GET(request: NextRequest) {
           }
         },
         periodo: true,
-        actividades_no_lectivas: true,
-        historial: true
+        actividades_no_lectivas: true
       },
       orderBy: { fecha_creacion: 'desc' }
     });

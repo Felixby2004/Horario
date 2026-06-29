@@ -1,7 +1,32 @@
 const tableBaseClass = 'w-full border-collapse border border-gray-900 table-fixed';
-const tableHeadCellClass = 'border border-gray-900 px-2 py-1.5 text-center align-middle font-semibold leading-tight';
-const tableBodyCellClass = 'border border-gray-900 px-2 py-1.5 align-top leading-snug break-normal whitespace-normal';
+const tableHeadCellClass = 'border border-gray-900 px-2 py-1.5 text-center align-middle font-semibold leading-tight break-words whitespace-normal';
+const tableBodyCellClass = 'border border-gray-900 px-2 py-1.5 align-top leading-snug break-words whitespace-normal overflow-hidden';
 const tableBodyCellCenterClass = `${tableBodyCellClass} text-center`;
+
+// Helper to normalize text: first letter uppercase, rest lowercase
+const normalizeText = (text: string | null | undefined): string => {
+  if (!text) return '';
+  const normalized = String(text).toLowerCase().replace(/_/g, ' ');
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+};
+
+// Helper to format date in Spanish: "29 de junio de 2026"
+const formatDateSpanish = (dateInput: string | Date | null | undefined): string => {
+  if (!dateInput) return '';
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return '';
+  
+  const months = [
+    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+  ];
+  
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  
+  return `${day} de ${month} de ${year}`;
+};
 
 export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, actividades }: any) {
   console.log('DocumentoHorarioSemanal props:', { carga, docente, periodo, horarios, actividades });
@@ -311,51 +336,51 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
   const totalHoras = totalCHL + totalCHNL;
 
   return (
-    <div className="p-8 max-w-6xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="p-8 max-w-6xl mx-auto bg-white" style={{ fontFamily: 'Times New Roman, serif', hyphens: 'auto' }}>
       <div className="text-center mb-4">
-        <h1 className="text-base font-bold text-gray-900 uppercase tracking-wider">HORARIO SEMANAL DE LA CARGA ACADÉMICA DOCENTE (F03-CAD)</h1>
+        <h1 className="text-base font-bold text-gray-900 uppercase tracking-wider break-words">HORARIO SEMANAL DE LA CARGA ACADÉMICA DOCENTE (F03-CAD)</h1>
       </div>
 
       {/* Header Info */}
       <div className="mb-4 text-xs">
         <div className="grid grid-cols-12 gap-1 mb-2">
-          <div className="col-span-4">
+          <div className="col-span-4 break-words">
             <span className="font-semibold">Facultad / Filial:</span> {docente?.facultad?.nombre || 'Ingeniería'}
           </div>
           <div className="col-span-4"></div>
-          <div className="col-span-4">
+          <div className="col-span-4 break-words">
             <span className="font-semibold">Dpto. Académico:</span> {docente?.departamento?.nombre || 'Ingeniería de Sistemas'}
           </div>
         </div>
         <div className="grid grid-cols-12 gap-1 mb-2">
-          <div className="col-span-3">
+          <div className="col-span-3 break-words">
             <span className="font-semibold">DNI:</span> {docente?.dni_docente || ''}
           </div>
-          <div className="col-span-5">
+          <div className="col-span-5 break-words">
             <span className="font-semibold">Docente:</span> {docente?.apellidos}, {docente?.nombres}
           </div>
-          <div className="col-span-4">
+          <div className="col-span-4 break-words">
             <span className="font-semibold">A SOCIADO TC:</span>
           </div>
         </div>
         <div className="grid grid-cols-12 gap-1">
-          <div className="col-span-3">
+          <div className="col-span-3 break-words">
             <span className="font-semibold">AÑO ACADÉMICO:</span> {periodo?.anio || new Date().getFullYear()}
           </div>
-          <div className="col-span-2">
+          <div className="col-span-2 break-words">
             <span className="font-semibold">SEMESTRE:</span> {periodo?.nombre || 'I'}
           </div>
-          <div className="col-span-3">
+          <div className="col-span-3 break-words">
             <span className="font-semibold">Fecha de Inicio:</span> {formatDate(periodo?.fecha_inicio)}
           </div>
-          <div className="col-span-4">
+          <div className="col-span-4 break-words">
             <span className="font-semibold">Fecha de Término:</span> {formatDate(periodo?.fecha_fin)}
           </div>
         </div>
       </div>
 
       {/* CHL Table */}
-      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed', wordBreak: 'break-word', hyphens: 'auto' }}>
         <colgroup>
           <col style={{ width: '23%' }} />
           <col style={{ width: '45%' }} />
@@ -365,17 +390,17 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
         </colgroup>
         <thead>
           <tr className="bg-gray-100">
-            <th className={tableHeadCellClass}>HORARIO</th>
-            <th className={tableHeadCellClass}>CARGA HORARIA LECTIVA (CHL)</th>
-            <th className={tableHeadCellClass}>LUGAR</th>
-            <th className={tableHeadCellClass}>AULA</th>
-            <th className={tableHeadCellClass}>TOTAL</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>HORARIO</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>CARGA HORARIA LECTIVA (CHL)</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>LUGAR</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>AULA</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>TOTAL</th>
           </tr>
         </thead>
         <tbody>
           {chlRows.map((row, idx) => (
             <tr key={idx}>
-              <td className={`${tableBodyCellClass} whitespace-pre-line`}>
+              <td className={`${tableBodyCellClass} whitespace-pre-line`} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>
                 {row.horario.map((h: string, i: number) => (
                   <span key={i}>
                     {h}
@@ -383,25 +408,25 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
                   </span>
                 ))}
               </td>
-              <td className={tableBodyCellClass}>{row.curso}</td>
-              <td className={tableBodyCellCenterClass}>{row.lugar}</td>
-              <td className={tableBodyCellCenterClass}>{row.aula}</td>
-              <td className={tableBodyCellCenterClass}>{row.horas}</td>
+              <td className={tableBodyCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.curso}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.lugar}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.aula}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.horas}</td>
             </tr>
           ))}
           {/* Total CHL Row */}
           <tr className="bg-gray-100">
-            <td className={`${tableBodyCellClass} font-semibold`}>T:</td>
-            <td className={tableBodyCellClass}></td>
-            <td className={tableBodyCellClass}></td>
-            <td className={tableBodyCellClass}></td>
-            <td className={`${tableBodyCellCenterClass} font-semibold`}>{totalCHL}</td>
+            <td className={`${tableBodyCellClass} font-semibold`} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>T:</td>
+            <td className={tableBodyCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}></td>
+            <td className={tableBodyCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}></td>
+            <td className={tableBodyCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}></td>
+            <td className={`${tableBodyCellCenterClass} font-semibold`} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{totalCHL}</td>
           </tr>
         </tbody>
       </table>
 
       {/* CHNL Table */}
-      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} mb-2 text-[11px]`} style={{ tableLayout: 'fixed', wordBreak: 'break-word', hyphens: 'auto' }}>
         <colgroup>
           <col style={{ width: '23%' }} />
           <col style={{ width: '45%' }} />
@@ -411,17 +436,17 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
         </colgroup>
         <thead>
           <tr className="bg-gray-100">
-            <th className={tableHeadCellClass}>HORARIO</th>
-            <th className={tableHeadCellClass}>CARGA HORARIA NO LECTIVA (CHNL)</th>
-            <th className={tableHeadCellClass}>LUGAR</th>
-            <th className={tableHeadCellClass}>AULA</th>
-            <th className={tableHeadCellClass}>TOTAL</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>HORARIO</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>CARGA HORARIA NO LECTIVA (CHNL)</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>LUGAR</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>AULA</th>
+            <th className={tableHeadCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto' }}>TOTAL</th>
           </tr>
         </thead>
         <tbody>
           {chnlRows.map((row, idx) => (
             <tr key={idx}>
-              <td className={`${tableBodyCellClass} whitespace-pre-line`}>
+              <td className={`${tableBodyCellClass} whitespace-pre-line`} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>
                 {row.horario.map((h: string, i: number) => (
                   <span key={i}>
                     {h}
@@ -429,30 +454,30 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
                   </span>
                 ))}
               </td>
-              <td className={tableBodyCellClass}>{row.actividad}</td>
-              <td className={tableBodyCellCenterClass}>{row.lugar}</td>
-              <td className={tableBodyCellCenterClass}>{row.aula}</td>
-              <td className={tableBodyCellCenterClass}>{row.horas}</td>
+              <td className={tableBodyCellClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.actividad}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.lugar}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.aula}</td>
+              <td className={tableBodyCellCenterClass} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{row.horas}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {/* Total Row */}
-      <table className={`${tableBaseClass} text-[11px]`} style={{ tableLayout: 'fixed' }}>
+      <table className={`${tableBaseClass} text-[11px]`} style={{ tableLayout: 'fixed', wordBreak: 'break-word', hyphens: 'auto' }}>
         <tbody>
           <tr className="bg-gray-200 font-bold">
-            <td className="border border-gray-900 px-2 py-2 text-center" colSpan={4}>TOTAL HORAS CARGA ACADÉMICA</td>
-            <td className="border border-gray-900 px-2 py-2 text-center">{totalHoras}</td>
+            <td className="border border-gray-900 px-2 py-2 text-center" colSpan={4} style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>TOTAL HORAS CARGA ACADÉMICA</td>
+            <td className="border border-gray-900 px-2 py-2 text-center" style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>{totalHoras}</td>
           </tr>
         </tbody>
       </table>
 
       {/* Notes */}
-      <div className="mt-2 text-[10px] text-gray-700 space-y-1">
-        <p><strong>T:</strong> TEORÍA, <strong>P:</strong> PRÁCTICA</p>
-        <p><strong>LU (LUNES),</strong> <strong>MA (MARTES),</strong> <strong>MI (MIÉRCOLES),</strong> <strong>JU (JUEVES),</strong> <strong>VI (VIERNES),</strong> <strong>SA (SÁBADO).</strong> TIEMPO EN FORMATO DE 24 HORAS.</p>
-        <p><strong>LUGAR:</strong> FC1: FIC - Ciencias - Atmosféricas; FC2: FC - Biológicas; FC3: FC - Económicas; FCS: Ciencias y Matemáticas; FCQ: FC - Químicas; FIA: FIA - Contabilidad y Ciencias Administrativas; FIC: FIC - Civil; FIE: FIE - Electrónica y Eléctrica; FIM: FIM - Mecánica; FIS: FIS - Sistemas; FIT: FIT - Textil; FIZ: FIZ - Zootecnia; 01: Plazoleta Jequetepeque; F16: Fial Santiago de Chuco; CA: Oficina Administrativa; SC: Salón de Consejo";</p>
+      <div className="mt-2 text-[10px] text-gray-700 space-y-1" style={{ wordBreak: 'break-word', hyphens: 'auto', overflowWrap: 'break-word' }}>
+        <p className="break-words"><strong>T:</strong> TEORÍA, <strong>P:</strong> PRÁCTICA</p>
+        <p className="break-words"><strong>LU (LUNES),</strong> <strong>MA (MARTES),</strong> <strong>MI (MIÉRCOLES),</strong> <strong>JU (JUEVES),</strong> <strong>VI (VIERNES),</strong> <strong>SA (SÁBADO).</strong> TIEMPO EN FORMATO DE 24 HORAS.</p>
+        <p className="break-words"><strong>LUGAR:</strong> FC1: FIC - Ciencias - Atmosféricas; FC2: FC - Biológicas; FC3: FC - Económicas; FCS: Ciencias y Matemáticas; FCQ: FC - Químicas; FIA: FIA - Contabilidad y Ciencias Administrativas; FIC: FIC - Civil; FIE: FIE - Electrónica y Eléctrica; FIM: FIM - Mecánica; FIS: FIS - Sistemas; FIT: FIT - Textil; FIZ: FIZ - Zootecnia; 01: Plazoleta Jequetepeque; F16: Fial Santiago de Chuco; CA: Oficina Administrativa; SC: Salón de Consejo;</p>
       </div>
 
       {/* Signatures */}
@@ -478,7 +503,7 @@ export function DocumentoHorarioSemanal({ carga, docente, periodo, horarios, act
 }
 
 export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, actividades }: any) {
-  // Helper function to format date as dd/mm/yyyy
+  // Helper function to format date as dd/mm/yyyy (for period dates)
   const formatDate = (dateInput: string | Date | null | undefined): string => {
     if (!dateInput) return '[dd/mm/aaaa]';
     const date = new Date(dateInput);
@@ -489,7 +514,7 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
     return `${day}/${month}/${year}`;
   };
 
-  const fechaEmision = formatDate(new Date());
+  const fechaEmision = formatDateSpanish(new Date());
 
   // Get unique course-group combinations from horarios and docente.cursos
   const getUniqueCursosFromHorarios = () => {
@@ -677,12 +702,10 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
           <tbody>
             <tr>
               <td className="border border-gray-900 px-3 py-2 text-xs leading-snug">{docente?.apellidos}, {docente?.nombres}</td>
-              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{docente?.modalidad || docente?.categoria || 'Nombrado'}</td>
-              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{docente?.categoria || 'Principal'}</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{normalizeText(docente?.modalidad || docente?.categoria) || 'Nombrado'}</td>
+              <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">{normalizeText(docente?.categoria) || 'Principal'}</td>
               <td className="border border-gray-900 px-3 py-2 text-xs text-center leading-snug">
-                {docente?.dedicacion?.replace(/_/g, ' ') ||
-                  docente?.tipo_dedicacion_laboral?.replace(/_/g, ' ') ||
-                  'Tiempo Completo'}
+                {normalizeText(docente?.dedicacion || docente?.tipo_dedicacion_laboral) || 'Tiempo Completo'}
               </td>
             </tr>
           </tbody>
@@ -853,11 +876,7 @@ export function DocumentoCargaAcademica({ carga, docente, periodo, horarios, act
 }
 
 export function DocumentoDeclaracionJurada({ docente }: any) {
-  const fechaActual = new Date().toLocaleDateString('es-PE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const fechaActual = formatDateSpanish(new Date());
 
   // Obtener condición (Nombrado / Contratado)
   const condicion =
@@ -952,7 +971,7 @@ export function DocumentoDeclaracionJurada({ docente }: any) {
         </p>
 
         <div className="text-center mt-16">
-          <p>Se expide la presente declaración en la ciudad de Trujillo, a los {new Date().getDate()} días del mes de {new Date().toLocaleDateString('es-PE', { month: 'long' })} del año {new Date().getFullYear()}.</p>
+          <p>Se expide la presente declaración en la ciudad de Trujillo, a {fechaActual}.</p>
         </div>
 
         {/* Espacio para firma */}
