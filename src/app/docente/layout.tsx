@@ -223,12 +223,15 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
         <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
           <div className={`p-4 border-b border-primary-800 flex items-center gap-4 ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {collapsed ? (
-              <h2 className="text-xl font-bold">UNT</h2>
+              <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 max-w-10 max-h-10 object-contain flex-shrink-0" />
             ) : (
               <>
-                <div>
-                  <h1 className="text-xl font-bold">Sistema de horarios</h1>
-                  <p className="text-sm text-primary-300 mt-1">UNT - Docente</p>
+                <div className="flex items-center gap-3">
+                  <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 max-w-10 max-h-10 object-contain flex-shrink-0" />
+                  <div>
+                    <h1 className="text-xl font-bold">Sistema de horarios</h1>
+                    <p className="text-sm text-primary-300 mt-1">UNT - Docente</p>
+                  </div>
                 </div>
               </>
             )}

@@ -57,9 +57,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-800">
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-blue-600 rounded-full mx-auto flex items-center justify-center mb-4">
-            <span className="text-white text-3xl font-bold">UNT</span>
-          </div>
+          <img src="/logo.png" alt="Logo UNT" className="w-20 h-20 max-w-20 max-h-20 object-contain mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-800">Sistema de horarios</h1>
           <p className="text-gray-600 mt-2">Universidad Nacional de Trujillo</p>
         </div>

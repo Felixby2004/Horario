@@ -111,6 +111,7 @@ export default function DocenteCargaAcademicaPage() {
   const [mostrarDocumento, setMostrarDocumento] = useState<'carga' | 'declaracion' | 'horario' | null>(null);
   const [mensajeExito, setMensajeExito] = useState<string>('');
   const [mensajeErrorCarga, setMensajeErrorCarga] = useState<string>('');
+  const [modalGestionHorariosAbierto, setModalGestionHorariosAbierto] = useState(false);
   const documentRef = useRef<HTMLDivElement>(null);
 
   const obtenerIdDocenteUsuario = (user: any) => {
@@ -241,12 +242,35 @@ export default function DocenteCargaAcademicaPage() {
         return;
       }
       
+      const parseJSON = (value: any) => {
+        if (typeof value === 'string') {
+          try {
+            return JSON.parse(value);
+          } catch (e) {
+            console.error('Error parsing JSON in cargarCargaYActividades:', e);
+            return value;
+          }
+        }
+        return value;
+      };
+
       if (dataCarga.exito && dataCarga.datos.length > 0) {
         const cargaData = dataCarga.datos[0];
+        const actividadesParseadas = (cargaData.actividades_no_lectivas || []).map((act: any) => ({
+          ...act,
+          horarios_actividad: parseJSON(act.horarios_actividad),
+          dias_semana: parseJSON(act.dias_semana),
+          datos_adicionales: parseJSON(act.datos_adicionales),
+          datos_sustento: parseJSON(act.datos_sustento)
+        }));
+        
         console.log('cargarCargaYActividades - cargaData:', cargaData);
-        console.log('cargarCargaYActividades - actividades_no_lectivas:', cargaData.actividades_no_lectivas);
-        setCarga(cargaData);
-        setActividades(cargaData.actividades_no_lectivas || []);
+        console.log('cargarCargaYActividades - actividades_no_lectivas:', actividadesParseadas);
+        setCarga({
+          ...cargaData,
+          actividades_no_lectivas: actividadesParseadas
+        });
+        setActividades(actividadesParseadas);
       } else {
         // Si no hay carga, creamos una nueva
         await crearCargaAcademica(idDocente, idPeriodo);
@@ -538,11 +562,21 @@ export default function DocenteCargaAcademicaPage() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
             {/* Actividades No Lectivas */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-4 md:p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+              <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-gray-50">
                 <h2 className="text-lg md:text-xl font-semibold text-gray-800">Actividades No Lectivas</h2>
-                {carga && ['borrador', 'observado'].includes(carga.estado) && (
-                  <Boton onClick={handleNuevaActividad}>➕ Nueva Actividad</Boton>
-                )}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {carga && ['borrador', 'observado'].includes(carga.estado) && (
+                    <Boton onClick={handleNuevaActividad}>➕ Nueva Actividad</Boton>
+                  )}
+                  {carga && (
+                    <button
+                      onClick={() => setModalGestionHorariosAbierto(true)}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium"
+                    >
+                      📅 Gestionar Horarios
+                    </button>
+                  )}
+                </div>
               </div>
 
               {actividades.length === 0 ? (
@@ -637,6 +671,22 @@ export default function DocenteCargaAcademicaPage() {
           docente={carga?.docente || usuario}
           onActualizar={async (mensaje: string) => {
             setModalAbierto(false);
+            setMensajeExito(mensaje);
+            if (usuario) await cargarCargaYActividades(usuario.id_docente, parseInt(periodoSeleccionado));
+          }}
+        />
+      )}
+
+      {/* Modal para Gestionar Horarios de Actividades No Lectivas */}
+      {modalGestionHorariosAbierto && (
+        <ModalGestionHorariosNoLectivas
+          abierto={modalGestionHorariosAbierto}
+          alCerrar={() => setModalGestionHorariosAbierto(false)}
+          idCargaAcademica={carga?.id_carga}
+          horasLectivas={carga?.horas_lectivas ?? 0}
+          periodo={periodos.find((p) => p.id_periodo === parseInt(periodoSeleccionado))}
+          docente={carga?.docente || usuario}
+          onActualizar={async (mensaje: string) => {
             setMensajeExito(mensaje);
             if (usuario) await cargarCargaYActividades(usuario.id_docente, parseInt(periodoSeleccionado));
           }}
@@ -1377,6 +1427,47 @@ function ModalActividadNoLectiva({
             />
           </div>
 
+          {/* Horas Totales */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Horas Totales <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              value={formData.horas_semanales}
+              onChange={(e) => {
+                const valor = parseFloat(e.target.value);
+                if (!Number.isNaN(valor)) {
+                  if (Number.isFinite(limiteActual) && valor > limiteActual - horasAcumuladasTipo) {
+                    setErrorFormulario(
+                      `El valor ingresado supera el límite permitido. Solo puedes agregar ${limiteActual - horasAcumuladasTipo} horas más.`
+                    );
+                  } else if (valor <= 0) {
+                    setErrorFormulario('Debes ingresar al menos 1 hora.');
+                  } else {
+                    setErrorFormulario('');
+                  }
+                  setFormData({ ...formData, horas_semanales: valor });
+                }
+              }}
+              className="w-full border rounded px-3 py-2"
+              disabled={tipoBloqueadoPorModalidad}
+              required
+              min={0.5}
+              step={0.5}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Horas disponibles: {Number.isFinite(horasDisponiblesTipo) ? horasDisponiblesTipo : 'Sin límite'}
+            </p>
+          </div>
+
+          {/* Error Formulario */}
+          {errorFormulario && (
+            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm font-medium text-red-600">{errorFormulario}</p>
+            </div>
+          )}
+
           {/* Ambiente (Combobox) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -1421,78 +1512,6 @@ function ModalActividadNoLectiva({
                 </button>
               </div>
             </div>
-          </div>
-
-          {/* Horarios */}
-          <div className="space-y-4">
-            <label className="block text-sm font-medium mb-2">
-              Horario <span className="text-red-500">*</span>
-            </label>
-            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
-            <table className="w-full border-collapse min-w-max">
-              <thead>
-                <tr>
-                  <th className="border p-2 bg-gray-100 text-sm">Hora</th>
-                  {DIAS.map((dia) => (
-                    <th key={dia} className="border p-2 bg-gray-100 text-sm min-w-[140px]">
-                      {dia}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {horas.map((hora, horaIndex) => (
-                  <tr key={horaIndex}>
-                    <td className="border p-2 text-xs font-medium bg-gray-50">
-                      {hora.inicio}
-                      <br />
-                      {hora.fin}
-                    </td>
-                    {DIAS.map((_dia, diaIndex) => {
-                      const key = `${diaIndex}-${horaIndex}`;
-                      const esSeleccionada = celdasSeleccionadas.has(key);
-                      const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
-                      const esOcupado = celdaInfo.ocupado;
-
-                      return (
-                        <td
-                          key={key}
-                          onClick={() => !esOcupado && handleCeldaClick(diaIndex, horaIndex)}
-                          className={`border p-1 transition-all h-16 text-center ${
-                            esOcupado
-                              ? 'bg-red-100 cursor-not-allowed'
-                              : rubroDeshabilitado
-                              ? 'bg-gray-100 cursor-not-allowed text-gray-400'
-                              : esSeleccionada
-                              ? 'bg-emerald-100 border-emerald-400 cursor-pointer'
-                              : 'bg-white hover:bg-emerald-50 cursor-pointer'
-                          }`}
-                        >
-                          {esOcupado ? (
-                            <div className="text-xs">
-                              <div className="font-bold text-red-800">{celdaInfo.actividad}</div>
-                              <div className="text-red-600">{celdaInfo.nombre}</div>
-                            </div>
-                          ) : esSeleccionada ? (
-                            <span className="text-emerald-700 font-bold">✓</span>
-                          ) : null}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-            <p className="text-xs text-gray-500">
-              Haz clic en las celdas para seleccionar los horarios de la actividad.
-              <br />
-              Horas semanales calculadas automáticamente:{' '}
-              <span className="font-bold">{formData.horas_semanales}</span> horas
-            </p>
-            {errorFormulario && (
-              <p className="mt-2 text-sm font-medium text-red-600">{errorFormulario}</p>
-            )}
           </div>
 
           {/* Descripción */}
@@ -1546,6 +1565,823 @@ function ModalActividadNoLectiva({
           actividadesNoLectivas={actividadesNoLectivas}
         />
       )}
+    </div>
+  );
+}
+
+function ModalGestionHorariosNoLectivas({
+  abierto,
+  alCerrar,
+  idCargaAcademica,
+  horasLectivas = 0,
+  periodo,
+  docente,
+  onActualizar
+}: {
+  abierto: boolean;
+  alCerrar: () => void;
+  idCargaAcademica?: number;
+  horasLectivas?: number;
+  periodo?: any;
+  docente: any;
+  onActualizar: (mensaje: string) => void;
+}) {
+  const [actividadSeleccionada, setActividadSeleccionada] = useState<any>(null);
+  const [formData, setFormData] = useState<any>({
+    tipo_actividad: 'tutoria_consejeria',
+    nombre: '',
+    descripcion: '',
+    horas_semanales: 0,
+    dias_semana: [],
+    datos_adicionales: {},
+    datos_sustento: {},
+    horarios_actividad: []
+  });
+  const [celdasSeleccionadas, setCeldasSeleccionadas] = useState<Set<string>>(new Set());
+  const [ambientes, setAmbientes] = useState<any[]>([]);
+  const [horariosExistentes, setHorariosExistentes] = useState<any[]>([]);
+  const [actividadesNoLectivas, setActividadesNoLectivas] = useState<any[]>([]);
+  const [config, setConfig] = useState<any>(null);
+  const [horas, setHoras] = useState<{ inicio: string; fin: string }[]>(utilidadesFecha.intervalosPorDefecto);
+  const [consultaTipo, setConsultaTipo] = useState<'aula' | 'laboratorio' | null>(null);
+  const [errorFormulario, setErrorFormulario] = useState('');
+  const [mostrarListaActividades, setMostrarListaActividades] = useState(true);
+  const [bloqueArrastrado, setBloqueArrastrado] = useState<{tipo: 'agregar' | 'remover', actividad: any, index?: number, celdaKey?: string} | null>(null);
+
+  const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+
+  useEffect(() => {
+    if (abierto) {
+      fetchConfig();
+      fetchActividadesNoLectivas();
+      fetchHorariosLectivos();
+      fetchAmbientes();
+    }
+  }, [abierto]);
+
+  const fetchAmbientes = async () => {
+    try {
+      const res = await fetch('/api/ambientes');
+      const data = await res.json();
+      if (data.exito) {
+        setAmbientes(data.datos || []);
+      } else {
+        setAmbientes([]);
+      }
+    } catch (error) {
+      console.error('Error fetching ambientes:', error);
+      setAmbientes([]);
+    }
+  };
+
+  useEffect(() => {
+    if (actividadSeleccionada) {
+      // Parse JSON fields
+      let horarios = actividadSeleccionada.horarios_actividad || [];
+      let diasSemana = actividadSeleccionada.dias_semana || [];
+      let datosAdicionales = actividadSeleccionada.datos_adicionales || {};
+      let datosSustento = actividadSeleccionada.datos_sustento || {};
+      
+      const parseJSON = (value: any) => {
+        if (typeof value === 'string') {
+          try {
+            return JSON.parse(value);
+          } catch (e) {
+            console.error('Error parsing JSON field:', e);
+            return value;
+          }
+        }
+        return value;
+      };
+      
+      horarios = parseJSON(horarios);
+      diasSemana = parseJSON(diasSemana);
+      datosAdicionales = parseJSON(datosAdicionales);
+      datosSustento = parseJSON(datosSustento);
+
+      setFormData({
+        tipo_actividad: actividadSeleccionada.tipo_actividad,
+        nombre: actividadSeleccionada.nombre,
+        descripcion: actividadSeleccionada.descripcion || '',
+        horas_semanales: actividadSeleccionada.horas_semanales || actividadSeleccionada.horas_asignadas || 0,
+        dias_semana: diasSemana,
+        datos_adicionales: datosAdicionales,
+        datos_sustento: datosSustento,
+        horarios_actividad: horarios
+      });
+      
+      // Limpiamos y volvemos a calcular celdas seleccionadas cada vez
+      const celdas = new Set<string>();
+      if (Array.isArray(horarios) && horarios.length > 0) {
+        horarios.forEach((horario: any) => {
+          if (!horario || !horario.dia || !horario.inicio) return;
+          const diaIndex = DIAS.indexOf(horario.dia);
+          const horaIndex = horas.findIndex((h) => h.inicio === horario.inicio);
+          if (diaIndex !== -1 && horaIndex !== -1) {
+            celdas.add(`${diaIndex}-${horaIndex}`);
+          }
+        });
+      }
+      console.log('useEffect actividadSeleccionada - celdas seleccionadas:', Array.from(celdas));
+      setCeldasSeleccionadas(celdas);
+    }
+  }, [actividadSeleccionada, horas]);
+
+  const fetchConfig = async () => {
+    try {
+      const res = await fetch('/api/configuracion');
+      const data = await res.json();
+      if (data.exito && data.datos) {
+        setConfig(data.datos);
+        const nuevosIntervalos = utilidadesFecha.generarIntervalosHorarios(
+          data.datos.hora_inicio,
+          data.datos.hora_fin,
+          data.datos.duracion_bloque
+        );
+        setHoras(nuevosIntervalos);
+      }
+    } catch (error) {
+      console.error('Error fetching config:', error);
+    }
+  };
+
+  const fetchActividadesNoLectivas = async () => {
+    try {
+      const res = await fetch('/api/actividad-no-lectiva');
+      const data = await res.json();
+      console.log('fetchActividadesNoLectivas received data:', data);
+      if (data.exito && data.datos) {
+        const parseJSON = (value: any) => {
+          if (typeof value === 'string') {
+            try {
+              return JSON.parse(value);
+            } catch (e) {
+              console.error('Error parsing JSON:', e);
+              return value;
+            }
+          }
+          return value;
+        };
+        const actividadesParseadas = data.datos.map((act: any) => ({
+          ...act,
+          horarios_actividad: parseJSON(act.horarios_actividad),
+          dias_semana: parseJSON(act.dias_semana),
+          datos_adicionales: parseJSON(act.datos_adicionales),
+          datos_sustento: parseJSON(act.datos_sustento)
+        }));
+        console.log('fetchActividadesNoLectivas parsed actividades:', actividadesParseadas);
+        setActividadesNoLectivas(actividadesParseadas);
+      } else {
+        setActividadesNoLectivas([]);
+      }
+    } catch (error) {
+      console.error('Error fetching actividades no lectivas:', error);
+      setActividadesNoLectivas([]);
+    }
+  };
+
+  const fetchHorariosLectivos = async () => {
+    if (!periodo) return;
+    try {
+      const res = await fetch(`/api/horarios?periodo=${periodo.id_periodo}`);
+      const data = await res.json();
+      if (data.exito) {
+        setHorariosExistentes(data.datos || []);
+      } else {
+        setHorariosExistentes([]);
+      }
+    } catch (error) {
+      console.error('Error fetching horarios:', error);
+      setHorariosExistentes([]);
+    }
+  };
+
+  const handleCancelar = () => {
+    setActividadSeleccionada(null);
+    setFormData({
+      tipo_actividad: 'tutoria_consejeria',
+      nombre: '',
+      descripcion: '',
+      horas_semanales: 0,
+      dias_semana: [],
+      datos_adicionales: {},
+      datos_sustento: {},
+      horarios_actividad: []
+    });
+    setCeldasSeleccionadas(new Set());
+    alCerrar();
+  };
+
+  const getCeldaInfo = (diaIndex: number, horaIndex: number): { ocupado: boolean; tipo?: 'lectivo' | 'no-lectivo'; nombre?: string; actividad?: string } => {
+    const key = `${diaIndex}-${horaIndex}`;
+    console.log('getCeldaInfo called for key:', key);
+    // Si la celda ya está seleccionada para la actividad actual, NO está ocupada
+    if (celdasSeleccionadas.has(key)) {
+      console.log('getCeldaInfo:', key, 'is already selected, returning not occupied');
+      return { ocupado: false };
+    }
+
+    const parseJSON = (value: any) => {
+      if (typeof value === 'string') {
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          console.error('Error parsing JSON in getCeldaInfo:', e);
+          return value;
+        }
+      }
+      return value;
+    };
+
+    // Check if cell is part of the currently selected activity's original data → NOT occupied
+    if (actividadSeleccionada) {
+      const originalHorarios = parseJSON(actividadSeleccionada.horarios_actividad);
+      if (Array.isArray(originalHorarios)) {
+        const isPartOfOriginal = originalHorarios.some((h: any) => {
+          if (!h || !h.dia || !h.inicio) return false;
+          const dIdx = DIAS.indexOf(h.dia);
+          const hIdx = horas.findIndex((hr) => hr.inicio === h.inicio);
+          return dIdx === diaIndex && hIdx === horaIndex;
+        });
+        if (isPartOfOriginal) {
+          console.log('getCeldaInfo:', key, 'is part of original selected activity, returning not occupied');
+          return { ocupado: false };
+        }
+      }
+    }
+
+    const hora = horas[horaIndex];
+    const ambienteSeleccionado = ambientes.find(
+      (a) => a.id_ambiente === Number(formData.datos_sustento?.id_ambiente)
+    );
+    
+    // Creamos una lista temporal de actividades no lectivas que actualice la actividad seleccionada con los datos actuales
+    const actividadesNoLectivasActualizadas = actividadesNoLectivas.map((act) => {
+      if (actividadSeleccionada && act.id_actividad === actividadSeleccionada.id_actividad) {
+        // Convertimos celdasSeleccionadas a horarios_actividad
+        const horariosActividadActual = Array.from(celdasSeleccionadas).map((k) => {
+          const [d, h] = k.split('-').map(Number);
+          return {
+            dia: DIAS[d],
+            inicio: horas[h]?.inicio || '',
+            fin: horas[h]?.fin || ''
+          };
+        });
+        return {
+          ...act,
+          ...formData,
+          horarios_actividad: horariosActividadActual
+        };
+      }
+      return act;
+    });
+    
+    // 1. Check if ambiente is occupied with lectivo
+    if (ambienteSeleccionado) {
+      const horarioLectivo = horariosExistentes.find(
+        (h) =>
+          h.id_ambiente === ambienteSeleccionado.id_ambiente &&
+          h.dia_semana === diaIndex &&
+          h.hora_inicio === hora.inicio &&
+          ['confirmado', 'publicado', 'borrador'].includes(h.estado)
+      );
+      if (horarioLectivo) {
+        const nombres = horarioLectivo.docente?.nombres || '';
+        const apellidos = horarioLectivo.docente?.apellidos || '';
+        const nombreCompleto = [nombres, apellidos].filter(Boolean).join(' ') || 'Docente';
+        
+        console.log('getCeldaInfo:', key, 'occupied by lectivo:', horarioLectivo);
+        return {
+          ocupado: true,
+          tipo: 'lectivo',
+          nombre: nombreCompleto,
+          actividad: horarioLectivo.curso?.nombre || horarioLectivo.grupo?.curso?.nombre || 'Clase'
+        };
+      }
+      
+      const actividadNoLectiva = actividadesNoLectivasActualizadas.find(
+        (act) => {
+          // Solo consideramos actividades de la carga académica actual
+          if (Number(act.id_carga) !== Number(idCargaAcademica)) return false;
+          
+          const horariosAct = parseJSON(act.horarios_actividad);
+          if (!Array.isArray(horariosAct)) return false;
+          
+          const matches = (
+            act.datos_sustento?.id_ambiente === ambienteSeleccionado.id_ambiente &&
+            horariosAct.some(
+              (h: any) =>
+                h && h.dia && DIAS.indexOf(h.dia) === diaIndex &&
+                h.inicio === hora.inicio &&
+                (!actividadSeleccionada || act.id_actividad !== actividadSeleccionada.id_actividad)
+            )
+          );
+          if (matches) {
+            console.log('getCeldaInfo:', key, 'matched actividadNoLectiva:', act, 'horariosAct:', horariosAct);
+          }
+          return matches;
+        }
+      );
+      if (actividadNoLectiva) {
+        const nombres = actividadNoLectiva.carga_academica?.docente?.nombres || '';
+        const apellidos = actividadNoLectiva.carga_academica?.docente?.apellidos || '';
+        const nombreCompleto = [nombres, apellidos].filter(Boolean).join(' ') || 'Docente';
+        
+        console.log('getCeldaInfo:', key, 'occupied by ambiente actividadNoLectiva:', actividadNoLectiva);
+        return {
+          ocupado: true,
+          tipo: 'no-lectivo',
+          nombre: nombreCompleto,
+          actividad: actividadNoLectiva.nombre || actividadNoLectiva.tipo_actividad
+        };
+      }
+    }
+
+    // 2. Check if DOCENTE is occupied with lectivos (for same docente)
+    const docenteHorarioLectivo = horariosExistentes.find(
+      (h) =>
+        h.id_docente === docente?.id_docente &&
+        h.dia_semana === diaIndex &&
+        h.hora_inicio === hora.inicio &&
+        ['confirmado', 'publicado', 'borrador'].includes(h.estado)
+    );
+    if (docenteHorarioLectivo) {
+      console.log('getCeldaInfo:', key, 'occupied by docenteHorarioLectivo:', docenteHorarioLectivo);
+      return {
+        ocupado: true,
+        tipo: 'lectivo',
+        nombre: 'Tú',
+        actividad: docenteHorarioLectivo.curso?.nombre || docenteHorarioLectivo.grupo?.curso?.nombre || 'Clase'
+      };
+    }
+
+    // 3. Check if DOCENTE is occupied with other actividades no lectivas
+    const docenteActividadNoLectiva = actividadesNoLectivasActualizadas.find(
+      (act) => {
+        // Solo consideramos actividades de la carga académica actual
+        if (Number(act.id_carga) !== Number(idCargaAcademica)) return false;
+        
+        const horariosAct = parseJSON(act.horarios_actividad);
+        if (!Array.isArray(horariosAct)) return false;
+
+        const matches = (
+          act.carga_academica?.id_docente === docente?.id_docente &&
+          horariosAct.some(
+            (h: any) =>
+              h && h.dia && DIAS.indexOf(h.dia) === diaIndex &&
+              h.inicio === hora.inicio &&
+              (!actividadSeleccionada || act.id_actividad !== actividadSeleccionada.id_actividad)
+          )
+        );
+        if (matches) {
+          console.log('getCeldaInfo:', key, 'matched docenteActividadNoLectiva:', act, 'horariosAct:', horariosAct);
+        }
+        return matches;
+      }
+    );
+    if (docenteActividadNoLectiva) {
+      console.log('getCeldaInfo:', key, 'occupied by docenteActividadNoLectiva:', docenteActividadNoLectiva);
+      return {
+        ocupado: true,
+        tipo: 'no-lectivo',
+        nombre: 'Tú',
+        actividad: docenteActividadNoLectiva.nombre || docenteActividadNoLectiva.tipo_actividad
+      };
+    }
+
+    console.log('getCeldaInfo:', key, 'is NOT occupied');
+    return { ocupado: false };
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, diaIndex?: number, horaIndex?: number) => {
+    e.preventDefault();
+    const nuevas = new Set(celdasSeleccionadas);
+    
+    if (!bloqueArrastrado) return;
+
+    if (bloqueArrastrado.tipo === 'agregar') {
+      if (!diaIndex || !horaIndex) {
+        setBloqueArrastrado(null);
+        return;
+      }
+      const key = `${diaIndex}-${horaIndex}`;
+      // Verificar si la celda está ocupada POR OTRA ACTIVIDAD o POR HORARIO LECTIVO
+      const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
+      
+      // Si la celda está ocupada por la MISMA actividad (está en celdasSeleccionadas),
+      // permitimos la operación sin error (solo no hacemos nada ya que es un Set)
+      if (celdaInfo.ocupado && !celdasSeleccionadas.has(key)) {
+        setErrorFormulario('Esta celda ya está ocupada.');
+        setBloqueArrastrado(null);
+        return;
+      }
+      
+      // Verificar límite de bloques
+      const duracionBloque = config ? config.duracion_bloque / 60 : 1.5;
+      const horasActividad = actividadSeleccionada?.horas_semanales || actividadSeleccionada?.horas_asignadas || 0;
+      const numBloques = Math.ceil(horasActividad / duracionBloque);
+      const bloquesAgregados = nuevas.size;
+      
+      if (bloquesAgregados >= numBloques && !nuevas.has(key)) {
+        setErrorFormulario('No puedes agregar más bloques de los permitidos.');
+        setBloqueArrastrado(null);
+        return;
+      }
+      
+      nuevas.add(key);
+      setErrorFormulario('');
+    } else if (bloqueArrastrado.tipo === 'remover') {
+      if (bloqueArrastrado.celdaKey) {
+        // If dropping on a new cell: move it!
+        if (diaIndex !== undefined && horaIndex !== undefined) {
+          const newKey = `${diaIndex}-${horaIndex}`;
+          const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
+          
+          if (bloqueArrastrado.celdaKey === newKey) {
+            // No-op if same cell
+            setErrorFormulario('');
+          } else if (celdaInfo.ocupado && !celdasSeleccionadas.has(newKey)) {
+            // Solo bloqueamos si está ocupada por otra actividad o horario lectivo
+            setErrorFormulario('Esta celda ya está ocupada.');
+            setBloqueArrastrado(null);
+            return;
+          } else {
+            // Si newKey ya está ocupada por la MISMA actividad, la reemplazamos:
+            // borramos la celda original y la nueva, luego agregamos la nueva
+            nuevas.delete(bloqueArrastrado.celdaKey);
+            if (nuevas.has(newKey)) {
+              nuevas.delete(newKey);
+            }
+            nuevas.add(newKey);
+            setErrorFormulario('');
+          }
+        } else {
+          // If dropping outside schedule (no diaIndex/horaIndex), remove it!
+          nuevas.delete(bloqueArrastrado.celdaKey);
+          setErrorFormulario('');
+        }
+      }
+    }
+
+    const horarios = Array.from(nuevas).map((k) => {
+      const [d, h] = k.split('-').map(Number);
+      return {
+        dia: DIAS[d],
+        diaIndex: d,
+        inicio: horas[h].inicio,
+        fin: horas[h].fin
+      };
+    });
+
+    setCeldasSeleccionadas(nuevas);
+    setFormData({
+      ...formData,
+      horarios_actividad: horarios,
+      dias_semana: Array.from(new Set(horarios.map((horario) => horario.dia))),
+      // Keep original horas_semanales from the selected activity
+      horas_semanales: actividadSeleccionada?.horas_semanales || actividadSeleccionada?.horas_asignadas || formData.horas_semanales
+    });
+
+    setBloqueArrastrado(null);
+  };
+
+  const handleCeldaClick = (diaIndex: number, horaIndex: number) => {
+    const key = `${diaIndex}-${horaIndex}`;
+    const nuevas = new Set(celdasSeleccionadas);
+    
+    if (nuevas.has(key)) {
+      nuevas.delete(key);
+    } else {
+      const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
+      // Solo bloqueamos si está ocupada POR OTRA ACTIVIDAD o POR HORARIO LECTIVO
+      if (celdaInfo.ocupado && !celdasSeleccionadas.has(key)) {
+        setErrorFormulario('Esta celda ya está ocupada.');
+        return;
+      }
+      
+      // Verificar límite de bloques
+      const duracionBloque = config ? config.duracion_bloque / 60 : 1.5;
+      const horasActividad = actividadSeleccionada?.horas_semanales || actividadSeleccionada?.horas_asignadas || 0;
+      const numBloques = Math.ceil(horasActividad / duracionBloque);
+      const bloquesAgregados = nuevas.size;
+      
+      if (bloquesAgregados >= numBloques) {
+        setErrorFormulario('No puedes agregar más bloques de los permitidos.');
+        return;
+      }
+      
+      nuevas.add(key);
+    }
+
+    const horarios = Array.from(nuevas).map((k) => {
+      const [d, h] = k.split('-').map(Number);
+      return {
+        dia: DIAS[d],
+        diaIndex: d,
+        inicio: horas[h].inicio,
+        fin: horas[h].fin
+      };
+    });
+
+    setCeldasSeleccionadas(nuevas);
+    setErrorFormulario('');
+    setFormData({
+      ...formData,
+      horarios_actividad: horarios,
+      dias_semana: Array.from(new Set(horarios.map((horario) => horario.dia))),
+      // Keep original horas_semanales from the selected activity
+      horas_semanales: actividadSeleccionada?.horas_semanales || actividadSeleccionada?.horas_asignadas || formData.horas_semanales
+    });
+  };
+
+  const handleGuardar = async () => {
+    if (!actividadSeleccionada) {
+      setErrorFormulario('Debes seleccionar una actividad.');
+      return;
+    }
+    try {
+      const res = await fetch(`/api/actividad-no-lectiva/${actividadSeleccionada.id_actividad}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) {
+        onActualizar('Horario actualizado correctamente');
+        fetchActividadesNoLectivas();
+        handleCancelar();
+      } else {
+        const data = await res.json();
+        setErrorFormulario(data.error || 'Error al guardar');
+      }
+    } catch (error) {
+      setErrorFormulario('Error al conectar con el servidor');
+    }
+  };
+
+  if (!abierto) return null;
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => handleDrop(e)}
+    >
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto m-4">
+        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-800">Gestión de Horarios - Actividades No Lectivas</h2>
+          <button onClick={handleCancelar} className="text-gray-500 hover:text-gray-700 text-3xl">
+            ×
+          </button>
+        </div>
+        
+        <div className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Lista de Actividades y Bloques */}
+            <div className="lg:col-span-1">
+              <h3 className="text-lg font-semibold mb-4 text-gray-700">Actividades Disponibles</h3>
+              <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                {actividadesNoLectivas
+                  .filter(a => Number(a.id_carga) === Number(idCargaAcademica))
+                  .map((act) => {
+                    const duracionBloque = config ? config.duracion_bloque / 60 : 1.5;
+                    const horasActividad = act.horas_semanales || act.horas_asignadas || 0;
+                    const numBloques = Math.ceil(horasActividad / duracionBloque);
+                    // Si la actividad está seleccionada, usamos celdasSeleccionadas para calcular bloquesAgregados
+                    const bloquesAgregados = (actividadSeleccionada?.id_actividad === act.id_actividad) 
+                      ? celdasSeleccionadas.size 
+                      : (act.horarios_actividad ? act.horarios_actividad.length : 0);
+                    const bloquesDisponibles = numBloques - bloquesAgregados;
+                    
+                    return (
+                      <div key={act.id_actividad} className="space-y-2">
+                        <div
+                          onClick={() => setActividadSeleccionada(act)}
+                          className={`p-3 border rounded-t-lg cursor-pointer transition-all ${
+                            actividadSeleccionada?.id_actividad === act.id_actividad
+                              ? 'border-indigo-500 bg-indigo-50'
+                              : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+                          }`}
+                        >
+                          <h4 className="font-semibold text-gray-800">{obtenerEtiquetaActividadNoLectiva(act.tipo_actividad)}</h4>
+                          <p className="text-sm text-gray-600">{act.nombre}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Total: {horasActividad}h | Agregados: {bloquesAgregados * duracionBloque}h
+                          </p>
+                        </div>
+                        
+                        {/* Bloques para agregar */}
+                        {actividadSeleccionada?.id_actividad === act.id_actividad && bloquesDisponibles > 0 && (
+                          <div className="grid grid-cols-2 gap-2 px-2">
+                            {Array.from({length: bloquesDisponibles}).map((_, idx) => (
+                              <div
+                                key={`${act.id_actividad}-agregar-${idx}`}
+                                draggable
+                                onDragStart={(e) => {
+                                  setActividadSeleccionada(act);
+                                  setBloqueArrastrado({ tipo: 'agregar', actividad: act, index: idx });
+                                }}
+                                className="p-2 bg-green-50 border border-green-300 rounded text-center text-xs font-semibold text-green-800 cursor-grab"
+                              >
+                                + Bloque {idx + 1}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Bloques para quitar */}
+                        {actividadSeleccionada?.id_actividad === act.id_actividad && celdasSeleccionadas.size > 0 && (
+                          <div className="grid grid-cols-2 gap-2 px-2">
+                            {Array.from(celdasSeleccionadas).map((key, idx) => {
+                              const [diaIndexStr, horaIndexStr] = key.split('-');
+                              const diaIndex = Number(diaIndexStr);
+                              const horaIndex = Number(horaIndexStr);
+                              const horario = {
+                                dia: DIAS[diaIndex],
+                                inicio: horas[horaIndex]?.inicio || '',
+                                fin: horas[horaIndex]?.fin || ''
+                              };
+                              return (
+                                <div
+                                  key={`${act.id_actividad}-remover-${idx}`}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    setActividadSeleccionada(act);
+                                    setBloqueArrastrado({ tipo: 'remover', actividad: act, celdaKey: key });
+                                  }}
+                                  className="p-2 bg-yellow-50 border border-yellow-300 rounded text-center text-xs font-semibold text-yellow-800 cursor-grab"
+                                >
+                                  - {horario.dia} {horario.inicio}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                        {/* Bloques para quitar (cuando actividad no está seleccionada, usamos datos originales) */}
+                        {actividadSeleccionada?.id_actividad !== act.id_actividad && act.horarios_actividad && act.horarios_actividad.length > 0 && (
+                          <div className="grid grid-cols-2 gap-2 px-2">
+                            {act.horarios_actividad.map((horario: any, idx: number) => {
+                              const diaIndex = DIAS.indexOf(horario.dia);
+                              const horaIndex = horas.findIndex((h) => h.inicio === horario.inicio);
+                              const key = `${diaIndex}-${horaIndex}`;
+                              return (
+                                <div
+                                  key={`${act.id_actividad}-remover-${idx}`}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    setActividadSeleccionada(act);
+                                    setBloqueArrastrado({ tipo: 'remover', actividad: act, celdaKey: key });
+                                  }}
+                                  className="p-2 bg-yellow-50 border border-yellow-300 rounded text-center text-xs font-semibold text-yellow-800 cursor-grab"
+                                >
+                                  - {horario.dia} {horario.inicio}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Gestión de Horarios */}
+            <div className="lg:col-span-2">
+              {actividadSeleccionada ? (
+                <>
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                      {obtenerEtiquetaActividadNoLectiva(actividadSeleccionada.tipo_actividad)}: {actividadSeleccionada.nombre}
+                    </h3>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="block text-sm font-medium mb-2">
+                      Horario <span className="text-red-500">*</span>
+                    </label>
+                    <div 
+                      className="bg-gray-50 p-3 rounded-lg overflow-x-auto"
+                      onDragOver={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                      }}
+                    >
+                      <table className="w-full border-collapse min-w-max">
+                        <thead>
+                          <tr>
+                            <th className="border p-1 bg-gray-100 text-xs">Hora</th>
+                            {DIAS.map((dia) => (
+                              <th key={dia} className="border p-1 bg-gray-100 text-xs min-w-[90px]">
+                                {dia}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {horas.map((hora, horaIndex) => (
+                            <tr key={horaIndex}>
+                              <td className="border p-1 text-[10px] font-medium bg-gray-50">
+                                {hora.inicio}
+                                <br />
+                                {hora.fin}
+                              </td>
+                              {DIAS.map((_dia, diaIndex) => {
+                                const key = `${diaIndex}-${horaIndex}`;
+                                const esSeleccionada = celdasSeleccionadas.has(key);
+                                const celdaInfo = getCeldaInfo(diaIndex, horaIndex);
+                                const esOcupado = celdaInfo.ocupado;
+
+                                return (
+                                  <td
+                                    key={key}
+                                    onClick={() => !esOcupado && !esSeleccionada && handleCeldaClick(diaIndex, horaIndex)}
+                                    onDragOver={(e) => {
+                                      e.stopPropagation();
+                                      e.preventDefault();
+                                    }}
+                                    onDrop={(e) => {
+                                      e.stopPropagation();
+                                      handleDrop(e, diaIndex, horaIndex);
+                                    }}
+                                    draggable={esSeleccionada}
+                                    onDragStart={(e) => {
+                                      if (esSeleccionada) {
+                                        e.stopPropagation();
+                                        setBloqueArrastrado({ 
+                                          tipo: 'remover', 
+                                          actividad: actividadSeleccionada, 
+                                          celdaKey: key 
+                                        });
+                                      }
+                                    }}
+                                    className={`border p-1 transition-all h-10 text-center ${
+                                      esOcupado
+                                        ? 'bg-red-100 cursor-not-allowed'
+                                        : esSeleccionada
+                                        ? 'bg-emerald-100 border-emerald-400 cursor-grab'
+                                        : 'bg-white hover:bg-emerald-50 cursor-pointer'
+                                    }`}
+                                  >
+                                    {esOcupado ? (
+                                      <div className="text-[10px]">
+                                        <div className="font-bold text-red-800">{celdaInfo.actividad}</div>
+                                      </div>
+                                    ) : esSeleccionada && actividadSeleccionada ? (
+                                      <div className="text-[10px]">
+                                        <div className="font-bold text-emerald-800">
+                                          {obtenerEtiquetaActividadNoLectiva(actividadSeleccionada.tipo_actividad)}
+                                        </div>
+                                        <div className="text-emerald-700 truncate">{actividadSeleccionada.nombre}</div>
+                                      </div>
+                                    ) : null}
+                                  </td>
+                                );
+                              })}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Haz clic en las celdas para seleccionar los horarios o arrastra una actividad.
+                      <br />
+                      Arrastra un horario seleccionado para moverlo o suéltalo fuera de la tabla para quitarlo.
+                      <br />
+                      Horas semanales: <span className="font-bold">{formData.horas_semanales}</span> horas
+                    </p>
+                    {errorFormulario && (
+                      <p className="mt-2 text-sm font-medium text-red-600">{errorFormulario}</p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-3 mt-6">
+                    <button
+                      onClick={handleGuardar}
+                      className="flex-1 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+                    >
+                      Guardar Horarios
+                    </button>
+                    <button
+                      onClick={handleCancelar}
+                      className="flex-1 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-400 transition-colors"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full min-h-[400px] text-gray-500">
+                  <p className="text-lg">Selecciona una actividad de la lista para gestionar sus horarios</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
