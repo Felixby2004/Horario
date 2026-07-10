@@ -335,6 +335,7 @@ export default function DocenteLayout({ children }: { children: React.ReactNode 
               </div>
             ))}
           </nav>
+        </aside>
       </>
 
       <main className={`flex-1 overflow-auto transition-all duration-300 ${collapsed ? 'md:ml-20' : 'md:ml-64'}`}>
