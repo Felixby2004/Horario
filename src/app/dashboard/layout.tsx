@@ -63,6 +63,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [verificando, setVerificando] = useState(true);
   const [usuario, setUsuario] = useState<any>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Verificar sesión
@@ -106,35 +107,41 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar Collapsible */}
       <>
-        <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex flex-col z-30`}>
-          <div className={`p-4 border-b border-primary-800 flex items-center gap-4 ${collapsed ? 'justify-center' : 'justify-between'}`}>
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="md:hidden fixed top-4 left-4 z-40 bg-primary-900 text-white p-3 rounded-xl shadow-lg"
+          aria-label="Abrir menú"
+        >
+          ☰
+        </button>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
+        )}
+
+        <aside className={`hidden md:flex ${collapsed ? 'w-20' : 'w-64'} bg-primary-900 text-white h-screen fixed left-0 top-0 overflow-y-auto transition-all duration-300 flex-col z-30`}>
+          <div className={`p-4 border-b border-primary-800 flex items-center gap-3 ${collapsed ? 'justify-center' : 'justify-between'}`}>
             {collapsed ? (
-              <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 max-w-10 max-h-10 object-contain flex-shrink-0" />
+              <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 object-contain flex-shrink-0 rounded-lg bg-white/10 p-1" />
             ) : (
-              <>
-                <div className="flex items-center gap-3">
-                  <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 max-w-10 max-h-10 object-contain flex-shrink-0" />
-                  <div>
-                    <h1 className="text-xl font-bold">Sistema de horarios</h1>
-                    <p className="text-sm text-primary-300 mt-1">UNT - Sistemas</p>
-                  </div>
+              <div className="flex items-center gap-3 min-w-0">
+                <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 object-contain flex-shrink-0 rounded-lg bg-white/10 p-1" />
+                <div className="min-w-0">
+                  <h1 className="text-lg font-bold leading-tight">Sistema de horarios</h1>
+                  <p className="text-xs text-primary-300 mt-0.5 truncate">UNT - Sistemas</p>
                 </div>
-              </>
+              </div>
             )}
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="p-2 rounded-lg hover:bg-primary-800 transition-colors flex-shrink-0"
               title={collapsed ? 'Expandir' : 'Contraer'}
             >
-              {collapsed ? (
-                <span className="text-xl">☰</span>
-              ) : (
-                <span className="text-xl">◀</span>
-              )}
+              {collapsed ? <span className="text-xl">☰</span> : <span className="text-xl">◀</span>}
             </button>
           </div>
-          
-          <nav className="flex-1 overflow-y-auto py-2">
+
+          <nav className="flex-1 overflow-y-auto py-3 px-2">
             {menuSections.map((section) => (
               <div key={section.title} className="mb-4">
                 {!collapsed && (
@@ -148,11 +155,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-5 py-3 transition-all duration-200 ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                         isActive
-                          ? 'bg-primary-800 border-l-4 border-white text-white font-semibold'
+                          ? 'bg-primary-800 text-white font-semibold shadow-inner ring-1 ring-white/10'
                           : 'hover:bg-primary-800/70 text-gray-300'
-                      } ${collapsed ? 'justify-center' : ''}`}
+                      } ${collapsed ? 'justify-center mx-1' : 'mx-2'}`}
                       title={collapsed ? item.texto : ''}
                     >
                       <FontAwesomeIcon icon={item.icon} className="w-5 h-5" />
@@ -164,18 +171,61 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </nav>
         </aside>
-        
-        {/* Toggle Button for Mobile */}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="md:hidden fixed top-4 left-4 z-40 bg-primary-600 text-white p-3 rounded-lg shadow-lg"
+
+        <aside
+          className={`md:hidden fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-primary-900 text-white overflow-y-auto transition-transform duration-300 flex flex-col ${
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
         >
-          ☰
-        </button>
+          <div className="p-4 border-b border-primary-800 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <img src="/logo.png" alt="Logo UNT" className="w-10 h-10 object-contain flex-shrink-0 rounded-lg bg-white/10 p-1" />
+              <div className="min-w-0">
+                <h1 className="text-base font-bold leading-tight">Sistema de horarios</h1>
+                <p className="text-xs text-primary-300 mt-0.5 truncate">UNT - Sistemas</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 rounded-lg hover:bg-primary-800 transition-colors flex-shrink-0"
+              aria-label="Cerrar menú"
+            >
+              ✕
+            </button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto py-3 px-2">
+            {menuSections.map((section) => (
+              <div key={section.title} className="mb-4">
+                <div className="px-4 py-2 text-xs uppercase tracking-wide text-primary-300">
+                  {section.title}
+                </div>
+                {section.items.map((item) => {
+                  const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 mx-2 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary-800 text-white font-semibold shadow-inner ring-1 ring-white/10'
+                          : 'hover:bg-primary-800/70 text-gray-300'
+                      }`}
+                    >
+                      <FontAwesomeIcon icon={item.icon} className="w-5 h-5" />
+                      <span className="truncate font-medium">{item.texto}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            ))}
+          </nav>
+        </aside>
       </>
 
       {/* Main Content */}
-      <main className={`flex-1 overflow-auto transition-all duration-300 ${collapsed ? 'ml-20' : 'ml-64'}`}>
+      <main className={`flex-1 overflow-auto transition-all duration-300 ${collapsed ? 'md:ml-20' : 'md:ml-64'}`}>
         <header className="bg-white shadow-sm px-8 py-4 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-800">
