@@ -1964,7 +1964,7 @@ function ModalGestionHorariosNoLectivas({
     if (!bloqueArrastrado) return;
 
     if (bloqueArrastrado.tipo === 'agregar') {
-      if (!diaIndex || !horaIndex) {
+      if (diaIndex === undefined || horaIndex === undefined) {
         setBloqueArrastrado(null);
         return;
       }
