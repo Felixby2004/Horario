@@ -107,7 +107,6 @@ export default function RegisterPage() {
                 required
               >
                 <option value="docente">Docente</option>
-                <option value="administrador_sistema">Administrador del Sistema</option>
               </select>
             </div>
 
