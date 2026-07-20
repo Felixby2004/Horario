@@ -189,28 +189,39 @@ export default function SeleccionarHorariosPage() {
 
   const determinarCiclos = async () => {
     const periodo = periodos.find((p: any) => p.id_periodo === parseInt(periodoSeleccionado));
-    if (!periodo) return;
+    if (!periodo || !usuario) return;
 
-    let ciclos: number[] = [];
-    if (periodo.codigo.endsWith('-I')) {
-      ciclos = [1, 3, 5, 7, 9];
-    } else if (periodo.codigo.endsWith('-II')) {
-      ciclos = [2, 4, 6, 8, 10];
-    } else {
-      ciclos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    try {
+      const res = await fetch(`/api/cursos?id_docente=${usuario.id_docente}`);
+      const data = await res.json();
+      if (data.exito) {
+        let ciclosSet = new Set<number>();
+        data.datos.forEach((c: any) => {
+          if (c.ciclo) ciclosSet.add(c.ciclo);
+        });
+        
+        let ciclos = Array.from(ciclosSet).sort((a, b) => a - b);
+        
+        if (periodo.codigo.endsWith('-I')) {
+          ciclos = ciclos.filter(c => c % 2 !== 0);
+        } else if (periodo.codigo.endsWith('-II')) {
+          ciclos = ciclos.filter(c => c % 2 === 0);
+        }
+
+        setCiclosDisponibles(ciclos);
+      }
+    } catch (e) {
+      console.error(e);
     }
-
-    setCiclosDisponibles(ciclos);
     setCicloSeleccionado('');
   };
 
   const cargarCursosDocente = async () => {
-    if (!cicloSeleccionado) return;
+    if (!cicloSeleccionado || !usuario) return;
 
     try {
-      // Cargar TODOS los cursos del ciclo seleccionado
-      // Un docente puede enseñar cualquier curso
-      const response = await fetch(`/api/cursos?ciclo=${cicloSeleccionado}`);
+      // Cargar cursos del ciclo seleccionado asignados al docente
+      const response = await fetch(`/api/cursos?ciclo=${cicloSeleccionado}&id_docente=${usuario.id_docente}`);
       const data = await response.json();
       if (data.exito) {
         setCursos(data.datos || []);
@@ -221,8 +232,9 @@ export default function SeleccionarHorariosPage() {
   };
 
   const cargarGrupos = async () => {
+    if (!usuario) return;
     try {
-      const response = await fetch(`/api/grupos?curso=${cursoSeleccionado}&periodo=${periodoSeleccionado}`);
+      const response = await fetch(`/api/grupos?curso=${cursoSeleccionado}&periodo=${periodoSeleccionado}&id_docente=${usuario.id_docente}`);
       const data = await response.json();
       if (data.exito) {
         setGrupos(data.datos || []);
